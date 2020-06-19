@@ -559,14 +559,20 @@ button:focus, input:focus {
 }
 
 .btn-animated {
-  box-shadow: 0 9px #999;
+  box-shadow: 0 6px #999;
   padding: 0;
   border: 0;
   width: 50px;
   border-radius: 10px;
+  transition: transform linear .3s, box-shadow linear .3s;
 
   img {
     border-radius: 10px;
+  }
+
+  &:active {
+    box-shadow: 0 3px #666;
+    transform: translateY(4px);
   }
 }
 
