@@ -69,7 +69,7 @@
             <h1 class="mb-4 available-games-title">{{ $t("AVAILABLE_GAMES") }}</h1>
             <div>
               <div class="one-game">
-                <router-link to="/coinflip">
+                <router-link to="/cf">
                   <span class="play-now">
                     {{ $t("NOW_PLAYING") }}
                     <b id="now_playing_coinflip">0</b>
