@@ -198,6 +198,22 @@
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/index.js');
       document.head.appendChild(recaptchaScript);
+
+      console.log('Open home page');
+
+      let loadInterval = setInterval(function () {
+        if (typeof window.Index !== 'undefined') {
+          window.Index.pageLoaded = true;
+          window.Index.setup();
+          clearInterval(loadInterval);
+        }
+      }, 50);
+    },
+    beforeRouteLeave(to, from, next) {
+      console.log('Leave home page');
+
+      window.Index.onUnload();
+      next()
     },
     directives: {
       ClickOutside

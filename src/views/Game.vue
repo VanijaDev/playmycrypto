@@ -142,11 +142,17 @@
       }
     },
     mounted() {
-      this.currentGame = window.location.pathname.replace('/', '');
-
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/game.js');
       document.head.appendChild(recaptchaScript);
-    }
+
+      this.currentGame = window.location.pathname.replace('/', '');
+
+      console.log('Open game view. Current game:', this.currentGame);
+    },
+    beforeRouteLeave(to, from, next) {
+      console.log('Leave game view');
+      next()
+    },
   }
 </script>
