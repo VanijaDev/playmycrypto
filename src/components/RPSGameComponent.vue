@@ -4,56 +4,50 @@
 
       <div class="mt-1 pt-2 text-left">
         <div>
-          <label for="referral" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-          <input type="text" id="referral" v-model="game.referral"/>
+          <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
+          <input type="text" id="Referal"/>
         </div>
 
         <div>
-          <label for="seed" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-          <input type="text" id="seed" v-model="game.seed"/>
+          <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
+          <input type="text" id="SeedPhrase"/>
         </div>
 
         <div>
-          <label for="bet" class="f10 text-left opacity-text mt-3 mb-1">
+          <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
             {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
           </label>
-          <input type="text" id="bet" class="bet-input" v-model="game.bet"/>
+          <input type="text" id="Bet" class="bet-input"/>
         </div>
 
-        <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: parseInt(game.bet)===0}" @click="startMove()">
+        <button class="btn btn-start-game desktop-move disabled">
           <img src="../assets/img/icon-btn-start.svg" class="mr-2">
           {{ $t('MAKE_MOVE') }}
         </button>
       </div>
     </div>
 
-    <div class="col-sm-8 border-left text-center inner-column">
+    <div class="col-sm-8 border-left text-center inner-column second-inner-column">
       <h3 class="mt-sm-4 mb-sm-4 f18">{{ $t('START_NEW_GAME') }}</h3>
       <h2 class="f24">{{ $t('MAKE_FIRST_MOVE') }}</h2>
 
       <div class="no-value mt-4 mt-sm-5 mb-4 mb-sm-5">
-        <img src="../assets/img/game-icon-ask-big.svg" v-if="!game.value">
-        <img src="../assets/img/game-icon-scissor-big.svg" v-if="game.value===1">
-        <img src="../assets/img/game-icon-rock-big.svg" v-if="game.value===2">
-        <img src="../assets/img/game-icon-paper-big.svg" v-if="game.value===3">
+        <img src="../assets/img/game-icon-ask-big.svg" id="selectedValue">
       </div>
 
       <div class="mb-sm-0 mb-3">
-        <button class="btn btn-link game-move-item mr-4 mr-sm-5" v-bind:class="{active: game.value===1}" @click="selectValue(1)">
-          <img src="../assets/img/game-icon-scissor-big.svg" v-if="game.value!==1">
-          <img src="../assets/img/game-icon-scissor-white.svg" v-if="game.value===1">
+        <button class="btn btn-link game-move-item mr-4 mr-sm-4 ml-sm-4">
+          <img src="../assets/img/game-icon-scissor-big.svg">
         </button>
-        <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: game.value===2}" @click="selectValue(2)">
-          <img src="../assets/img/game-icon-rock-big.svg" v-if="game.value!==2">
-          <img src="../assets/img/game-icon-rock-white.svg" v-if="game.value===2">
+        <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-4 ml-sm-5">
+          <img src="../assets/img/game-icon-rock-big.svg">
         </button>
-        <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: game.value===3}" @click="selectValue(3)">
-          <img src="../assets/img/game-icon-paper-big.svg" v-if="game.value!==3">
-          <img src="../assets/img/game-icon-paper-white.svg" v-if="game.value===3">
+        <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-4 ml-sm-5">
+          <img src="../assets/img/game-icon-paper-big.svg">
         </button>
       </div>
 
-      <button class="btn btn-start-game mb-3 mobile-move" v-bind:class="{disabled: parseInt(game.bet)===0}" @click="startMove()">
+      <button class="btn btn-start-game mb-3 mobile-move">
         <img src="../assets/img/icon-btn-start.svg" class="mr-2">
         {{ $t('MAKE_MOVE') }}
       </button>
@@ -65,32 +59,10 @@
 <script>
   export default {
     name: "RPSGameComponent",
-    data: function () {
-      return {
-        game: {
-          id: 0,
-          creator: '0x0',
-          opponent: '0x0',
-          referral: '',
-          seed: '',
-          bet: 0,
-          value: null
-        }
-      }
-    },
     computed: {
       currency() {
         return this.$store.state.currency
       }
-    },
-    methods: {
-      selectValue(value) {
-        console.log(`Value selected: ${value}`);
-        this.game.value = value;
-      },
-      startMove() {
-        console.log(`Move click. Selected value: ${this.game.value}, bet: ${this.game.bet}`)
-      },
     }
   };
 </script>
@@ -115,10 +87,15 @@
     text-align: center;
     line-height: 66px;
     box-shadow: 0 0 0 9px rgba(255, 255, 255, 0.5);
+    transition: all ease .3s;
 
     &.active {
       background: #F2994A;
       box-shadow: 0 0 0 9px rgba(242, 153, 74, 0.5);
+    }
+
+    &:hover {
+      opacity: .75;
     }
 
     img {
@@ -146,6 +123,10 @@
 
   .game-area .inner-column {
     padding: .8rem 1rem .8rem 2rem !important;
+
+    &.second-inner-column {
+      padding: .8rem 1rem .8rem 1rem !important;
+    }
   }
 
   .mobile-move {

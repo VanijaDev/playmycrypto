@@ -46,19 +46,19 @@
             <div class="col-sm-10 text-right total-amounts">
               <div class="total-item d-inline-block">
                 <img src="../assets/img/bg-hand-money.svg" class="hand-money">
-                <span>{{ total.referral }}</span>
+                <span id="totalUsedReferralFees">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-item d-inline-block">
                 <img src="../assets/img/bg-hand-money.svg" class="hand-money">
-                <span>{{ total.raffle }}</span>
+                <span id="ongoinRafflePrize">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-item d-inline-block">
                 <img src="../assets/img/bg-hand-money.svg" class="hand-money">
-                <span>{{ total.partner }}</span>
+                <span id="totalUsedPartnerFees">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
@@ -72,7 +72,7 @@
                 <router-link to="/coinflip">
                   <span class="play-now">
                     {{ $t("NOW_PLAYING") }}
-                    <b>{{ nowPlaying.coinFlip }}</b>
+                    <b id="now_playing_coinflip">0</b>
                   </span>
                   <img src="../assets/img/icon-coinflip.svg" class="game-icon">
                   <span class="title">Coin Flip</span>
@@ -83,7 +83,7 @@
                 <router-link to="/rps">
                 <span class="play-now">
                   {{ $t("NOW_PLAYING") }}
-                  <b>{{ nowPlaying.rps }}</b>
+                  <b id="now_playing_rps">0</b>
                 </span>
                   <img src="../assets/img/icon-rock-paper-scissors.svg" class="game-icon">
                   <span class="title">Rock Paper Scissors</span>
@@ -94,7 +94,7 @@
                 <router-link to="/ttt">
                 <span class="play-now">
                   {{ $t("NOW_PLAYING") }}
-                  <b>{{ nowPlaying.ttt }}</b>
+                  <b id="now_playing_ttt">0</b>
                 </span>
                   <img src="../assets/img/icon-tic-tac-toe.svg" class="game-icon">
                   <span class="title">Tic-Tac-Toe</span>
@@ -115,7 +115,7 @@
 
           <div class="border-block">
             <div class="header">
-              {{ $t("TOTAL_WON") }}: <b>{{ raffleTotal }}</b>
+              {{ $t("TOTAL_WON") }}: <b id="rafflePrizesWonTotal">0.00000</b>
               <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
               <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </div>
@@ -123,19 +123,19 @@
 
               <div class="total-won">
                 <img src="../assets/img/icon-coinflip-sm.svg" class="game-sm-icon">
-                {{ raffle.coinFlip }}
+                <span id="rafflePrizesWonTotalGameCoinFlip">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-won">
                 <img src="../assets/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon">
-                {{ raffle.rps }}
+                <span id="rafflePrizesWonTotalGameRPS">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-won">
                 <img src="../assets/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon">
-                {{ raffle.ttt }}
+                <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
                 <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
@@ -150,16 +150,20 @@
             <div class="header f13">
               {{ $t("TOTAL_CRYPT_AMOUNT") }}
             </div>
-            <div class="clearfix">
-              <div>
-                <div class="total-column text-center total-column-1">ETH</div>
-                <div class="total-column total-column-2">{{ totalCryptAmount.eth }}</div>
-              </div>
-              <div>
-                <div class="total-column text-center total-column-1">TRX</div>
-                <div class="total-column total-column-2">{{ totalCryptAmount.trx }}</div>
-              </div>
-            </div>
+            <table id="cryptoAmountPlayedOnSiteTotal">
+              <tbody>
+              <tr>
+              </tr>
+              <tr>
+                <td class="total-column total-column-1">ETH</td>
+                <td class="total-column total-column-2">0.00000</td>
+              </tr>
+              <tr>
+                <td class="total-column total-column-1">TRX</td>
+                <td class="total-column total-column-2">0.00000</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -176,34 +180,30 @@
     data: function () {
       return {
         visibleInfoTooltip: 0,
-        total: {
-          referral: 0.07431,
-          raffle: 0.03451,
-          partner: 0.02314,
-        },
-        nowPlaying: {
-          coinFlip: 0,
-          rps: 0,
-          ttt: 0,
-        },
-        raffle: {
-          coinFlip: 100.3242,
-          rps: 100.1216,
-          ttt: 100.4322,
-        },
-        totalCryptAmount: {
-          eth: '91997.746382',
-          trx: '31997.746382',
-        }
+        // total: {
+        //   referral: 0.07431,
+        //   raffle: 0.03451,
+        //   partner: 0.02314,
+        // },
+        // nowPlaying: {
+        //   coinFlip: 0,
+        //   rps: 0,
+        //   ttt: 0,
+        // },
+        // raffle: {
+        //   coinFlip: 100.3242,
+        //   rps: 100.1216,
+        //   ttt: 100.4322,
+        // },
+        // totalCryptAmount: {
+        //   eth: '91997.746382',
+        //   trx: '31997.746382',
+        // }
       }
     },
     computed: {
       currency() {
         return this.$store.state.currency
-      },
-      raffleTotal() {
-        let sum = this.raffle.coinFlip + this.raffle.rps + this.raffle.ttt;
-        return Math.round(sum * 10000) / 10000
       }
     },
     methods: {

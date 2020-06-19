@@ -18,7 +18,7 @@
                 <div class="f13">{{ $t('IN_RAFFLE') }}:</div>
 
                 <div class="raffle-amount">
-                  {{ raffle.amount }}
+                  0.03413
                   <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                   <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
                 </div>
@@ -27,24 +27,22 @@
                 <div class="participants">
                   <img src="../assets/img/game-icon-users.svg" class="mr-2">
                   <span class="f16"> {{ $t('PARTICIPANTS') }}:</span>
-                  <b class="f18">{{ raffle.participants }}/100</b>
-                  <button class="btn long-btn btn-primary rounded-button float-right" @click="startRaffle()">{{ $t('START') }}</button>
+                  <b class="f18"><span id="participants">99</span>/100</b>
+                  <button class="btn long-btn btn-primary rounded-button float-right">{{ $t('START') }}</button>
                 </div>
                 <div class="participants pt-3">
                   <img src="../assets/img/game-icon-quality.svg" class="mr-2">
                   {{ $t('LAST_WINNER') }}:
                 </div>
-
                 <div class="scrollbar-inner">
                   <div class="bordered mt-1">
-                    <p>{{ raffle.lastWinner.hash }}</p>
+                    <p>0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</p>
                     <p>
                       <span class="text-primary">
-                        <b>{{ raffle.lastWinner.amount }}</b>
-                        <img src="../assets/img/icon_amount-eth.svg" class="money-icon ml-2" v-show="raffle.lastWinner.currency === 'eth'">
-                        <img src="../assets/img/icon_amount-trx.svg" class="money-icon ml-2" v-show="raffle.lastWinner.currency === 'trx'">
+                        <b>0.0453</b>
+                        <img src="../assets/img/icon_amount-eth.svg" class="money-icon ml-2">
                       </span>
-                      <span class="float-right text-black-50">{{ raffle.lastWinner.date }}</span>
+                      <span class="float-right text-black-50">18.03.2020</span>
                     </p>
                   </div>
                 </div>
@@ -66,19 +64,18 @@
               {{ $t('TOP_GAMES') }}
             </h2>
             <div id="BlockTopGames" class="inner-padding scrollbar-inner">
-              <div class="bordered blue-border mt-1" v-for="topGame in topGames" :key="topGame.hash ">
+              <div class="bordered blue-border mt-1">
                 <p>
                   <img src="../assets/img/game-icon-wallet.svg" class="creator">
                   <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
-                  <span class="one-line">{{ topGame.hash }}</span>
+                  <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
                 </p>
                 <p>
                   <img src="../assets/img/game-icon-bet.svg" class="creator">
                   <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                  <span class="text-primary"><b>{{ topGame.amount }}</b></span>
+                  <span class="text-primary"><b>0.0453</b></span>
 
-                  <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="topGame.currency === 'eth'">
-                  <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="topGame.currency === 'trx'">
+                  <img src="../assets/img/icon_amount-eth.svg" class="money-icon">
                 </p>
               </div>
             </div>
@@ -94,19 +91,17 @@
               </h2>
 
               <div class="inner-padding scrollbar-inner">
-                <div class="bordered mt-1" v-for="availableGame in availableGames" :key="availableGame.hash ">
+                <div class="bordered mt-1">
                   <p>
                     <img src="../assets/img/game-icon-wallet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">Creator:</span>
-                    <span class="one-line">{{ availableGame.hash }}</span>
+                    <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
                   </p>
                   <p>
                     <img src="../assets/img/game-icon-bet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                    <span class="text-primary"><b>{{ availableGame.amount }}</b></span>
-
-                    <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="availableGame.currency === 'eth'">
-                    <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="availableGame.currency === 'trx'">
+                    <span class="text-primary"><b>0.0453</b></span>
+                    <img src="../assets/img/icon_amount-eth.svg" class="money-icon">
                   </p>
                 </div>
               </div>
@@ -123,30 +118,6 @@
     data: function () {
       return {
         currentGame: '',
-        raffle: {
-          amount: '0.0425',
-          participants: 99,
-          lastWinner: {
-            hash: '0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF',
-            amount: '0.0453',
-            currency: 'trx',
-            date: '18.03.2020'
-          }
-        },
-        topGames: [
-          {
-            hash: '0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF',
-            amount: '0.0453',
-            currency: 'trx',
-          }
-        ],
-        availableGames: [
-          {
-            hash: '0xXDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF',
-            amount: '0.0413',
-            currency: 'eth',
-          }
-        ]
       }
     },
     computed: {
