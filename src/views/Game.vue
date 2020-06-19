@@ -18,7 +18,7 @@
                 <div class="f13">{{ $t('IN_RAFFLE') }}:</div>
 
                 <div class="raffle-amount">
-                  <b id="cryptoForRaffle">0.03413</b>
+                  <b id="cryptoForRaffle">0.00000</b>
                   <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                   <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
                 </div>
@@ -28,9 +28,9 @@
                   <img src="/img/game-icon-users.svg" class="mr-2">
                   <span class="f16"> {{ $t('PARTICIPANTS') }}:</span>
                   <b class="f18">
-                    <span id="rafflePlayingAmount">99</span>
+                    <span id="rafflePlayingAmount">0</span>
                     /
-                    <span id="raffleActivationAmount">100</span>
+                    <span id="raffleActivationAmount">0</span>
                   </b>
                   <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right">{{ $t('START') }}</button>
                 </div>
@@ -43,10 +43,10 @@
                     <p>0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</p>
                     <p>
                       <span class="text-primary">
-                        <b>0.0453</b>
+                        <b>0.00000</b>
                         <img src="/img/icon_amount-eth.svg" class="money-icon ml-2">
                       </span>
-                      <span class="float-right text-black-50">18.03.2020</span>
+                      <span class="float-right text-black-50">00.00.0000</span>
                     </p>
                   </div>
                 </div>
@@ -77,7 +77,7 @@
                 <p>
                   <img src="/img/game-icon-bet.svg" class="creator">
                   <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                  <span class="text-primary"><b>0.0453</b></span>
+                  <span class="text-primary"><b>0.00000</b></span>
 
                   <img src="/img/icon_amount-eth.svg" class="money-icon">
                 </p>
@@ -104,7 +104,7 @@
                   <p>
                     <img src="/img/game-icon-bet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                    <span class="text-primary"><b>0.0453</b></span>
+                    <span class="text-primary"><b>0.00000</b></span>
                     <img src="/img/icon_amount-eth.svg" class="money-icon">
                   </p>
                 </div>
