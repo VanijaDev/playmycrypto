@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import {ProfileManager} from "../profileManager";
-import {CoinFlipData, RockPaperScissorsData} from "../../contract/contract";
+import {CoinFlipData, RockPaperScissorsData} from "../../../blockchain/contract/contract";
 import Types from "../../types";
 import {PromiseManager} from '../promiseManager';
 import BigNumber from 'bignumber.js';
@@ -41,9 +41,7 @@ const BlockchainManager_ethereum = {
         }
       } catch (error) {
         this.initted = false;
-        if (typeof showAlert !== 'undefined') {
-          showAlert('error', error.message);
-        }
+        showAlert('error', error.message);
         return false;
       }
     }
@@ -52,10 +50,7 @@ const BlockchainManager_ethereum = {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
       this.initted = false;
-      if (typeof showAlert !== 'undefined') {
-        showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
-      }
-
+      showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
       throw new Error('Please install MetaMask.')
     }
     // Non-dapp browsers...

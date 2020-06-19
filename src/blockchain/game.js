@@ -1,12 +1,12 @@
 import BlockchainManager from "./managers/blockchainManager/blockchainManager";
-import { PromiseManager } from "./managers/promiseManager";
-import { CoinFlip } from "./gameView/coinFlip";
-import { RPS } from "./gameView/rps";
-import { Utils } from "./utils";
-import { NotificationManager } from "./managers/notificationManager";
-import { BigNumber } from "bignumber.js";
-import { ProfileManager } from "./managers/profileManager";
-import { HowToPlayConstructor } from "./howToPlay/howToPlayConstructor";
+import {PromiseManager} from "./managers/promiseManager";
+import {CoinFlip} from "./gameView/coinFlip";
+import {RPS} from "./gameView/rps";
+import {Utils} from "./utils";
+import {NotificationManager} from "./managers/notificationManager";
+import {BigNumber} from "bignumber.js";
+import {ProfileManager} from "./managers/profileManager";
+import {HowToPlayConstructor} from "./howToPlay/howToPlayConstructor";
 import Types from "./types";
 
 
@@ -36,7 +36,7 @@ const Game = {
 
 
   setup: async function () {
-    if(!this.pageLoaded) {
+    if (!this.pageLoaded) {
       return;
     }
     console.log('%c Game - setup', 'color: #00aa00');
@@ -54,7 +54,9 @@ const Game = {
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     this.updateSuspendedViewForGame(this.gameType);
     this.updateAllGamesForGame(this.gameType);
-    this.updateRaffleStateInfoForGame(this.gameType, true);
+    await this.updateRaffleStateInfoForGame(this.gameType, true);
+
+    hideSpinner(Spinner.raffle);
   },
 
   setupOnce: function () {
@@ -96,7 +98,7 @@ const Game = {
     NotificationManager.clearAll();
   },
 
-  updateSuspendedViewForGame: async function(_gameType) {
+  updateSuspendedViewForGame: async function (_gameType) {
     if (_gameType != Types.Game.cf) {
       document.getElementById("suspendedView").style.display = "none";
       return;
@@ -116,7 +118,7 @@ const Game = {
   },
 
   //  LOAD GAMES
-  updateAllGamesForGame: function(_gameType) {
+  updateAllGamesForGame: function (_gameType) {
     // clear data
     this.availableGamesFetchStartIndex = -1;
     this.availableGameIds.splice(0, this.availableGameIds.length);
@@ -140,7 +142,7 @@ const Game = {
     this.topGameIds = await PromiseManager.topGamesPromise(_gameType);
     console.log("topGameIds: ", this.topGameIds);
 
-    for (let i = 0; i < this.topGameIds.length; i ++) {
+    for (let i = 0; i < this.topGameIds.length; i++) {
       let id = parseInt(this.topGameIds[i]);
       if (id > 0) {
         let gameInfo = await PromiseManager.gameInfoPromise(_gameType, parseInt(id));
@@ -219,20 +221,20 @@ const Game = {
       }
 
     } else {
-        if (_prepend) {
-          this.availableGameIds.unshift(_gameInfo.id);
-          $('#AvailableGames').prepend(TableAvailableGamesTemplate.composetmp({
-            'address': _gameInfo.creator,
-            'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
-          }));
-        } else {
-          this.availableGameIds.push(_gameInfo.id);
-          $('#AvailableGames').append(TableAvailableGamesTemplate.composetmp({
-            'address': _gameInfo.creator,
-            'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
-          }));
-        }
+      if (_prepend) {
+        this.availableGameIds.unshift(_gameInfo.id);
+        $('#AvailableGames').prepend(TableAvailableGamesTemplate.composetmp({
+          'address': _gameInfo.creator,
+          'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
+        }));
+      } else {
+        this.availableGameIds.push(_gameInfo.id);
+        $('#AvailableGames').append(TableAvailableGamesTemplate.composetmp({
+          'address': _gameInfo.creator,
+          'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
+        }));
       }
+    }
   },
 
   removeGameWithId: function (_gameId) {
@@ -256,21 +258,21 @@ const Game = {
   },
 
   //  RAFFLE
-  updateRaffleStateInfoForGame: function (_gameType, _withHistory) {
+  updateRaffleStateInfoForGame: async function (_gameType, _withHistory) {
     console.log("updateRaffleStateInfoForGame");
 
-    // this.updateRafflePlayersPresentForGame(_gameType);
-    // this.updateRafflePlayersToActivateForGame(_gameType);
-    // this.updateRaffleStartButtonForGame(_gameType);
-    // this.updateRaffleOngoingPrizeForGame(_gameType);
+    await this.updateRafflePlayersPresentForGame(_gameType);
+    await this.updateRafflePlayersToActivateForGame(_gameType);
+    await this.updateRaffleStartButtonForGame(_gameType);
+    await this.updateRaffleOngoingPrizeForGame(_gameType);
 
-    // if (_withHistory) {
-    //   this.updateRaffleHistoryForGame(_gameType);
-    // }
+    if (_withHistory) {
+      this.updateRaffleHistoryForGame(_gameType);
+    }
   },
 
   updateRafflePlayersPresentForGame: async function (_gameType) {
-    let participants = await PromiseManager.getRaffleParticipantsPromise(_gameType);
+    let participants = await PromiseManager.raffleParticipantsPromise(_gameType);
 
     this.updateProfileOnRaffle(participants.length);
     this.raffleParticipants = participants.length;
@@ -278,7 +280,7 @@ const Game = {
     document.getElementById("rafflePlayingAmount").innerText = participants.length;
   },
 
-  updateProfileOnRaffle: function(_currentParticipants) {
+  updateProfileOnRaffle: function (_currentParticipants) {
     if (_currentParticipants < this.raffleParticipants) {
       ProfileManager.update();
     }
@@ -296,41 +298,27 @@ const Game = {
   },
 
   updateRaffleOngoingPrizeForGame: async function (_gameType) {
-    let ongoingPrize = await PromiseManager.getOngoinRafflePrizePromise(_gameType);
+    let ongoingPrize = await PromiseManager.ongoinRafflePrizePromise(_gameType);
     // console.log("ongoinRafflePrize: ", result.toString());
     document.getElementById("cryptoForRaffle").innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
-    hideSpinner(Spinner.raffle);
   },
 
   updateRaffleHistoryForGame: async function (_gameType) {
     $('#BlockRaffle').empty();
 
-    let raffleResults = await PromiseManager.getRaffleResultCountPromise(_gameType);
+    let raffleResults = await PromiseManager.raffleResultCountPromise(_gameType);
     // console.log("raffleResults: ", raffleResults);
     if (raffleResults == 0) {
       return;
     }
 
-    let result = await PromiseManager.getRaffleResultInfoPromise(_gameType, raffleResults - 1);
+    let result = await PromiseManager.raffleResultInfoPromise(_gameType, raffleResults - 1);
     $('#BlockRaffle').append(RaffleGamesTemplate.composetmp({
       'address': result.winner,
       'amount': Utils.weiToEtherFixed(result.prize.toString()),
       'timeago': new Date(result.time * 1000).toISOString().slice(0, 10)
     }));
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   //  NOTIFICATION HELPERS
@@ -350,7 +338,7 @@ const Game = {
     }
   },
 
-  onGameAddedToTop: function(_gameType, _gameId, _creator) {
+  onGameAddedToTop: function (_gameType, _gameId, _creator) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
     } else if (_gameType == Utils.Games.rockPaperScissors) {
@@ -363,7 +351,7 @@ const Game = {
     this.loadTopGamesForGame(this.gameType);
   },
 
-  onGameCreated: async function(_gameType, _gameId, _creator) {
+  onGameCreated: async function (_gameType, _gameId, _creator) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
     } else if (_gameType == Utils.Games.rockPaperScissors) {
@@ -376,7 +364,7 @@ const Game = {
     }
   },
 
-  onGameJoined: async function(_gameId, _creator, _opponent) {
+  onGameJoined: async function (_gameId, _creator, _opponent) {
     console.log('%c game - onGameJoined_RPS', 'color: #1d34ff');
 
     if (this.isGamePresentInAnyList(_gameId)) {
@@ -391,7 +379,7 @@ const Game = {
     }
   },
 
-  onGamePlayed: async function(_gameType, _gameId, _creator, _opponent) {
+  onGamePlayed: async function (_gameType, _gameId, _creator, _opponent) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c game - onGamePlayed_CF %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     } else if (_gameType == Utils.Games.rockPaperScissors) {
@@ -401,8 +389,7 @@ const Game = {
     if (_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
-    }
-    else if (_opponent.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    } else if (_opponent.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
       this.updateSuspendedViewForGame(this.gameType);
@@ -414,7 +401,7 @@ const Game = {
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
-  onGamePrizesWithdrawn: function(_gameType) {
+  onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c game - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Utils.Games.rockPaperScissors) {
@@ -424,14 +411,14 @@ const Game = {
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
-  onGamePaused: function(_gameId) {
+  onGamePaused: function (_gameId) {
     console.log('%c game - onGamePaused_RPS: %s', 'color: #1d34ff', _gameId);
     if (this.isGamePresentInAnyList(_gameId)) {
       this.removeGameWithId(_gameId);
     }
   },
 
-  onGameUnpaused: async function(_gameId, _creator) {
+  onGameUnpaused: async function (_gameId, _creator) {
     console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
     if (!_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
@@ -458,7 +445,7 @@ const Game = {
         }
         resultView = (Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.quitted)) == 0 ||
-                (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.expired)) == 0) {
+        (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.expired)) == 0) {
         resultView = (Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else {
         throw("onGameFinished - ERROR");
@@ -471,7 +458,7 @@ const Game = {
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
   },
 
-  onGameMovePlayed: function(_gameId, _nextMover) {
+  onGameMovePlayed: function (_gameId, _nextMover) {
     console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
@@ -479,7 +466,7 @@ const Game = {
     }
   },
 
-  onGameOpponentMoved: function(_gameId, _nextMover) {
+  onGameOpponentMoved: function (_gameId, _nextMover) {
     console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
@@ -546,13 +533,13 @@ const Game = {
     this.raffleStartedByMe = true;
 
     this.gameType.methods.runRaffle().send({
-        from: BlockchainManager.currentAccount
-      })
-      .on('transactionHash', function(hash){
+      from: BlockchainManager.currentAccount
+    })
+      .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
         showNotifViewWithData("RUN RAFFLE transaction ", hash);
       })
-      .once('receipt', function(receipt) {
+      .once('receipt', function (receipt) {
         ProfileManager.update();
 
         Game.updateRaffleStateInfoForGame(Game.gameType, true);
@@ -597,7 +584,7 @@ window.addEventListener('onunload', async () => {
 
 
 ethereum.on('accountsChanged', async function (accounts) {
-  if(Game.pageLoaded) {
+  if (Game.pageLoaded) {
     console.log('%c Game - accountsChanged', 'color: #00aa00');
     await BlockchainManager.accountChanged();
     await Game.setup();
@@ -605,7 +592,7 @@ ethereum.on('accountsChanged', async function (accounts) {
 });
 
 ethereum.on('networkChanged', async function (accounts) {
-  if(Game.pageLoaded) {
+  if (Game.pageLoaded) {
     console.log('%c Game - networkChanged', 'color: #00aa00');
     await BlockchainManager.setup();
     await Game.setup();
@@ -613,15 +600,14 @@ ethereum.on('networkChanged', async function (accounts) {
 });
 
 
-
 //  HELPERS
 
 String.prototype.composetmp = (function () {
   var re = /\{{(.+?)\}}/g;
   return function (o) {
-      return this.replace(re, function (_, k) {
-          return typeof o[k] != 'undefined' ? o[k] : '';
-      });
+    return this.replace(re, function (_, k) {
+      return typeof o[k] != 'undefined' ? o[k] : '';
+    });
   }
 }());
 

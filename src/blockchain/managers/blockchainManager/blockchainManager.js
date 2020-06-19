@@ -3,11 +3,11 @@
 // import { ProfileManager } from "../profileManager";
 // import { CoinFlipData, RockPaperScissorsData } from "../../../../blockchain/contract";
 
-import {BlockchainManager_ethereum} from "./blockchainManager_ethereum";
+import { BlockchainManager_ethereum } from "./blockchainManager_ethereum";
 import Types from "../../types";
 
 const BlockchainManager = {
-
+  
   MetaMaskCodes: {
     userDenied: 4001
   },
@@ -18,7 +18,7 @@ const BlockchainManager = {
   coinFlipContract: null,
   rockPaperScissorsContract: null,
 
-  init: async function () {
+  init: async function ()  {
     if (!this.initted) {
       console.log('%c BlockchainManager - init', 'color: #00aa00');
 
@@ -40,14 +40,14 @@ const BlockchainManager = {
       case Types.BlockchainType.tron:
         console.log("setCurrentBlockchain - Tron");
         break;
-
+    
       default:
         throw("setCurrentBlockchain - wrong type" + _blockchainType);
         break;
     }
   },
 
-  accountChanged: async function () {
+  accountChanged: async function() {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
     this.currentBlockchain.accountChanged();
   },
@@ -84,23 +84,35 @@ const BlockchainManager = {
   contract_cf: function () {
     return this.currentBlockchain.contract_inst_cf;
   },
-
+  
   contract_rps: function () {
     return this.currentBlockchain.contract_inst_rps;
   },
+
+
 
 
   /**
    * HELPERS
    */
 
-  currentAccount: function () {
+  currentAccount: function() {
     return this.currentBlockchain.currentAccount;
   },
 
-  gameInst: function (_gameType) {
+  gameInst: function(_gameType) {
     return this.currentBlockchain.gameInst(_gameType);
   },
+
+
+
+
+
+
+
+
+
+
 
 
   // connectToMetaMask: async function () {
@@ -188,11 +200,11 @@ const BlockchainManager = {
         document.getElementById("tron-select-btn").classList.add("deactivated");
 
         iconElements = document.getElementsByClassName("game-crypto-icon");
-        for (let i = 0; i < iconElements.length; i++) {
+        for (let i = 0; i < iconElements.length; i ++) {
           iconElements[i].src = "/img/icon_amount-eth.svg";
         }
         break;
-
+      
       case 1:
         if (document.getElementById("tron-select-btn").classList.contains("activated")) {
           return;
@@ -206,7 +218,7 @@ const BlockchainManager = {
         document.getElementById("tron-select-btn").classList.add("activated");
 
         iconElements = document.getElementsByClassName("game-crypto-icon");
-        for (let i = 0; i < iconElements.length; i++) {
+        for (let i = 0; i < iconElements.length; i ++) {
           iconElements[i].src = "/img/icon_amount-trx.svg";
         }
         break;
@@ -220,8 +232,7 @@ const BlockchainManager = {
   currentCryptoName: function () {
     if (this.currentBlockchainType == 0) {
       return "ETH";
-    }
-    if (this.currentBlockchainType == 1) {
+    } if (this.currentBlockchainType == 1) {
       return "TRX";
     }
   },
@@ -230,18 +241,18 @@ const BlockchainManager = {
    * HELPERS
    */
 
-  currentAccount: function () {
+  currentAccount: function() {
     return this.currentBlockchain.currentAccount;
   },
 
-  getBalance: async function () {
+  getBalance: async function() {
     return await this.currentBlockchain.getBalance(this.currentAccount);
   },
 
   /**
    * Increase current gasPrice for 20% to make tx mine faster.
    */
-  gasPriceNormalizedString: async function () {
+  gasPriceNormalizedString: async function() {
     let gasPrice = await web3.eth.getGasPrice();
     console.log("gasPrice: ", gasPrice);
     let gasPriceNormalizedString = (parseInt(gasPrice) * 120).toString();
@@ -267,10 +278,10 @@ const BlockchainManager = {
 window.BlockchainManager = BlockchainManager;
 
 //  COMMON FOR ALL SCREENS
-window.addEventListener("click", function (event) {
+window.addEventListener("click", function(event) {
   const profileElement = document.getElementById("carttoggle");
   let targetElement = event.target; // clicked element
-
+  
   do {
     if (targetElement == profileElement) {
       return;
@@ -279,7 +290,7 @@ window.addEventListener("click", function (event) {
     targetElement = targetElement.parentNode;
   } while (targetElement);
 
-  if ((targetElement != profileElement) && (profileElement.style.display != "none")) {
+  if((targetElement != profileElement) && (profileElement.style.display != "none")) {
     document.getElementById("carttoggle").style.display = "none";
   }
 });

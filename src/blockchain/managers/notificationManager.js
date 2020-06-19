@@ -1,6 +1,6 @@
 import BlockchainManager from "./blockchainManager/blockchainManager";
 import { Utils } from "../utils";
-import { CoinFlipData, RockPaperScissorsData } from "../contract/contract";
+import { CoinFlipData, RockPaperScissorsData } from "../../blockchain/contract/contract";
 import { BigNumber } from "bignumber.js";
 import Types from "../types";
 
@@ -43,9 +43,9 @@ const NotificationManager = {
       case Types.BlockchainType.ethereum:
         console.log("subscribeAll - Ethereum");
         this.subscribeAll_ethereum();
-
+        
         break;
-
+    
 
       case Types.currentBlockchainType.ethereum:
         console.log("subscribeAll - Tron");
@@ -182,7 +182,7 @@ const NotificationManager = {
         case this.NotificationHashes_RPS.partnerFeeTransferred:
           console.log("NotificationHashes_RPS.partnerFeeTransferred");
           break;
-
+      
         default:
           break;
       }
@@ -248,7 +248,7 @@ const NotificationManager = {
         //   console.log("NotificationHashes_CF.partnerFeeTransferred");
 
         //   break;
-
+      
         default:
           break;
       }
@@ -336,7 +336,7 @@ const NotificationManager = {
         case this.NotificationHashes_RPS.partnerFeeTransferred:
           console.log("NotificationHashes_RPS.partnerFeeTransferred");
           break;
-
+      
         default:
           break;
       }
@@ -348,9 +348,9 @@ const NotificationManager = {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
         window.web3.eth.clearSubscriptions();
-
+        
         break;
-
+    
 
       case Types.currentBlockchainType.ethereum:
         console.log("clearAll - Tron");

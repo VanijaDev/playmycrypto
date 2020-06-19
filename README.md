@@ -14,17 +14,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Development:
-Show top banner message (code inside one of the method):
-```
-this.$store.commit('showTopBannerMessage', {
-  textBefore: 'before',
-  hash: 'hash'
-});
-```
-
-Hide top banner message:
-```
-this.$store.commit('hideTopBannerMessage')
-```
