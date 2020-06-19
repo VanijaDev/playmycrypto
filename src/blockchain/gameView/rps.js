@@ -509,7 +509,7 @@ const RPS = {
     switch (_move) {
       case this.Move.none:
         if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/images/game-icon-ask-big.svg";
+          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-ask-big.svg";
         }
         document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
         document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
@@ -518,7 +518,7 @@ const RPS = {
 
       case this.Move.rock:
         if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/images/game-icon-rock-big.svg";
+          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-rock-big.svg";
         }
         document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.add("move_bg_selected");
         document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
@@ -527,7 +527,7 @@ const RPS = {
 
       case this.Move.paper:
         if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/images/game-icon-paper-big.svg";
+          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-paper-big.svg";
         }
         document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
         document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.add("move_bg_selected");
@@ -536,7 +536,7 @@ const RPS = {
 
       case this.Move.scissors:
         if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/images/game-icon-scissor-big.svg";
+          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-scissor-big.svg";
         }      
         document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
         document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");

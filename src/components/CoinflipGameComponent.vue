@@ -16,10 +16,10 @@
       <h2 class="f24">{{ $t('CHOOSE_COIN_SIDE') }}:</h2>
 
       <button id="ethereumFlip" class="btn btn-link" onclick="window.CoinFlip.coinSideChanged(0)">
-        <img src="../assets/img/ethereum-orange.svg">
+        <img src="/img/ethereum-orange.svg">
       </button>
       <button class="btn btn-link" id="bitcoinFlip" onclick="window.CoinFlip.coinSideChanged(1)">
-        <img src="../assets/img/bitcoin-black.svg">
+        <img src="/img/bitcoin-black.svg">
       </button>
 
       <form class="row mt-4 pt-2">
@@ -31,12 +31,12 @@
           <label for="bet" class="f10 text-left opacity-text">
             {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
           </label>
-          <input type="number" step="0.01" min="0.01" placeholder="0.01" class="form-control form-bet" id="gameBet_start">
+          <input type="number" step="0.01" min="0.01" placeholder="0.01" class="form-bet" id="gameBet_start">
         </div>
       </form>
 
       <button class="btn btn-start-game disabled" onclick="window.CoinFlip.startGame()">
-        <img src="../assets/img/icon-btn-start.svg" class="mr-3">
+        <img src="/img/icon-btn-start.svg" class="mr-3">
         {{ $t('START_GAME') }}
       </button>
     </div>

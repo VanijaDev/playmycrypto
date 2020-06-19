@@ -83,7 +83,7 @@ const CoinFlip = {
         document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
         document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
         document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("frontCoinMakeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/images/ethereum-orange.svg" : "/images/bitcoin-orange.svg";
+        document.getElementById("frontCoinMakeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
         document.getElementById("makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
         break;
 
@@ -91,7 +91,7 @@ const CoinFlip = {
         document.getElementById("gameId_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
         document.getElementById("gameCreator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
         document.getElementById("gameBet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/images/bitcoin-orange.svg" : "/images/ethereum-orange.svg";
+        document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
       break;
 
       default:
@@ -135,13 +135,13 @@ const CoinFlip = {
 
     switch (_side) {
       case 0:
-        $("#bitcoinFlip").html('<img src="/images/bitcoin-black.svg">');
-        $("#ethereumFlip").html('<img src="/images/ethereum-orange.svg">');
+        $("#bitcoinFlip").html('<img src="/img/bitcoin-black.svg">');
+        $("#ethereumFlip").html('<img src="/img/ethereum-orange.svg">');
         break;
 
       case 1:
-        $("#bitcoinFlip").html('<img src="/images/bitcoin-orange.svg">');
-        $("#ethereumFlip").html('<img src="/images/ethereum-black.svg">');
+        $("#bitcoinFlip").html('<img src="/img/bitcoin-orange.svg">');
+        $("#ethereumFlip").html('<img src="/img/ethereum-black.svg">');
         break;
 
       default:

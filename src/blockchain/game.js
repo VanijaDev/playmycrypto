@@ -628,12 +628,12 @@ String.prototype.composetmp = (function () {
 var TableAvailableGamesTemplate = '<li>' +
   '<table class="table-games gameCell" onclick="Game.gameClicked(this)">' +
   '<tr>' +
-  '<th><img src="/images/game-icon-wallet.svg"> Creator:</th>' +
+  '<th><img src="/img/game-icon-wallet.svg"> Creator:</th>' +
   '<td colspan="2">{{address}}</td>' +
   '</tr>' +
   '<tr>' +
-  '<th><img src="/images/game-icon-bet.svg"> Bet:</th>' +
-  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/images/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
+  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right"></td>' +
   '</tr>' +
   '</table>' +
@@ -642,12 +642,12 @@ var TableAvailableGamesTemplate = '<li>' +
 var TopGamesTemplate = '<li>' +
   '<table class="table-games gameCell" onclick="Game.topGameClicked(this)">' +
   '<tr>' +
-  '<th><img src="/images/game-icon-wallet.svg"> Creator:</th>' +
+  '<th><img src="/img/game-icon-wallet.svg"> Creator:</th>' +
   '<td colspan="2">{{address}}</td>' +
   '</tr>' +
   '<tr>' +
-  '<th><img src="/images/game-icon-bet.svg"> Bet:</th>' +
-  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/images/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
+  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right"></td>' +
   '</tr>' +
   '</table>' +
@@ -656,12 +656,12 @@ var TopGamesTemplate = '<li>' +
 var RaffleGamesTemplate = '<li>' +
   '<table class="table-games">' +
   '<tr>' +
-  '<th><img src="/images/game-icon-wallet.svg"> Winner:</th>' +
+  '<th><img src="/img/game-icon-wallet.svg"> Winner:</th>' +
   '<td colspan="2">{{address}}</td>' +
   '</tr>' +
   '<tr>' +
-  '<th><img src="/images/game-icon-bet.svg"> Prize:</th>' +
-  '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/images/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<th><img src="/img/game-icon-bet.svg"> Prize:</th>' +
+  '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right">{{timeago}}</td>' +
   '</tr>' +
   '</table>' +

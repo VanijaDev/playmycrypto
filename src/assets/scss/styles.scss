@@ -174,19 +174,19 @@ button:focus, input:focus {
   border: none;
 
   &.flag-en {
-    background-image: url(./assets/img/flags/en.png);
+    background-image: url(/img/flags/en.png);
   }
 
   &.flag-ua {
-    background-image: url(./assets/img/flags/ua.png);
+    background-image: url(/img/flags/ua.png);
   }
 
   &.flag-jp {
-    background-image: url(./assets/img/flags/jp.png);
+    background-image: url(/img/flags/jp.png);
   }
 
   &.flag-kr {
-    background-image: url(./assets/img/flags/kr.png);
+    background-image: url(/img/flags/kr.png);
   }
 }
 
@@ -417,6 +417,10 @@ button:focus, input:focus {
   }
 }
 
+.full-width {
+  width: 100%;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -544,7 +548,25 @@ button:focus, input:focus {
 
 .raffle {
   .scrollbar-inner {
-    height: 302px;
+    height: 322px;
+  }
+}
+
+.how-to-play {
+  .scrollbar-inner {
+    height: 420px;
+  }
+}
+
+.btn-animated {
+  box-shadow: 0 9px #999;
+  padding: 0;
+  border: 0;
+  width: 50px;
+  border-radius: 10px;
+
+  img {
+    border-radius: 10px;
   }
 }
 

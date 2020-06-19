@@ -18,29 +18,33 @@
                 <div class="f13">{{ $t('IN_RAFFLE') }}:</div>
 
                 <div class="raffle-amount">
-                  0.03413
-                  <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                  <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                  <b id="cryptoForRaffle">0.03413</b>
+                  <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                  <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
                 </div>
               </div>
               <div class="content">
                 <div class="participants">
-                  <img src="../assets/img/game-icon-users.svg" class="mr-2">
+                  <img src="/img/game-icon-users.svg" class="mr-2">
                   <span class="f16"> {{ $t('PARTICIPANTS') }}:</span>
-                  <b class="f18"><span id="participants">99</span>/100</b>
-                  <button class="btn long-btn btn-primary rounded-button float-right">{{ $t('START') }}</button>
+                  <b class="f18">
+                    <span id="rafflePlayingAmount">99</span>
+                    /
+                    <span id="raffleActivationAmount">100</span>
+                  </b>
+                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right">{{ $t('START') }}</button>
                 </div>
                 <div class="participants pt-3">
-                  <img src="../assets/img/game-icon-quality.svg" class="mr-2">
+                  <img src="/img/game-icon-quality.svg" class="mr-2">
                   {{ $t('LAST_WINNER') }}:
                 </div>
-                <div class="scrollbar-inner">
+                <div class="scrollbar-inner" id="BlockRaffle">
                   <div class="bordered mt-1">
                     <p>0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</p>
                     <p>
                       <span class="text-primary">
                         <b>0.0453</b>
-                        <img src="../assets/img/icon_amount-eth.svg" class="money-icon ml-2">
+                        <img src="/img/icon_amount-eth.svg" class="money-icon ml-2">
                       </span>
                       <span class="float-right text-black-50">18.03.2020</span>
                     </p>
@@ -66,22 +70,22 @@
             <div id="BlockTopGames" class="inner-padding scrollbar-inner">
               <div class="bordered blue-border mt-1">
                 <p>
-                  <img src="../assets/img/game-icon-wallet.svg" class="creator">
+                  <img src="/img/game-icon-wallet.svg" class="creator">
                   <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
                   <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
                 </p>
                 <p>
-                  <img src="../assets/img/game-icon-bet.svg" class="creator">
+                  <img src="/img/game-icon-bet.svg" class="creator">
                   <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
                   <span class="text-primary"><b>0.0453</b></span>
 
-                  <img src="../assets/img/icon_amount-eth.svg" class="money-icon">
+                  <img src="/img/icon_amount-eth.svg" class="money-icon">
                 </p>
               </div>
             </div>
 
             <div class="bg-primary text-white mt-3 p-3">
-              <img src="../assets/img/game-icon-money.svg">
+              <img src="/img/game-icon-money.svg">
               {{ $t('LIST_OPENED_GAMES') }}:
             </div>
 
@@ -90,22 +94,30 @@
                 {{ $t('AVAILABLE_GAMES') }}:
               </h2>
 
-              <div class="inner-padding scrollbar-inner">
+              <div class="inner-padding scrollbar-inner" id="AvailableGames">
                 <div class="bordered mt-1">
                   <p>
-                    <img src="../assets/img/game-icon-wallet.svg" class="creator">
+                    <img src="/img/game-icon-wallet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">Creator:</span>
                     <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
                   </p>
                   <p>
-                    <img src="../assets/img/game-icon-bet.svg" class="creator">
+                    <img src="/img/game-icon-bet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
                     <span class="text-primary"><b>0.0453</b></span>
-                    <img src="../assets/img/icon_amount-eth.svg" class="money-icon">
+                    <img src="/img/icon_amount-eth.svg" class="money-icon">
                   </p>
                 </div>
               </div>
             </div>
+
+            <div class="inner-padding">
+              <button class="btn long-btn btn-primary rounded-button full-width mt-4"
+                      id="loadMoreAvailableGamesBtn" onclick="window.Game.loadMoreAvailableGames()">
+                LOAD MORE
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
@@ -127,11 +139,6 @@
     },
     mounted() {
       this.currentGame = window.location.pathname.replace('/', '');
-    },
-    methods: {
-      startRaffle() {
-        console.log('StartRaffle click')
-      }
     }
   }
 </script>

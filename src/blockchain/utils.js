@@ -41,7 +41,7 @@ const Utils = {
 
   addGameIconsToElement: (element, gameIconIds) => {
     gameIconIds.forEach((id) => {
-      element.append('<img src="/images/' + Utils.gamesIconsSmall[id] + '.svg">');
+      element.append('<img src="/img/' + Utils.gamesIconsSmall[id] + '.svg">');
     })
   },
 

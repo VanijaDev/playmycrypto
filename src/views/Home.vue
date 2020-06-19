@@ -15,13 +15,13 @@
           </div>
           <div class="col">
             <b>2%</b>
-            <img class="info_icon" src="../assets/img/icon_info.svg" @click.stop="showInfoTooltip(1)" v-click-outside="hideInfoTooltip">
+            <img class="info_icon" src="/img/icon_info.svg" @click.stop="showInfoTooltip(1)" v-click-outside="hideInfoTooltip">
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_3") }}</p>
             <span class="tooltip-info" v-show="visibleInfoTooltip===1">{{ $t("ADVANTAGES.TOOLTIP_3") }}</span>
           </div>
           <div class="col">
             <b>2%</b>
-            <img class="info_icon" src="../assets/img/icon_info.svg" @click.stop="showInfoTooltip(2)" v-click-outside="hideInfoTooltip">
+            <img class="info_icon" src="/img/icon_info.svg" @click.stop="showInfoTooltip(2)" v-click-outside="hideInfoTooltip">
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_4") }}</p>
             <span class="tooltip-info" v-show="visibleInfoTooltip===2">
               <a href="https://onigiribank.com" target="blank">OnigiriBank</a> {{ $t("ADVANTAGES.TOOLTIP_4") }}
@@ -29,7 +29,7 @@
           </div>
           <div class="col">
             <b>100%</b>
-            <img class="info_icon" src="../assets/img/icon_info.svg" @click.stop="showInfoTooltip(3)" v-click-outside="hideInfoTooltip">
+            <img class="info_icon" src="/img/icon_info.svg" @click.stop="showInfoTooltip(3)" v-click-outside="hideInfoTooltip">
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_5") }}</p>
             <span class="tooltip-info" v-show="visibleInfoTooltip===3">{{ $t("ADVANTAGES.TOOLTIP_5") }}</span>
           </div>
@@ -45,22 +45,22 @@
 
             <div class="col-sm-10 text-right total-amounts">
               <div class="total-item d-inline-block">
-                <img src="../assets/img/bg-hand-money.svg" class="hand-money">
+                <img src="/img/bg-hand-money.svg" class="hand-money">
                 <span id="totalUsedReferralFees">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-item d-inline-block">
-                <img src="../assets/img/bg-hand-money.svg" class="hand-money">
+                <img src="/img/bg-hand-money.svg" class="hand-money">
                 <span id="ongoinRafflePrize">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-item d-inline-block">
-                <img src="../assets/img/bg-hand-money.svg" class="hand-money">
+                <img src="/img/bg-hand-money.svg" class="hand-money">
                 <span id="totalUsedPartnerFees">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
                     {{ $t("NOW_PLAYING") }}
                     <b id="now_playing_coinflip">0</b>
                   </span>
-                  <img src="../assets/img/icon-coinflip.svg" class="game-icon">
+                  <img src="/img/icon-coinflip.svg" class="game-icon">
                   <span class="title">Coin Flip</span>
                 </router-link>
               </div>
@@ -85,7 +85,7 @@
                   {{ $t("NOW_PLAYING") }}
                   <b id="now_playing_rps">0</b>
                 </span>
-                  <img src="../assets/img/icon-rock-paper-scissors.svg" class="game-icon">
+                  <img src="/img/icon-rock-paper-scissors.svg" class="game-icon">
                   <span class="title">Rock Paper Scissors</span>
                 </router-link>
               </div>
@@ -96,13 +96,13 @@
                   {{ $t("NOW_PLAYING") }}
                   <b id="now_playing_ttt">0</b>
                 </span>
-                  <img src="../assets/img/icon-tic-tac-toe.svg" class="game-icon">
+                  <img src="/img/icon-tic-tac-toe.svg" class="game-icon">
                   <span class="title">Tic-Tac-Toe</span>
                 </router-link>
               </div>
 
               <div class="one-game new-game">
-                <img src="../assets/img/icon-coming-soon.svg" class="game-icon">
+                <img src="/img/icon-coming-soon.svg" class="game-icon">
                 <span class="new-game-title">{{ $t("NEW_GAME") }}</span>
                 <span class="title">{{ $t("COMING_SOON") }}...</span>
               </div>
@@ -116,34 +116,34 @@
           <div class="border-block">
             <div class="header">
               {{ $t("TOTAL_WON") }}: <b id="rafflePrizesWonTotal">0.00000</b>
-              <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-              <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </div>
             <div class="content">
 
               <div class="total-won">
-                <img src="../assets/img/icon-coinflip-sm.svg" class="game-sm-icon">
+                <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon">
                 <span id="rafflePrizesWonTotalGameCoinFlip">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-won">
-                <img src="../assets/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon">
+                <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon">
                 <span id="rafflePrizesWonTotalGameRPS">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
               <div class="total-won">
-                <img src="../assets/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon">
+                <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon">
                 <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
-                <img src="../assets/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                <img src="../assets/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </div>
             </div>
           </div>
 
           <div class="text-center mb-4 more-play">
-            <img src="../assets/img/icon-motivation.svg">
+            <img src="/img/icon-motivation.svg">
           </div>
 
           <div class="border-block">

@@ -21,7 +21,7 @@
         </div>
 
         <button class="btn btn-start-game desktop-move disabled">
-          <img src="../assets/img/icon-btn-start.svg" class="mr-2">
+          <img src="/img/icon-btn-start.svg" class="mr-2">
           {{ $t('MAKE_MOVE') }}
         </button>
       </div>
@@ -32,23 +32,23 @@
       <h2 class="f24">{{ $t('MAKE_FIRST_MOVE') }}</h2>
 
       <div class="no-value mt-4 mt-sm-5 mb-4 mb-sm-5">
-        <img src="../assets/img/game-icon-ask-big.svg" id="selectedValue">
+        <img src="/img/game-icon-ask-big.svg" id="selectedValue">
       </div>
 
       <div class="mb-sm-0 mb-3">
         <button class="btn btn-link game-move-item mr-4 mr-sm-4 ml-sm-4">
-          <img src="../assets/img/game-icon-scissor-big.svg">
+          <img src="/img/game-icon-scissor-big.svg">
         </button>
         <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-4 ml-sm-5">
-          <img src="../assets/img/game-icon-rock-big.svg">
+          <img src="/img/game-icon-rock-big.svg">
         </button>
         <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-4 ml-sm-5">
-          <img src="../assets/img/game-icon-paper-big.svg">
+          <img src="/img/game-icon-paper-big.svg">
         </button>
       </div>
 
       <button class="btn btn-start-game mb-3 mobile-move">
-        <img src="../assets/img/icon-btn-start.svg" class="mr-2">
+        <img src="/img/icon-btn-start.svg" class="mr-2">
         {{ $t('MAKE_MOVE') }}
       </button>
 

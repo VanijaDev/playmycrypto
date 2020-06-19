@@ -6,7 +6,7 @@
         <div class="d-flex">
           <div class="mr-auto">
             <router-link to="/">
-              <img src="./assets/img/logo-oxo.svg" alt="Logo oxo" class="logo">
+              <img src="/img/logo-oxo.svg" alt="Logo oxo" class="logo">
             </router-link>
           </div>
           <div class="row align-self-start">
@@ -14,10 +14,10 @@
               Choose crypto:
             </div>
             <button class="currency-select" v-bind:class="{'is-active': currency === 'trx'}" @click="setCurrency('trx')">
-              <img src="./assets/img/icon-tron.svg" alt="Tron">
+              <img src="/img/icon-tron.svg" alt="Tron">
             </button>
             <button class="currency-select" v-bind:class="{'is-active': currency === 'eth'}" @click="setCurrency('eth')">
-              <img src="./assets/img/ethereum-logo.svg" alt="ETH">
+              <img src="/img/ethereum-logo.svg" alt="ETH">
             </button>
 
             <div class="user-profile position-relative">
@@ -33,11 +33,11 @@
               </div>
 
               <div class="profile-info position-relative" v-click-outside="hideUserPopup">
-                <img src="./assets/img/icon-profile.svg" class="float-right pointer" @click="userPopupOpened = !userPopupOpened">
+                <img src="/img/icon-profile.svg" class="float-right pointer" @click="userPopupOpened = !userPopupOpened">
                 <div class="pointer float-left mr-2">
                   <small>{{ $t('PROFILE') }}:</small>
-                  <div class="profile-name" id="profileName" @click="userPopupOpened = !userPopupOpened">
-                    {{ user.name }}
+                  <div class="profile-name" id="playerAccount" @click="userPopupOpened = !userPopupOpened">
+                    0x7eb***62c
                   </div>
                 </div>
 
@@ -48,9 +48,9 @@
                         <h3>{{ $t('TOTAL_BALANCE') }}:</h3>
                       </div>
                       <div class="col-6">
-                        <img src="./assets/img/icon_amount-eth.svg" class="game-crypto-icon ml-2 mr-2" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" class="game-crypto-icon ml-2 mr-2" v-show="currency === 'trx'">
-                        <em id="currentAccountBalance">{{ user.totalBalance }}</em>
+                        <img src="/img/icon_amount-eth.svg" class="game-crypto-icon ml-2 mr-2" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" class="game-crypto-icon ml-2 mr-2" v-show="currency === 'trx'">
+                        <em id="currentAccountBalance">0</em>
                       </div>
                     </div>
                   </li>
@@ -58,7 +58,7 @@
                   <li>
                     <h3>{{ $t('CURRENTLY_PLAYING') }}:</h3>
                     <div id="listCurrentlyPlayingGames">
-                      <img src="./assets/img/icon-rock-paper-scissors-sm.svg">
+                      <img src="/img/icon-rock-paper-scissors-sm.svg">
                     </div>
                   </li>
 
@@ -66,16 +66,16 @@
                     <h3>{{ $t("TOTAL_PLAYINGS") }}:</h3>
                     <div class="user-table row">
                       <div class="col-4 pr-0">
-                        <img src="./assets/img/icon-coinflip-sm.svg" class="mr-2">
-                        <em id="coinFlipPlayedTotalAmount">{{ user.totalPlaying.coinFlip }}</em>
+                        <img src="/img/icon-coinflip-sm.svg" class="mr-2">
+                        <em id="coinFlipPlayedTotalAmount">0</em>
                       </div>
                       <div class="col-4 pr-0">
-                        <img src="./assets/img/icon-rock-paper-scissors-sm.svg" class="mr-2">
-                        <em id="rockPaperScissorsPlayedTotalAmount">{{ user.totalPlaying.rps }}</em>
+                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2">
+                        <em id="rockPaperScissorsPlayedTotalAmount">0</em>
                       </div>
                       <div class="col-4 pr-0">
-                        <img src="./assets/img/icon-tic-tac-toe-sm.svg" class="mr-2">
-                        <em id="oxoTotalAmount">{{ user.totalPlaying.ttt }}</em>
+                        <img src="/img/icon-tic-tac-toe-sm.svg" class="mr-2">
+                        <em id="oxoTotalAmount">0</em>
                       </div>
                     </div>
                   </li>
@@ -86,11 +86,11 @@
                         <h3 class="mt-2">{{ $t('GAMEPLAY_PROFIT') }}:</h3>
                       </div>
                       <div class="col-sm-5 pr-0">
-                        <img src="./assets/img/icon_amount-eth.svg" class="game-crypto-icon mr-3" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" class="game-crypto-icon mr-3" v-show="currency === 'trx'">
+                        <img src="/img/icon_amount-eth.svg" class="game-crypto-icon mr-3" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" class="game-crypto-icon mr-3" v-show="currency === 'trx'">
 
-                        <b id="profit_amount_gameplay">{{ user.gamePlayProfit }}</b>
-                        <em id="updownpic_gameplay"><img src="./assets/img/icon-trending-up.svg"></em>
+                        <b id="profit_amount_gameplay">0</b>
+                        <em id="updownpic_gameplay"><img src="/img/icon-trending-up.svg"></em>
                       </div>
                     </div>
                     <div class="user-table row">
@@ -98,11 +98,11 @@
                         <h3 class="mt-2">{{ $t('TOTAL_PROFIT') }}:</h3>
                       </div>
                       <div class="col-sm-5 pr-0">
-                        <img src="./assets/img/icon_amount-eth.svg" class="game-crypto-icon mr-3" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" class="game-crypto-icon mr-3" v-show="currency === 'trx'">
+                        <img src="/img/icon_amount-eth.svg" class="game-crypto-icon mr-3" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" class="game-crypto-icon mr-3" v-show="currency === 'trx'">
 
-                        <b id="profit_amount_total">{{ user.totalProfit }}</b>
-                        <em id="updownpic_total"><img src="./assets/img/icon-trending-up.svg"></em>
+                        <b id="profit_amount_total">0</b>
+                        <em id="updownpic_total"><img src="/img/icon-trending-up.svg"></em>
                       </div>
                     </div>
                   </li>
@@ -111,22 +111,22 @@
                     <h3>{{ $t('REFERRAL_FEE_RECEIVED') }}:</h3>
                     <div class="user-table row">
                       <div class="col-sm-6 mb-2">
-                        <img src="./assets/img/icon-coinflip-sm.svg" class="mr-2">
-                        <em id="ReferralFeesWithdrawnCoinflip">{{ user.referralFee.coinFlip }}</em>
-                        <img src="./assets/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
+                        <img src="/img/icon-coinflip-sm.svg" class="mr-2">
+                        <em id="ReferralFeesWithdrawnCoinflip">0</em>
+                        <img src="/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
                       </div>
                       <div class="col-sm-6 mb-2">
-                        <img src="./assets/img/icon-rock-paper-scissors-sm.svg" class="mr-2">
-                        <em id="ReferralFeesWithdrawnRPS">{{ user.referralFee.rps }}</em>
-                        <img src="./assets/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
+                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2">
+                        <em id="ReferralFeesWithdrawnRPS">0</em>
+                        <img src="/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
                       </div>
                       <div class="col-sm-6">
-                        <img src="./assets/img/icon-tic-tac-toe-sm.svg" class="mr-2">
-                        <em id="ReferralFeesWithdrawnOxo">{{ user.referralFee.ttt }}</em>
-                        <img src="./assets/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
-                        <img src="./assets/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
+                        <img src="/img/icon-tic-tac-toe-sm.svg" class="mr-2">
+                        <em id="ReferralFeesWithdrawnOxo">0</em>
+                        <img src="/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
+                        <img src="/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
                       </div>
                     </div>
                   </li>
@@ -146,31 +146,25 @@
                         </button>
                       </div>
 
-                      <div>
-                        <div class="pt-3" id="withdrawReferral" v-if="activeUserTab===1">
-                          <img src="./assets/img/icon-coinflip-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.referral.indexOf('coinFlip') !== -1">
-                          <img src="./assets/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.referral.indexOf('rps') !== -1">
-                          <img src="./assets/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.referral.indexOf('ttt') !== -1">
+                      <div class="pt-3">
+                        <div id="withdrawReferral" v-if="activeUserTab===1">
+                          <button class="btn btn-animated">
+                            <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
+                          </button>
                         </div>
-                        <div class="pt-3" id="withdrawGamePrize" v-if="activeUserTab===2">
-                          <img src="./assets/img/icon-coinflip-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.gamePrize.indexOf('coinFlip') !== -1">
-                          <img src="./assets/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.gamePrize.indexOf('rps') !== -1">
-                          <img src="./assets/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.gamePrize.indexOf('ttt') !== -1">
+
+                        <div id="withdrawGamePrize" v-if="activeUserTab===2">
+                          <button class="btn btn-animated">
+                            <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
+                          </button>
                         </div>
-                        <div class="pt-3" id="withdrawRafflePrize" v-if="activeUserTab===3">
-                          <img src="./assets/img/icon-coinflip-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.rafflePrize.indexOf('coinFlip') !== -1">
-                          <img src="./assets/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.rafflePrize.indexOf('rps') !== -1">
-                          <img src="./assets/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3"
-                               v-show="user.withdrawPending.rafflePrize.indexOf('ttt') !== -1">
+
+                        <div id="withdrawRafflePrize" v-if="activeUserTab===3">
+                          <button class="btn btn-animated">
+                            <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
+                          </button>
                         </div>
+
                       </div>
                     </div>
                   </li>
@@ -202,7 +196,6 @@
 
 <script>
   import ClickOutside from 'vue-click-outside'
-  // import axios from "axios";
 
   export default {
     data: function () {
@@ -210,27 +203,6 @@
         userPopupOpened: false,
         languagePopupOpened: false,
         activeUserTab: 1,
-        user: {
-          name: '0xE4Cf...2dEf',
-          totalBalance: 0,
-          gamePlayProfit: 0.12411,
-          totalProfit: 0.13411,
-          totalPlaying: {
-            coinFlip: 100,
-            rps: 10,
-            ttt: 10,
-          },
-          referralFee: {
-            coinFlip: 0.01231,
-            rps: 0,
-            ttt: 0,
-          },
-          withdrawPending: {
-            referral: [],
-            gamePrize: [],
-            rafflePrize: [],
-          }
-        }
       };
     },
     computed: {
@@ -243,14 +215,6 @@
       topBannerMessage() {
         return this.$store.state.topBannerMessage
       }
-    },
-    mounted() {
-      this.addWithdrawPending()
-      // axios.get("https://jsonplaceholder.typicode.com/todos/").then(
-      //   response => {
-      //     console.log(response);
-      //   }
-      // )
     },
     methods: {
       hideUserPopup() {
@@ -267,12 +231,11 @@
         //   hash: 'hash'
         // });
       },
-      addWithdrawPending() {
-        this.user.withdrawPending.referral.push('ttt');
-        // this.user.withdrawPending.referral.push('coinFlip');
-      },
       setCurrency(currency) {
         this.$store.commit('setCurrency', currency);
+
+        let selectedBlockChain = (currency === 'eth') ? 0 : 1;
+        window.BlockchainManager.blockchainChanged(selectedBlockChain)
       },
       getCurrentFlag() {
         return 'flag-' + this.language;

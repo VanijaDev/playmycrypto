@@ -109,11 +109,11 @@ let ProfileManager = {
     profitAmountElement.innerText = Utils.weiToEtherFixed(profit.toString());
 
     if (profit.comparedTo(new BigNumber("0")) < 0) {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/images/icon-trending-down.svg">';
+      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
       profitAmountElement.classList.remove("green");
       profitAmountElement.classList.add("red");
     } else {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/images/icon-trending-up.svg">';
+      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
     }
   },
 
@@ -173,11 +173,11 @@ let ProfileManager = {
     profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
 
     if (totalProfit.comparedTo(new BigNumber("0")) < 0) {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/images/icon-trending-down.svg">';
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
       profitAmountTotalElement.classList.remove("green");
       profitAmountTotalElement.classList.add("red");
     } else {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/images/icon-trending-up.svg">';
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
       profitAmountTotalElement.classList.remove("red");
       profitAmountTotalElement.classList.add("green");
     }
@@ -315,7 +315,7 @@ let ProfileManager = {
           pendingValue = _pendingValues[idx];
           tooltipSuffix = " games";
         }
-        var pictureTemplate = '<li><button class="pendingWithdraw pending_btn" style="background: url(/images/' + Utils.gameIconSmallForGame(value) + '.svg) no-repeat center transparent;" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')"> <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span> </button></li>';
+        var pictureTemplate = '<li><button class="pendingWithdraw pending_btn" style="background: url(/img/' + Utils.gameIconSmallForGame(value) + '.svg) no-repeat center transparent;" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')"> <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span> </button></li>';
         $('#' + _pendingTarget).append(pictureTemplate);
       });
     }
