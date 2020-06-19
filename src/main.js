@@ -56,3 +56,35 @@ new Vue({
   store: store,
   render: (h) => h(App),
 }).$mount("#app");
+
+// window.addEventListener('load', async () => {
+//   console.log('%c index - load', 'color: #00aa00');
+
+//   // Index.pageLoaded = true;
+//   // await Index.setup();
+// });
+
+// window.addEventListener('onunload', async () => {
+//   console.log('%c index - onunload', 'color: #00aa00');
+
+//   // Index.onUnload();
+// });
+
+
+// ethereum.on('accountsChanged', function (accounts) {
+//   // if (!Index.pageLoaded) {
+//   //   return;
+//   // }
+
+//   console.log('%c index - accountsChanged', 'color: #00aa00');
+//   // BlockchainManager.accountChanged();
+// });
+
+// ethereum.on('networkChanged', function (accounts) {
+//   // if (!Index.pageLoaded) {
+//   //   return;
+//   // }
+
+//   console.log('%c index - networkChanged', 'color: #00aa00');
+//   // BlockchainManager.setup();
+// });
