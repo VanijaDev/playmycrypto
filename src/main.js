@@ -31,7 +31,6 @@ let store = new Vuex.Store({
   state: {
     currency: currency,
     language: language,
-    topBannerMessage: null
   },
   mutations: {
     setCurrency(state, currency) {
@@ -43,12 +42,6 @@ let store = new Vuex.Store({
     setLanguage(state, lang) {
       localStorage.language = state.language = lang;
       i18n.locale = lang;
-    },
-    showTopBannerMessage(state, {textBefore, hash, textAfter = 'is being mined...'}) {
-      this.state.topBannerMessage = textBefore + ' <u>' + hash + '</u> ' + textAfter;
-    },
-    hideTopBannerMessage() {
-      this.state.topBannerMessage = null;
     },
   }
 });

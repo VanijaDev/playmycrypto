@@ -175,7 +175,7 @@
         </div>
       </div>
 
-      <div class="top-message" v-html="topBannerMessage" v-bind:class="{visible: topBannerMessage}"></div>
+      <div class="top-message"></div>
     </header>
 
     <!-- Begin page content -->
@@ -211,9 +211,6 @@
       },
       language() {
         return this.$store.state.language
-      },
-      topBannerMessage() {
-        return this.$store.state.topBannerMessage
       }
     },
     methods: {
@@ -225,11 +222,6 @@
       },
       setLocale(lang) {
         this.$store.commit('setLanguage', lang);
-
-        // this.$store.commit('showTopBannerMessage', {
-        //   textBefore: 'before',
-        //   hash: 'hash'
-        // });
       },
       setCurrency(currency) {
         this.$store.commit('setCurrency', currency);

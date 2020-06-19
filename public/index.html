@@ -9,41 +9,25 @@
   <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
 </head>
 <body>
-<noscript>
-  <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-</noscript>
 <div id="app"></div>
 <!-- built files will be auto injected -->
 
 <script src="./jquery.min.js"></script>
 <script>
-  var alerttext = '';
+  function showTopBannerMessage(textBefore, hash) {
+    var topBannerMessage = textBefore + ' <u>' + hash + '</u> is being mined...';
+    $('.top-message').html(topBannerMessage).addClass('visible');
+  }
+
+  function showTopBannerMessage() {
+    $('.top-message').html('').removeClass('visible');
+  }
 
   function showAlert(name, alerttext) {
-    if (name == 'success') {
-      // $('#successpopuptext').text(alerttext);
-      // $.magnificPopup.open({
-      //   items: {
-      //     src: '#PopupSuccess'
-      //   },
-      //   type: 'inline',
-      //   preloader: false,
-      //   focus: '#username',
-      //   modal: true
-      // });
-    }
-    if (name == 'error') {
-      // $('#errorpopuptext').text(alerttext);
-      // $.magnificPopup.open({
-      //   items: {
-      //     src: '#PopupError'
-      //   },
-      //   type: 'inline',
-      //   preloader: false,
-      //   focus: '#username',
-      //   modal: true
-      // });
-    }
+    $('.top-message').html(alerttext).addClass('visible');
+    setTimeout(function () {
+      $('.top-message').html('').removeClass('visible');
+    }, 5000)
   }
 </script>
 <script src="./index.js"></script>
