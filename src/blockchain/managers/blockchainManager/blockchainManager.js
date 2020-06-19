@@ -201,7 +201,7 @@ const BlockchainManager = {
 
         iconElements = document.getElementsByClassName("game-crypto-icon");
         for (let i = 0; i < iconElements.length; i ++) {
-          iconElements[i].src = "/img/icon_amount-eth.svg";
+          iconElements[i].src = "/images/icon_amount-eth.svg";
         }
         break;
       
@@ -219,7 +219,7 @@ const BlockchainManager = {
 
         iconElements = document.getElementsByClassName("game-crypto-icon");
         for (let i = 0; i < iconElements.length; i ++) {
-          iconElements[i].src = "/img/icon_amount-trx.svg";
+          iconElements[i].src = "/images/icon_amount-trx.svg";
         }
         break;
 
