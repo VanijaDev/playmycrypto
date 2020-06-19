@@ -44,19 +44,21 @@ const Game = {
     this.setupOnce();
 
     if (this.gameType == Types.Game.cf) {
-      document.getElementById("game_name").innerHTML = "CoinFlip";
+      // document.getElementById("game_name").innerHTML = "CoinFlip";
       CoinFlip.updateGameView();
     } else if (this.gameType == Types.Game.rps) {
-      document.getElementById("game_name").innerHTML = "Rock Paper Scissors";
+      // document.getElementById("game_name").innerHTML = "Rock Paper Scissors";
       // RPS.updateGameView();  TODO
+    } else {
+      // document.getElementById("game_name").innerHTML = "TITLE - ERROR";
     }
 
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    this.updateSuspendedViewForGame(this.gameType);
-    this.updateAllGamesForGame(this.gameType);
-    await this.updateRaffleStateInfoForGame(this.gameType, true);
+    // this.updateSuspendedViewForGame(this.gameType);
+    // this.updateAllGamesForGame(this.gameType);
+    // await this.updateRaffleStateInfoForGame(this.gameType, true);
 
-    hideSpinner(Spinner.raffle);
+    // hideSpinner(Spinner.raffle);
   },
 
   setupOnce: function () {
@@ -350,6 +352,18 @@ const Game = {
     }
     this.loadTopGamesForGame(this.gameType);
   },
+
+
+
+
+
+
+
+
+
+
+
+
 
   onGameCreated: async function (_gameType, _gameId, _creator) {
     if (_gameType == Utils.Games.coinFlip) {

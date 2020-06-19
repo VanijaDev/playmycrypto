@@ -46,7 +46,7 @@ let store = new Vuex.Store({
   }
 });
 
-Vue.component('coinflip-game', CoinflipGameComponent);
+Vue.component('cf-game', CoinflipGameComponent);
 Vue.component('rps-game', RPSGameComponent);
 Vue.component('ttt-game', TTTGameComponent);
 

@@ -5,7 +5,7 @@
         <div class="col-sm-8">
           <div class="shadow-block inner-padding game-block">
             <div class="game-area">
-              <coinflip-game v-if="currentGame === 'coinflip'"></coinflip-game>
+              <cf-game v-if="currentGame === 'coinflip'"></cf-game>
               <rps-game v-if="currentGame === 'rps'"></rps-game>
               <ttt-game v-if="currentGame === 'ttt'"></ttt-game>
             </div>
