@@ -741,6 +741,14 @@ button:focus, input:focus {
   text-align: center;
 }
 
+.mr-game-name {
+  margin-right: auto;
+  padding-left: 50px;
+  font-weight: bolder;
+  font-size: 30px;
+  font-family: 'SFProDisplay-Medium', sans-serif;
+  color: #0049D8;
+}
 
 @media all and (max-width: 480px) {
   h2 {
