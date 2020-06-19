@@ -14,3 +14,9 @@ npm run serve
 ```
 npm run build
 ```
+
+#### Show message:
+showTopBannerMessage(textBefore, hash)
+
+#### Hide message:
+hideTopBannerMessage()

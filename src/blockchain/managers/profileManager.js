@@ -26,7 +26,7 @@ let ProfileManager = {
   update: async function () {
     console.log('%c ProfileManager - update', 'color: #00aa00');
     
-    hideAndClearNotifView();
+    hideTopBannerMessage();
     this.updateCurrentAccountUI();
     this.updateCurrentAccountBalanceUI();
 
@@ -291,7 +291,7 @@ let ProfileManager = {
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, this.ongoingGameRPS);
       if (Utils.addressesEqual(gameInfo.nextMover, BlockchainManager.currentAccount())) {
-        showNotifViewWithData("Rock Paper Scissors: you have pending move.");
+        showTopBannerMessage("Rock Paper Scissors: you have pending move.");
       }
     }
   },
@@ -355,10 +355,10 @@ let ProfileManager = {
         })
         .on('transactionHash', function(hash){
           // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showNotifViewWithData("REFERRAL FEE WITHDRAW transaction ", hash);
+          showTopBannerMessage("REFERRAL FEE WITHDRAW transaction ", hash);
         })
         .once('receipt', function(receipt){
-          hideAndClearNotifView();
+          hideTopBannerMessage();
           ProfileManager.updateAfterWithdrawal();
         })
         .once('error', function (error, receipt) {
@@ -366,7 +366,7 @@ let ProfileManager = {
             showAlert('error', "Error on withdraw referral fees transaction");
           }
 
-          hideAndClearNotifView();
+          hideTopBannerMessage();
         });
         break;
 
@@ -382,17 +382,17 @@ let ProfileManager = {
         })
         .on('transactionHash', function(hash){
           // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showNotifViewWithData("GAME PRIZE WITHDRAW transaction ", hash);
+          showTopBannerMessage("GAME PRIZE WITHDRAW transaction ", hash);
         })
         .once('receipt', function(receipt){
-          hideAndClearNotifView();
+          hideTopBannerMessage();
           ProfileManager.updateAfterWithdrawal();
         })
         .once('error', function (error, receipt) {
           if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
             showAlert('error', "Error on withdraw game prizes transaction");
           }
-          hideAndClearNotifView();
+          hideTopBannerMessage();
         });
         break;
 
@@ -405,17 +405,17 @@ let ProfileManager = {
         })
         .on('transactionHash', function(hash){
           // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showNotifViewWithData("RAFFLE FEE WITHDRAW transaction ", hash);
+          showTopBannerMessage("RAFFLE FEE WITHDRAW transaction ", hash);
         })
         .once('receipt', function(receipt){
-          hideAndClearNotifView();
+          hideTopBannerMessage();
           ProfileManager.updateAfterWithdrawal;
         })
         .once('error', function (error, receipt) {
           if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
             showAlert('error', "Error on withdraw raffle prize transaction");
           }
-          hideAndClearNotifView();
+          hideTopBannerMessage();
         });
         break;
 
