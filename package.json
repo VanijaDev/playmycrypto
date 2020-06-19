@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "concurrently \"webpack --watch\", \"vue-cli-service serve\"",
+    "serve": "webpack && vue-cli-service serve",
     "build": "webpack && vue-cli-service build",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
@@ -25,7 +25,6 @@
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
     "bignumber.js": "^9.0.0",
-    "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^6.0.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",

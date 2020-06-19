@@ -41,7 +41,9 @@ const BlockchainManager_ethereum = {
         }
       } catch (error) {
         this.initted = false;
-        showAlert('error', error.message);
+        if (typeof showAlert !== 'undefined') {
+          showAlert('error', error.message);
+        }
         return false;
       }
     }
@@ -50,7 +52,10 @@ const BlockchainManager_ethereum = {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
       this.initted = false;
-      showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
+      if (typeof showAlert !== 'undefined') {
+        showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
+      }
+
       throw new Error('Please install MetaMask.')
     }
     // Non-dapp browsers...

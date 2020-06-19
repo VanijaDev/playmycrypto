@@ -1,9 +1,9 @@
 import BlockchainManager from "./managers/blockchainManager/blockchainManager";
-import { NotificationManager } from "./managers/notificationManager";
-import { Utils } from "./utils";
+import {NotificationManager} from "./managers/notificationManager";
+import {Utils} from "./utils";
 import BigNumber from "bignumber.js";
-import { ProfileManager } from "./managers/profileManager";
-import { PromiseManager } from "./managers/promiseManager";
+import {ProfileManager} from "./managers/profileManager";
+import {PromiseManager} from "./managers/promiseManager";
 import Types from "./types";
 
 
@@ -15,7 +15,7 @@ const Index = {
   networkId: 0,
 
   //  ProfileManager callback
-  profileUpdated: function() {
+  profileUpdated: function () {
     ProfileManager.checkIfNextMover();
   },
 
@@ -33,7 +33,7 @@ const Index = {
     console.log('%c index - setupOnce', 'color: #00aa00');
     if (!this.initialSetupDone) {
       this.initialSetupDone = true;
-      
+
       NotificationManager.eventHandler = this;
       NotificationManager.subscribeAll();
     }
@@ -90,7 +90,7 @@ const Index = {
     let raffled_rps = new BigNumber(await BlockchainManager.rafflePrizesWonTotal(Types.Game.rps));
     // console.log("raffled_rps: ", raffled_rps.toString());
     document.getElementById("rafflePrizesWonTotalGameRPS").innerText = Utils.weiToEtherFixed(raffled_rps.toString());
-    
+
     document.getElementById("rafflePrizesWonTotal").innerText = Utils.weiToEtherFixed(raffled_cf.plus(raffled_rps)).toString();
   },
 
@@ -120,13 +120,13 @@ const Index = {
     //  running
     let running_cf = parseInt(created_cf) - parseInt(completed_cf);
     document.getElementById("now_playing_coinflip").innerText = running_cf;
-    
+
     let running_rps = parseInt(created_rps) - parseInt(completed_rps);
     document.getElementById("now_playing_rps").innerText = running_rps;
   },
 
   infoClicked: function (_idSuffix) {
-    var popup = document.getElementById("myPopup_"+_idSuffix);
+    var popup = document.getElementById("myPopup_" + _idSuffix);
     popup.classList.toggle("show");
   },
 
@@ -138,10 +138,10 @@ const Index = {
     } else if (_gameType == Utils.Games.rockPaperScissors) {
       console.log('%c index - onGameCreated_RPS', 'color: #1d34ff');
     }
-    
+
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
-    
+
     if (_creator.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
@@ -152,7 +152,7 @@ const Index = {
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
-    
+
     if (ProfileManager.isGameParticipant(Utils.Games.coinFlip, _gameId)) {
       ProfileManager.update();
     }
@@ -190,13 +190,13 @@ const Index = {
     } else if (_gameType == Utils.Games.rockPaperScissors) {
       console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
-    
+
     Index.updateRafflePrizesWonTotal();
     Index.updateOngoinRafflePrize();
 
     if (_winner.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
-    }    
+    }
   },
 
   onGameOpponentMoved: function (_id, _nextMover) {
@@ -213,7 +213,7 @@ const Index = {
     } else if (_gameType == Utils.Games.rockPaperScissors) {
       console.log('%c index - onRafflePrizeWithdrawn_RPS', 'color: #1d34ff');
     }
-    
+
     Index.updateReferralFeesForAllGamesTotal();
     Index.updatePartnerFeesForAllGamesTotal();
     Index.updateOngoinRafflePrize();
@@ -308,7 +308,7 @@ window.addEventListener('onunload', async () => {
 
 
 ethereum.on('accountsChanged', function (accounts) {
-  if(!Index.pageLoaded) {
+  if (!Index.pageLoaded) {
     return;
   }
 
@@ -317,7 +317,7 @@ ethereum.on('accountsChanged', function (accounts) {
 });
 
 ethereum.on('networkChanged', function (accounts) {
-  if(!Index.pageLoaded) {
+  if (!Index.pageLoaded) {
     return;
   }
 
