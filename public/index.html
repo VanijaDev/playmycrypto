@@ -33,6 +33,14 @@
       $('.top-message').html('').removeClass('visible');
     }, 5000)
   }
+
+  function showLoader(element) {
+    $(element).addClass('loader').append('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  }
+
+  function hideLoader(element) {
+    $(element).removeClass('loader').find('.lds-ring').remove()
+  }
 </script>
 
 </body>
