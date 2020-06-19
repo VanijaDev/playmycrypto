@@ -50,6 +50,11 @@
       currency() {
         return this.$store.state.currency
       }
+    },
+    mounted(){
+      let recaptchaScript = document.createElement('script');
+      recaptchaScript.setAttribute('src', '/coinFlip.js');
+      document.head.appendChild(recaptchaScript);
     }
   };
 </script>

@@ -32,7 +32,9 @@
                     /
                     <span id="raffleActivationAmount">100</span>
                   </b>
-                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right">{{ $t('START') }}</button>
+                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right">{{ $t('START')
+                    }}
+                  </button>
                 </div>
                 <div class="participants pt-3">
                   <img src="/img/game-icon-quality.svg" class="mr-2">
@@ -139,6 +141,10 @@
     },
     mounted() {
       this.currentGame = window.location.pathname.replace('/', '');
+
+      let recaptchaScript = document.createElement('script');
+      recaptchaScript.setAttribute('src', '/game.js');
+      document.head.appendChild(recaptchaScript);
     }
   }
 </script>
