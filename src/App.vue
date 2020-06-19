@@ -4,11 +4,13 @@
     <header>
       <div class="container">
         <div class="d-flex">
-          <div class="mr-auto">
+          <!-- <div class="mr-auto"> -->
+            <div>
             <router-link to="/">
               <img src="/img/logo-oxo.svg" alt="Logo oxo" class="logo">
             </router-link>
           </div>
+          <div id="gameName" class="mr-game-name"></div>
           <div class="row align-self-start">
             <div class="choose-crypto">
               Choose crypto:

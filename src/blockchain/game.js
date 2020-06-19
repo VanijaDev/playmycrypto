@@ -582,36 +582,36 @@ export {
   Game
 };
 
-window.addEventListener('load', async function () {
-  console.log('%c Game - load', 'color: #00aa00');
+// window.addEventListener('load', async function () {
+//   console.log('%c Game - load', 'color: #00aa00');
 
-  Game.pageLoaded = true;
-  await BlockchainManager.init();
-  await Game.setup();
-});
+//   Game.pageLoaded = true;
+//   await BlockchainManager.init();
+//   await Game.setup();
+// });
 
-window.addEventListener('onunload', async () => {
-  console.log('%c index - onunload', 'color: #00aa00');
+// window.addEventListener('onunload', async () => {
+//   console.log('%c index - onunload', 'color: #00aa00');
 
-  Index.onUnload();
-});
+//   Index.onUnload();
+// });
 
 
-ethereum.on('accountsChanged', async function (accounts) {
-  if (Game.pageLoaded) {
-    console.log('%c Game - accountsChanged', 'color: #00aa00');
-    await BlockchainManager.accountChanged();
-    await Game.setup();
-  }
-});
+// ethereum.on('accountsChanged', async function (accounts) {
+//   if (Game.pageLoaded) {
+//     console.log('%c Game - accountsChanged', 'color: #00aa00');
+//     await BlockchainManager.accountChanged();
+//     await Game.setup();
+//   }
+// });
 
-ethereum.on('networkChanged', async function (accounts) {
-  if (Game.pageLoaded) {
-    console.log('%c Game - networkChanged', 'color: #00aa00');
-    await BlockchainManager.setup();
-    await Game.setup();
-  }
-});
+// ethereum.on('networkChanged', async function (accounts) {
+//   if (Game.pageLoaded) {
+//     console.log('%c Game - networkChanged', 'color: #00aa00');
+//     await BlockchainManager.setup();
+//     await Game.setup();
+//   }
+// });
 
 
 //  HELPERS
