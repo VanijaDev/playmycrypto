@@ -34,11 +34,11 @@
     }, 5000)
   }
 
-  function showLoader(element) {
+  function showSpinner(element) {
     $(element).addClass('loader').append('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
   }
 
-  function hideLoader(element) {
+  function hideSpinner(element) {
     $(element).removeClass('loader').find('.lds-ring').remove()
   }
 </script>

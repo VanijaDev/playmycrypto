@@ -27,5 +27,10 @@ hideTopBannerMessage()
 
 #### Add block loader:
 ```
-window.showLoader(document.getElementById('...'))
+window.showSpinner(document.getElementById('...'))
+```
+
+#### Hide block loader:
+```
+window.hideSpinner(document.getElementById('...'))
 ```
