@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-8">
           <div class="shadow-block inner-padding game-block">
-            <div class="game-area">
+            <div class="game-area" id="gameBlock">
               <cf-game v-if="currentGame === 'cf'"></cf-game>
               <rps-game v-if="currentGame === 'rps'"></rps-game>
               <ttt-game v-if="currentGame === 'ttt'"></ttt-game>
@@ -12,7 +12,7 @@
           </div>
 
           <div class="mt-5">
-            <div class="raffle shadow-block">
+            <div class="raffle shadow-block" id="raffleBlock">
               <div class="header position-relative">
                 <div>{{ $t('RAFFLE') }}</div>
                 <div class="f13">{{ $t('IN_RAFFLE') }}:</div>
@@ -66,23 +66,25 @@
 
         <div class="col-sm-4">
           <div class="shadow-block">
-            <h2 class="text-primary p20 mb-0 pb-0">
-              {{ $t('TOP_GAMES') }}
-            </h2>
-            <div id="BlockTopGames" class="inner-padding scrollbar-inner">
-              <div class="bordered blue-border mt-1">
-                <p>
-                  <img src="/img/game-icon-wallet.svg" class="creator">
-                  <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
-                  <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
-                </p>
-                <p>
-                  <img src="/img/game-icon-bet.svg" class="creator">
-                  <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                  <span class="text-primary"><b>0.00000</b></span>
+            <div class="position-relative" id="BlockTopGames">
+              <h2 class="text-primary p20 mb-0 pb-0">
+                {{ $t('TOP_GAMES') }}
+              </h2>
+              <div class="inner-padding scrollbar-inner">
+                <div class="bordered blue-border mt-1">
+                  <p>
+                    <img src="/img/game-icon-wallet.svg" class="creator">
+                    <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
+                    <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
+                  </p>
+                  <p>
+                    <img src="/img/game-icon-bet.svg" class="creator">
+                    <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
+                    <span class="text-primary"><b>0.00000</b></span>
 
-                  <img src="/img/icon_amount-eth.svg" class="money-icon">
-                </p>
+                    <img src="/img/icon_amount-eth.svg" class="money-icon">
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -91,7 +93,7 @@
               {{ $t('LIST_OPENED_GAMES') }}:
             </div>
 
-            <div>
+            <div class="position-relative" id="availableGamesBlock">
               <h2 class="text-primary p20 mb-0 pb-0">
                 {{ $t('AVAILABLE_GAMES') }}:
               </h2>
@@ -114,7 +116,7 @@
             </div>
 
             <div class="inner-padding">
-              <button class="btn long-btn btn-primary rounded-button full-width mt-4"
+              <button class="btn long-btn btn-primary rounded-button full-width mt-2"
                       id="loadMoreAvailableGamesBtn" onclick="window.Game.loadMoreAvailableGames()">
                 LOAD MORE
               </button>
@@ -136,7 +138,7 @@
     },
     computed: {
       currency() {
-        return this.$store.state.currency
+        return this.$store.state.currency;
       }
     },
     mounted() {

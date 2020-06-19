@@ -16,7 +16,16 @@ npm run build
 ```
 
 #### Show message:
+```
 showTopBannerMessage(textBefore, hash)
+```
 
 #### Hide message:
+```
 hideTopBannerMessage()
+```
+
+#### Add block loader:
+```
+window.showLoader(document.getElementById('...'))
+```
