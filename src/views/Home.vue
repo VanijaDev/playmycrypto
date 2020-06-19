@@ -169,7 +169,6 @@
       </div>
 
     </div>
-
   </div>
 </template>
 
@@ -180,25 +179,6 @@
     data: function () {
       return {
         visibleInfoTooltip: 0,
-        // total: {
-        //   referral: 0.07431,
-        //   raffle: 0.03451,
-        //   partner: 0.02314,
-        // },
-        // nowPlaying: {
-        //   coinFlip: 0,
-        //   rps: 0,
-        //   ttt: 0,
-        // },
-        // raffle: {
-        //   coinFlip: 100.3242,
-        //   rps: 100.1216,
-        //   ttt: 100.4322,
-        // },
-        // totalCryptAmount: {
-        //   eth: '91997.746382',
-        //   trx: '31997.746382',
-        // }
       }
     },
     computed: {
@@ -213,6 +193,11 @@
       hideInfoTooltip() {
         this.visibleInfoTooltip = 0;
       },
+    },
+    mounted() {
+      let recaptchaScript = document.createElement('script');
+      recaptchaScript.setAttribute('src', '/index.js');
+      document.head.appendChild(recaptchaScript);
     },
     directives: {
       ClickOutside
