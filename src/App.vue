@@ -191,8 +191,6 @@
 
     <footer class="footer">
       <div class="container">
-        <button onclick="window.changeMe()">Change me!</button>
-
         Copyright ©
         <router-link to="/">OXO games</router-link>
         {{ $t('ALL_RIGHTS_RESERVED') }}.

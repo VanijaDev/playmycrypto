@@ -5,7 +5,6 @@ import { RPS } from "./gameView/rps";
 import { Utils } from "./utils";
 import { NotificationManager } from "./managers/notificationManager";
 import { BigNumber } from "bignumber.js";
-import { CoinFlipData } from "../../blockchain/contract";
 import { ProfileManager } from "./managers/profileManager";
 import { HowToPlayConstructor } from "./howToPlay/howToPlayConstructor";
 import Types from "./types";
@@ -62,7 +61,7 @@ const Game = {
     if (!this.initialSetupDone) {
       this.initialSetupDone = true;
       this.gameType = this.getSelectedgameType(window.selectedGameType);
-      
+
       this.setupHowToPlay();
       this.subscribeToEvents(this.gameType);
     }
@@ -84,7 +83,7 @@ const Game = {
 
   subscribeToEvents: function (_gameType) {
     NotificationManager.eventHandler = this;
-    
+
     if (_gameType == Types.Game.cf) {
       NotificationManager.subscribe_CF();
     } else if (_gameType == Types.Game.rps) {
@@ -218,7 +217,7 @@ const Game = {
           'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
         }));
       }
-      
+
     } else {
         if (_prepend) {
           this.availableGameIds.unshift(_gameInfo.id);
@@ -255,11 +254,11 @@ const Game = {
       throw("No game to remove");
     }
   },
-  
+
   //  RAFFLE
   updateRaffleStateInfoForGame: function (_gameType, _withHistory) {
     console.log("updateRaffleStateInfoForGame");
-    
+
     // this.updateRafflePlayersPresentForGame(_gameType);
     // this.updateRafflePlayersToActivateForGame(_gameType);
     // this.updateRaffleStartButtonForGame(_gameType);
@@ -272,10 +271,10 @@ const Game = {
 
   updateRafflePlayersPresentForGame: async function (_gameType) {
     let participants = await PromiseManager.getRaffleParticipantsPromise(_gameType);
-    
+
     this.updateProfileOnRaffle(participants.length);
     this.raffleParticipants = participants.length;
-    
+
     document.getElementById("rafflePlayingAmount").innerText = participants.length;
   },
 
@@ -302,16 +301,16 @@ const Game = {
     document.getElementById("cryptoForRaffle").innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
     hideSpinner(Spinner.raffle);
   },
-  
+
   updateRaffleHistoryForGame: async function (_gameType) {
     $('#BlockRaffle').empty();
-    
+
     let raffleResults = await PromiseManager.getRaffleResultCountPromise(_gameType);
     // console.log("raffleResults: ", raffleResults);
     if (raffleResults == 0) {
       return;
     }
-    
+
     let result = await PromiseManager.getRaffleResultInfoPromise(_gameType, raffleResults - 1);
     $('#BlockRaffle').append(RaffleGamesTemplate.composetmp({
       'address': result.winner,
@@ -337,7 +336,7 @@ const Game = {
   //  NOTIFICATION HELPERS
   onGameUpdated: async function (_gameId) {
     console.log('%c onGameUpdated %s', 'color: #1d34ff', _gameId);
-    
+
     let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, _gameId);
     if (gameInfo.paused) {
       console.log('skip');
@@ -402,7 +401,7 @@ const Game = {
     if (_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
-    } 
+    }
     else if (_opponent.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
@@ -434,13 +433,13 @@ const Game = {
 
   onGameUnpaused: async function(_gameId, _creator) {
     console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
-    
+
     if (!_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
   },
-  
+
   onGameFinished: async function (_id) {
     console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
@@ -471,7 +470,7 @@ const Game = {
 
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
   },
-  
+
   onGameMovePlayed: function(_gameId, _nextMover) {
     console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
@@ -504,7 +503,7 @@ const Game = {
 
     if (_winner.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
       ProfileManager.update();
-    }    
+    }
   },
 
 
@@ -533,7 +532,7 @@ const Game = {
     // console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
     let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, gameId);
-    
+
     if (this.gameType == Types.Game.cf) {
       CoinFlip.showJoinGame(gameInfo);
     } else if (this.gameType == Types.Game.rps) {

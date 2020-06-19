@@ -94,7 +94,7 @@
               </h2>
 
               <div class="inner-padding scrollbar-inner">
-                <div class="bordered blue-border mt-1" v-for="availableGame in availableGames" :key="availableGame.hash ">
+                <div class="bordered mt-1" v-for="availableGame in availableGames" :key="availableGame.hash ">
                   <p>
                     <img src="../assets/img/game-icon-wallet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">Creator:</span>
