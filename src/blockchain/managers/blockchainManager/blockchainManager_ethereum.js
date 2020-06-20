@@ -93,6 +93,7 @@ const BlockchainManager_ethereum = {
   },
 
   gameInst: function(_gameType) {
+    console.log("gameInst e: ", _gameType);
     let gameInst;
 
     switch (_gameType) {
@@ -105,6 +106,7 @@ const BlockchainManager_ethereum = {
         break;
     
       default:
+        console.error("bm_e gameInst");
         break;
     }
     return gameInst;

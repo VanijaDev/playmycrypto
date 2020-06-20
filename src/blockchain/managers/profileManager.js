@@ -74,12 +74,12 @@ let ProfileManager = {
 
     this.ongoingGameCF = new BigNumber(await PromiseManager.ongoingGameIdxForCreatorPromise(Types.Game.cf, BlockchainManager.currentAccount()));
     if (this.ongoingGameCF.comparedTo(new BigNumber("0")) == 1) {
-      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Utils.Games.coinFlip]);
+      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
     }
 
     this.ongoingGameRPS = new BigNumber(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, BlockchainManager.currentAccount()));
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
-      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Utils.Games.rockPaperScissors]);
+      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.rps]);
     }
   },
 
@@ -195,13 +195,13 @@ let ProfileManager = {
 
     let cfResult = new BigNumber(await PromiseManager.referralFeesPendingPromise(Types.Game.cf, BlockchainManager.currentAccount()));
     if (cfResult.comparedTo(new BigNumber("0")) > 0) {
-      pendingGames.push(Utils.Games.coinFlip);
+      pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
     }
 
     let rpsResult = new BigNumber(await PromiseManager.referralFeesPendingPromise(Types.Game.rps, BlockchainManager.currentAccount()));
     if (rpsResult.comparedTo(new BigNumber("0")) > 0) {
-      pendingGames.push(Utils.Games.rockPaperScissors);
+      pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
 
@@ -214,13 +214,13 @@ let ProfileManager = {
 
     let cfResultGames = await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(Types.Game.cf, BlockchainManager.currentAccount());
     if (new BigNumber(cfResultGames.length.toString()).comparedTo(new BigNumber("0"))) {
-      pendingGames.push(Utils.Games.coinFlip);
+      pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResultGames.length);
     }
 
     let rpsResultGames = await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(Types.Game.rps, BlockchainManager.currentAccount());
     if (new BigNumber(rpsResultGames.length.toString()).comparedTo(new BigNumber("0"))) {
-      pendingGames.push(Utils.Games.rockPaperScissors);
+      pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResultGames.length);
     }
 
@@ -233,13 +233,13 @@ let ProfileManager = {
 
     let cfResult = new BigNumber(await PromiseManager.rafflePrizePendingForAddressPromise(Types.Game.cf, BlockchainManager.currentAccount()));
     if (cfResult.comparedTo(new BigNumber("0")) > 0) {
-      pendingGames.push(Utils.Games.coinFlip);
+      pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
     }
 
     let rpsResult = new BigNumber(await PromiseManager.rafflePrizePendingForAddressPromise(Types.Game.rps, BlockchainManager.currentAccount()));
     if (rpsResult.comparedTo(new BigNumber("0")) > 0) {
-      pendingGames.push(Utils.Games.rockPaperScissors);
+      pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
     
@@ -278,9 +278,9 @@ let ProfileManager = {
   // },
 
   isGameParticipant: function(_gameType, _id) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       return this.ongoingGameCF.comparedTo(new BigNumber(_id)) == 0;
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       return this.ongoingGameRPS.comparedTo(new BigNumber(_id)) == 0;
     } else {
       throw("ERROR: " + _gameType + _id);

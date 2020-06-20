@@ -1,17 +1,24 @@
 const Types = {
   View: {
-    index: 0,
-    game: 1
+    index: "index",
+    game: "game"
   },
 
   Game: {
-    cf: 0,
-    rps: 1
+    cf: "cf",
+    rps: "rps"
+  },
+
+  SpinnerView: {
+    gameView: "gameView",
+    availanbleGames: "availanbleGames",
+    topGames: "topGames",
+    raffle: "raffle",
   },
 
   BlockchainType: {
-    ethereum: 0,
-    tron: 1
+    ethereum: "ethereum",
+    tron: "tron"
   },
 }
 

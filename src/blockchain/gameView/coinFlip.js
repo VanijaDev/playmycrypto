@@ -14,7 +14,7 @@ const CoinFlip = {
   updateGameView: async function() {
     console.log('%c CoinFlip - updateGameView', 'color: #00aa00');
 
-    showSpinner(Spinner.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     // this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
     // this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
