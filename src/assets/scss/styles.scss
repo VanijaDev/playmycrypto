@@ -216,7 +216,7 @@ button:focus, input:focus {
     background: #F7F7F7;
     position: relative;
     margin-top: 36px;
-    margin-left: 55px;
+    margin-left: 30px;
     font-size: 22px;
     line-height: 26px;
     font-weight: 700;
@@ -225,7 +225,7 @@ button:focus, input:focus {
     width: 170px;
 
     &:last-child {
-      margin-right: 58px;
+      // margin-right: 58px;
     }
 
     .hand-money {

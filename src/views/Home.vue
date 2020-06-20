@@ -5,9 +5,13 @@
         <h1>{{ $t("OUR_ADVANTAGES") }}</h1>
 
         <div class="row our-advantages-list">
-          <div class="col" style="width: 170px;">
+          <div class="col">
             <b>90%</b>
-            <p class="pl-5 pr-5">{{ $t("ADVANTAGES.TEXT_1") }}</p>
+            <p>{{ $t("ADVANTAGES.TEXT_1") }}</p>
+          </div>
+          <div class="col">
+            <b>2%</b>
+            <p >{{ $t("ADVANTAGES.TEXT_6") }}</p>
           </div>
           <div class="col">
             <b>2%</b>
@@ -26,10 +30,6 @@
             <span class="tooltip-info" v-show="visibleInfoTooltip===2">
               <a href="https://onigiribank.com" target="blank">OnigiriBank</a> {{ $t("ADVANTAGES.TOOLTIP_4") }}
             </span>
-          </div>
-          <div class="col">
-            <b>2%</b>
-            <p class="pl-5 pr-5">{{ $t("ADVANTAGES.TEXT_6") }}</p>
           </div>
           <div class="col">
             <b>100%</b>
