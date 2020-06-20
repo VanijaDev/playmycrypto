@@ -238,7 +238,6 @@
     },
 
     mounted() {
-      console.log("App.vue");
       window.CommonManager = CommonManager;
 
       window.ethereum.on('accountsChanged', function (accounts) {

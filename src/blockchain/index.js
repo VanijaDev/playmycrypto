@@ -23,7 +23,7 @@ const Index = {
     console.log('%c index - setup', 'color: #00aa00');
 
     window.CommonManager.setCurrentView(Types.View.index);
-    console.log("view: ", window.CommonManager.currentView);
+
     await BlockchainManager.init();
     ProfileManager.profileUpdateHandler = this;
     await this.refreshData();

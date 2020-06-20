@@ -15,11 +15,11 @@ const CoinFlip = {
     console.log('%c CoinFlip - updateGameView', 'color: #00aa00');
 
     showSpinner(Spinner.gameView);
-    this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
-    this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
+    // this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
+    // this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
-    this.setPlaceholders();
-    this.showGameViewForCurrentAccount();
+    // this.setPlaceholders();
+    // this.showGameViewForCurrentAccount();
   },
 
   setPlaceholders: function () {

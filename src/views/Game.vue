@@ -130,6 +130,8 @@
 </template>
 
 <script>
+import Types from '../blockchain/types'
+
   export default {
     data: function () {
       return {
@@ -142,9 +144,10 @@
       }
     },
     mounted() {
-      console.log("Game.vue");
+      this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
-
+      window.CommonManager.setCurrentGame((this.currentGame === "cf") ?  Types.Game.cf: Types.Game.rps);
+      
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/game.js');
       document.head.appendChild(recaptchaScript);
@@ -157,11 +160,11 @@
           clearInterval(loadInterval);
         }
       }, 50);
-
-      this.currentGame = window.location.pathname.replace('/', '');
     },
     beforeRouteLeave(to, from, next) {
       console.log('Leave game page');
+      window.Game.gameType = -1;
+      document.getElementById("gameName").innerHTML = "";
       next()
     },
   }

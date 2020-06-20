@@ -40,19 +40,19 @@ const Game = {
       return;
     }
     console.log('%c Game - setup', 'color: #00aa00');
-    window.CommonManager.setCurrentView(Types.View.game);
-    console.log("view: ", window.CommonManager.currentView);
 
     this.setupOnce();
 
     if (this.gameType == Types.Game.cf) {
-      // document.getElementById("game_name").innerHTML = "CoinFlip";
+      console.log("!!! cf");
+      document.getElementById("gameName").innerHTML = "CoinFlip";
       CoinFlip.updateGameView();
     } else if (this.gameType == Types.Game.rps) {
-      // document.getElementById("game_name").innerHTML = "Rock Paper Scissors";
+      console.log("!!! rps");
+      document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
       // RPS.updateGameView();  TODO
     } else {
-      // document.getElementById("game_name").innerHTML = "TITLE - ERROR";
+      document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
@@ -66,7 +66,7 @@ const Game = {
   setupOnce: function () {
     if (!this.initialSetupDone) {
       this.initialSetupDone = true;
-      this.gameType = this.getSelectedgameType(window.selectedGameType);
+      this.gameType = window.CommonManager.currentGame;
 
       this.setupHowToPlay();
       this.subscribeToEvents(this.gameType);

@@ -199,7 +199,6 @@
       },
     },
     mounted() {
-      console.log("Home.vue");
       console.log('Open home page');
 
       let recaptchaScript = document.createElement('script');
