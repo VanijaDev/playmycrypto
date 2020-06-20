@@ -198,6 +198,7 @@
 
 <script>
   import ClickOutside from 'vue-click-outside'
+  import CommonManager from './blockchain/managers/CommonManager'
 
   export default {
     data: function () {
@@ -237,7 +238,8 @@
     },
 
     mounted() {
-      window.gameView = null;
+      console.log("App.vue");
+      window.CommonManager = CommonManager;
 
       window.ethereum.on('accountsChanged', function (accounts) {
         console.log(accounts);

@@ -40,6 +40,8 @@ const Game = {
       return;
     }
     console.log('%c Game - setup', 'color: #00aa00');
+    window.CommonManager.setCurrentView(Types.View.game);
+    console.log("view: ", window.CommonManager.currentView);
 
     this.setupOnce();
 

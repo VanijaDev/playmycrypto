@@ -199,11 +199,12 @@
       },
     },
     mounted() {
+      console.log("Home.vue");
+      console.log('Open home page');
+
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/index.js');
       document.head.appendChild(recaptchaScript);
-
-      console.log('Open home page');
 
       let loadInterval = setInterval(function () {
         if (typeof window.Index !== 'undefined') {

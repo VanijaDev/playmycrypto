@@ -142,16 +142,26 @@
       }
     },
     mounted() {
+      console.log("Game.vue");
+      console.log('Open game page. Current game:', this.currentGame);
+
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/game.js');
       document.head.appendChild(recaptchaScript);
 
-      this.currentGame = window.location.pathname.replace('/', '');
+      let loadInterval = setInterval(function () {
+        if (typeof window.Game !== 'undefined') {
+          window.BlockchainManager.init();
+          window.Game.pageLoaded = true;
+          window.Game.setup();
+          clearInterval(loadInterval);
+        }
+      }, 50);
 
-      console.log('Open game view. Current game:', this.currentGame);
+      this.currentGame = window.location.pathname.replace('/', '');
     },
     beforeRouteLeave(to, from, next) {
-      console.log('Leave game view');
+      console.log('Leave game page');
       next()
     },
   }
