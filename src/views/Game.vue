@@ -154,7 +154,7 @@ import Types from '../blockchain/types'
 
       let loadInterval = setInterval(function () {
         if (typeof window.Game !== 'undefined') {
-          BlockchainManager.init();
+          window.BlockchainManager.init();
           window.Game.pageLoaded = true;
           window.Game.setup();
           clearInterval(loadInterval);

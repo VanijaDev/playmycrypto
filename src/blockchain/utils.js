@@ -2,17 +2,6 @@ import BigNumber from "bignumber.js";
 
 const Utils = {
 
-  View: {
-    Main: 0, 
-    Game: 1
-  },
-
-  //  TODO: delete
-  Games: {
-    coinFlip: 0,
-    rockPaperScissors: 1
-  },
-
   GameState: {
     waitingForOpponent: 0,
     started: 1,

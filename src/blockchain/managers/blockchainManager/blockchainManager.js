@@ -269,7 +269,7 @@ const BlockchainManager = {
   gameContractForGameType: function (_gameType) {
     let gameContract = BlockchainManager.coinFlipContract;
 
-    if (_gameType == Utils.Games.rockPaperScissors) {
+    if (_gameType == Types.Game.rps) {
       gameContract = BlockchainManager.rockPaperScissorsContract;
     }
     return gameContract;
