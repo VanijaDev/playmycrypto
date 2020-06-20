@@ -101,6 +101,7 @@ const BlockchainManager = {
   },
 
   gameInst: function(_gameType) {
+    console.log("gameInst: ", _gameType);
     return this.currentBlockchain.gameInst(_gameType);
   },
 

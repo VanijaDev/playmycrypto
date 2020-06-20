@@ -46,7 +46,7 @@ const Game = {
     if (this.gameType == Types.Game.cf) {
       console.log("!!! cf");
       document.getElementById("gameName").innerHTML = "CoinFlip";
-      CoinFlip.updateGameView();
+      // CoinFlip.updateGameView();
     } else if (this.gameType == Types.Game.rps) {
       console.log("!!! rps");
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
@@ -55,8 +55,10 @@ const Game = {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
+    console.log("setup: ", this.gameType);
+    console.log(BlockchainManager);
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    // this.updateSuspendedViewForGame(this.gameType);
+    // this.updateSuspendedViewForGame(this.gameType);  //TODO
     // this.updateAllGamesForGame(this.gameType);
     // await this.updateRaffleStateInfoForGame(this.gameType, true);
 
@@ -103,6 +105,8 @@ const Game = {
   },
 
   updateSuspendedViewForGame: async function (_gameType) {
+    document.getElementById("suspendedView").style.display = "block";
+    return;
     if (_gameType != Types.Game.cf) {
       document.getElementById("suspendedView").style.display = "none";
       return;
