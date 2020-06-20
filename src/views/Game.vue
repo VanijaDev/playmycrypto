@@ -66,6 +66,15 @@
 
         <div class="col-sm-4">
           <div class="shadow-block">
+
+            <div class="timer-block text-primary">
+              <p class="mb-0">Join next game at</p>
+              <p id="timerBack">
+                00:00
+              </p>
+              <small>Suspended time was introduced to avoid spamming.</small>
+            </div>
+
             <div class="position-relative" id="BlockTopGames">
               <h2 class="text-primary p20 mb-0 pb-0">
                 {{ $t('TOP_GAMES') }}
@@ -130,7 +139,7 @@
 </template>
 
 <script>
-import Types from '../blockchain/types'
+  import Types from '../blockchain/types'
 
   export default {
     data: function () {
@@ -146,8 +155,8 @@ import Types from '../blockchain/types'
     mounted() {
       this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
-      window.CommonManager.setCurrentGame((this.currentGame === "cf") ?  Types.Game.cf: Types.Game.rps);
-      
+      window.CommonManager.setCurrentGame((this.currentGame === "cf") ? Types.Game.cf : Types.Game.rps);
+
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/game.js');
       document.head.appendChild(recaptchaScript);

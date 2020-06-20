@@ -817,6 +817,35 @@ button:focus, input:focus {
   color: #0049D8;
 }
 
+.timer-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(255, 255, 255, .9);
+  display: none;
+  z-index: 2;
+  text-align: center;
+  padding-top: 47vh;
+
+  &.visible {
+    display: block;
+  }
+
+  p {
+    font-size: 26px;
+  }
+
+  small {
+    font-size: 14px;
+  }
+}
+
+#listCurrentlyPlayingGames img {
+  margin-right: 10px;
+}
+
 @media all and (max-width: 480px) {
   h2 {
     font-size: 22px;

@@ -34,3 +34,8 @@ window.showSpinner(document.getElementById('...'))
 ```
 window.hideSpinner(document.getElementById('...'))
 ```
+
+#### Show back timer (seconds, callback):
+showBackTimer(10, function(){
+   console.log('Inner callback function')
+})
