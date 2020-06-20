@@ -28,6 +28,10 @@
             </span>
           </div>
           <div class="col">
+            <b>2%</b>
+            <p class="pl-5 pr-5">{{ $t("ADVANTAGES.TEXT_6") }}</p>
+          </div>
+          <div class="col">
             <b>100%</b>
             <img class="info_icon" src="/img/icon_info.svg" @click.stop="showInfoTooltip(3)" v-click-outside="hideInfoTooltip">
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_5") }}</p>

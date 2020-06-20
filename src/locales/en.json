@@ -20,7 +20,8 @@
     "TEXT_4": "of prize goes to our partner project as a donation",
     "TOOLTIP_4": "is the partner project, that receives donations",
     "TEXT_5": "of fair P2P (player to player) gaming",
-    "TOOLTIP_5": "Players play directly with each other on Blockchain, no middleman in between"
+    "TOOLTIP_5": "Players play directly with each other on Blockchain, no middleman in between",
+    "TEXT_6": "of prize goes to faucet"
   },
   "TOTAL": "Total",
   "AVAILABLE_GAMES": "Available games",

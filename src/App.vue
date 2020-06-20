@@ -235,6 +235,31 @@
         return 'flag-' + this.language;
       },
     },
+
+    mounted() {
+      window.gameView = null;
+
+      window.ethereum.on('accountsChanged', function (accounts) {
+        console.log(accounts);
+        if (!window.Index.pageLoaded) {
+          return;
+        }
+
+        console.log('%c App - accountsChanged', 'color: #00aa00');
+        window.BlockchainManager.accountChanged();
+      });
+
+      window.ethereum.on('networkChanged', function (accounts) {
+        console.log(accounts);
+        if (!window.Index.pageLoaded) {
+          return;
+        }
+
+        console.log('%c index - networkChanged', 'color: #00aa00');
+        window.BlockchainManager.setup();
+      });
+    },
+
     directives: {
       ClickOutside
     }
