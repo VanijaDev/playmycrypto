@@ -5,7 +5,7 @@
       <div class="container">
         <div class="d-flex">
           <!-- <div class="mr-auto"> -->
-            <div>
+          <div>
             <router-link to="/">
               <img src="/img/logo-oxo.svg" alt="Logo oxo" class="logo">
             </router-link>
@@ -239,7 +239,6 @@
 
     mounted() {
       window.CommonManager = CommonManager;
-
       window.ethereum.on('accountsChanged', function (accounts) {
         console.log(accounts);
         if (!window.Index.pageLoaded) {

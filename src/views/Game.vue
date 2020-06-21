@@ -153,6 +153,8 @@
       }
     },
     mounted() {
+      let manager = window.BlockchainManager;
+
       this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
       window.CommonManager.setCurrentGame((this.currentGame === "cf") ? Types.Game.cf : Types.Game.rps);
@@ -166,6 +168,11 @@
           window.Game.pageLoaded = true;
           window.Game.setup();
           clearInterval(loadInterval);
+
+          setTimeout(function () {
+            window.BlockchainManager = manager;
+            console.log('Restore BlockchainManager')
+          }, 300);
         }
       }, 50);
     },

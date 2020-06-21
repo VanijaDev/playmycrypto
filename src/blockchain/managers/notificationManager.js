@@ -348,7 +348,6 @@ const NotificationManager = {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
         window.web3.eth.clearSubscriptions();
-        
         break;
     
 
