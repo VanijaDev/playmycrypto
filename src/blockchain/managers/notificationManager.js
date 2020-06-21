@@ -39,7 +39,7 @@ const NotificationManager = {
   subscribeAll: function () {
     console.log('%c NotificationManager - subscribeAll', 'color: #00aa00');
 
-    switch (BlockchainManager.currentBlockchainType) {
+    switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("subscribeAll - Ethereum");
         this.subscribeAll_ethereum();
@@ -344,7 +344,7 @@ const NotificationManager = {
   },
 
   clearAll: function() {
-    switch (BlockchainManager.currentBlockchainType) {
+    switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
         window.web3.eth.clearSubscriptions();

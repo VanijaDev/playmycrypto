@@ -6,7 +6,7 @@ import BlockchainManager from "./blockchainManager/blockchainManager";
 let PromiseManager = {
   ongoingGameIdxForCreatorPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -18,7 +18,7 @@ let PromiseManager = {
 
   ongoingGameIdxForPlayerPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForPlayer(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForPlayer(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -30,7 +30,7 @@ let PromiseManager = {
 
   participatedGameIdxsForPlayerPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getParticipatedGameIdxsForPlayer(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getParticipatedGameIdxsForPlayer(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -42,7 +42,7 @@ let PromiseManager = {
 
   playedGameIdxsForPlayerPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getPlayedGameIdxsForPlayer(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getPlayedGameIdxsForPlayer(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -54,7 +54,7 @@ let PromiseManager = {
 
   addressBetTotalPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.addressBetTotal(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.addressBetTotal(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -66,7 +66,7 @@ let PromiseManager = {
 
   addressPrizeTotalPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.addressPrizeTotal(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.addressPrizeTotal(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -78,7 +78,7 @@ let PromiseManager = {
 
   referralFeesWithdrawnPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.referralFeesWithdrawn(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.referralFeesWithdrawn(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -90,7 +90,7 @@ let PromiseManager = {
 
   raffleResultCountPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getRaffleResultCount().call()
+      window.BlockchainManager.gameInst(_gameType).methods.getRaffleResultCount().call()
       .then(result => {
         resolve(result);
       })
@@ -102,7 +102,7 @@ let PromiseManager = {
 
   raffleResultInfoPromise: function (_gameType, _idx) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.raffleResults(_idx).call()
+      window.BlockchainManager.gameInst(_gameType).methods.raffleResults(_idx).call()
       .then(result => {
         resolve(result);
       })
@@ -114,7 +114,7 @@ let PromiseManager = {
 
   referralFeesPendingPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.referralFeesPending(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.referralFeesPending(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -126,7 +126,7 @@ let PromiseManager = {
 
   gamesWithPendingPrizeWithdrawalForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawalForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawalForAddress(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -138,7 +138,7 @@ let PromiseManager = {
 
   rafflePrizePendingForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.rafflePrizePendingForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePendingForAddress(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -150,7 +150,7 @@ let PromiseManager = {
 
   totalUsedReferralFeesPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.totalUsedReferralFees().call()
+      window.BlockchainManager.gameInst(_gameType).methods.totalUsedReferralFees().call()
       .then(result => {
         resolve(result);
       })
@@ -162,7 +162,7 @@ let PromiseManager = {
 
   ongoinRafflePrizePromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.ongoinRafflePrize().call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoinRafflePrize().call()
       .then(result => {
         resolve(result);
       })
@@ -174,7 +174,7 @@ let PromiseManager = {
 
   partnerFeeUsedTotalPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.partnerFeeTotalUsed().call()
+      window.BlockchainManager.gameInst(_gameType).methods.partnerFeeTotalUsed().call()
       .then(result => {
         resolve(result);
       })
@@ -186,7 +186,7 @@ let PromiseManager = {
 
   rafflePrizesWonTotalPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.rafflePrizesWonTotal().call()
+      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizesWonTotal().call()
       .then(result => {
         resolve(result);
       })
@@ -198,7 +198,7 @@ let PromiseManager = {
 
   totalUsedInGamePromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.totalUsedInGame().call()
+      window.BlockchainManager.gameInst(_gameType).methods.totalUsedInGame().call()
       .then(result => {
         resolve(result);
       })
@@ -210,7 +210,7 @@ let PromiseManager = {
 
   gamesCreatedAmountPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.gamesCreatedAmount().call()
+      window.BlockchainManager.gameInst(_gameType).methods.gamesCreatedAmount().call()
       .then(result => {
         resolve(result);
       })
@@ -222,7 +222,7 @@ let PromiseManager = {
 
   gamesCompletedAmountPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.gamesCompletedAmount().call()
+      window.BlockchainManager.gameInst(_gameType).methods.gamesCompletedAmount().call()
       .then(result => {
         resolve(result);
       })
@@ -234,7 +234,7 @@ let PromiseManager = {
 
   ownerPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.owner().call()
+      window.BlockchainManager.gameInst(_gameType).methods.owner().call()
       .then(result => {
         resolve(result);
       })
@@ -247,8 +247,8 @@ let PromiseManager = {
   minBetForGamePromise: function (_gameType) {
     console.log("minBetForGamePromise: ", _gameType);
     return new Promise(resolve => {
-      console.log(BlockchainManager);
-      BlockchainManager.gameInst(_gameType).methods.minBet().call()
+      console.log(window.BlockchainManager);
+      window.BlockchainManager.gameInst(_gameType).methods.minBet().call()
         .then(result => {
           resolve(result);
         })
@@ -260,7 +260,7 @@ let PromiseManager = {
 
   createdGameIdForAccountPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -272,7 +272,7 @@ let PromiseManager = {
 
   gameInfoPromise: function (_gameType, _idx) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.games(_idx).call()
+      window.BlockchainManager.gameInst(_gameType).methods.games(_idx).call()
         .then(result => {
           resolve(result);
         })
@@ -284,7 +284,7 @@ let PromiseManager = {
 
   isTopGamePromise: function (_gameType, _idx) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.isTopGame(_idx).call()
+      window.BlockchainManager.gameInst(_gameType).methods.isTopGame(_idx).call()
       .then(result => {
         resolve(result);
       })
@@ -296,7 +296,7 @@ let PromiseManager = {
 
   allowedToPlayPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.allowedToPlay().call({
+      window.BlockchainManager.gameInst(_gameType).methods.allowedToPlay().call({
         from: _account
       })
       .then(result => {
@@ -310,7 +310,7 @@ let PromiseManager = {
 
   suspendedTimeDurationPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.suspendedTimeDuration().call()
+      window.BlockchainManager.gameInst(_gameType).methods.suspendedTimeDuration().call()
       .then(result => {
         resolve(result);
       })
@@ -322,7 +322,7 @@ let PromiseManager = {
 
   lastPlayTimestampPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.lastPlayTimestamp(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.lastPlayTimestamp(_account).call()
       .then(result => {
         resolve(result);
       })
@@ -334,7 +334,7 @@ let PromiseManager = {
 
   topGamesPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getTopGames().call()
+      window.BlockchainManager.gameInst(_gameType).methods.getTopGames().call()
       .then(result => {
         resolve(result);
       })
@@ -346,7 +346,7 @@ let PromiseManager = {
 
   raffleParticipantsPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.getRaffleParticipants().call()
+      window.BlockchainManager.gameInst(_gameType).methods.getRaffleParticipants().call()
       .then(result => {
         resolve(result);
       })
@@ -358,7 +358,7 @@ let PromiseManager = {
 
   raffleActivationParticipantsAmountPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.raffleActivationParticipantsAmount().call()
+      window.BlockchainManager.gameInst(_gameType).methods.raffleActivationParticipantsAmount().call()
       .then(result => {
         resolve(result);
       })
@@ -370,7 +370,7 @@ let PromiseManager = {
 
   isRaffleActivatedPromise: function (_gameType) {
     return new Promise(resolve => {
-      BlockchainManager.gameInst(_gameType).methods.raffleActivated().call()
+      window.BlockchainManager.gameInst(_gameType).methods.raffleActivated().call()
       .then(result => {
         resolve(result);
       })

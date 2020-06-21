@@ -56,7 +56,7 @@ const Game = {
     }
 
     console.log("setup: ", this.gameType);
-    console.log(BlockchainManager);
+    console.log("Game BlockchainManager: ", window.BlockchainManager);
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     // this.updateSuspendedViewForGame(this.gameType);  //TODO
     // this.updateAllGamesForGame(this.gameType);
@@ -112,14 +112,14 @@ const Game = {
       return;
     }
 
-    if (await PromiseManager.allowedToPlayPromise(_gameType, BlockchainManager.currentAccount())) {
+    if (await PromiseManager.allowedToPlayPromise(_gameType, window.BlockchainManager.currentAccount())) {
       document.getElementById("suspendedView").style.display = "none";
       return;
     }
 
     document.getElementById("suspendedView").style.display = "block";
     let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
-    let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, BlockchainManager.currentAccount()));
+    let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
     let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000)).toNumber();
     var availableTime = new Date(availableTimestamp).toLocaleTimeString("en-US");
     document.getElementById("availableToPlayTime").innerText = availableTime;
@@ -141,7 +141,7 @@ const Game = {
   loadTopGamesForGame: async function (_gameType) {
     if (_gameType == Types.Game.cf) {
       console.log("loadTopGamesForGame - CF");
-    } else if (_gameType == BlockchainManager.rockPaperScissors) {
+    } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
       console.log("loadTopGamesForGame - RPS");
     }
 
@@ -155,7 +155,7 @@ const Game = {
       if (id > 0) {
         let gameInfo = await PromiseManager.gameInfoPromise(_gameType, parseInt(id));
         // console.log("Top game: ", parseInt(id), " ", gameInfo);
-        if (Utils.addressesEqual(gameInfo.creator, BlockchainManager.currentAccount())) {
+        if (Utils.addressesEqual(gameInfo.creator, window.BlockchainManager.currentAccount())) {
           this.topGameIds.splice(i, 1);
           this.topGameIds.push("0");
         } else {
@@ -169,7 +169,7 @@ const Game = {
   loadAvailableGamesPortionForGame: async function (_gameType) {
     if (_gameType == Types.Game.cf) {
       console.log("loadAvailableGamesPortionForGame - CF");
-    } else if (_gameType == BlockchainManager.rockPaperScissors) {
+    } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
       console.log("loadAvailableGamesPortionForGame - RPS");
     }
 
@@ -207,7 +207,7 @@ const Game = {
   availableGameValidToAppend: function (_gameInfo) {
     //  skip if paused && creator && winner present && top game
     return (!_gameInfo.paused &&
-      !Utils.addressesEqual(_gameInfo.creator, BlockchainManager.currentAccount()) &&
+      !Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) &&
       Utils.addressesEqual(_gameInfo.opponent, Utils.zeroAddress_eth) &&
       Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth) &&
       !this.topGameIds.includes(_gameInfo.id)) ? true : false;
@@ -378,7 +378,7 @@ const Game = {
       console.log('%c game - onGameCreated_RPS', 'color: #1d34ff');
     }
 
-    if (!_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (!_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
@@ -391,10 +391,10 @@ const Game = {
       this.removeGameWithId(_gameId);
     }
 
-    if (_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       RPS.showGameView(RPS.GameView.playMove, gameInfo);
-    } else if (_opponent.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -406,10 +406,10 @@ const Game = {
       console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    if (_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
-    } else if (_opponent.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
       this.updateSuspendedViewForGame(this.gameType);
@@ -441,7 +441,7 @@ const Game = {
   onGameUnpaused: async function (_gameId, _creator) {
     console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
-    if (!_creator.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (!_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
@@ -455,18 +455,18 @@ const Game = {
       let resultView;
 
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.draw)) == 0) {
-        if (!Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.opponent)) {
+        if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
           return;
         }
         resultView = RPS.GameView.draw;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.winnerPresent)) == 0) {
-        if (!Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.opponent)) {
+        if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
           return;
         }
-        resultView = (Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.quitted)) == 0 ||
         (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.expired)) == 0) {
-        resultView = (Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else {
         throw("onGameFinished - ERROR");
       }
@@ -481,7 +481,7 @@ const Game = {
   onGameMovePlayed: function (_gameId, _nextMover) {
     console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
-    if (_nextMover.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_nextMover.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
     }
   },
@@ -489,7 +489,7 @@ const Game = {
   onGameOpponentMoved: function (_gameId, _nextMover) {
     console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
-    if (_nextMover.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_nextMover.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
     }
   },
@@ -508,7 +508,7 @@ const Game = {
 
     Game.updateRaffleStateInfoForGame(Game.gameType, true);
 
-    if (_winner.includes(BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_winner.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -553,7 +553,7 @@ const Game = {
     this.raffleStartedByMe = true;
 
     this.gameType.methods.runRaffle().send({
-      from: BlockchainManager.currentAccount
+      from: window.BlockchainManager.currentAccount
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -592,7 +592,7 @@ export {
 //   console.log('%c Game - load', 'color: #00aa00');
 
 //   Game.pageLoaded = true;
-//   await BlockchainManager.init();
+//   await window.BlockchainManager.init();
 //   await Game.setup();
 // });
 
@@ -606,7 +606,7 @@ export {
 // ethereum.on('accountsChanged', async function (accounts) {
 //   if (Game.pageLoaded) {
 //     console.log('%c Game - accountsChanged', 'color: #00aa00');
-//     await BlockchainManager.accountChanged();
+//     await window.BlockchainManager.accountChanged();
 //     await Game.setup();
 //   }
 // });
@@ -614,7 +614,7 @@ export {
 // ethereum.on('networkChanged', async function (accounts) {
 //   if (Game.pageLoaded) {
 //     console.log('%c Game - networkChanged', 'color: #00aa00');
-//     await BlockchainManager.setup();
+//     await window.BlockchainManager.setup();
 //     await Game.setup();
 //   }
 // });
@@ -639,7 +639,7 @@ var TableAvailableGamesTemplate = '<li>' +
   '</tr>' +
   '<tr>' +
   '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
-  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right"></td>' +
   '</tr>' +
   '</table>' +
@@ -653,7 +653,7 @@ var TopGamesTemplate = '<li>' +
   '</tr>' +
   '<tr>' +
   '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
-  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right"></td>' +
   '</tr>' +
   '</table>' +
@@ -667,7 +667,7 @@ var RaffleGamesTemplate = '<li>' +
   '</tr>' +
   '<tr>' +
   '<th><img src="/img/game-icon-bet.svg"> Prize:</th>' +
-  '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+  '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
   '<td class="text-right">{{timeago}}</td>' +
   '</tr>' +
   '</table>' +

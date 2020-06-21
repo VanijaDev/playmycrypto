@@ -33,7 +33,7 @@ const CoinFlip = {
   showGameViewForCurrentAccount: async function () {
     showSpinner(Spinner.gameView);
 
-    let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, BlockchainManager.currentAccount()));
+    let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("showGameViewForCurrentAccount id: ", id);
 
     if (id == 0) {
@@ -117,10 +117,10 @@ const CoinFlip = {
     // console.log("showGamePlayed: ", _gameInfo);
     hideSpinner(Spinner.gameView);
     hideAndClearNotifView();
-    if (Utils.addressesEqual(_gameInfo.creator, BlockchainManager.currentAccount) && $("#cfmaketop").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount) && $("#cfmaketop").css("display") !== "none") {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
     } else if ($("#cfjoin").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
     }
   },
 
@@ -151,17 +151,17 @@ const CoinFlip = {
 
   makeTopClicked: async function () {
     // console.log("makeTopClicked");
-    if (parseInt(await BlockchainManager.getBalance()) < Game.minBet) {
+    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
       showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet) + '. Not enough crypto.');
       return;
     }
 
     showSpinner(Spinner.gameView);
     let gameId = document.getElementById("gameId_makeTop").innerHTML;
-    BlockchainManager.coinFlipContract.methods.addTopGame(gameId).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.coinFlipContract.methods.addTopGame(gameId).send({
+      from: window.BlockchainManager.currentAccount,
       value: Game.minBet,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
@@ -175,7 +175,7 @@ const CoinFlip = {
     .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "MAKE TOP GAME error...");
         throw new Error(error, receipt);
       }
@@ -186,17 +186,17 @@ const CoinFlip = {
     let bet = document.getElementById("gameBetNew_makeTop").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + BlockchainManager.currentCryptoName() + ".");
+      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
       return;
     }
 
     let gameId = document.getElementById("gameId_makeTop").innerHTML;
 
     showSpinner(Spinner.gameView);
-    BlockchainManager.coinFlipContract.methods.increaseBetForGameBy(gameId).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.coinFlipContract.methods.increaseBetForGameBy(gameId).send({
+      from: window.BlockchainManager.currentAccount,
       value: Utils.etherToWei(bet).toString(),
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -210,7 +210,7 @@ const CoinFlip = {
     .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Increase bet error...");
         throw new Error(error, receipt);
       }
@@ -231,15 +231,15 @@ const CoinFlip = {
     let bet = document.getElementById("gameBet_start").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + BlockchainManager.currentCryptoName() + ".");
+      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
       return;
     }
 
     showSpinner(Spinner.gameView);
-    BlockchainManager.coinFlipContract.methods.createGame(this.coinSideChosen, referral).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.coinFlipContract.methods.createGame(this.coinSideChosen, referral).send({
+      from: window.BlockchainManager.currentAccount,
       value: Utils.etherToWei(bet),
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -253,7 +253,7 @@ const CoinFlip = {
     .once('error', function (error, receipt) {
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "CREATE GAME error...");
         throw new Error(error, receipt);
       }
@@ -273,18 +273,18 @@ const CoinFlip = {
       referral = this.ownerAddress;
     }
 
-    let gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.coinFlipContract, document.getElementById("gameId_join").innerHTML);
+    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.coinFlipContract, document.getElementById("gameId_join").innerHTML);
     let bet = gameInfo.bet;
-    if (parseInt(await BlockchainManager.getBalance()) < bet) {
+    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
       showAlert('error', 'Not enough balance to join game.');
       return;
     }
 
     showSpinner(Spinner.gameView);
-    BlockchainManager.coinFlipContract.methods.joinAndPlayGame(document.getElementById("gameId_join").innerHTML, referral).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.coinFlipContract.methods.joinAndPlayGame(document.getElementById("gameId_join").innerHTML, referral).send({
+      from: window.BlockchainManager.currentAccount,
       value: bet,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -299,7 +299,7 @@ const CoinFlip = {
     .once('error', function (error, receipt) {
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "JOIN GAME error...");
         throw new Error(error, receipt);
       }

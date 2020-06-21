@@ -24,7 +24,8 @@ const Index = {
 
     window.CommonManager.setCurrentView(Types.View.index);
 
-    await BlockchainManager.init();
+    await window.BlockchainManager.init();
+    console.log("index BlockchainManager: ", window.BlockchainManager);
     ProfileManager.profileUpdateHandler = this;
     await this.refreshData();
 
@@ -63,33 +64,33 @@ const Index = {
   },
 
   updateReferralFeesForAllGamesTotal: async function () {
-    let totalUsedReferralFees = await BlockchainManager.totalUsedReferralFees();
+    let totalUsedReferralFees = await window.BlockchainManager.totalUsedReferralFees();
     // console.log("totalUsedReferralFees: ", totalUsedReferralFees.toString());
     document.getElementById("totalUsedReferralFees").textContent = Utils.weiToEtherFixed(totalUsedReferralFees.toString());
   },
 
   updateOngoinRafflePrize: async function () {
-    let ongoinRafflePrize = await BlockchainManager.ongoinRafflePrize();
+    let ongoinRafflePrize = await window.BlockchainManager.ongoinRafflePrize();
     // console.log("ongoinRafflePrize: ", ongoinRafflePrize.toString());
     document.getElementById("ongoinRafflePrize").textContent = Utils.weiToEtherFixed(ongoinRafflePrize.toString());
   },
 
   updatePartnerFeesForAllGamesTotal: async function () {
-    let partnerFeeUsedTotal_cf = new BigNumber(await BlockchainManager.partnerFeeUsedTotal(Types.Game.cf));
+    let partnerFeeUsedTotal_cf = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.cf));
     // console.log("partnerFeeUsedTotal_cf: ", partnerFeeUsedTotal_cf.toString());
 
-    let partnerFeeUsedTotal_rps = new BigNumber(await BlockchainManager.partnerFeeUsedTotal(Types.Game.rps));
+    let partnerFeeUsedTotal_rps = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.rps));
     // console.log("partnerFeeUsedTotal_rps: ", partnerFeeUsedTotal_rps.toString());
 
     document.getElementById("totalUsedPartnerFees").textContent = Utils.weiToEtherFixed((partnerFeeUsedTotal_cf.plus(partnerFeeUsedTotal_rps)).toString());
   },
 
   updateRafflePrizesWonTotal: async function () {
-    let raffled_cf = new BigNumber(await BlockchainManager.rafflePrizesWonTotal(Types.Game.cf));
+    let raffled_cf = new BigNumber(await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.cf));
     // console.log("raffled_cf: ", raffled_cf.toString());
     document.getElementById("rafflePrizesWonTotalGameCoinFlip").innerText = Utils.weiToEtherFixed(raffled_cf.toString());
 
-    let raffled_rps = new BigNumber(await BlockchainManager.rafflePrizesWonTotal(Types.Game.rps));
+    let raffled_rps = new BigNumber(await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.rps));
     // console.log("raffled_rps: ", raffled_rps.toString());
     document.getElementById("rafflePrizesWonTotalGameRPS").innerText = Utils.weiToEtherFixed(raffled_rps.toString());
 
@@ -97,10 +98,10 @@ const Index = {
   },
 
   updateCryptoAmountPlayedOnSiteTotal: async function () {
-    let total_cf = new BigNumber(await BlockchainManager.totalUsedInGame(Types.Game.cf));
+    let total_cf = new BigNumber(await window.BlockchainManager.totalUsedInGame(Types.Game.cf));
     // console.log("total_cf: ", total_cf.toString());
 
-    let total_rps = new BigNumber(await BlockchainManager.totalUsedInGame(Types.Game.rps));
+    let total_rps = new BigNumber(await window.BlockchainManager.totalUsedInGame(Types.Game.rps));
     // console.log("total_rps: ", total_rps.toString());
 
     document.getElementById("cryptoAmountPlayedOnSiteTotal").rows[1].cells[1].innerHTML = Utils.weiToEtherFixed(total_cf.plus(total_rps)).toString();
@@ -108,15 +109,15 @@ const Index = {
 
   updateRunningGameAmounts: async function () {
     //  created
-    let created_cf = new BigNumber(await BlockchainManager.gamesCreatedAmount(Types.Game.cf));
+    let created_cf = new BigNumber(await window.BlockchainManager.gamesCreatedAmount(Types.Game.cf));
     // console.log("created_cf: ", created_cf.toString());
-    let created_rps = new BigNumber(await BlockchainManager.gamesCreatedAmount(Types.Game.rps));
+    let created_rps = new BigNumber(await window.BlockchainManager.gamesCreatedAmount(Types.Game.rps));
     // console.log("created_rps: ", created_rps.toString());
 
     //  completed
-    let completed_cf = new BigNumber(await BlockchainManager.gamesCompletedAmount(Types.Game.cf));
+    let completed_cf = new BigNumber(await window.BlockchainManager.gamesCompletedAmount(Types.Game.cf));
     // console.log("completed_cf: ", completed_cf.toString());
-    let completed_rps = new BigNumber(await BlockchainManager.gamesCompletedAmount(Types.Game.rps));
+    let completed_rps = new BigNumber(await window.BlockchainManager.gamesCompletedAmount(Types.Game.rps));
     // console.log("completed_rps: ", completed_rps.toString());
 
     //  running
@@ -144,7 +145,7 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
 
-    if (_creator.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -169,7 +170,7 @@ const Index = {
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
-    if (_creator.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -196,7 +197,7 @@ const Index = {
     Index.updateRafflePrizesWonTotal();
     Index.updateOngoinRafflePrize();
 
-    if (_winner.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -204,7 +205,7 @@ const Index = {
   onGameOpponentMoved: function (_id, _nextMover) {
     console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
-    if (_nextMover.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       showNotifViewWithData("Rock Paper Scissors: you have pending move");
     }
   },
@@ -220,7 +221,7 @@ const Index = {
     Index.updatePartnerFeesForAllGamesTotal();
     Index.updateOngoinRafflePrize();
 
-    if (_winner.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -232,7 +233,7 @@ const Index = {
       console.log('%c index - onGameReferralWithdrawn_RPS', 'color: #1d34ff');
     }
 
-    if (_address.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -246,9 +247,9 @@ const Index = {
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
-    if (_creator.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       showNotifViewWithData("Rock Paper Scissors: game was joined, you have pending move.");
-    } else if (_opponent.includes(BlockchainManager.currentAccount().replace("0x", ""))) {
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -260,12 +261,12 @@ const Index = {
 
     if (ProfileManager.isGameParticipant(Utils.Games.rockPaperScissors, _id)) {
       // console.log("YES participant");
-      let gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.rockPaperScissorsContract, _id);
+      let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, _id);
 
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
         case Utils.GameState.winnerPresent:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
           break;
 
         case Utils.GameState.draw:
@@ -273,11 +274,11 @@ const Index = {
           break;
 
         case Utils.GameState.quitted:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
           break;
 
         case Utils.GameState.expired:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
           break;
       }
 
@@ -315,7 +316,7 @@ window.Index = Index;
 //   }
 
 //   console.log('%c index - accountsChanged', 'color: #00aa00');
-//   BlockchainManager.accountChanged();
+//   window.BlockchainManager.accountChanged();
 // });
 
 // ethereum.on('networkChanged', function (accounts) {
@@ -324,5 +325,5 @@ window.Index = Index;
 //   }
 
 //   console.log('%c index - networkChanged', 'color: #00aa00');
-//   BlockchainManager.setup();
+//   window.BlockchainManager.setup();
 // });

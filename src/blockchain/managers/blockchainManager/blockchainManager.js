@@ -15,8 +15,8 @@ const BlockchainManager = {
   currentBlockchainType: 0,
   currentBlockchain: null,
   initted: false,
-  coinFlipContract: null,
-  rockPaperScissorsContract: null,
+  // coinFlipContract: null,
+  // rockPaperScissorsContract: null,
 
   init: async function ()  {
     if (!this.initted) {
@@ -24,6 +24,8 @@ const BlockchainManager = {
 
       this.setCurrentBlockchain(Types.BlockchainType.ethereum);
       await this.currentBlockchain.setup();
+
+      this.initted = true;
     }
   },
 
@@ -139,7 +141,7 @@ const BlockchainManager = {
   //         throw new Error("Wrong Network. Please use Ropsten for testing.")
   //       }
   //     } catch (error) {
-  //       BlockchainManager.initted = false;
+  //       window.BlockchainManager.initted = false;
   //       showAlert('error', error.message);
   //       return false;
   //     }
@@ -148,19 +150,19 @@ const BlockchainManager = {
   //   else if (window.web3) {
   //     console.log("Legacy dapp browsers...");
   //     // window.web3 = new Web3(web3.currentProvider);
-  //       BlockchainManager.initted = false;
+  //       window.BlockchainManager.initted = false;
   //     showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
   //     throw new Error('Please install MetaMask.')
   //   }
   //   // Non-dapp browsers...
   //   else {
   //     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-  //     BlockchainManager.initted = false;
+  //     window.BlockchainManager.initted = false;
   //     return false;
   //   }
 
   //   ethereum.autoRefreshOnNetworkChange = false;
-  //   BlockchainManager.initted = true;
+  //   window.BlockchainManager.initted = true;
   //   return true;
   // },
 
@@ -267,12 +269,12 @@ const BlockchainManager = {
    */
 
   gameContractForGameType: function (_gameType) {
-    let gameContract = BlockchainManager.coinFlipContract;
+    // let gameContract = this.coinFlipContract;
 
-    if (_gameType == Types.Game.rps) {
-      gameContract = BlockchainManager.rockPaperScissorsContract;
-    }
-    return gameContract;
+    // if (_gameType == Types.Game.rps) {
+    //   gameContract = this.rockPaperScissorsContract;
+    // }
+    // return gameContract;
   }
 }
 

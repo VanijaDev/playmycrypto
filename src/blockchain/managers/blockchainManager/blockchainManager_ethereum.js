@@ -193,10 +193,10 @@ const BlockchainManager_ethereum = {
    */
 
   // gameContractForGameType: function (_gameType) {
-  //   let gameContract = BlockchainManager.contract_inst_cf;
+  //   let gameContract = window.BlockchainManager.contract_inst_cf;
 
   //   if (_gameType == Utils.Games.rockPaperScissors) {
-  //     gameContract = BlockchainManager.contract_inst_rps;
+  //     gameContract = window.BlockchainManager.contract_inst_rps;
   //   }
   //   return gameContract;
   // }

@@ -230,7 +230,7 @@
         this.$store.commit('setCurrency', currency);
 
         let selectedBlockChain = (currency === 'eth') ? 0 : 1;
-        window.BlockchainManager.blockchainChanged(selectedBlockChain)
+        window.window.BlockchainManager.blockchainChanged(selectedBlockChain)
       },
       getCurrentFlag() {
         return 'flag-' + this.language;
@@ -247,7 +247,7 @@
         }
 
         console.log('%c App - accountsChanged', 'color: #00aa00');
-        window.BlockchainManager.accountChanged();
+        window.window.BlockchainManager.accountChanged();
       });
 
       window.ethereum.on('networkChanged', function (accounts) {
@@ -257,7 +257,7 @@
         }
 
         console.log('%c index - networkChanged', 'color: #00aa00');
-        window.BlockchainManager.setup();
+        window.window.BlockchainManager.setup();
       });
     },
 

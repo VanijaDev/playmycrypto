@@ -47,8 +47,8 @@ const RPS = {
     console.log("RPS - updateGameView");
 
     showSpinner(Spinner.gameView);
-    this.ownerAddress = await PromiseManager.getOwnerPromise(BlockchainManager.rockPaperScissorsContract);
-    this.minBet = await PromiseManager.minBetForGamePromise(BlockchainManager.rockPaperScissorsContract);
+    this.ownerAddress = await PromiseManager.getOwnerPromise(window.BlockchainManager.rockPaperScissorsContract);
+    this.minBet = await PromiseManager.minBetForGamePromise(window.BlockchainManager.rockPaperScissorsContract);
 
     this.setPlaceholders();
     this.showGameViewForCurrentAccount();
@@ -67,13 +67,13 @@ const RPS = {
   showGameViewForCurrentAccount: async function () {
     showSpinner(Spinner.gameView);
 
-    let gameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(BlockchainManager.rockPaperScissorsContract, BlockchainManager.currentAccount));
+    let gameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(window.BlockchainManager.rockPaperScissorsContract, window.BlockchainManager.currentAccount));
     // console.log("showGameViewForCurrentAccount gameId: ", gameId);
 
     if (gameId == 0) {
       this.showGameView(this.GameView.startNew, null);
     } else {
-      let gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.rockPaperScissorsContract, gameId);
+      let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
       // console.log("gameInfo: ", gameInfo);
 
       switch (parseInt(gameInfo.state)) {
@@ -82,9 +82,9 @@ const RPS = {
           break;
 
         case Utils.GameState.started:
-          let isNextMover = Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.nextMover);
+          let isNextMover = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.nextMover);
           if (isNextMover) {
-            let isGameCreator = Utils.addressesEqual(BlockchainManager.currentAccount, gameInfo.creator);
+            let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.creator);
             if (isGameCreator) {
               this.showGameView(this.GameView.playMove, gameInfo);
             } else {
@@ -110,7 +110,7 @@ const RPS = {
 
     if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
       resultView = RPS.GameView.draw;
-    } else if (Utils.addressesEqual(_gameInfo.winner, BlockchainManager.currentAccount)) {
+    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) {
       resultView = RPS.GameView.won;
     }
 
@@ -162,8 +162,8 @@ const RPS = {
       return;
     }
 
-    const isMoveExpired = await PromiseManager.getGameMoveExpiredPromise(BlockchainManager.rockPaperScissorsContract, _gameInfo.id);
-    const isGameCreator = Utils.addressesEqual(BlockchainManager.currentAccount, _gameInfo.creator);
+    const isMoveExpired = await PromiseManager.getGameMoveExpiredPromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);
+    const isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount, _gameInfo.creator);
     const gameMoveResults = await this.gameMoveResults(_gameInfo.id);
     // console.log("gameMoveResults: ", gameMoveResults);
 
@@ -184,7 +184,7 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponent + "_paused").classList.add("display-none");
           document.getElementById(this.GameView.waitingForOpponent + "_pauseBtn").innerHTML = "Pause game";
 
-          (await PromiseManager.isTopGamePromise(BlockchainManager.rockPaperScissorsContract, _gameInfo.id)) ? document.getElementById("rpswfopponent_makeTop").classList.add("display-none") : document.getElementById("rpswfopponent_makeTop").classList.remove("display-none");
+          (await PromiseManager.isTopGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id)) ? document.getElementById("rpswfopponent_makeTop").classList.add("display-none") : document.getElementById("rpswfopponent_makeTop").classList.remove("display-none");
         }
         break;
 
@@ -230,7 +230,7 @@ const RPS = {
 
         this.updateExpiredUIFor(this.GameView.playMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
 
-        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(BlockchainManager.rockPaperScissorsContract, _gameInfo.id);    
+        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);    
         if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
           document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("display-none");
           this.skipNextMove = false;
@@ -259,7 +259,7 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
         }
@@ -277,7 +277,7 @@ const RPS = {
           document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
           
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
         }
@@ -295,7 +295,7 @@ const RPS = {
           document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
           
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
         }
@@ -310,7 +310,7 @@ const RPS = {
   gameMoveResults: async function(_gameId) {
     let result = [0,0]; //  creator, joiner
 
-    let rowMoves_0 = await PromiseManager.getShowRowMovesPromise(BlockchainManager.rockPaperScissorsContract, _gameId, 0);
+    let rowMoves_0 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 0);
     // console.log("rowMoves_0: ", rowMoves_0);
     if (rowMoves_0[0] == 0) {
       return result;
@@ -330,7 +330,7 @@ const RPS = {
     }
     // console.log("result_0: ", result);
 
-    let rowMoves_1 = await PromiseManager.getShowRowMovesPromise(BlockchainManager.rockPaperScissorsContract, _gameId, 1);
+    let rowMoves_1 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 1);
     // console.log("rowMoves_1: ", rowMoves_1);
     if (rowMoves_1[0] == 0) {
       return result;
@@ -350,7 +350,7 @@ const RPS = {
     }
     // console.log("result_1: ", result);
 
-    let rowMoves_2 = await PromiseManager.getShowRowMovesPromise(BlockchainManager.rockPaperScissorsContract, _gameId, 2);
+    let rowMoves_2 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 2);
     // console.log("rowMoves_2: ", rowMoves_2);
     if (rowMoves_2[0] == 0) {
       return result;
@@ -636,9 +636,9 @@ const RPS = {
       showAlert("error", "Please select move.");
       return;
     } else if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + BlockchainManager.currentCryptoName() + ".");
+      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
       return;
-    } else if (new BigNumber(await BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
+    } else if (new BigNumber(await window.BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
       showAlert("error", "Not enough funds.");
       return;
     } else if (seedStr.length == 0) {
@@ -662,10 +662,10 @@ const RPS = {
     }
 
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.createGame(referral, seedHash).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.rockPaperScissorsContract.methods.createGame(referral, seedHash).send({
+      from: window.BlockchainManager.currentAccount,
       value: Utils.etherToWei(bet),
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -681,7 +681,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Create game error...");
         throw new Error(error, receipt);
       }
@@ -691,7 +691,7 @@ const RPS = {
   joinGameClicked: async function() {
     console.log('%c joinGameClicked', 'color: #e51dff');
 
-    let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(BlockchainManager.rockPaperScissorsContract, BlockchainManager.currentAccount));
+    let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(window.BlockchainManager.rockPaperScissorsContract, window.BlockchainManager.currentAccount));
     if (ongoingGameId != 0) {
       showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
       return;
@@ -713,19 +713,19 @@ const RPS = {
     }
 
     let gameId = document.getElementById("rpsjoingame_gameId").innerHTML;
-    let gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
     
     let bet = gameInfo.bet;
-    if (parseInt(await BlockchainManager.getBalance()) < bet) {
+    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
       showAlert('error', 'Not enough balance to join game.');
       return;
     }
 
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.joinGame(gameId, referral, this.selectedMove).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.rockPaperScissorsContract.methods.joinGame(gameId, referral, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount,
       value: bet,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -741,7 +741,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Join game error...");
         throw new Error(error, receipt);
       }
@@ -758,9 +758,9 @@ const RPS = {
 
     let gameId = document.getElementById("rpsmakemove_game_id").innerHTML;
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.opponentNextMove(gameId, this.selectedMove).send({
-      from: BlockchainManager.currentAccount,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+    window.BlockchainManager.rockPaperScissorsContract.methods.opponentNextMove(gameId, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
@@ -776,7 +776,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Make move error...");
         throw new Error(error, receipt);
       }
@@ -824,9 +824,9 @@ const RPS = {
     const seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
-    BlockchainManager.rockPaperScissorsContract.methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
-      from: BlockchainManager.currentAccount,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+    window.BlockchainManager.rockPaperScissorsContract.methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
+      from: window.BlockchainManager.currentAccount,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -836,7 +836,7 @@ const RPS = {
       ProfileManager.update();
       hideAndClearNotifView();
 
-      const gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.rockPaperScissorsContract, gameId);
+      const gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
       if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
         RPS.showGameViewForCurrentAccount();
       } else {
@@ -851,7 +851,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
       
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Play move error...");
         throw new Error(error, receipt);
       }
@@ -870,9 +870,9 @@ const RPS = {
     console.log("gameId: ", gameId);
     
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.quitGame(gameId).send({
-      from: BlockchainManager.currentAccount,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+    window.BlockchainManager.rockPaperScissorsContract.methods.quitGame(gameId).send({
+      from: window.BlockchainManager.currentAccount,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -889,7 +889,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Quit game error...");
         throw new Error(error, receipt);
       }
@@ -906,9 +906,9 @@ const RPS = {
     console.log("gameId: ", gameId);
     
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.finishExpiredGame(gameId).send({
-      from: BlockchainManager.currentAccount,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+    window.BlockchainManager.rockPaperScissorsContract.methods.finishExpiredGame(gameId).send({
+      from: window.BlockchainManager.currentAccount,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
@@ -925,7 +925,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Claim expired game error...");
         throw new Error(error, receipt);
       }
@@ -937,17 +937,17 @@ const RPS = {
 
     let bet = document.getElementById("rpswfopponent_increse_bet").value;
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + BlockchainManager.currentCryptoName() + ".");
+      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
       return;
     }
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     
     showSpinner(Spinner.gameView);
-    BlockchainManager.rockPaperScissorsContract.methods.increaseBetForGameBy(gameId).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.rockPaperScissorsContract.methods.increaseBetForGameBy(gameId).send({
+      from: window.BlockchainManager.currentAccount,
       value: Utils.etherToWei(bet).toString(),
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -966,7 +966,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Increase bet error...");
         throw new Error(error, receipt);
       }
@@ -980,16 +980,16 @@ const RPS = {
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     showSpinner(Spinner.gameView);
 
-    let gameInfo = await PromiseManager.getGameInfoPromise(BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
     gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
   },
 
   pauseGame: async function(_gameId) {
     console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
 
-    BlockchainManager.rockPaperScissorsContract.methods.pauseGame(_gameId).send({
-      from: BlockchainManager.currentAccount,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+    window.BlockchainManager.rockPaperScissorsContract.methods.pauseGame(_gameId).send({
+      from: window.BlockchainManager.currentAccount,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
@@ -1006,7 +1006,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Pause game error...");
         throw new Error(error, receipt);
       }
@@ -1016,15 +1016,15 @@ const RPS = {
   unpauseGame: async function(_gameId) {
     console.log('%c unpauseGame_RPS:', 'color: #e51dff');
 
-    if (parseInt(await BlockchainManager.getBalance()) < Game.minBet) {
+    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
       showAlert('error', 'Unpause Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
       return;
     }
 
-    BlockchainManager.rockPaperScissorsContract.methods.unpauseGame(_gameId).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.rockPaperScissorsContract.methods.unpauseGame(_gameId).send({
+      from: window.BlockchainManager.currentAccount,
       value: Game.minBet,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -1041,7 +1041,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "Unpause game error...");
         throw new Error(error, receipt);
       }
@@ -1051,17 +1051,17 @@ const RPS = {
   makeTopClicked: async function () {
     console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
     
-    if (parseInt(await BlockchainManager.getBalance()) < Game.minBet) {
+    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
       showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
       return;
     }
 
     showSpinner(Spinner.gameView);
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    BlockchainManager.rockPaperScissorsContract.methods.addTopGame(gameId).send({
-      from: BlockchainManager.currentAccount,
+    window.BlockchainManager.rockPaperScissorsContract.methods.addTopGame(gameId).send({
+      from: window.BlockchainManager.currentAccount,
       value: Game.minBet,
-      gasPrice: await BlockchainManager.gasPriceNormalizedString()
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
@@ -1078,7 +1078,7 @@ const RPS = {
       hideAndClearNotifView();
       hideSpinner(Spinner.gameView);
 
-      if (error.code != BlockchainManager.MetaMaskCodes.userDenied) {
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
         showAlert('error', "MAKE TOP GAME error...");
         throw new Error(error, receipt);
       }
