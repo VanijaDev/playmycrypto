@@ -165,13 +165,15 @@
 
       let loadInterval = setInterval(function () {
         if (typeof window.Game !== 'undefined') {
-          window.Game.pageLoaded = true;
-          window.Game.setup();
           clearInterval(loadInterval);
 
           setTimeout(function () {
-            window.BlockchainManager = manager;
-            console.log('Restore BlockchainManager')
+            if (manager) {
+              window.BlockchainManager = manager;
+            }
+
+            window.Game.pageLoaded = true;
+            window.Game.setup();
           }, 300);
         }
       }, 50);

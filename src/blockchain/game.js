@@ -41,23 +41,26 @@ const Game = {
     }
     console.log('%c Game - setup', 'color: #00aa00');
 
+    if (!window.BlockchainManager.initted) {
+      await window.BlockchainManager.init();
+    }
+
     this.setupOnce();
 
     if (this.gameType == Types.Game.cf) {
-      console.log("!!! cf");
+      console.log("this.gameType = cf");
       document.getElementById("gameName").innerHTML = "CoinFlip";
       // CoinFlip.updateGameView();
     } else if (this.gameType == Types.Game.rps) {
-      console.log("!!! rps");
+      console.log("this.gameType = rps");
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
       // RPS.updateGameView();  TODO
     } else {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
-    console.log("setup: ", this.gameType);
-    console.log("Game BlockchainManager: ", window.BlockchainManager);
-    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
+    // console.log("setup: ", this.gameType);
+    // this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     // this.updateSuspendedViewForGame(this.gameType);  //TODO
     // this.updateAllGamesForGame(this.gameType);
     // await this.updateRaffleStateInfoForGame(this.gameType, true);

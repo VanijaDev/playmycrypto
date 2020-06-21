@@ -12,7 +12,7 @@ const BlockchainManager = {
     userDenied: 4001
   },
 
-  currentBlockchainType: 0,
+  currentBlockchainType: "",
   currentBlockchain: null,
   initted: false,
   // coinFlipContract: null,
