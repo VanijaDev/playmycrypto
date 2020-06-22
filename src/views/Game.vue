@@ -32,7 +32,7 @@
                     /
                     <span id="raffleActivationAmount">0</span>
                   </b>
-                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right">{{ $t('START')
+                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right" disabled>{{ $t('START')
                     }}
                   </button>
                 </div>
@@ -40,18 +40,7 @@
                   <img src="/img/game-icon-quality.svg" class="mr-2">
                   {{ $t('LAST_WINNER') }}:
                 </div>
-                <div class="scrollbar-inner" id="BlockRaffle">
-                  <div class="bordered mt-1">
-                    <p>0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</p>
-                    <p>
-                      <span class="text-primary">
-                        <b>0.00000</b>
-                        <img src="/img/icon_amount-eth.svg" class="money-icon ml-2">
-                      </span>
-                      <span class="float-right text-black-50">00.00.0000</span>
-                    </p>
-                  </div>
-                </div>
+                <div class="scrollbar-inner list-no-style" id="BlockRaffle"></div>
 
               </div>
             </div>
@@ -80,20 +69,6 @@
                 {{ $t('TOP_GAMES') }}
               </h2>
               <div class="inner-padding scrollbar-inner list-no-style" id="BlockTopGames">
-                <!-- <div class="bordered blue-border mt-1">
-                  <p>
-                    <img src="/img/game-icon-wallet.svg" class="creator">
-                    <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
-                    <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
-                  </p>
-                  <p>
-                    <img src="/img/game-icon-bet.svg" class="creator">
-                    <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                    <span class="text-primary"><b>0.00000</b></span>
-
-                    <img src="/img/icon_amount-eth.svg" class="money-icon">
-                  </p>
-                </div> -->
               </div>
             </div>
 
@@ -104,23 +79,10 @@
 
             <div class="position-relative" id="availableGamesBlock">
               <h2 class="text-primary p20 mb-0 pb-0">
-                {{ $t('AVAILABLE_GAMES') }}:
+                {{ $t('AVAILABLE_GAMES') }}
               </h2>
 
               <div class="inner-padding scrollbar-inner list-no-style" id="AvailableGames">
-                <!-- <div class="bordered mt-1">
-                  <p>
-                    <img src="/img/game-icon-wallet.svg" class="creator">
-                    <span class="pl-2 pr-2 text-black-50 creator-title">Creator:</span>
-                    <span class="one-line">0xKDJFKSDFSDJHFKDSKJFHKSDFKHDSHKFFDFSDF</span>
-                  </p>
-                  <p>
-                    <img src="/img/game-icon-bet.svg" class="creator">
-                    <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('BET') }}:</span>
-                    <span class="text-primary"><b>0.00000</b></span>
-                    <img src="/img/icon_amount-eth.svg" class="money-icon">
-                  </p>
-                </div> -->
               </div>
             </div>
 

@@ -62,7 +62,7 @@ const Game = {
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     // this.updateSuspendedViewForGame(this.gameType);
     this.updateAllGamesForGame(this.gameType);
-    // await this.updateRaffleStateInfoForGame(this.gameType, true);
+    await this.updateRaffleStateInfoForGame(this.gameType, true);
 
     // hideSpinner(Spinner.raffle);
   },
@@ -293,7 +293,7 @@ const Game = {
     this.updateProfileOnRaffle(participants.length);
     this.raffleParticipants = participants.length;
 
-    document.getElementById("rafflePlayingAmount").innerText = participants.length;
+    $("#rafflePlayingAmount")[0].innerText = participants.length;
   },
 
   updateProfileOnRaffle: function (_currentParticipants) {
@@ -305,18 +305,18 @@ const Game = {
   updateRafflePlayersToActivateForGame: async function (_gameType) {
     let participants = await PromiseManager.raffleActivationParticipantsAmountPromise(_gameType);
     // console.log("raffleActivationParticipantsAmount: ", result.toString());
-    document.getElementById("raffleActivationAmount").innerText = participants.toString();
+    $("#raffleActivationAmount")[0].innerText = participants.toString();
   },
 
   updateRaffleStartButtonForGame: async function (_gameType) {
     let isActivated = await PromiseManager.isRaffleActivatedPromise(_gameType);
-    document.getElementById("raffleStartBtn").disabled = !isActivated;
+    $("#raffleStartBtn")[0].disabled = !isActivated;
   },
 
   updateRaffleOngoingPrizeForGame: async function (_gameType) {
     let ongoingPrize = await PromiseManager.ongoinRafflePrizePromise(_gameType);
     // console.log("ongoinRafflePrize: ", result.toString());
-    document.getElementById("cryptoForRaffle").innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
+    $("#cryptoForRaffle")[0].innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
   },
 
   updateRaffleHistoryForGame: async function (_gameType) {
@@ -672,16 +672,32 @@ var TopGamesTemplate = '<li>' +
   '</div>' +
   '</li>';
 
+// var RaffleGamesTemplate = '<li>' +
+//   '<table class="table-games">' +
+//   '<tr>' +
+//   '<th><img src="/img/game-icon-wallet.svg"> Winner:</th>' +
+//   '<td colspan="2">{{address}}</td>' +
+//   '</tr>' +
+//   '<tr>' +
+//   '<th><img src="/img/game-icon-bet.svg"> Prize:</th>' +
+//   '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+//   '<td class="text-right">{{timeago}}</td>' +
+//   '</tr>' +
+//   '</table>' +
+//   '</li>';
 var RaffleGamesTemplate = '<li>' +
-  '<table class="table-games">' +
-  '<tr>' +
-  '<th><img src="/img/game-icon-wallet.svg"> Winner:</th>' +
-  '<td colspan="2">{{address}}</td>' +
-  '</tr>' +
-  '<tr>' +
-  '<th><img src="/img/game-icon-bet.svg"> Prize:</th>' +
-  '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
-  '<td class="text-right">{{timeago}}</td>' +
-  '</tr>' +
-  '</table>' +
+  '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
+  '<p>' +
+    '<img src="/img/game-icon-wallet.svg" class="creator">' +
+    '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("WINNER") }}:</span>' +
+    '<span class="one-line">{{address}}</span>' +
+    '</p>' +
+  '<p>' +
+    '<img src="/img/game-icon-bet.svg" class="creator">' +
+    '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("PRIZE") }}:</span>' +
+    '<span class="text-primary"><b>{{amount}}</b></span>' +
+    '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+    '<span class="float-right text-black-50">{{timeago}}</span>' +
+  '</p>' +
+  '</div>' +
   '</li>';
