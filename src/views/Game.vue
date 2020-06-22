@@ -75,12 +75,12 @@
               <small>Suspended time was introduced to avoid spamming.</small>
             </div>
 
-            <div class="position-relative" id="BlockTopGames">
+            <div class="position-relative">
               <h2 class="text-primary p20 mb-0 pb-0">
                 {{ $t('TOP_GAMES') }}
               </h2>
-              <div class="inner-padding scrollbar-inner">
-                <div class="bordered blue-border mt-1">
+              <div class="inner-padding scrollbar-inner" id="BlockTopGames">
+                <!-- <div class="bordered blue-border mt-1">
                   <p>
                     <img src="/img/game-icon-wallet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">{{ $t('CREATOR') }}:</span>
@@ -93,7 +93,7 @@
 
                     <img src="/img/icon_amount-eth.svg" class="money-icon">
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -108,7 +108,7 @@
               </h2>
 
               <div class="inner-padding scrollbar-inner" id="AvailableGames">
-                <div class="bordered mt-1">
+                <!-- <div class="bordered mt-1">
                   <p>
                     <img src="/img/game-icon-wallet.svg" class="creator">
                     <span class="pl-2 pr-2 text-black-50 creator-title">Creator:</span>
@@ -120,7 +120,7 @@
                     <span class="text-primary"><b>0.00000</b></span>
                     <img src="/img/icon_amount-eth.svg" class="money-icon">
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
 

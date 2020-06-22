@@ -27,12 +27,12 @@ hideTopBannerMessage()
 
 #### Add block loader:
 ```
-window.showSpinner(document.getElementById('...'))
+window.CommonManager.showSpinner(_spinnerViewType)
 ```
 
 #### Hide block loader:
 ```
-window.hideSpinner(document.getElementById('...'))
+window.CommonManager.hideSpinner(_spinnerViewType)
 ```
 
 #### Show back timer (seconds, callback):

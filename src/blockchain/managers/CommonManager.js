@@ -4,7 +4,6 @@ const CommonManager = {
 
   currentView: -1,
   currentGame: -1,
-  currentSpinnerView: null,
 
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;
@@ -16,12 +15,12 @@ const CommonManager = {
 
 
   showSpinner: function (_viewType) {
-    this.currentSpinnerView = this.spinnerViewForType(_viewType);
-    window.showSpinner(this.currentSpinnerView);
+    let spinnerView = this.spinnerViewForType(_viewType);
+    window.showSpinner(spinnerView);
   },
-  hideSpinner: function () {
-    window.hideSpinner(this.currentSpinnerView);
-    this.currentSpinnerView = null;
+  hideSpinner: function (_viewType) {
+    let spinnerView = this.spinnerViewForType(_viewType);
+    window.hideSpinner(spinnerView);
   },
   spinnerViewForType: function (_viewType) {
     let view = null;
@@ -30,11 +29,22 @@ const CommonManager = {
       case Types.SpinnerView.gameView:
         view = "gameBlock";
         break;
+
+      case Types.SpinnerView.availableGames:
+        view = "AvailableGames";
+        break;
+
+      case Types.SpinnerView.topGames:
+        view = "BlockTopGames";
+        break;
+
+      case Types.SpinnerView.raffle:
+        view = "raffleBlock";
+        break;
     
       default:
         break;
     }
-
 
     return view;
   }

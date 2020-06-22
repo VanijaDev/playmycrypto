@@ -34,12 +34,16 @@
     }, 5000)
   }
 
-  function showSpinner(element) {
-    $(element).addClass('loader').append('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  function showSpinner(_element) {
+    if (!$("#" + _element)[0].classList.contains('loader')) {
+      $("#" + _element).addClass('loader').append('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+    }
   }
 
-  function hideSpinner(element) {
-    $(element).removeClass('loader').find('.lds-ring').remove()
+  function hideSpinner(_element) {
+    if (!$("#" + _element)[0].classList.contains('loader')) {
+      $("#" + _element).removeClass('loader').find('.lds-ring').remove()
+    }
   }
 
   function showBackTimer(duration, callback = null) {

@@ -59,10 +59,9 @@ const Game = {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
-    // console.log("setup: ", this.gameType);
-    // this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    // this.updateSuspendedViewForGame(this.gameType);  //TODO
-    // this.updateAllGamesForGame(this.gameType);
+    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
+    // this.updateSuspendedViewForGame(this.gameType);
+    this.updateAllGamesForGame(this.gameType);
     // await this.updateRaffleStateInfoForGame(this.gameType, true);
 
     // hideSpinner(Spinner.raffle);
@@ -138,10 +137,15 @@ const Game = {
     $('#BlockTopGames').empty();
 
     this.loadTopGamesForGame(_gameType);
-    this.loadAvailableGamesPortionForGame(_gameType);
+    // this.loadAvailableGamesPortionForGame(_gameType);
   },
 
   loadTopGamesForGame: async function (_gameType) {
+    window.CommonManager.showSpinner(Types.SpinnerView.topGames);
+    window.CommonManager.showSpinner(Types.SpinnerView.availableGames);
+    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+
     if (_gameType == Types.Game.cf) {
       console.log("loadTopGamesForGame - CF");
     } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
@@ -149,6 +153,8 @@ const Game = {
     }
 
     $('#BlockTopGames').empty();
+
+return;
 
     this.topGameIds = await PromiseManager.topGamesPromise(_gameType);
     console.log("topGameIds: ", this.topGameIds);
@@ -181,7 +187,7 @@ const Game = {
       return;
     }
 
-    showSpinner(Spinner.availanbleGames);
+    showSpinner(Spinner.availableGames);
 
     if (this.availableGamesFetchStartIndex == -1) {
       this.availableGamesFetchStartIndex = (await PromiseManager.gamesCreatedAmountPromise(_gameType)) - 1;
@@ -203,7 +209,7 @@ const Game = {
         }
       }
     }
-    hideSpinner(Spinner.availanbleGames);
+    hideSpinner(Spinner.availableGames);
     console.log("availableGameIds: ", this.availableGameIds);
   },
 
