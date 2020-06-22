@@ -142,9 +142,6 @@ const Game = {
 
   loadTopGamesForGame: async function (_gameType) {
     window.CommonManager.showSpinner(Types.SpinnerView.topGames);
-    window.CommonManager.showSpinner(Types.SpinnerView.availableGames);
-    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     if (_gameType == Types.Game.cf) {
       console.log("loadTopGamesForGame - CF");
@@ -153,26 +150,39 @@ const Game = {
     }
 
     $('#BlockTopGames').empty();
+    this.topGameIds = [];
 
-return;
+    let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
+    this.topGameIds = this.topGameIds.concat(topGameIds_tmp);
 
-    this.topGameIds = await PromiseManager.topGamesPromise(_gameType);
-    console.log("topGameIds: ", this.topGameIds);
+    let ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
+
+    let ownGameTopGamesIdx = this.topGameIds.indexOf(ownGame);
+
+    if (ownGameTopGamesIdx >= 0) {
+      this.topGameIds.splice(ownGameTopGamesIdx, 1);
+      this.topGameIds.push("0");
+    }
+    // console.log("topGameIds: ", this.topGameIds);
 
     for (let i = 0; i < this.topGameIds.length; i++) {
       let id = parseInt(this.topGameIds[i]);
       if (id > 0) {
-        let gameInfo = await PromiseManager.gameInfoPromise(_gameType, parseInt(id));
-        // console.log("Top game: ", parseInt(id), " ", gameInfo);
-        if (Utils.addressesEqual(gameInfo.creator, window.BlockchainManager.currentAccount())) {
-          this.topGameIds.splice(i, 1);
-          this.topGameIds.push("0");
-        } else {
-          this.addGameWithInfo(gameInfo, true, false);
-        }
+        let gameInfo = await PromiseManager.gameInfoPromise(_gameType, id);
+        console.log("Top game: ", id, " ", gameInfo);
+        this.addGameWithInfo(gameInfo, true, false);
       }
+      // let id = parseInt(this.topGameIds[i]);
+      //   let gameInfo = await PromiseManager.gameInfoPromise(_gameType, parseInt(id));
+      //   console.log("Top game: ", parseInt(id), " ", gameInfo);
+      //   if (Utils.addressesEqual(gameInfo.creator, window.BlockchainManager.currentAccount())) {
+      //     this.topGameIds.splice(i, 1);
+      //     // this.topGameIds.push("0");
+      //   } else {
+      //     this.addGameWithInfo(gameInfo, true, false);
+      //   }
     }
-    hideSpinner(Spinner.topGames);
+    window.CommonManager.hideSpinner(Types.SpinnerView.topGames);
   },
 
   loadAvailableGamesPortionForGame: async function (_gameType) {
@@ -654,18 +664,34 @@ var TableAvailableGamesTemplate = '<li>' +
   '</table>' +
   '</li>';
 
+// var TopGamesTemplate = '<li>' +
+//   '<table class="bordered blue-border mt-1" onclick="Game.topGameClicked(this)">' +
+//   '<tr>' +
+//   '<th><img src="/img/game-icon-wallet.svg"> Creator:</th>' +
+//   '<td colspan="2">{{address}}</td>' +
+//   '</tr>' +
+//   '<tr>' +
+//   '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
+//   '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
+//   '<td class="text-right"></td>' +
+//   '</tr>' +
+//   '</table>' +
+//   '</li>';
 var TopGamesTemplate = '<li>' +
-  '<table class="table-games gameCell" onclick="Game.topGameClicked(this)">' +
-  '<tr>' +
-  '<th><img src="/img/game-icon-wallet.svg"> Creator:</th>' +
-  '<td colspan="2">{{address}}</td>' +
-  '</tr>' +
-  '<tr>' +
-  '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
-  '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
-  '<td class="text-right"></td>' +
-  '</tr>' +
-  '</table>' +
+  '<div class="bordered blue-border mt-1">' +
+    '<p>' +
+      '<img src="/img/game-icon-wallet.svg" class="creator">' +
+      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
+      '<span class="one-line">{{address}}</span>' +
+    '</p>' +
+    '<p>' +
+      '<img src="/img/game-icon-bet.svg" class="creator">' +
+      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
+      '<span class="text-primary"><b>{{bet}}</b></span>' +
+
+      '<img src="/img/icon_amount-eth.svg" class="money-icon">' +
+    '</p>' +
+  '</div>' +
   '</li>';
 
 var RaffleGamesTemplate = '<li>' +

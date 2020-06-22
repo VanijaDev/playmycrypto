@@ -79,7 +79,7 @@
               <h2 class="text-primary p20 mb-0 pb-0">
                 {{ $t('TOP_GAMES') }}
               </h2>
-              <div class="inner-padding scrollbar-inner" id="BlockTopGames">
+              <div class="inner-padding scrollbar-inner list-no-style" id="BlockTopGames">
                 <!-- <div class="bordered blue-border mt-1">
                   <p>
                     <img src="/img/game-icon-wallet.svg" class="creator">
@@ -107,7 +107,7 @@
                 {{ $t('AVAILABLE_GAMES') }}:
               </h2>
 
-              <div class="inner-padding scrollbar-inner" id="AvailableGames">
+              <div class="inner-padding scrollbar-inner list-no-style" id="AvailableGames">
                 <!-- <div class="bordered mt-1">
                   <p>
                     <img src="/img/game-icon-wallet.svg" class="creator">
