@@ -30,17 +30,16 @@ const BlockchainManager = {
   },
 
   setCurrentBlockchain: function (_blockchainType) {
-    console.log("setCurrentBlockchain: ", _blockchainType);
     this.currentBlockchainType = _blockchainType;
 
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
-        console.log("setCurrentBlockchain - Ethereum");
+        // console.log("setCurrentBlockchain - Ethereum");
         this.currentBlockchain = BlockchainManager_ethereum;
         break;
 
       case Types.BlockchainType.tron:
-        console.log("setCurrentBlockchain - Tron");
+        // console.log("setCurrentBlockchain - Tron");
         break;
     
       default:
@@ -103,7 +102,7 @@ const BlockchainManager = {
   },
 
   gameInst: function(_gameType) {
-    console.log("gameInst: ", _gameType);
+    // console.log("gameInst: ", _gameType);
     return this.currentBlockchain.gameInst(_gameType);
   },
 

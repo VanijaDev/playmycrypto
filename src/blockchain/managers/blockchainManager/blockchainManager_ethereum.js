@@ -93,7 +93,7 @@ const BlockchainManager_ethereum = {
   },
 
   gameInst: function(_gameType) {
-    console.log("gameInst e: ", _gameType);
+    // console.log("gameInst e: ", _gameType);
     let gameInst;
 
     switch (_gameType) {

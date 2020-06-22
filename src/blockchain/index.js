@@ -25,7 +25,6 @@ const Index = {
     window.CommonManager.setCurrentView(Types.View.index);
 
     await window.BlockchainManager.init();
-    console.log("index BlockchainManager: ", window.BlockchainManager);
     ProfileManager.profileUpdateHandler = this;
     await this.refreshData();
 
