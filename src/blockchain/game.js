@@ -132,12 +132,9 @@ const Game = {
     // clear data
     this.availableGamesFetchStartIndex = -1;
     this.availableGameIds.splice(0, this.availableGameIds.length);
-    $('#AvailableGames').empty();
-    this.topGameIds.splice(0, this.topGameIds.length);
-    $('#BlockTopGames').empty();
 
     this.loadTopGamesForGame(_gameType);
-    // this.loadAvailableGamesPortionForGame(_gameType);
+    this.loadAvailableGamesPortionForGame(_gameType);
   },
 
   loadTopGamesForGame: async function (_gameType) {
@@ -169,18 +166,9 @@ const Game = {
       let id = parseInt(this.topGameIds[i]);
       if (id > 0) {
         let gameInfo = await PromiseManager.gameInfoPromise(_gameType, id);
-        console.log("Top game: ", id, " ", gameInfo);
+        // console.log("Top game: ", id, " ", gameInfo);
         this.addGameWithInfo(gameInfo, true, false);
       }
-      // let id = parseInt(this.topGameIds[i]);
-      //   let gameInfo = await PromiseManager.gameInfoPromise(_gameType, parseInt(id));
-      //   console.log("Top game: ", parseInt(id), " ", gameInfo);
-      //   if (Utils.addressesEqual(gameInfo.creator, window.BlockchainManager.currentAccount())) {
-      //     this.topGameIds.splice(i, 1);
-      //     // this.topGameIds.push("0");
-      //   } else {
-      //     this.addGameWithInfo(gameInfo, true, false);
-      //   }
     }
     window.CommonManager.hideSpinner(Types.SpinnerView.topGames);
   },
@@ -197,7 +185,7 @@ const Game = {
       return;
     }
 
-    showSpinner(Spinner.availableGames);
+    window.CommonManager.showSpinner(Types.SpinnerView.availableGames);
 
     if (this.availableGamesFetchStartIndex == -1) {
       this.availableGamesFetchStartIndex = (await PromiseManager.gamesCreatedAmountPromise(_gameType)) - 1;
@@ -219,7 +207,8 @@ const Game = {
         }
       }
     }
-    hideSpinner(Spinner.availableGames);
+
+    window.CommonManager.hideSpinner(Types.SpinnerView.availableGames);
     console.log("availableGameIds: ", this.availableGameIds);
   },
 
@@ -664,21 +653,8 @@ var TableAvailableGamesTemplate = '<li>' +
   '</table>' +
   '</li>';
 
-// var TopGamesTemplate = '<li>' +
-//   '<table class="bordered blue-border mt-1" onclick="Game.topGameClicked(this)">' +
-//   '<tr>' +
-//   '<th><img src="/img/game-icon-wallet.svg"> Creator:</th>' +
-//   '<td colspan="2">{{address}}</td>' +
-//   '</tr>' +
-//   '<tr>' +
-//   '<th><img src="/img/game-icon-bet.svg"> Bet:</th>' +
-//   '<td><b>{{bet}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
-//   '<td class="text-right"></td>' +
-//   '</tr>' +
-//   '</table>' +
-//   '</li>';
 var TopGamesTemplate = '<li>' +
-  '<div class="bordered blue-border mt-1">' +
+  '<div class="bordered blue-border mt-1 cursor-pointer" onclick="Game.topGameClicked(this)">' +
     '<p>' +
       '<img src="/img/game-icon-wallet.svg" class="creator">' +
       '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
@@ -689,7 +665,7 @@ var TopGamesTemplate = '<li>' +
       '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
       '<span class="text-primary"><b>{{bet}}</b></span>' +
 
-      '<img src="/img/icon_amount-eth.svg" class="money-icon">' +
+      '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
     '</p>' +
   '</div>' +
   '</li>';
