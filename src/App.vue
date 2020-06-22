@@ -15,11 +15,11 @@
             <div class="choose-crypto">
               Choose crypto:
             </div>
-            <button class="currency-select" v-bind:class="{'is-active': currency === 'trx'}" @click="setCurrency('trx')">
-              <img src="/img/icon-tron.svg" alt="Tron">
-            </button>
             <button class="currency-select" v-bind:class="{'is-active': currency === 'eth'}" @click="setCurrency('eth')">
               <img src="/img/ethereum-logo.svg" alt="ETH">
+            </button>
+            <button class="currency-select" v-bind:class="{'is-active': currency === 'trx'}" @click="setCurrency('trx')">
+              <img src="/img/icon-tron.svg" alt="Tron">
             </button>
 
             <div class="user-profile position-relative">

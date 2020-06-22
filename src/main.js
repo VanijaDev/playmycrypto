@@ -13,7 +13,7 @@ Vue.use(Vuex);
 let currency = localStorage.getItem('currency');
 let language = localStorage.getItem('language');
 if (!currency) {
-  currency = 'trx';
+  currency = 'eth';
 }
 if (!language) {
   // detect language
@@ -34,6 +34,7 @@ let store = new Vuex.Store({
   },
   mutations: {
     setCurrency(state, currency) {
+      console.log("setCurrency: ", currency);
       if (state.currency !== currency) {
         localStorage.currency = state.currency = currency;
         console.log('Currency changed')
