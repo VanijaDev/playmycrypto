@@ -846,8 +846,12 @@ button:focus, input:focus {
   list-style: none;
 }
 
-.cursor-pointer {
+.game-cell {
   cursor: pointer;
+  
+  &:hover {
+    opacity: .7;
+  }
 }
 
 #listCurrentlyPlayingGames img {
