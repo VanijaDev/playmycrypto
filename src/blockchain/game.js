@@ -665,7 +665,7 @@ var TopGamesTemplate = '<li>' +
   '</li>';
 
 var RaffleGamesTemplate = '<li>' +
-  '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
+  '<div class="bordered mt-1"">' +
   '<p>' +
     '<img src="/img/game-icon-wallet.svg" class="creator">' +
     '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("WINNER") }}:</span>' +
