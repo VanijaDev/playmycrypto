@@ -158,6 +158,9 @@
                         <div id="withdrawGamePrize" v-if="activeUserTab===2">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
+                          </button>
+                          <button class="btn btn-animated">
+                            <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
                           </button> -->
                         </div>
 

@@ -8,9 +8,9 @@ let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
 
   PendingWithdraw: {
-    referral: "ReferralPicList",
-    gamePrize: "GamePrizePicList",
-    raffle: "RafflePrizePicList"
+    referral: "withdrawReferral",
+    gamePrize: "withdrawGamePrize",
+    raffle: "withdrawRafflePrize"
   },
 
   profileUpdateHandler: null,
@@ -35,7 +35,7 @@ let ProfileManager = {
     await this.updatePlayerGameplayProfit();
     await this.updateReferralFeesWithdrawn();
     await this.updatePlayerTotalProfit();
-    // await this.updatePending();
+    await this.updatePending();
 
     // this.profileUpdated();
   },
@@ -187,9 +187,9 @@ let ProfileManager = {
   },
 
   updatePending: async function () {
-    this.updatePendingReferral();
+    // this.updatePendingReferral();
     this.updatePendingGamePrize();
-    this.updatePendingRafflePrize();
+    // this.updatePendingRafflePrize();
   },
 
   updatePendingReferral: async function () {
@@ -249,37 +249,6 @@ let ProfileManager = {
     this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // updatePendingPrizesForGames: async function (_gameInst, _gameIds) {
-  //   let totalPrize = 0;
-  //   await Utils.asyncForEach( _gameIds, async id => {
-  //     let gameInfo = await PromiseManager.getGameInfoPromise(_gameInst, id);
-  //     totalPrize += gameInfo.bet * 2 * 0.95;
-  //   });
-  //   return totalPrize;
-  // },
-
   isGameParticipant: function(_gameType, _id) {
     if (_gameType == Types.Game.cf) {
       return this.ongoingGameCF.comparedTo(new BigNumber(_id)) == 0;
@@ -303,7 +272,7 @@ let ProfileManager = {
    * HELPERS
    */
   updatePendingPictures: function (_pendingTarget, _gamesWithPendingPrize, _pendingValues) {
-    // console.log("updatePendingPictures: ", _pendingTarget, _gamesWithPendingPrize, _pendingValues.toString());
+    console.log("updatePendingPictures: ", _pendingTarget, _gamesWithPendingPrize, _pendingValues.toString());
     $('#' + _pendingTarget).empty();
     this.showPendingDot(false, _pendingTarget);
 
@@ -318,8 +287,9 @@ let ProfileManager = {
           pendingValue = _pendingValues[idx];
           tooltipSuffix = " games";
         }
-        var pictureTemplate = '<li><button class="pendingWithdraw pending_btn" style="background: url(/images/' + Utils.gameIconSmallForGame(value) + '.svg) no-repeat center transparent;" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')"> <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span> </button></li>';
-        $('#' + _pendingTarget).append(pictureTemplate);
+        // var pictureTemplate = '<li><button class="pendingWithdraw pending_btn" style="background: url(/images/' + Utils.gameIconSmallForGame(value) + '.svg) no-repeat center transparent;" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')"> <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span> </button></li>';
+        const pictureTemplate = '<button class="btn btn-animated"><img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')></button>'
+        $('#' + _pendingTarget).appendChild(pictureTemplate);
       });
     }
   },
