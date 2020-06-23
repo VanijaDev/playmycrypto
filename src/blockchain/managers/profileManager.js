@@ -33,8 +33,8 @@ let ProfileManager = {
     await this.updateCurrentlyPlayingGames();
     await this.updatePlayedGamesTotalAmounts();
     await this.updatePlayerGameplayProfit();
-    // await this.updateReferralFeesWithdrawn();
-    // await this.updatePlayerTotalProfit();
+    await this.updateReferralFeesWithdrawn();
+    await this.updatePlayerTotalProfit();
     // await this.updatePending();
 
     // this.profileUpdated();
@@ -164,6 +164,7 @@ let ProfileManager = {
     // console.log("totalProfit: raffle + referral: ", totalProfit.toString());
     // console.log("totalProfit raffle + referral: ", new BigNumber(Utils.weiToEtherFixed(totalProfit).toString()).toString());
 
+    //  gameplayProfit
     let gameplayProfit = new BigNumber(profit_amount_gameplay.innerText);
     // console.log("gameplayProfit: ", gameplayProfit.toString());
 
@@ -175,11 +176,11 @@ let ProfileManager = {
     profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
 
     if (totalProfit.comparedTo(new BigNumber("0")) < 0) {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/images/icon-trending-down.svg">';
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
       profitAmountTotalElement.classList.remove("green");
       profitAmountTotalElement.classList.add("red");
     } else {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/images/icon-trending-up.svg">';
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
       profitAmountTotalElement.classList.remove("red");
       profitAmountTotalElement.classList.add("green");
     }
