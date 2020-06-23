@@ -31,8 +31,8 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    // await this.updatePlayedGamesTotalAmounts();
-    // await this.updatePlayerGameplayProfit();
+    await this.updatePlayedGamesTotalAmounts();
+    await this.updatePlayerGameplayProfit();
     // await this.updateReferralFeesWithdrawn();
     // await this.updatePlayerTotalProfit();
     // await this.updatePending();
@@ -111,11 +111,11 @@ let ProfileManager = {
     profitAmountElement.innerText = Utils.weiToEtherFixed(profit.toString());
 
     if (profit.comparedTo(new BigNumber("0")) < 0) {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/images/icon-trending-down.svg">';
+      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
       profitAmountElement.classList.remove("green");
       profitAmountElement.classList.add("red");
     } else {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/images/icon-trending-up.svg">';
+      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
     }
   },
 
