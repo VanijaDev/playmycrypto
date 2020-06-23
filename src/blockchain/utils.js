@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import Types from "./types";
 
 const Utils = {
 
@@ -33,9 +34,9 @@ const Utils = {
     return web3.utils.toWei(validatedValue, "ether");
   },
 
-  addGameIconsToElement: (element, gameIconIds) => {
-    gameIconIds.forEach((id) => {
-      element.append('<img src="/img/' + Utils.gamesIconsSmall[id] + '.svg">');
+  addGameIconsToElement: (element, gameTypes) => {
+    gameTypes.forEach((type) => {
+      element.append('<img src="/img/' + Utils.gameIconSmallForGame(type) + '.svg">');
     })
   },
 
@@ -54,11 +55,11 @@ const Utils = {
   gameIconSmallForGame: (_game) => {
     let iconName;
     switch (_game) {
-      case Utils.Games.coinFlip:
+      case Types.Game.cf:
         iconName = Utils.gamesIconsSmall[0];
         break;
     
-      case Utils.Games.rockPaperScissors:
+      case Types.Game.rps:
         iconName = Utils.gamesIconsSmall[1];
       default:
         break;

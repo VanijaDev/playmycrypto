@@ -39,7 +39,7 @@
                 <div class="pointer float-left mr-2">
                   <small>{{ $t('PROFILE') }}:</small>
                   <div class="profile-name" id="playerAccount" @click="userPopupOpened = !userPopupOpened">
-                    0x7eb***62c
+                    0x000***000
                   </div>
                 </div>
 
@@ -60,7 +60,7 @@
                   <li>
                     <h3>{{ $t('CURRENTLY_PLAYING') }}:</h3>
                     <div id="listCurrentlyPlayingGames">
-                      <img src="/img/icon-rock-paper-scissors-sm.svg">
+                      <!-- <img src="/img/icon-rock-paper-scissors-sm.svg"> -->
                     </div>
                   </li>
 
@@ -150,21 +150,21 @@
 
                       <div class="pt-3">
                         <div id="withdrawReferral" v-if="activeUserTab===1">
-                          <button class="btn btn-animated">
+                          <!-- <button class="btn btn-animated">
                             <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
-                          </button>
+                          </button> -->
                         </div>
 
                         <div id="withdrawGamePrize" v-if="activeUserTab===2">
-                          <button class="btn btn-animated">
+                          <!-- <button class="btn btn-animated">
                             <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
-                          </button>
+                          </button> -->
                         </div>
 
                         <div id="withdrawRafflePrize" v-if="activeUserTab===3">
-                          <button class="btn btn-animated">
+                          <!-- <button class="btn btn-animated">
                             <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
-                          </button>
+                          </button> -->
                         </div>
 
                       </div>

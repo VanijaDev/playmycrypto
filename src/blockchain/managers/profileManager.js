@@ -31,8 +31,8 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerGameplayProfit();
+    // await this.updatePlayedGamesTotalAmounts();
+    // await this.updatePlayerGameplayProfit();
     // await this.updateReferralFeesWithdrawn();
     // await this.updatePlayerTotalProfit();
     // await this.updatePending();
@@ -73,11 +73,13 @@ let ProfileManager = {
     Utils.clearElementIcons($('#listCurrentlyPlayingGames'));
 
     this.ongoingGameCF = new BigNumber(await PromiseManager.ongoingGameIdxForCreatorPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    console.log("this.ongoingGameCF: ", this.ongoingGameCF.toString());
     if (this.ongoingGameCF.comparedTo(new BigNumber("0")) == 1) {
       Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
     }
 
     this.ongoingGameRPS = new BigNumber(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    console.log("this.ongoingGameRPS: ", this.ongoingGameRPS.toString());
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
       Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.rps]);
     }
