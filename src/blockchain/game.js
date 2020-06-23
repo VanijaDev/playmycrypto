@@ -45,25 +45,22 @@ const Game = {
       await window.BlockchainManager.init();
     }
 
-    // this.setupOnce();
+    this.setupOnce();
 
-    // if (this.gameType == Types.Game.cf) {
-    //   console.log("this.gameType = cf");
-    //   document.getElementById("gameName").innerHTML = "CoinFlip";
-    //   // CoinFlip.updateGameView();
-    // } else if (this.gameType == Types.Game.rps) {
-    //   console.log("this.gameType = rps");
-    //   document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
-    //   // RPS.updateGameView();  TODO
-    // } else {
-    //   document.getElementById("gameName").innerHTML = "TITLE - ERROR";
-    // }
+    if (this.gameType == Types.Game.cf) {
+      document.getElementById("gameName").innerHTML = "CoinFlip";
+      // CoinFlip.updateGameView();
+    } else if (this.gameType == Types.Game.rps) {
+      document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
+      // RPS.updateGameView();  TODO
+    } else {
+      document.getElementById("gameName").innerHTML = "TITLE - ERROR";
+    }
 
-    // console.log("0 _gameType: ", this.gameType);
-    // this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    // this.updateSuspendedViewForGame(this.gameType);
-    // this.updateAllGamesForGame(this.gameType);
-    // await this.updateRaffleStateInfoForGame(this.gameType, true);
+    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
+    await this.updateSuspendedViewForGame(this.gameType);
+    await this.updateAllGamesForGame(this.gameType);
+    await this.updateRaffleStateInfoForGame(this.gameType, true);
   },
 
   setupOnce: function () {
@@ -109,37 +106,13 @@ const Game = {
     if (await PromiseManager.allowedToPlayPromise(_gameType, window.BlockchainManager.currentAccount())) {
       window.CommonManager.hideBackTimer();
     } else {
-      console.log("1 _gameType: ", _gameType);
-      // let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
-      // let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
-      // let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000)).toNumber();
-      // let diff = new BigNumber(availableTimestamp).sub(Date.now()).toNumber();
-      // console.log("diff: ", diff);
-      
-      // window.CommonManager.showBackTimer(diff);
+      let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
+      let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
+      let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000));
+      let diff = availableTimestamp.minus(new BigNumber(Date.now())).dividedBy(new BigNumber(1000)).toNumber();
+      // var availableTime = new Date(availableTimestamp).toLocaleTimeString("en-US");
+      window.CommonManager.showBackTimer(diff);
     }
-
-    return;
-
-
-    document.getElementById("suspendedView").style.display = "block";
-
-    if (_gameType != Types.Game.cf) {
-      document.getElementById("suspendedView").style.display = "none";
-      return;
-    }
-
-    if (await PromiseManager.allowedToPlayPromise(_gameType, window.BlockchainManager.currentAccount())) {
-      document.getElementById("suspendedView").style.display = "none";
-      return;
-    }
-
-    document.getElementById("suspendedView").style.display = "block";
-    let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
-    let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
-    let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000)).toNumber();
-    var availableTime = new Date(availableTimestamp).toLocaleTimeString("en-US");
-    document.getElementById("availableToPlayTime").innerText = availableTime;
   },
 
   //  LOAD GAMES
@@ -442,7 +415,7 @@ const Game = {
       this.updateSuspendedViewForGame(this.gameType);
     }
 
-    if (this.isGamePresentInAnyList(_gameId)) {
+    if (this.isGamePresentInAnyList(_gameId)) {``
       this.removeGameWithId(_gameId);
     }
     this.updateRaffleStateInfoForGame(this.gameType, false);

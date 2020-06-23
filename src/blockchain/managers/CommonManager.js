@@ -67,7 +67,7 @@ const CommonManager = {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
 
-      $('#timerBack').text(minutes + ":" + seconds);
+      $('#timerBack').text(minutes + " min " + seconds + " sec");
       if (--timer < 0) {
         clearInterval(backInterval);
         $('.timer-block').removeClass('visible');

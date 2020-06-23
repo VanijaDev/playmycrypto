@@ -57,7 +57,7 @@
           <div class="shadow-block">
 
             <div class="timer-block text-primary">
-              <p class="mb-0">Join next game at</p>
+              <p class="mb-0">Join next game in</p>
               <p id="timerBack">
                 00:00
               </p>
