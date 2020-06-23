@@ -245,6 +245,7 @@ let PromiseManager = {
   },
 
   minBetForGamePromise: function (_gameType) {
+    // console.log("minBetForGamePromise _gameType: ", _gameType);
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.minBet().call()
         .then(result => {

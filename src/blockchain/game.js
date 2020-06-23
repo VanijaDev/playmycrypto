@@ -45,26 +45,25 @@ const Game = {
       await window.BlockchainManager.init();
     }
 
-    this.setupOnce();
+    // this.setupOnce();
 
-    if (this.gameType == Types.Game.cf) {
-      console.log("this.gameType = cf");
-      document.getElementById("gameName").innerHTML = "CoinFlip";
-      // CoinFlip.updateGameView();
-    } else if (this.gameType == Types.Game.rps) {
-      console.log("this.gameType = rps");
-      document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
-      // RPS.updateGameView();  TODO
-    } else {
-      document.getElementById("gameName").innerHTML = "TITLE - ERROR";
-    }
+    // if (this.gameType == Types.Game.cf) {
+    //   console.log("this.gameType = cf");
+    //   document.getElementById("gameName").innerHTML = "CoinFlip";
+    //   // CoinFlip.updateGameView();
+    // } else if (this.gameType == Types.Game.rps) {
+    //   console.log("this.gameType = rps");
+    //   document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
+    //   // RPS.updateGameView();  TODO
+    // } else {
+    //   document.getElementById("gameName").innerHTML = "TITLE - ERROR";
+    // }
 
-    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
+    // console.log("0 _gameType: ", this.gameType);
+    // this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     // this.updateSuspendedViewForGame(this.gameType);
-    this.updateAllGamesForGame(this.gameType);
-    await this.updateRaffleStateInfoForGame(this.gameType, true);
-
-    // hideSpinner(Spinner.raffle);
+    // this.updateAllGamesForGame(this.gameType);
+    // await this.updateRaffleStateInfoForGame(this.gameType, true);
   },
 
   setupOnce: function () {
@@ -107,8 +106,24 @@ const Game = {
   },
 
   updateSuspendedViewForGame: async function (_gameType) {
-    document.getElementById("suspendedView").style.display = "block";
+    if (await PromiseManager.allowedToPlayPromise(_gameType, window.BlockchainManager.currentAccount())) {
+      window.CommonManager.hideBackTimer();
+    } else {
+      console.log("1 _gameType: ", _gameType);
+      // let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
+      // let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
+      // let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000)).toNumber();
+      // let diff = new BigNumber(availableTimestamp).sub(Date.now()).toNumber();
+      // console.log("diff: ", diff);
+      
+      // window.CommonManager.showBackTimer(diff);
+    }
+
     return;
+
+
+    document.getElementById("suspendedView").style.display = "block";
+
     if (_gameType != Types.Game.cf) {
       document.getElementById("suspendedView").style.display = "none";
       return;
@@ -277,6 +292,8 @@ const Game = {
   updateRaffleStateInfoForGame: async function (_gameType, _withHistory) {
     console.log("updateRaffleStateInfoForGame");
 
+    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
+
     await this.updateRafflePlayersPresentForGame(_gameType);
     await this.updateRafflePlayersToActivateForGame(_gameType);
     await this.updateRaffleStartButtonForGame(_gameType);
@@ -285,6 +302,8 @@ const Game = {
     if (_withHistory) {
       this.updateRaffleHistoryForGame(_gameType);
     }
+
+    window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
   },
 
   updateRafflePlayersPresentForGame: async function (_gameType) {
@@ -672,19 +691,6 @@ var TopGamesTemplate = '<li>' +
   '</div>' +
   '</li>';
 
-// var RaffleGamesTemplate = '<li>' +
-//   '<table class="table-games">' +
-//   '<tr>' +
-//   '<th><img src="/img/game-icon-wallet.svg"> Winner:</th>' +
-//   '<td colspan="2">{{address}}</td>' +
-//   '</tr>' +
-//   '<tr>' +
-//   '<th><img src="/img/game-icon-bet.svg"> Prize:</th>' +
-//   '<td><b>{{amount}}</b><img class="game-crypto-icon game-crypto-icon-small" src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg"></td>' +
-//   '<td class="text-right">{{timeago}}</td>' +
-//   '</tr>' +
-//   '</table>' +
-//   '</li>';
 var RaffleGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
   '<p>' +

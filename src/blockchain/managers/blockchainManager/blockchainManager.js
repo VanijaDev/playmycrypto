@@ -102,7 +102,7 @@ const BlockchainManager = {
   },
 
   gameInst: function(_gameType) {
-    // console.log("gameInst: ", _gameType);
+    // console.log("BM gameInst: ", _gameType);
     return this.currentBlockchain.gameInst(_gameType);
   },
 

@@ -36,6 +36,6 @@ window.CommonManager.hideSpinner(_spinnerViewType)
 ```
 
 #### Show back timer (seconds, callback):
-showBackTimer(10, function(){
+window.CommonManager.showBackTimer(10, function(){
    console.log('Inner callback function')
 })
