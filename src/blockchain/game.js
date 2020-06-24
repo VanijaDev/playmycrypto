@@ -346,9 +346,9 @@ const Game = {
   },
 
   onGameAddedToTop: function (_gameType, _gameId, _creator) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c onGameAddedToTop - RPS: %s %s', 'color: #1d34ff', _gameId, _creator);
     }
 
@@ -375,9 +375,9 @@ const Game = {
 
 
   onGameCreated: async function (_gameType, _gameId, _creator) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c game - onGameCreated_RPS', 'color: #1d34ff');
     }
 
@@ -403,9 +403,9 @@ const Game = {
   },
 
   onGamePlayed: async function (_gameType, _gameId, _creator, _opponent) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c game - onGamePlayed_CF %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
@@ -425,9 +425,9 @@ const Game = {
   },
 
   onGamePrizesWithdrawn: function (_gameType) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c game - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c game - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
     }
 
@@ -453,7 +453,7 @@ const Game = {
   onGameFinished: async function (_id) {
     console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
-    if (ProfileManager.isGameParticipant(Utils.Games.rockPaperScissors, _id)) {
+    if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       let gameInfo = await PromiseManager.getGameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
@@ -503,9 +503,9 @@ const Game = {
       return;
     }
 
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c Game - onGameRafflePlayed_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c Game - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 

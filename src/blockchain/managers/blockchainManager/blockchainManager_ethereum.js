@@ -195,7 +195,7 @@ const BlockchainManager_ethereum = {
   // gameContractForGameType: function (_gameType) {
   //   let gameContract = window.BlockchainManager.contract_inst_cf;
 
-  //   if (_gameType == Utils.Games.rockPaperScissors) {
+  //   if (_gameType == Types.Game.rps) {
   //     gameContract = window.BlockchainManager.contract_inst_rps;
   //   }
   //   return gameContract;

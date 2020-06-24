@@ -281,7 +281,7 @@ let ProfileManager = {
     if (_gamesWithPendingPrize.length > 0) {
       this.showPendingDot(true, _pendingTarget);
 
-      _gamesWithPendingPrize.map((value, idx) => {
+      _gamesWithPendingPrize.map((gameType, idx) => {
         let pendingValue = Utils.weiToEtherFixed(_pendingValues[idx]);
         let tooltipSuffix = " ETH";
 
@@ -293,10 +293,10 @@ let ProfileManager = {
         var btn = document.createElement("BUTTON");
         btn.classList.add("btn");
         btn.classList.add("btn-animated");
-        btn.onclick = function(){ProfileManager.pendingClicked(this, _pendingTarget, value);};
+        btn.onclick = function(){ProfileManager.pendingClicked(this, _pendingTarget, gameType);};
 
         var img = document.createElement('IMG');
-        img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(value) + ".svg");
+        img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(gameType) + ".svg");
         img.classList.add("game-icon");
         img.classList.add("mr-3");
         btn.appendChild(img);
@@ -330,18 +330,19 @@ let ProfileManager = {
   },
 
   pendingClicked: async function (_btn, _pendingTarget, _gameType) {
-    console.log("_gameType: ", _gameType);
-    let gameContract = window.BlockchainManager.gameContractForGameType(_gameType);
-    // console.log("gameContract: ", gameContract);
+    console.log("pendingClicked - _pendingTarget: %s,  _gameType: %s", _pendingTarget, _gameType);
+
+    let gameContract = window.BlockchainManager.gameInst(_gameType);
+    console.log("gameContract: ", gameContract);
 
     _btn.classList.add('disabled');
 
-    switch (_pendingTarget.id) {
+    switch (_pendingTarget) {
       case this.PendingWithdraw.referral:
-        // console.log('%c pendingClicked - ReferralPicList', 'color: #000baa');
+        // console.log('%c pendingClicked - withdrawReferral', 'color: #000baa');
 
         gameContract.methods.withdrawReferralFees().send({
-          from: window.BlockchainManager.currentAccount,
+          from: window.BlockchainManager.currentAccount(),
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
           .on('transactionHash', function (hash) {
@@ -362,13 +363,13 @@ let ProfileManager = {
         break;
 
       case this.PendingWithdraw.gamePrize:
-        // console.log('pendingClicked - GamePrizePicList');
+        // console.log('pendingClicked - withdrawGamePrize');
 
-        let cfResultGames = await PromiseManager.getGamesWithPendingPrizeWithdrawalForAddressPromise(gameContract, window.BlockchainManager.currentAccount());
-        let loopAmount = Math.min(cfResultGames.length, 10);
+        let pendingGames = await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(_gameType, window.BlockchainManager.currentAccount());
+        let loopAmount = Math.min(pendingGames.length, 10);
 
         gameContract.methods.withdrawGamePrizes(loopAmount).send({
-          from: window.BlockchainManager.currentAccount,
+          from: window.BlockchainManager.currentAccount(),
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
           .on('transactionHash', function (hash) {
@@ -388,10 +389,10 @@ let ProfileManager = {
         break;
 
       case this.PendingWithdraw.raffle:
-        // console.log('%c pendingClicked - RafflePrizePicList', 'color: #000baa');
+        // console.log('%c pendingClicked - withdrawRafflePrize', 'color: #000baa');
 
         gameContract.methods.withdrawRafflePrizes().send({
-          from: window.BlockchainManager.currentAccount,
+          from: window.BlockchainManager.currentAccount(),
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
           .on('transactionHash', function (hash) {
@@ -411,6 +412,7 @@ let ProfileManager = {
         break;
 
       default:
+        throw("pendingClicked - wrong _pendingTarget: ", _pendingTarget);
         break;
     }
   },

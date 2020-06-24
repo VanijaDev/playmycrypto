@@ -267,14 +267,14 @@ const BlockchainManager = {
    * PROMISES
    */
 
-  gameContractForGameType: function (_gameType) {
+  // gameContractForGameType: function (_gameType) {
     // let gameContract = this.coinFlipContract;
 
     // if (_gameType == Types.Game.rps) {
     //   gameContract = this.rockPaperScissorsContract;
     // }
     // return gameContract;
-  }
+  // }
 }
 
 window.BlockchainManager = BlockchainManager;

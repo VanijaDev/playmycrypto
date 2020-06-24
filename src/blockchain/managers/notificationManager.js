@@ -71,7 +71,7 @@ const NotificationManager = {
         //  CF
         case this.NotificationHashes_CF.gameCreated:
           // console.log("NotificationHashes_CF.gameCreated");
-          this.eventHandler.onGameCreated(Utils.Games.coinFlip, result.topics[2]);
+          this.eventHandler.onGameCreated(Types.Game.cf, result.topics[2]);
           break;
 
         case this.NotificationHashes_CF.gamePlayed:
@@ -81,7 +81,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_CF.gamePrizesWithdrawn:
           // console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Utils.Games.coinFlip);
+          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
           break;
 
         case this.NotificationHashes_CF.gameAddedToTop:
@@ -90,22 +90,22 @@ const NotificationManager = {
 
         case this.NotificationHashes_CF.gameReferralWithdrawn:
           // console.log("NotificationHashes_CF.gameReferralWithdrawn");
-          this.eventHandler.onGameReferralWithdrawn(Utils.Games.coinFlip, result.topics[1]);
+          this.eventHandler.onGameReferralWithdrawn(Types.Game.cf, result.topics[1]);
           break;
 
         case this.NotificationHashes_CF.gameUpdated:
           console.log("NotificationHashes_CF.gameUpdated");
-          this.eventHandler.onGameUpdated(Utils.Games.coinFlip, result.topics[2]);
+          this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
           break;
 
         case this.NotificationHashes_CF.rafflePlayed:
           // console.log("NotificationHashes_CF.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Utils.Games.coinFlip, result.topics[1]);
+          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
           break;
 
         case this.NotificationHashes_CF.rafflePrizeWithdrawn:
           // console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
-          this.eventHandler.onRafflePrizeWithdrawn(Utils.Games.coinFlip, result.topics[1]);
+          this.eventHandler.onRafflePrizeWithdrawn(Types.Game.cf, result.topics[1]);
           break;
 
         case this.NotificationHashes_CF.partnerFeeTransferred:
@@ -115,12 +115,12 @@ const NotificationManager = {
         //  RPS
         case this.NotificationHashes_RPS.gameCreated:
           // console.log("NotificationHashes_RPS.gameCreated");
-          this.eventHandler.onGameCreated(Utils.Games.rockPaperScissors, result.topics[1]);
+          this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1]);
           break;
 
         case this.NotificationHashes_RPS.gameJoined:
           // console.log("NotificationHashes_RPS.gameJoined");
-          this.eventHandler.onGameJoined(Utils.Games.rockPaperScissors, result.topics[2], result.topics[3]);
+          this.eventHandler.onGameJoined(Types.Game.rps, result.topics[2], result.topics[3]);
           break;
 
         case this.NotificationHashes_RPS.gameMovePlayed:
@@ -139,7 +139,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gamePrizesWithdrawn:
           // console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Utils.Games.rockPaperScissors);
+          this.eventHandler.onGamePrizesWithdrawn(Types.Game.rps);
           break;
 
         case this.NotificationHashes_RPS.gameQuitted:
@@ -148,7 +148,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gameUpdated:
           console.log("NotificationHashes_RPS.gameUpdated");
-          this.eventHandler.onGameUpdated(Utils.Games.rockPaperScissors, result.topics[2]);
+          this.eventHandler.onGameUpdated(Types.Game.rps, result.topics[2]);
 
           break;
 
@@ -158,17 +158,17 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gameReferralWithdrawn:
           // console.log("NotificationHashes_RPS.gameReferralWithdrawn");
-          this.eventHandler.onGameReferralWithdrawn(Utils.Games.rockPaperScissors, result.topics[1]);
+          this.eventHandler.onGameReferralWithdrawn(Types.Game.rps, result.topics[1]);
           break;
 
         case this.NotificationHashes_RPS.rafflePlayed:
           // console.log("NotificationHashes_RPS.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Utils.Games.rockPaperScissors, result.topics[1]);
+          this.eventHandler.onGameRafflePlayed(Types.Game.rps, result.topics[1]);
           break;
 
         case this.NotificationHashes_RPS.rafflePrizeWithdrawn:
           // console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
-          this.eventHandler.onRafflePrizeWithdrawn(Utils.Games.rockPaperScissors, result.topics[1]);
+          this.eventHandler.onRafflePrizeWithdrawn(Types.Game.rps, result.topics[1]);
           break;
 
         case this.NotificationHashes_RPS.gamePaused:
@@ -205,23 +205,23 @@ const NotificationManager = {
       switch (result.topics[0]) {
         case this.NotificationHashes_CF.gameCreated:
           // console.log("NotificationHashes_CF.gameCreated");
-          this.eventHandler.onGameCreated(Utils.Games.coinFlip, result.topics[1], result.topics[2]);
+          this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
           break;
 
         case this.NotificationHashes_CF.gamePlayed:
           // console.log("NotificationHashes_CF.gamePlayed");
           // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner, uint256 bet);
-          this.eventHandler.onGamePlayed(Utils.Games.coinFlip, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
+          this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
           break;
 
         case this.NotificationHashes_CF.gamePrizesWithdrawn:
           // console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Utils.Games.coinFlip);
+          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
           break;
 
         case this.NotificationHashes_CF.gameAddedToTop:
           console.log("NotificationHashes_CF.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Utils.Games.coinFlip, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+          this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
         // case this.NotificationHashes_CF.gameReferralWithdrawn:
@@ -236,7 +236,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_CF.rafflePlayed:
           // console.log("NotificationHashes_CF.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Utils.Games.coinFlip, result.topics[1]);
+          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
           break;
 
         // case this.NotificationHashes_CF.rafflePrizeWithdrawn:
@@ -269,7 +269,7 @@ const NotificationManager = {
       switch (result.topics[0]) {
         case this.NotificationHashes_RPS.gameCreated:
           console.log("NotificationHashes_RPS.gameCreated");
-          this.eventHandler.onGameCreated(Utils.Games.rockPaperScissors, result.topics[1], result.topics[2]);
+          this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1], result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameJoined:
@@ -294,7 +294,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gamePrizesWithdrawn:
           console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Utils.Games.coinFlip);
+          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
           break;
 
         case this.NotificationHashes_RPS.gameQuitted:
@@ -308,7 +308,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gameAddedToTop:
           console.log("NotificationHashes_RPS.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Utils.Games.rockPaperScissors, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+          this.eventHandler.onGameAddedToTop(Types.Game.rps, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameReferralWithdrawn:

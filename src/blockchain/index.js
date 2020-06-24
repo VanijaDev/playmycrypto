@@ -135,9 +135,9 @@ const Index = {
 
   //  NOTIFICAtiON MNAGER EVENT HANDLERS
   onGameCreated: function (_gameType, _creator) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameCreated_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGameCreated_RPS', 'color: #1d34ff');
     }
 
@@ -155,15 +155,15 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
 
-    if (ProfileManager.isGameParticipant(Utils.Games.coinFlip, _gameId)) {
+    if (ProfileManager.isGameParticipant(Types.Game.cf, _gameId)) {
       ProfileManager.update();
     }
   },
 
   onGameUpdated: function (_gameType, _creator) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameUpdated_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGameUpdated_RPS', 'color: #1d34ff');
     }
 
@@ -175,9 +175,9 @@ const Index = {
   },
 
   onGamePrizesWithdrawn: function (_gameType) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
     }
 
@@ -187,9 +187,9 @@ const Index = {
   },
 
   onGameRafflePlayed: function (_gameType, _winner) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameRafflePlayed_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
@@ -210,9 +210,9 @@ const Index = {
   },
 
   onRafflePrizeWithdrawn: function (_gameType, _winner) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onRafflePrizeWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onRafflePrizeWithdrawn_RPS', 'color: #1d34ff');
     }
 
@@ -226,9 +226,9 @@ const Index = {
   },
 
   onGameReferralWithdrawn: function (_gameType, _address) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameReferralWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGameReferralWithdrawn_RPS', 'color: #1d34ff');
     }
 
@@ -238,9 +238,9 @@ const Index = {
   },
 
   onGameJoined: function (_gameType, _creator, _opponent) {
-    if (_gameType == Utils.Games.coinFlip) {
+    if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
-    } else if (_gameType == Utils.Games.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
     }
 
@@ -258,7 +258,7 @@ const Index = {
 
     Index.updateRunningGameAmounts();
 
-    if (ProfileManager.isGameParticipant(Utils.Games.rockPaperScissors, _id)) {
+    if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       // console.log("YES participant");
       let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, _id);
 
