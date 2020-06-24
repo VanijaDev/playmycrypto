@@ -138,12 +138,15 @@
                     <div class="user-tabs">
                       <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <button class="btn btn-outline-primary" v-bind:class="{active:activeUserTab===1}" @click="activeUserTab=1">
+                          <div id="referralPendingPrizeBtn" class="pending-dot"></div>
                           {{ $t('REFERRAL') }}
                         </button>
                         <button class="btn btn-outline-primary" v-bind:class="{active:activeUserTab===2}" @click="activeUserTab=2">
+                          <div id="gamePendingPrizeBtn" class="pending-dot"></div>
                           {{ $t('GAME_PRIZE') }}
                         </button>
                         <button class="btn btn-outline-primary" v-bind:class="{active:activeUserTab===3}" @click="activeUserTab=3">
+                          <div id="rafflePendingPrizeBtn" class="pending-dot"></div>
                           {{ $t('RAFFLE_PRIZE') }}
                         </button>
                       </div>

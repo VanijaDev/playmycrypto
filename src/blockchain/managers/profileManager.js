@@ -188,9 +188,9 @@ let ProfileManager = {
   },
 
   updatePending: async function () {
-    // this.updatePendingReferral();
+    this.updatePendingReferral();
     this.updatePendingGamePrize();
-    // this.updatePendingRafflePrize();
+    this.updatePendingRafflePrize();
   },
 
   updatePendingReferral: async function () {
@@ -300,7 +300,6 @@ let ProfileManager = {
         img.classList.add("mr-3");
         btn.appendChild(img);
 
-        // <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span>
         var tooltiptext = document.createElement("SPAN");
         tooltiptext.classList.add("tooltiptext");
         var t = document.createTextNode(pendingValue + tooltipSuffix);
@@ -314,14 +313,14 @@ let ProfileManager = {
 
   showPendingDot: function (_isShow, _pendingTarget) {
     switch (_pendingTarget) {
-      case this.PendingWithdraw.gamePrize:
-        _isShow ? $('#GamePrizePointer').addClass('blue') : $('#GamePrizePointer').removeClass('blue');
-        break;
       case this.PendingWithdraw.referral:
-        _isShow ? $('#ReferralPointer').addClass('blue') : $('#ReferralPointer').removeClass('blue');
+        _isShow ? $('#referralPendingPrizeBtn').addClass('visible') : $('#referralPendingPrizeBtn').removeClass('visible');
+        break;
+      case this.PendingWithdraw.gamePrize:
+        _isShow ? $('#gamePendingPrizeBtn').addClass('visible') : $('#gamePendingPrizeBtn').removeClass('visible');
         break;
       case this.PendingWithdraw.raffle:
-        _isShow ? $('#RafflePrizePointer').addClass('blue') : $('#RafflePrizePointer').removeClass('blue');
+        _isShow ? $('#rafflePendingPrizeBtn').addClass('visible') : $('#rafflePendingPrizeBtn').removeClass('visible');
         break;
 
       default:

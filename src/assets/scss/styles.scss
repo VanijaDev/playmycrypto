@@ -999,3 +999,17 @@ button:focus, input:focus {
     float: none !important;
   }
 }
+
+.pending-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #0049D8;
+  border-radius: 6px;
+  position: absolute;
+  right: 8px;
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+}
