@@ -273,7 +273,7 @@ let ProfileManager = {
    * HELPERS
    */
   updatePendingPictures: function (_pendingTarget, _gamesWithPendingPrize, _pendingValues) {
-    console.log("updatePendingPictures: ", _pendingTarget, _gamesWithPendingPrize, _pendingValues.toString());
+    // console.log("updatePendingPictures: ", _pendingTarget, _gamesWithPendingPrize, _pendingValues.toString());
     $('#' + _pendingTarget).empty();
     this.showPendingDot(false, _pendingTarget);
 
@@ -288,9 +288,26 @@ let ProfileManager = {
           pendingValue = _pendingValues[idx];
           tooltipSuffix = " games";
         }
-        // var pictureTemplate = '<li><button class="pendingWithdraw pending_btn" style="background: url(/images/' + Utils.gameIconSmallForGame(value) + '.svg) no-repeat center transparent;" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')"> <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span> </button></li>';
-        const pictureTemplate = '<button class="btn btn-animated"><img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3" onclick="ProfileManager.pendingClicked(this, ' + _pendingTarget + ', ' + value + ')></button>'
-        $('#' + _pendingTarget).appendChild(pictureTemplate);
+
+        var btn = document.createElement("BUTTON");
+        btn.classList.add("btn");
+        btn.classList.add("btn-animated");
+        btn.onclick = function(){ProfileManager.pendingClicked(this, _pendingTarget, value);};
+
+        var img = document.createElement('IMG');
+        img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(value) + ".svg");
+        img.classList.add("game-icon");
+        img.classList.add("mr-3");
+        btn.appendChild(img);
+
+        // <span class="tooltiptext">' + pendingValue + tooltipSuffix + '</span>
+        var tooltiptext = document.createElement("SPAN");
+        tooltiptext.classList.add("tooltiptext");
+        var t = document.createTextNode(pendingValue + tooltipSuffix);
+        tooltiptext.appendChild(t);
+        btn.appendChild(tooltiptext);
+
+        $('#' + _pendingTarget)[0].appendChild(btn);
       });
     }
   },
@@ -313,7 +330,7 @@ let ProfileManager = {
   },
 
   pendingClicked: async function (_btn, _pendingTarget, _gameType) {
-    // console.log("_gameType: ", _gameType);
+    console.log("_gameType: ", _gameType);
     let gameContract = window.BlockchainManager.gameContractForGameType(_gameType);
     // console.log("gameContract: ", gameContract);
 

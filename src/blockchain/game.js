@@ -359,6 +359,21 @@ const Game = {
   },
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   onGameCreated: async function (_gameType, _gameId, _creator) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
@@ -404,7 +419,6 @@ const Game = {
     }
 
     if (this.isGamePresentInAnyList(_gameId)) {
-      ``
       this.removeGameWithId(_gameId);
     }
     this.updateRaffleStateInfoForGame(this.gameType, false);

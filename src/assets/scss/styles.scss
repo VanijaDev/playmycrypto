@@ -578,6 +578,38 @@ button:focus, input:focus {
   }
 }
 
+
+.btn-animated .tooltiptext {
+  visibility: hidden;
+  background-color: #0049d8;
+  color: #fff;
+  font-size: 0.8em;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  margin-top: -40px;
+  margin-left: -70px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-animated .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0049d8 transparent transparent transparent;
+}
+.btn-animated:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
 .inner-padding {
   padding: 6px;
 }
