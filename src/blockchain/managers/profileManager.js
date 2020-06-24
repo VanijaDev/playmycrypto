@@ -38,7 +38,7 @@ let ProfileManager = {
     await this.updatePlayerTotalProfit();
     await this.updatePending();
 
-    // this.profileUpdated();
+    this.profileUpdated();
   },
 
   updateAfterWithdrawal: async function () {
@@ -269,6 +269,7 @@ let ProfileManager = {
     }
   },
 
+  
   /**
    * HELPERS
    */
