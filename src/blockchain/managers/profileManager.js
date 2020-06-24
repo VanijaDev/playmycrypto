@@ -1,8 +1,9 @@
 import BlockchainManager from "./blockchainManager/blockchainManager";
-import { PromiseManager } from "./promiseManager";
-import { Utils } from "../utils";
+import {PromiseManager} from "./promiseManager";
+import {Utils} from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
+import $ from "../../../public/jquery.min"
 
 let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
@@ -18,14 +19,14 @@ let ProfileManager = {
   ongoingGameCF: new BigNumber("0"),
   ongoingGameRPS: new BigNumber("0"),
 
-  setProfileUpdateHandler: function(_handler) {
+  setProfileUpdateHandler: function (_handler) {
     this.profileUpdateHandler = _handler;
     this.checkIfNextMover();
   },
 
   update: async function () {
     console.log('%c ProfileManager - update', 'color: #00aa00');
-    
+
     hideTopBannerMessage();
     this.updateCurrentAccountUI();
     this.updateCurrentAccountBalanceUI();
@@ -42,7 +43,7 @@ let ProfileManager = {
 
   updateAfterWithdrawal: async function () {
     console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
-    
+
     this.updateCurrentAccountBalanceUI();
 
     await this.updatePlayerGameplayProfit();
@@ -51,9 +52,9 @@ let ProfileManager = {
     await this.updatePending();
   },
 
-  profileUpdated: function() {
+  profileUpdated: function () {
     if (this.profileUpdateHandler) {
-      if (typeof(this.profileUpdateHandler.profileUpdated) == "function"){
+      if (typeof (this.profileUpdateHandler.profileUpdated) == "function") {
         this.profileUpdateHandler.profileUpdated();
       }
     }
@@ -133,9 +134,9 @@ let ProfileManager = {
     //  raffle
     //  cf
     let totalProfit = new BigNumber("0");
-    
+
     let raffleResults = await PromiseManager.raffleResultCountPromise(Types.Game.cf);
-    for (let i = 0; i < raffleResults; i ++) {
+    for (let i = 0; i < raffleResults; i++) {
       let resultInfo = await PromiseManager.raffleResultInfoPromise(Types.Game.cf, i);
       // console.log("raffleResults cf ", i, resultInfo);
       if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
@@ -145,7 +146,7 @@ let ProfileManager = {
     // console.log("raffleResults cf: ", totalProfit.toString());
     //  rps
     raffleResults = await PromiseManager.raffleResultCountPromise(Types.Game.rps);
-    for (let i = 0; i < raffleResults; i ++) {
+    for (let i = 0; i < raffleResults; i++) {
       let resultInfo = await PromiseManager.raffleResultInfoPromise(Types.Game.rps, i);
       // console.log("raffleResults rps ", i, resultInfo);
       if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
@@ -245,11 +246,11 @@ let ProfileManager = {
       pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
-    
+
     this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
   },
 
-  isGameParticipant: function(_gameType, _id) {
+  isGameParticipant: function (_gameType, _id) {
     if (_gameType == Types.Game.cf) {
       return this.ongoingGameCF.comparedTo(new BigNumber(_id)) == 0;
     } else if (_gameType == Types.Game.rps) {
@@ -259,7 +260,7 @@ let ProfileManager = {
     }
   },
 
-  checkIfNextMover: async function() {
+  checkIfNextMover: async function () {
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, this.ongoingGameRPS);
       if (Utils.addressesEqual(gameInfo.nextMover, window.BlockchainManager.currentAccount())) {
@@ -282,7 +283,7 @@ let ProfileManager = {
       _gamesWithPendingPrize.map((value, idx) => {
         let pendingValue = Utils.weiToEtherFixed(_pendingValues[idx]);
         let tooltipSuffix = " ETH";
-        
+
         if (_pendingTarget == this.PendingWithdraw.gamePrize) {
           pendingValue = _pendingValues[idx];
           tooltipSuffix = " games";
@@ -311,7 +312,7 @@ let ProfileManager = {
     }
   },
 
-  pendingClicked: async function(_btn, _pendingTarget, _gameType) {
+  pendingClicked: async function (_btn, _pendingTarget, _gameType) {
     // console.log("_gameType: ", _gameType);
     let gameContract = window.BlockchainManager.gameContractForGameType(_gameType);
     // console.log("gameContract: ", gameContract);
@@ -326,47 +327,47 @@ let ProfileManager = {
           from: window.BlockchainManager.currentAccount,
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
-        .on('transactionHash', function(hash){
-          // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showTopBannerMessage("REFERRAL FEE WITHDRAW transaction ", hash);
-        })
-        .once('receipt', function(receipt){
-          hideTopBannerMessage();
-          ProfileManager.updateAfterWithdrawal();
-        })
-        .once('error', function (error, receipt) {
-          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-            showAlert('error', "Error on withdraw referral fees transaction");
-          }
+          .on('transactionHash', function (hash) {
+            // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            showTopBannerMessage("REFERRAL FEE WITHDRAW transaction ", hash);
+          })
+          .once('receipt', function (receipt) {
+            hideTopBannerMessage();
+            ProfileManager.updateAfterWithdrawal();
+          })
+          .once('error', function (error, receipt) {
+            if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+              showAlert('error', "Error on withdraw referral fees transaction");
+            }
 
-          hideTopBannerMessage();
-        });
+            hideTopBannerMessage();
+          });
         break;
 
       case this.PendingWithdraw.gamePrize:
         // console.log('pendingClicked - GamePrizePicList');
-        
+
         let cfResultGames = await PromiseManager.getGamesWithPendingPrizeWithdrawalForAddressPromise(gameContract, window.BlockchainManager.currentAccount());
         let loopAmount = Math.min(cfResultGames.length, 10);
-        
+
         gameContract.methods.withdrawGamePrizes(loopAmount).send({
           from: window.BlockchainManager.currentAccount,
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
-        .on('transactionHash', function(hash){
-          // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showTopBannerMessage("GAME PRIZE WITHDRAW transaction ", hash);
-        })
-        .once('receipt', function(receipt){
-          hideTopBannerMessage();
-          ProfileManager.updateAfterWithdrawal();
-        })
-        .once('error', function (error, receipt) {
-          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-            showAlert('error', "Error on withdraw game prizes transaction");
-          }
-          hideTopBannerMessage();
-        });
+          .on('transactionHash', function (hash) {
+            // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            showTopBannerMessage("GAME PRIZE WITHDRAW transaction ", hash);
+          })
+          .once('receipt', function (receipt) {
+            hideTopBannerMessage();
+            ProfileManager.updateAfterWithdrawal();
+          })
+          .once('error', function (error, receipt) {
+            if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+              showAlert('error', "Error on withdraw game prizes transaction");
+            }
+            hideTopBannerMessage();
+          });
         break;
 
       case this.PendingWithdraw.raffle:
@@ -376,20 +377,20 @@ let ProfileManager = {
           from: window.BlockchainManager.currentAccount,
           gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
         })
-        .on('transactionHash', function(hash){
-          // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-          showTopBannerMessage("RAFFLE FEE WITHDRAW transaction ", hash);
-        })
-        .once('receipt', function(receipt){
-          hideTopBannerMessage();
-          ProfileManager.updateAfterWithdrawal;
-        })
-        .once('error', function (error, receipt) {
-          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-            showAlert('error', "Error on withdraw raffle prize transaction");
-          }
-          hideTopBannerMessage();
-        });
+          .on('transactionHash', function (hash) {
+            // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            showTopBannerMessage("RAFFLE FEE WITHDRAW transaction ", hash);
+          })
+          .once('receipt', function (receipt) {
+            hideTopBannerMessage();
+            ProfileManager.updateAfterWithdrawal;
+          })
+          .once('error', function (error, receipt) {
+            if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+              showAlert('error', "Error on withdraw raffle prize transaction");
+            }
+            hideTopBannerMessage();
+          });
         break;
 
       default:

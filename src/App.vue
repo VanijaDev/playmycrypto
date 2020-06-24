@@ -149,13 +149,13 @@
                       </div>
 
                       <div class="pt-3">
-                        <div id="withdrawReferral" v-if="activeUserTab===1">
+                        <div id="withdrawReferral" v-show="activeUserTab===1">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
                           </button> -->
                         </div>
 
-                        <div id="withdrawGamePrize" v-if="activeUserTab===2">
+                        <div id="withdrawGamePrize" v-show="activeUserTab===2">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
                           </button>
@@ -164,7 +164,7 @@
                           </button> -->
                         </div>
 
-                        <div id="withdrawRafflePrize" v-if="activeUserTab===3">
+                        <div id="withdrawRafflePrize" v-show="activeUserTab===3">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
                           </button> -->
