@@ -33,16 +33,9 @@ var coinFlipConfig = Object.assign({}, config, {
   },
 });
 
-// var plugins = [
-//   new webpack.ProvidePlugin({
-//     $: "public/jquery.min.js",
-//   })
-// ];
-
 // Return Array of Configurations
 module.exports = [
   mainConfig,
   gameConfig,
   coinFlipConfig,
-  // plugins
 ];

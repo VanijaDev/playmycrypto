@@ -9,7 +9,6 @@ import {ProfileManager} from "./managers/profileManager";
 import {HowToPlayConstructor} from "./howToPlay/howToPlayConstructor";
 import Types from "./types";
 
-
 const Game = {
 
   CF_Notifications: {
@@ -360,17 +359,6 @@ const Game = {
   },
 
 
-
-
-
-
-
-
-
-
-
-
-
   onGameCreated: async function (_gameType, _gameId, _creator) {
     if (_gameType == Utils.Games.coinFlip) {
       console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
@@ -415,7 +403,8 @@ const Game = {
       this.updateSuspendedViewForGame(this.gameType);
     }
 
-    if (this.isGamePresentInAnyList(_gameId)) {``
+    if (this.isGamePresentInAnyList(_gameId)) {
+      ``
       this.removeGameWithId(_gameId);
     }
     this.updateRaffleStateInfoForGame(this.gameType, false);
@@ -633,50 +622,50 @@ String.prototype.composetmp = (function () {
 
 var TableAvailableGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
-    '<p>' +
-      '<img src="/img/game-icon-wallet.svg" class="creator">' +
-      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
-      '<span class="one-line">{{address}}</span>' +
-      '</p>' +
-    '<p>' +
-      '<img src="/img/game-icon-bet.svg" class="creator">' +
-      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
-      '<span class="text-primary"><b>{{bet}}</b></span>' +
-      '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
-    '</p>' +
+  '<p>' +
+  '<img src="/img/game-icon-wallet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
+  '<span class="one-line">{{address}}</span>' +
+  '</p>' +
+  '<p>' +
+  '<img src="/img/game-icon-bet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
+  '<span class="text-primary"><b>{{bet}}</b></span>' +
+  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '</p>' +
   '</div>' +
   '</li>';
 
 var TopGamesTemplate = '<li>' +
   '<div class="bordered blue-border mt-1 game-cell" onclick="Game.topGameClicked(this)">' +
-    '<p>' +
-      '<img src="/img/game-icon-wallet.svg" class="creator">' +
-      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
-      '<span class="one-line">{{address}}</span>' +
-    '</p>' +
-    '<p>' +
-      '<img src="/img/game-icon-bet.svg" class="creator">' +
-      '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
-      '<span class="text-primary"><b>{{bet}}</b></span>' +
+  '<p>' +
+  '<img src="/img/game-icon-wallet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
+  '<span class="one-line">{{address}}</span>' +
+  '</p>' +
+  '<p>' +
+  '<img src="/img/game-icon-bet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
+  '<span class="text-primary"><b>{{bet}}</b></span>' +
 
-      '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
-    '</p>' +
+  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '</p>' +
   '</div>' +
   '</li>';
 
 var RaffleGamesTemplate = '<li>' +
   '<div class="bordered mt-1"">' +
   '<p>' +
-    '<img src="/img/game-icon-wallet.svg" class="creator">' +
-    '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("WINNER") }}:</span>' +
-    '<span class="one-line">{{address}}</span>' +
-    '</p>' +
+  '<img src="/img/game-icon-wallet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("WINNER") }}:</span>' +
+  '<span class="one-line">{{address}}</span>' +
+  '</p>' +
   '<p>' +
-    '<img src="/img/game-icon-bet.svg" class="creator">' +
-    '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("PRIZE") }}:</span>' +
-    '<span class="text-primary"><b>{{amount}}</b></span>' +
-    '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
-    '<span class="float-right text-black-50">{{timeago}}</span>' +
+  '<img src="/img/game-icon-bet.svg" class="creator">' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("PRIZE") }}:</span>' +
+  '<span class="text-primary"><b>{{amount}}</b></span>' +
+  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '<span class="float-right text-black-50">{{timeago}}</span>' +
   '</p>' +
   '</div>' +
   '</li>';

@@ -1,4 +1,5 @@
 import Types from '../types'
+import $ from "../../../public/jquery.min"
 
 const CommonManager = {
 
@@ -16,14 +17,14 @@ const CommonManager = {
 
   showSpinner: function (_viewType) {
     let spinnerView = this.spinnerViewForType(_viewType);
-    
+
     if (!$("#" + spinnerView)[0].classList.contains('loader')) {
       $("#" + spinnerView).addClass('loader').append('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
     }
   },
   hideSpinner: function (_viewType) {
     let spinnerView = this.spinnerViewForType(_viewType);
-    
+
     if ($("#" + spinnerView)[0].classList.contains('loader')) {
       $("#" + spinnerView).removeClass('loader').find('.lds-ring').remove()
     }
@@ -47,7 +48,7 @@ const CommonManager = {
       case Types.SpinnerView.raffle:
         view = "raffleBlock";
         break;
-    
+
       default:
         break;
     }
