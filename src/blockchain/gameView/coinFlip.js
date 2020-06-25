@@ -15,35 +15,37 @@ const CoinFlip = {
     console.log('%c CoinFlip - updateGameView', 'color: #00aa00');
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    // this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
-    // this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
+    this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
+    this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
-    // this.setPlaceholders();
-    // this.showGameViewForCurrentAccount();
+    this.setPlaceholders();
+    this.showGameViewForCurrentAccount();
   },
 
   setPlaceholders: function () {
     $('#gameReferral_start')[0].placeholder = this.ownerAddress;
-    $('#gameReferral_join')[0].placeholder = this.ownerAddress;
     $('#gameBet_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    $('#gameBetNew_makeTop')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+
+    // $('#gameReferral_join')[0].placeholder = this.ownerAddress;
+    // $('#gameBet_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    // $('#gameBetNew_makeTop')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
   showGameViewForCurrentAccount: async function () {
-    showSpinner(Spinner.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // console.log("showGameViewForCurrentAccount id: ", id);
+    console.log("showGameViewForCurrentAccount id: ", id);
 
-    if (id == 0) {
-      this.showGameView("cfstart", null);
-    } else {
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-      this.showGameView("cfmaketop", gameInfo);
-    }
+    // if (id == 0) {
+    //   this.showGameView("cfstart", null);
+    // } else {
+    //   let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
+    //   this.showGameView("cfmaketop", gameInfo);
+    // }
 
-    hideSpinner(Spinner.gameView);
+    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
   showGameView: function (_viewName, _gameInfo){

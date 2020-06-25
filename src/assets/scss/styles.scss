@@ -221,7 +221,7 @@ button:focus, input:focus {
     line-height: 26px;
     font-weight: 700;
     color: #0049D8;
-    padding: 10px 17px 10px 0;
+    padding: 10px 15px 10px 15px;
     width: 170px;
 
     &:last-child {
@@ -1012,4 +1012,8 @@ button:focus, input:focus {
   &.visible {
     display: block;
   }
+}
+
+.game_view-value {
+  font-size: 10px;
 }

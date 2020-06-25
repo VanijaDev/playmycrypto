@@ -25,13 +25,13 @@
       <form class="row mt-4 pt-2">
         <div class="col-8 offset-sm-2 col-sm-6 pr-sm-1 pr-0">
           <label for="gameReferral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
-          <input type="text" id="gameReferral_start"/>
+          <input type="text" id="gameReferral_start" class="game_view-value"/>
         </div>
         <div class="col-4 col-sm-2">
           <label for="bet" class="f10 text-left opacity-text">
             {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
           </label>
-          <input type="number" step="0.01" min="0.01" placeholder="0.01" class="form-bet" id="gameBet_start">
+          <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="gameBet_start">
         </div>
       </form>
 

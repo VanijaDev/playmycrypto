@@ -48,7 +48,7 @@ const Game = {
 
     if (this.gameType == Types.Game.cf) {
       document.getElementById("gameName").innerHTML = "CoinFlip";
-      // CoinFlip.updateGameView();
+      CoinFlip.updateGameView();
     } else if (this.gameType == Types.Game.rps) {
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
       // RPS.updateGameView();  TODO
@@ -359,12 +359,10 @@ const Game = {
   },
 
 
-
-
-
-
-
-
+  //  HELPERS
+  isGamePresentInAnyList: function (_gameId) {
+    return (this.topGameIds.includes(_gameId)) || (this.availableGameIds.includes(_gameId));
+  },
 
 
 
@@ -577,11 +575,6 @@ const Game = {
         hideSpinner(Spinner.raffle);
       });
   },
-
-  //  HELPERS
-  isGamePresentInAnyList: function (_gameId) {
-    return (this.topGameIds.includes(_gameId)) || (this.availableGameIds.includes(_gameId));
-  }
 }
 
 
