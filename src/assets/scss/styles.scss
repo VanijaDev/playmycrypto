@@ -605,6 +605,7 @@ button:focus, input:focus {
   border-style: solid;
   border-color: #0049d8 transparent transparent transparent;
 }
+
 .btn-animated:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
@@ -785,8 +786,70 @@ button:focus, input:focus {
     border-left-color: rgba(255, 255, 255, .3) !important;
   }
 
+  .bet-input {
+    padding: 2px 3px;
+    font-size: 12px;
+    background: #FFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 2px;
+  }
+
   .opacity-text {
-    opacity: .75;
+    label, p {
+      opacity: .75;
+    }
+  }
+
+  .btn-small-orange {
+    background: #F2994A;
+    padding: 2px 6px;
+    font-size: 12px;
+    float: right;
+    border-radius: 2px;
+    color: #FFF;
+  }
+
+  .btn-medium-orange {
+    background: #F2994A;
+    padding: 6px 40px;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #FFF;
+    border: 2px solid #61A4FF;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .bottom-buttons {
+    position: absolute;
+    bottom: 14px;
+    left: 12px;
+    right: 0;
+
+    .offset-1 {
+      border-right: 1px solid #61A4FF;
+    }
+
+    .btn-small-orange {
+      width: 100%;
+      font-size: 13px;
+      padding: 3px 5px;
+    }
+  }
+
+  .paused-game {
+    color: #F2994A;
+    font-size: 48px;
+    line-height: 57px;
+    font-family: 'SFProDisplay-Bold', sans-serif;
+    font-weight: 600;
+  }
+
+  .inner-column.game-image-padding {
+    padding-top: 100px !important;
+    width: 100%;
   }
 
   .inner-column {
@@ -881,7 +944,7 @@ button:focus, input:focus {
 
 .game-cell {
   cursor: pointer;
-  
+
   &:hover {
     opacity: .7;
   }

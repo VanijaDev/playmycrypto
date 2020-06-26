@@ -11,6 +11,16 @@
             </div>
           </div>
 
+          <div class="tmp-block">
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('startNewGame')">Screen 1</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('joinGame')">Screen 2</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('waitingForOpponent')">Screen 3</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Screen 4</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youWon')">Screen 5</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youLost')">Screen 6</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Screen 7</button>
+          </div>
+
           <div class="mt-5">
             <div class="raffle shadow-block" id="raffleBlock">
               <div class="header position-relative">
@@ -32,7 +42,8 @@
                     /
                     <span id="raffleActivationAmount">0</span>
                   </b>
-                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right" disabled>{{ $t('START')
+                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right" disabled>{{
+                    $t('START')
                     }}
                   </button>
                 </div>

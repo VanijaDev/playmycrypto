@@ -51,5 +51,19 @@
   "LIST_OPENED_GAMES": "List of opened games",
   "MAKE_FIRST_MOVE": "MAKE FIRST MOVE",
   "MAKE_MOVE": "MAKE MOVE",
-  "ENTER_SEED": "Enter seed phrase ( IMPORTANT: save it )"
+  "ENTER_SEED": "Enter seed phrase ( IMPORTANT: save it )",
+  "JOIN_GAME": "JOIN GAME",
+  "COIN_SIDE": "YOUR COIN SIDE",
+  "WAITING_FOR_OPPONENT": "WAITING FOR OPPONENT",
+  "MAKE_TOP_GAME": "MAKE TOP GAME",
+  "UPDATE_BET": "Update bet",
+  "UPDATE": "UPDATE",
+  "QUIT_GAME": "QUIT GAME",
+  "PAUSE_GAME": "PAUSE GAME",
+  "GAME_PAUSED": "GAME IS PAUSED",
+  "UNPAUSE_COST": "unpause cost",
+  "YOU_WON": "Yeay, you won",
+  "CLOSE": "CLOSE",
+  "YOU_LOST": "Sorry, but you lost",
+  "YOU_DRAW": "Well, it’s draw"
 }
