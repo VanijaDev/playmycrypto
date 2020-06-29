@@ -32,11 +32,12 @@
             <label for="bet" class="f10 text-left opacity-text">
               {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
             </label>
-            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_update_bet_input">
+            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_bet_input">
           </div>
         </form>
 
-        <button class="btn btn-start-game disabled" onclick="window.CoinFlip.startGame()">
+        <!-- <button id="start_btn_start" class="btn btn-start-game disabled" onclick="window.CoinFlip.startGame()"> -->
+          <button id="start_btn_start" class="btn btn-start-game" onclick="window.CoinFlip.startGame()">
           <img src="/img/icon-btn-start.svg" class="mr-3">
           {{ $t('START_GAME') }}
         </button>
@@ -95,7 +96,7 @@
           </div>
           <div class="col-6 pr-0">
             <label class="pt-4">{{ $t('UPDATE_BET') }} (ETH):</label>
-            <input id="update-bet-input" type="number" step="0.01" min="0.01" class="col-5 bet-input"/>
+            <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input"/>
             <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
           </div>
         </div>

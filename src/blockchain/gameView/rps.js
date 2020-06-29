@@ -669,7 +669,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("CREATE GAME transaction ", hash);
+      showTopBannerMessage("CREATE GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       RPS.showGameViewForCurrentAccount();
@@ -729,7 +729,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("JOIN GAME transaction ", hash);
+      showTopBannerMessage("JOIN GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       RPS.showGameViewForCurrentAccount();
@@ -764,7 +764,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("MAKE MOVE transaction ", hash);
+      showTopBannerMessage("MAKE MOVE transaction ", hash);
     })
     .once('receipt', function(receipt){
       RPS.showGameViewForCurrentAccount();
@@ -830,7 +830,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("PLAY MOVE transaction ", hash);
+      showTopBannerMessage("PLAY MOVE transaction ", hash);
     })
     .once('receipt', async function(receipt){
       ProfileManager.update();
@@ -876,7 +876,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("QUIT GAME transaction ", hash);
+      showTopBannerMessage("QUIT GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       RPS.showGameView(RPS.GameView.lost, null);
@@ -912,7 +912,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("CLAIM EXPIRED GAME transaction ", hash);
+      showTopBannerMessage("CLAIM EXPIRED GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       RPS.showGameView(RPS.GameView.won, null);
@@ -951,7 +951,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("INCREASE BET transaction ", hash);
+      showTopBannerMessage("INCREASE BET transaction ", hash);
     })
     .once('receipt', function(receipt){
       console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
@@ -993,7 +993,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("PAUSE GAME transaction ", hash);
+      showTopBannerMessage("PAUSE GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       hideAndClearNotifView();
@@ -1028,7 +1028,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("UNPAUSE GAME transaction ", hash);
+      showTopBannerMessage("UNPAUSE GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       ProfileManager.update();
@@ -1065,7 +1065,7 @@ const RPS = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("MAKE TOP GAME transaction ", hash);
+      showTopBannerMessage("MAKE TOP GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       ProfileManager.update();

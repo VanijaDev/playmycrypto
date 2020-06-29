@@ -246,8 +246,8 @@
     mounted() {
       window.CommonManager = CommonManager;
       window.ethereum.on('accountsChanged', function (accounts) {
-        console.log(accounts);
-        if (!window.Index.pageLoaded) {
+        // console.log(accounts);
+        if (!window.Index || !window.Index.pageLoaded) {
           return;
         }
 
@@ -256,8 +256,8 @@
       });
 
       window.ethereum.on('networkChanged', function (accounts) {
-        console.log(accounts);
-        if (!window.Index.pageLoaded) {
+        // console.log(accounts);
+        if (!window.Index || !window.Index.pageLoaded) {
           return;
         }
 

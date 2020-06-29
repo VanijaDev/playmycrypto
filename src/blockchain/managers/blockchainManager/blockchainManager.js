@@ -232,9 +232,9 @@ const BlockchainManager = {
   },
 
   currentCryptoName: function () {
-    if (this.currentBlockchainType == 0) {
+    if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
       return "ETH";
-    } if (this.currentBlockchainType == 1) {
+    } if (this.currentBlockchainType == Types.BlockchainType.tron) {
       return "TRX";
     }
   },

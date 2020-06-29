@@ -558,7 +558,7 @@ const Game = {
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showNotifViewWithData("RUN RAFFLE transaction ", hash);
+        showTopBannerMessage("RUN RAFFLE transaction ", hash);
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();

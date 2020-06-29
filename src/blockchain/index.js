@@ -135,6 +135,7 @@ const Index = {
 
   //  NOTIFICAtiON MNAGER EVENT HANDLERS
   onGameCreated: function (_gameType, _creator) {
+    console.log("onGameCreated - _gameType: ", _gameType, " _creator: ", _creator);
     if (_gameType == Types.Game.cf) {
       console.log('%c index - onGameCreated_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
@@ -148,6 +149,16 @@ const Index = {
       ProfileManager.update();
     }
   },
+
+
+
+
+
+
+
+
+
+
 
   onGamePlayed: function (_gameId) {
     console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
@@ -205,7 +216,7 @@ const Index = {
     console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showNotifViewWithData("Rock Paper Scissors: you have pending move");
+      showTopBannerMessage("Rock Paper Scissors: you have pending move");
     }
   },
 
@@ -247,7 +258,7 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showNotifViewWithData("Rock Paper Scissors: game was joined, you have pending move.");
+      showTopBannerMessage("Rock Paper Scissors: game was joined, you have pending move.");
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
@@ -281,7 +292,7 @@ const Index = {
           break;
       }
 
-      showNotifViewWithData(infoStr, null);
+      showTopBannerMessage(infoStr, null);
       setTimeout(function () {
         hideAndClearNotifView();
       }, 5000);

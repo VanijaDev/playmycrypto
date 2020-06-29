@@ -24,10 +24,10 @@ const CoinFlip = {
 
   setPlaceholders: function () {
     $('#cf_game_referral_start')[0].placeholder = this.ownerAddress;
-    $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cf_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
 
     $('#cf_game_referral_join')[0].placeholder = this.ownerAddress;
-    $('#update-bet-input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
@@ -90,6 +90,52 @@ const CoinFlip = {
   },
 
 
+  //  HANDLE UI ELEMENT ACTIONS
+  startGame: async function () {
+    let referral = document.getElementById("cf_game_referral_start").value;
+    if (referral.length > 0) {
+      if (!web3.utils.isAddress(referral)) {
+        showAlert("error", "Wrong referral address.");
+        return;
+      }
+    } else {
+      referral = this.ownerAddress;
+    }
+
+    let bet = document.getElementById("cf_bet_input").value;
+
+    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName());
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.createGame(this.coinSideChosen, referral).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Utils.etherToWei(bet),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function(hash){
+      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("CREATE GAME transaction ", hash);
+    })
+    .once('receipt', function(receipt){
+      CoinFlip.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideAndClearNotifView();
+    })
+    .once('error', function (error, receipt) {
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "CREATE GAME error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
+
+
 
 
 
@@ -107,14 +153,13 @@ const CoinFlip = {
     // console.log("showGamePlayed: ", _gameInfo);
     hideSpinner(Spinner.gameView);
     hideAndClearNotifView();
-    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount) && $("#cfmaketop").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && $("#cfmaketop").css("display") !== "none") {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
     } else if ($("#cfjoin").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
     }
   },
 
-  //  HANDLE UI ELEMENT ACTIONS
 
   closeResultView: function () {
     this.showGameViewForCurrentAccount();
@@ -149,13 +194,13 @@ const CoinFlip = {
     showSpinner(Spinner.gameView);
     let gameId = document.getElementById("gameId_makeTop").innerHTML;
     window.BlockchainManager.coinFlipContract.methods.addTopGame(gameId).send({
-      from: window.BlockchainManager.currentAccount,
+      from: window.BlockchainManager.currentAccount(),
       value: Game.minBet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("MAKE TOP GAME transaction ", hash);
+      showTopBannerMessage("MAKE TOP GAME transaction ", hash);
     })
     .once('receipt', function(receipt){
       hideAndClearNotifView();
@@ -184,13 +229,13 @@ const CoinFlip = {
 
     showSpinner(Spinner.gameView);
     window.BlockchainManager.coinFlipContract.methods.increaseBetForGameBy(gameId).send({
-      from: window.BlockchainManager.currentAccount,
+      from: window.BlockchainManager.currentAccount(),
       value: Utils.etherToWei(bet).toString(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("INCREASE BET transaction ", hash);
+      showTopBannerMessage("INCREASE BET transaction ", hash);
     })
     .once('receipt', function(receipt){
       CoinFlip.showGameViewForCurrentAccount();
@@ -207,48 +252,7 @@ const CoinFlip = {
     });
   },
 
-  startGame: async function () {
-    let referral = document.getElementById("cf_game_referral_start").value;
-    if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
-        return;
-      }
-    } else {
-      referral = this.ownerAddress;
-    }
-
-    let bet = document.getElementById("cf_update_bet_input").value;
-
-    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
-      return;
-    }
-
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.coinFlipContract.methods.createGame(this.coinSideChosen, referral).send({
-      from: window.BlockchainManager.currentAccount,
-      value: Utils.etherToWei(bet),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-    .on('transactionHash', function(hash){
-      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("CREATE GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      CoinFlip.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideAndClearNotifView();
-    })
-    .once('error', function (error, receipt) {
-      hideSpinner(Spinner.gameView);
-
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "CREATE GAME error...");
-        throw new Error(error, receipt);
-      }
-    });
-  },
+  
 
   coinflipJoinAndPlay: async function () {
     console.log('%c coinflipJoinAndPlay', 'color: #e51dff');
@@ -272,13 +276,13 @@ const CoinFlip = {
 
     showSpinner(Spinner.gameView);
     window.BlockchainManager.coinFlipContract.methods.joinAndPlayGame(document.getElementById("gameId_join").innerHTML, referral).send({
-      from: window.BlockchainManager.currentAccount,
+      from: window.BlockchainManager.currentAccount(),
       value: bet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showNotifViewWithData("JOIN GAME transaction ", hash);
+      showTopBannerMessage("JOIN GAME transaction ", hash);
     })
     // .once('receipt', function(receipt){
     //   console.log("receipt: ", receipt.events.GamePlayed.returnValues);
