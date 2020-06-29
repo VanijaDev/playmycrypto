@@ -55,12 +55,12 @@ const RPS = {
   },
 
   setPlaceholders: function () {
-    $('#gameReferral_start_rps')[0].placeholder = this.ownerAddress;
-    $('#gameReferral_join_rps')[0].placeholder = this.ownerAddress;
+    $('#cf_game_referral_start_rps')[0].placeholder = this.ownerAddress;
+    $('#cf_game_referral_join_rps')[0].placeholder = this.ownerAddress;
     $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
     $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
     $('#seed_start_rps')[0].placeholder ="Any string, but MEMORIZE it !";
-    $('#gameBet_start_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
@@ -409,9 +409,9 @@ const RPS = {
 
     switch (_viewName) {
       case this.GameView.startNew:
-        document.getElementById("gameReferral_start_rps").value = "";
+        document.getElementById("cf_game_referral_start_rps").value = "";
         document.getElementById("seed_start_rps").value = "";
-        document.getElementById("gameBet_start_rps").value = "";
+        document.getElementById("cf_update_bet_input_rps").value = "";
         this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
@@ -434,7 +434,7 @@ const RPS = {
         break;
 
       case this.GameView.join:
-        document.getElementById("gameReferral_join_rps").value = "";
+        document.getElementById("cf_game_referral_join_rps").value = "";
         this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
       
@@ -629,7 +629,7 @@ const RPS = {
   startGameClicked: async function() {
     console.log('%c startGameClicked_RPS', 'color: #e51dff');
 
-    let bet = document.getElementById("gameBet_start_rps").value;
+    let bet = document.getElementById("cf_update_bet_input_rps").value;
     let seedStr = document.getElementById("seed_start_rps").value;
 
     if (this.selectedMove == 0) {
@@ -651,7 +651,7 @@ const RPS = {
     let seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
-    let referral = document.getElementById("gameReferral_start_rps").value;
+    let referral = document.getElementById("cf_game_referral_start_rps").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");
@@ -702,7 +702,7 @@ const RPS = {
       return;
     }
 
-    let referral = document.getElementById("gameReferral_join_rps").value;
+    let referral = document.getElementById("cf_game_referral_join_rps").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");

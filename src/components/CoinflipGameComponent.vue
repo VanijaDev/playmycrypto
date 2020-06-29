@@ -25,14 +25,14 @@
 
         <form class="row mt-4 pt-2">
           <div class="col-8 offset-sm-2 col-sm-6 pr-0">
-            <label for="gameReferral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="gameReferral_start" class="game_view-value referral-addr"/>
+            <label for="cf_game_referral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
+            <input type="text" id="cf_game_referral_start" class="game_view-value referral-addr"/>
           </div>
           <div class="col-4 col-sm-2">
             <label for="bet" class="f10 text-left opacity-text">
               {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
             </label>
-            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="gameBet_start">
+            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_update_bet_input">
           </div>
         </form>
 
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="row hidden game-block" id="joinGame">
+    <div class="row hidden game-block" id="cfjoin">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
         <span id="gameId_start">0</span>
@@ -65,8 +65,8 @@
 
         <form class="row mt-4 pt-2">
           <div class="col-8 offset-sm-2 col-sm-6 pr-0">
-            <label for="gameReferral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="gameReferral_join" class="game_view-value referral-addr"/>
+            <label for="cf_game_referral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
+            <input type="text" id="cf_game_referral_join" class="game_view-value referral-addr"/>
           </div>
         </form>
 
@@ -77,7 +77,7 @@
       </div>
     </div>
 
-    <div class="row hidden game-block" id="waitingForOpponent">
+    <div class="row hidden game-block" id="cfmaketop">
       <div class="col-sm-4 f13 info-column inner-column opacity-text position-relative">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
         <span id="gameId_start">0</span>
@@ -95,7 +95,7 @@
           </div>
           <div class="col-6 pr-0">
             <label class="pt-4">{{ $t('UPDATE_BET') }} (ETH):</label>
-            <input type="number" step="0.01" min="0.01" class="col-5 bet-input"/>
+            <input id="update-bet-input" type="number" step="0.01" min="0.01" class="col-5 bet-input"/>
             <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
           </div>
         </div>

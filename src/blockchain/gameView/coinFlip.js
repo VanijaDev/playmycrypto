@@ -23,11 +23,11 @@ const CoinFlip = {
   },
 
   setPlaceholders: function () {
-    $('#gameReferral_start')[0].placeholder = this.ownerAddress;
-    $('#gameBet_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cf_game_referral_start')[0].placeholder = this.ownerAddress;
+    $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
 
-    $('#gameReferral_join')[0].placeholder = this.ownerAddress;
-    // $('#gameBetNew_makeTop')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cf_game_referral_join')[0].placeholder = this.ownerAddress;
+    $('#update-bet-input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
@@ -37,62 +37,51 @@ const CoinFlip = {
     let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
     console.log("showGameViewForCurrentAccount id: ", id);
 
-    // if (id == 0) {
-    //   this.showGameView("cfstart", null);
-    // } else {
-    //   let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-    //   this.showGameView("cfmaketop", gameInfo);
-    // }
+    if (id == 0) {
+      this.showGameView("cfstart", null);
+    } else {
+      // let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
+      // this.showGameView("cfmaketop", gameInfo);
+    }
 
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
   showGameView: function (_viewName, _gameInfo){
-    // console.log("showGameView: ", _viewName, _gameInfo);
+    console.log("showGameView: ", _viewName, _gameInfo);
     if (_viewName != "youwon" && _viewName != "youlost") {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
 
-    this.hideAllGameViews();
-    $("#" + _viewName).css("display","block");
+    this.clearAllGameViews();
+    window.showGameBlock(_viewName)
   },
 
-  hideAllGameViews: function (){
-      $("#cfstart").css("display","none");
-      document.getElementById("gameReferral_start").value = "";
-      document.getElementById("gameReferral_join").value = "";
-      document.getElementById("gameBet_start").value = "";
-
-      $("#cfjoin").css("display","none");
-      document.getElementById("gameReferral_join").value = "";
-
-      $("#cfmaketop").css("display","none");
-      document.getElementById("gameBetNew_makeTop").value = "";
-
-      $("#cfpaused").css("display","none");
-      $("#youwon").css("display","none");
-      $("#youlost").css("display","none");
+  clearAllGameViews: function (){
+      document.getElementById("cf_game_referral_start").value = "";
+      document.getElementById("cf_game_referral_join").value = "";
+      document.getElementById("cf_update_bet_input").value = "";
   },
 
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
     switch (_viewName) {
       case "cfmaketop":
-        document.getElementById("gameBetNew_makeTop").value = "";
-        document.getElementById("gameId_makeTop").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
-        document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("frontCoinMakeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
-        document.getElementById("makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
+        // document.getElementById("cf_update_bet_input").value = "";
+        // document.getElementById("gameId_makeTop").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+        // document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+        // document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
+        // document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+        // document.getElementById("frontCoinMakeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
+        // document.getElementById("makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
         break;
 
       case "cfjoin":
-        document.getElementById("gameId_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        document.getElementById("gameCreator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        document.getElementById("gameBet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
+        // document.getElementById("gameId_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+        // document.getElementById("gameCreator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+        // document.getElementById("gameBet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+        // document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
       break;
 
       default:
@@ -184,7 +173,7 @@ const CoinFlip = {
   },
 
   increaseBetClicked: async function () {
-    let bet = document.getElementById("gameBetNew_makeTop").value;
+    let bet = document.getElementById("cf_update_bet_input").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
       showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
@@ -219,7 +208,7 @@ const CoinFlip = {
   },
 
   startGame: async function () {
-    let referral = document.getElementById("gameReferral_start").value;
+    let referral = document.getElementById("cf_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");
@@ -229,7 +218,7 @@ const CoinFlip = {
       referral = this.ownerAddress;
     }
 
-    let bet = document.getElementById("gameBet_start").value;
+    let bet = document.getElementById("cf_update_bet_input").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
       showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
@@ -264,7 +253,7 @@ const CoinFlip = {
   coinflipJoinAndPlay: async function () {
     console.log('%c coinflipJoinAndPlay', 'color: #e51dff');
 
-    let referral = document.getElementById("gameReferral_join").value;
+    let referral = document.getElementById("cf_game_referral_join").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");
