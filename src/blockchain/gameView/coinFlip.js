@@ -26,8 +26,7 @@ const CoinFlip = {
     $('#gameReferral_start')[0].placeholder = this.ownerAddress;
     $('#gameBet_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
 
-    // $('#gameReferral_join')[0].placeholder = this.ownerAddress;
-    // $('#gameBet_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#gameReferral_join')[0].placeholder = this.ownerAddress;
     // $('#gameBetNew_makeTop')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 

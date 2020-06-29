@@ -62,6 +62,7 @@
   "PAUSE_GAME": "PAUSE GAME",
   "GAME_PAUSED": "GAME IS PAUSED",
   "UNPAUSE_COST": "unpause cost",
+  "MAKE_TOP_COST": "make top cost",
   "YOU_WON": "Yeay, you won",
   "CLOSE": "CLOSE",
   "YOU_LOST": "Sorry, but you lost",

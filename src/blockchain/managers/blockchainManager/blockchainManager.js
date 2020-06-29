@@ -15,8 +15,6 @@ const BlockchainManager = {
   currentBlockchainType: "",
   currentBlockchain: null,
   initted: false,
-  // coinFlipContract: null,
-  // rockPaperScissorsContract: null,
 
   init: async function ()  {
     if (!this.initted) {

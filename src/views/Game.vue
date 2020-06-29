@@ -12,7 +12,7 @@
           </div>
 
           <div class="tmp-block">
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('startNewGame')">Screen 1</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfstart')">Screen 1</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('joinGame')">Screen 2</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('waitingForOpponent')">Screen 3</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Screen 4</button>

@@ -888,6 +888,10 @@ button:focus, input:focus {
       vertical-align: top;
     }
   }
+
+  .btn-make-top {
+    margin-top: 14px !important;
+  }
 }
 
 .footer {
@@ -1079,4 +1083,9 @@ button:focus, input:focus {
 
 .game_view-value {
   font-size: 10px;
+}
+
+.referral-addr {
+  -ms-flex: 0 0 55%;
+  flex: 0 0 55%;
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row game-block" id="startNewGame">
+    <div class="row game-block" id="cfstart">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
         <span id="gameId_start">0</span>
@@ -24,9 +24,9 @@
         </button>
 
         <form class="row mt-4 pt-2">
-          <div class="col-8 offset-sm-2 col-sm-6 pr-sm-1 pr-0">
+          <div class="col-8 offset-sm-2 col-sm-6 pr-0">
             <label for="gameReferral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="gameReferral_start" class="game_view-value"/>
+            <input type="text" id="gameReferral_start" class="game_view-value referral-addr"/>
           </div>
           <div class="col-4 col-sm-2">
             <label for="bet" class="f10 text-left opacity-text">
@@ -64,9 +64,9 @@
         </button>
 
         <form class="row mt-4 pt-2">
-          <div class="col-8 offset-sm-2 col-sm-6 pr-sm-1 pr-0">
+          <div class="col-8 offset-sm-2 col-sm-6 pr-0">
             <label for="gameReferral_start" class="f10 opacity-text text-left">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="gameReferral_start" class="game_view-value"/>
+            <input type="text" id="gameReferral_join" class="game_view-value referral-addr"/>
           </div>
         </form>
 
@@ -120,14 +120,16 @@
 
         <div class="row mt-5 pt-4"></div>
 
-        <button class="btn btn-start-game" onclick="window.CoinFlip.startGame()">
+
+        <p class="f18 font-weight-bold">{{ $t('MAKE_TOP_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
+        <button class="btn btn-start-game btn-make-top" onclick="window.CoinFlip.startGame()">
           <img src="/img/icon-btn-start.svg" class="mr-3">
           {{ $t('MAKE_TOP_GAME') }}
         </button>
       </div>
     </div>
 
-    <div class="row hidden game-block" id="pausedGame">
+    <!-- <div class="row hidden game-block" id="pausedGame">
       <div class="col-sm-4 f13 info-column inner-column opacity-text position-relative">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
         <span id="gameId_start">0</span>
@@ -173,7 +175,7 @@
           <p class="f18 font-weight-bold">{{ $t('UNPAUSE_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="row hidden game-block" id="youWon">
       <div class="inner-column game-image-padding text-center">
