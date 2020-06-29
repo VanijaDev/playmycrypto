@@ -40,8 +40,8 @@ const CoinFlip = {
     if (id == 0) {
       this.showGameView("cfstart", null);
     } else {
-      // let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-      // this.showGameView("cfmaketop", gameInfo);
+      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
+      this.showGameView("cfmaketop", gameInfo);
     }
 
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
@@ -64,17 +64,17 @@ const CoinFlip = {
   },
 
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
     switch (_viewName) {
       case "cfmaketop":
-        // document.getElementById("cf_update_bet_input").value = "";
-        // document.getElementById("gameId_makeTop").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        // document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        // document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
-        // document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        // document.getElementById("frontCoinMakeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
-        // document.getElementById("makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
+        document.getElementById("cf_update_bet_input").value = "";
+        document.getElementById("gameId_makeTop").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+        document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+        document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
+        document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+        document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
+        document.getElementById("make_top_block_makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
         break;
 
       case "cfjoin":

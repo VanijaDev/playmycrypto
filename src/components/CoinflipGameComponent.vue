@@ -80,17 +80,17 @@
     <div class="row hidden game-block" id="cfmaketop">
       <div class="col-sm-4 f13 info-column inner-column opacity-text position-relative">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
-        <span id="gameId_start">0</span>
+        <span id="gameId_makeTop"  class="f10">0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_CREATOR') }}:</p>
-        <span id="gameCreator_start">0x0</span>
+        <span id="gameCreator_makeTop" class="f10">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
-        <span id="gameOpponent_start">0x0</span>
+        <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
         <div class="row">
           <div class="col-6 pr-0">
             <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
             <span class="f16">
-              <b id="gameBetCurrent_start">0.12345</b>
+              <b id="gameBet_makeTop">0.12345</b>
             </span>
           </div>
           <div class="col-6 pr-0">
@@ -115,17 +115,18 @@
         <h2 class="f24">{{ $t('COIN_SIDE') }}:</h2>
 
         <button id="ethereumFlip" class="btn btn-link" onclick="window.CoinFlip.coinSideChanged(0)">
-          <img src="/img/ethereum-orange.svg">
+          <img id="fromt_coin_makeTop" src="/img/ethereum-orange.svg">
         </button>
 
         <div class="row mt-5 pt-4"></div>
 
-
-        <p class="f18 font-weight-bold">{{ $t('MAKE_TOP_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
-        <button class="btn btn-start-game btn-make-top" onclick="window.CoinFlip.startGame()">
-          <img src="/img/icon-btn-start.svg" class="mr-3">
-          {{ $t('MAKE_TOP_GAME') }}
-        </button>
+        <div id="make_top_block_makeTop" class="make_top_block_makeTop">
+          <p class="f18 font-weight-bold">{{ $t('MAKE_TOP_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
+          <button id="make_top_btc_makeTop" class="btn btn-start-game btn-make-top" onclick="window.CoinFlip.makeTopClicked()">
+            <img src="/img/icon-btn-start.svg" class="mr-3">
+            {{ $t('MAKE_TOP_GAME') }}
+          </button>
+        </div>
       </div>
     </div>
 
