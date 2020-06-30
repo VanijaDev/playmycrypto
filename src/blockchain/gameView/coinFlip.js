@@ -175,6 +175,43 @@ const CoinFlip = {
     });
   },
 
+  increaseBetClicked: async function () {
+    let bet = document.getElementById("cf_update_bet_input").value;
+
+    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      return;
+    }
+
+    let gameId = document.getElementById("cf_gameId_makeTop").innerHTML;
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.increaseBetForGameBy(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Utils.etherToWei(bet).toString(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function(hash){
+      // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("INCREASE BET transaction ", hash);
+    })
+    .once('receipt', function(receipt){
+      CoinFlip.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideAndClearNotifView();
+    })
+    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Increase bet error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
+
+
 
 
 
@@ -221,44 +258,7 @@ const CoinFlip = {
       default:
         break;
     }
-  },
-
-  increaseBetClicked: async function () {
-    let bet = document.getElementById("cf_update_bet_input").value;
-
-    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
-      return;
-    }
-
-    let gameId = document.getElementById("cf_gameId_makeTop").innerHTML;
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.coinFlipContract.methods.increaseBetForGameBy(gameId).send({
-      from: window.BlockchainManager.currentAccount(),
-      value: Utils.etherToWei(bet).toString(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-    .on('transactionHash', function(hash){
-      // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("INCREASE BET transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      CoinFlip.showGameViewForCurrentAccount();
-      hideAndClearNotifView();
-      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Increase bet error...");
-        throw new Error(error, receipt);
-      }
-    });
-  },
-
-  
+  }, 
 
   coinflipJoinAndPlay: async function () {
     console.log('%c coinflipJoinAndPlay', 'color: #e51dff');

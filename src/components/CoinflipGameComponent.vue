@@ -97,7 +97,7 @@
           <div class="col-8 pr-0">
             <label class="pt-4">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
             <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input" v-model="currentBet"/>
-            <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
+            <button class="btn btn-small-orange" onclick="window.CoinFlip.increaseBetClicked()">{{ $t('UPDATE') }}</button>
           </div>
         </div>
 
