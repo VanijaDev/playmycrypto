@@ -20,6 +20,12 @@ const Types = {
     ethereum: "ethereum",
     tron: "tron"
   },
+
+  CF_Move: {
+    rock: 0,
+    paper: 1,
+    scissors: 2
+  }
 }
 
 export default Types;
