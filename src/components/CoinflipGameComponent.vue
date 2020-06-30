@@ -217,7 +217,7 @@
     name: "CoinflipGameComponent",
     data: function () {
       return {
-        currentBet: 0
+        currentBet: ""
       }
     },
     computed: {
