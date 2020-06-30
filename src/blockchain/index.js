@@ -175,6 +175,16 @@ const Index = {
     }
   },
 
+  onGameAddedToTop: function (_gameType) {
+    if (_gameType == Types.Game.cf) {
+      console.log('%c index - onGameAddedToTop_CF', 'color: #1d34ff');
+    } else if (_gameType == Types.Game.rps) {
+      console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
+    }
+
+    Index.updateCryptoAmountPlayedOnSiteTotal();
+  },
+
   onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Types.Game.cf) {
       console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');

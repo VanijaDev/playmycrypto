@@ -86,6 +86,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_CF.gameAddedToTop:
           // console.log("NotificationHashes_CF.gameAddedToTop");
+          this.eventHandler.onGameAddedToTop(Types.Game.cf);
           break;
 
         case this.NotificationHashes_CF.gameReferralWithdrawn:
@@ -154,6 +155,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gameAddedToTop:
           // console.log("NotificationHashes_RPS.gameAddedToTop");
+          this.eventHandler.onGameAddedToTop(Types.Game.rps);
           break;
 
         case this.NotificationHashes_RPS.gameReferralWithdrawn:
