@@ -122,7 +122,7 @@ const CoinFlip = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("CREATE GAME transaction ", hash);
+      showTopBannerMessage("CREATE GAME transaction: ", hash);
     })
     .once('receipt', function(receipt){
       CoinFlip.showGameViewForCurrentAccount();
@@ -205,7 +205,7 @@ const CoinFlip = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("MAKE TOP GAME transaction ", hash);
+      showTopBannerMessage("MAKE TOP GAME transaction: ", hash);
     })
     .once('receipt', function(receipt){
       hideAndClearNotifView();
@@ -272,7 +272,7 @@ const CoinFlip = {
       referral = this.ownerAddress;
     }
 
-    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.coinFlipContract, document.getElementById("gameId_join").innerHTML);
+    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.coinFlipContract, document.getElementById("gameId_join").innerHTML);
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
       showAlert('error', 'Not enough balance to join game.');
@@ -287,7 +287,7 @@ const CoinFlip = {
     })
     .on('transactionHash', function(hash){
       // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("JOIN GAME transaction ", hash);
+      showTopBannerMessage("JOIN GAME transaction: ", hash);
     })
     // .once('receipt', function(receipt){
     //   console.log("receipt: ", receipt.events.GamePlayed.returnValues);

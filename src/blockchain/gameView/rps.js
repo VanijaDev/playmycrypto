@@ -73,7 +73,7 @@ const RPS = {
     if (gameId == 0) {
       this.showGameView(this.GameView.startNew, null);
     } else {
-      let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+      let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
       // console.log("gameInfo: ", gameInfo);
 
       switch (parseInt(gameInfo.state)) {
@@ -713,7 +713,7 @@ const RPS = {
     }
 
     let gameId = document.getElementById("rpsjoingame_gameId").innerHTML;
-    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
     
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
@@ -836,7 +836,7 @@ const RPS = {
       ProfileManager.update();
       hideAndClearNotifView();
 
-      const gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+      const gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
       if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
         RPS.showGameViewForCurrentAccount();
       } else {
@@ -980,7 +980,7 @@ const RPS = {
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     showSpinner(Spinner.gameView);
 
-    let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
     gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
   },
 

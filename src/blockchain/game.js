@@ -332,7 +332,7 @@ const Game = {
   onGameUpdated: async function (_gameId) {
     console.log('%c onGameUpdated %s', 'color: #1d34ff', _gameId);
 
-    let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, _gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, _gameId);
     if (gameInfo.paused) {
       console.log('skip');
       return;
@@ -373,7 +373,7 @@ const Game = {
     }
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
   },
@@ -386,7 +386,7 @@ const Game = {
     }
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       RPS.showGameView(RPS.GameView.playMove, gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
@@ -401,10 +401,10 @@ const Game = {
     }
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
       this.updateSuspendedViewForGame(this.gameType);
     }
@@ -436,7 +436,7 @@ const Game = {
     console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
   },
@@ -445,7 +445,7 @@ const Game = {
     console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
-      let gameInfo = await PromiseManager.getGameInfoPromise(Types.Game.rps, _id);
+      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.draw)) == 0) {
@@ -532,7 +532,7 @@ const Game = {
   joinGame: async function (_gameIdx, _isTopGame) {
     // console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
-    let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 
     if (this.gameType == Types.Game.cf) {
       CoinFlip.showJoinGame(gameInfo);

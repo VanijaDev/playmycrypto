@@ -261,7 +261,7 @@ const Index = {
 
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       // console.log("YES participant");
-      let gameInfo = await PromiseManager.getGameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, _id);
+      let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, _id);
 
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
