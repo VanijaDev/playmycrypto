@@ -551,6 +551,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
     topGames = topGamesTmp;
     devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit RPS_GameAddedToTop(_id, games[_id].creator);
   }
