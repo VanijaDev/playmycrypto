@@ -9,7 +9,7 @@
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">0</b></span>
+        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
@@ -32,12 +32,12 @@
             <label for="bet" class="f10 text-left opacity-text">
               {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
             </label>
-            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_bet_input">
+            <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_bet_input" v-model="currentBet">
           </div>
         </form>
 
         <!-- <button id="start_btn_start" class="btn btn-start-game disabled" onclick="window.CoinFlip.startGame()"> -->
-          <button id="start_btn_start" class="btn btn-start-game" onclick="window.CoinFlip.startGame()">
+        <button id="start_btn_start" class="btn btn-start-game" v-bind:class="{'disabled': isStartGameDisabled()}" onclick="window.CoinFlip.startGame()">
           <img src="/img/icon-btn-start.svg" class="mr-3">
           {{ $t('START_GAME') }}
         </button>
@@ -53,7 +53,7 @@
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">0.12345</b></span>
+        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
@@ -81,22 +81,22 @@
     <div class="row hidden game-block" id="cfmaketop">
       <div class="col-sm-4 f13 info-column inner-column opacity-text position-relative">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
-        <span id="gameId_makeTop"  class="f10">0</span>
+        <span id="gameId_makeTop" class="f10">0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_CREATOR') }}:</p>
         <span id="gameCreator_makeTop" class="f10">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
         <div class="row">
-          <div class="col-6 pr-0">
-            <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
+          <div class="col-4 pr-0">
+            <p class="mb-1 mt-4">{{ $t('GAME_BET') }}:</p>
             <span class="f16">
-              <b id="gameBet_makeTop">0.12345</b>
+              <b id="gameBet_makeTop">{{ currentBet }}</b>
             </span>
           </div>
-          <div class="col-6 pr-0">
-            <label class="pt-4">{{ $t('UPDATE_BET') }} (ETH):</label>
-            <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input"/>
+          <div class="col-8 pr-0">
+            <label class="pt-4">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
+            <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input" v-model="currentBet"/>
             <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
           </div>
         </div>
@@ -215,9 +215,19 @@
 <script>
   export default {
     name: "CoinflipGameComponent",
+    data: function () {
+      return {
+        currentBet: '0'
+      }
+    },
     computed: {
       currency() {
         return this.$store.state.currency
+      }
+    },
+    methods: {
+      isStartGameDisabled() {
+        return this.currentBet <= 0;
       }
     },
     mounted() {

@@ -792,6 +792,7 @@ button:focus, input:focus {
     background: #FFF;
     border: 1px solid #E0E0E0;
     border-radius: 2px;
+    max-width: 70px;
   }
 
   .opacity-text {
@@ -802,7 +803,7 @@ button:focus, input:focus {
 
   .btn-small-orange {
     background: #F2994A;
-    padding: 2px 6px;
+    padding: 2px 10px;
     font-size: 12px;
     float: right;
     border-radius: 2px;
