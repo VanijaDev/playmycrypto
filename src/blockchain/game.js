@@ -372,7 +372,7 @@ const Game = {
       console.log('%c game - onGameCreated_RPS', 'color: #1d34ff');
     }
 
-    if (!_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
@@ -385,10 +385,10 @@ const Game = {
       this.removeGameWithId(_gameId);
     }
 
-    if (_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       RPS.showGameView(RPS.GameView.playMove, gameInfo);
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },
@@ -400,10 +400,10 @@ const Game = {
       console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    if (_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       CoinFlip.showGamePlayed(gameInfo);
       this.updateSuspendedViewForGame(this.gameType);
@@ -435,7 +435,7 @@ const Game = {
   onGameUnpaused: async function (_gameId, _creator) {
     console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
-    if (!_creator.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.getGameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
@@ -475,7 +475,7 @@ const Game = {
   onGameMovePlayed: function (_gameId, _nextMover) {
     console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
-    if (_nextMover.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
     }
   },
@@ -483,7 +483,7 @@ const Game = {
   onGameOpponentMoved: function (_gameId, _nextMover) {
     console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
-    if (_nextMover.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
     }
   },
@@ -502,7 +502,7 @@ const Game = {
 
     Game.updateRaffleStateInfoForGame(Game.gameType, true);
 
-    if (_winner.includes(window.BlockchainManager.currentAccount.replace("0x", ""))) {
+    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },

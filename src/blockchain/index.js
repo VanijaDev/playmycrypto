@@ -150,16 +150,6 @@ const Index = {
     }
   },
 
-
-
-
-
-
-
-
-
-
-
   onGamePlayed: function (_gameId) {
     console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
 
