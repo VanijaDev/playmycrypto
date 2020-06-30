@@ -42,7 +42,7 @@ const CommonManager = {
         break;
 
       case Types.SpinnerView.topGames:
-        view = "BlockTopGames";
+        view = "topGamesBlock";
         break;
 
       case Types.SpinnerView.raffle:

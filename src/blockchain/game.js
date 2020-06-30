@@ -133,7 +133,7 @@ const Game = {
       console.log("loadTopGamesForGame - RPS");
     }
 
-    $('#BlockTopGames').empty();
+    $('#topGamesBlock').empty();
     this.topGameIds = [];
 
     let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
@@ -212,12 +212,12 @@ const Game = {
     // console.log("addGameWithInfo: ", _gameInfo, _isTopGame, _prepend);
     if (_isTopGame) {
       if (_prepend) {
-        $('#BlockTopGames').prepend(TopGamesTemplate.composetmp({
+        $('#topGamesBlock').prepend(TopGamesTemplate.composetmp({
           'address': _gameInfo.creator,
           'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
         }));
       } else {
-        $('#BlockTopGames').append(TopGamesTemplate.composetmp({
+        $('#topGamesBlock').append(TopGamesTemplate.composetmp({
           'address': _gameInfo.creator,
           'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
         }));
@@ -247,7 +247,7 @@ const Game = {
       console.log("from TopGames");
 
       let idx = this.topGameIds.indexOf(_gameId);
-      $('#BlockTopGames')[0].removeChild($('#BlockTopGames')[0].children[idx]);
+      $('#topGamesBlock')[0].removeChild($('#topGamesBlock')[0].children[idx]);
       this.topGameIds.splice(idx, 1);
     } else if (this.availableGameIds.includes(_gameId)) {
       console.log("from AvailableGames");
@@ -363,13 +363,6 @@ const Game = {
   isGamePresentInAnyList: function (_gameId) {
     return (this.topGameIds.includes(_gameId)) || (this.availableGameIds.includes(_gameId));
   },
-
-
-
-
-
-
-
 
 
   onGameCreated: async function (_gameType, _gameId, _creator) {

@@ -12,7 +12,7 @@ const Types = {
   SpinnerView: {
     gameView: "gameView",
     availableGames: "availableGames",
-    topGames: "topGames",
+    topGames: "topGamesBlock",
     raffle: "raffle",
   },
 
