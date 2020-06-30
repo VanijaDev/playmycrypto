@@ -98,6 +98,11 @@ const CoinFlip = {
         showAlert("error", "Wrong referral address.");
         return;
       }
+
+      if (Utils.addressesEqual(BlockchainManager.currentAccount(), referral)) {
+        showAlert("error", "Wrong referral address. Cannot be same as creator");
+        return;
+      }
     } else {
       referral = this.ownerAddress;
     }
