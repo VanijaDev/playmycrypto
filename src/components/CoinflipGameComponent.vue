@@ -101,14 +101,14 @@
           </div>
         </div>
 
-        <div class="bottom-buttons row">
+        <!-- <div class="bottom-buttons row">
           <div class="col-5 offset-1">
             <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
           </div>
           <div class="col-5 button-border-left">
             <button class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
