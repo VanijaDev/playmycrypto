@@ -17,15 +17,5 @@
     "crypto"
   ],
   "author": "Ivan Solomichev",
-  "license": "ISC",
-  "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "chai": "4.2.0",
-    "openzeppelin-solidity": "3.0.1",
-    "openzeppelin-test-helpers": "^0.5.1",
-    "truffle-hdwallet-provider": "^1.0.17",
-    "truffle-flattener": "^1.4.4"
-  }
+  "license": "ISC"
 }

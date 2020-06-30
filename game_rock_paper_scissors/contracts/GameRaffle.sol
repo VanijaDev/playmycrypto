@@ -1,10 +1,9 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity 0.5.8;
 
-import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./_Ownable.sol";
+import "./_SafeMath.sol";
 
-abstract contract GameRaffle is Ownable {
+contract GameRaffle is Ownable {
   using SafeMath for uint256;
 
   struct RaffleResult {
@@ -93,5 +92,5 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Withdraw prizes for all won raffles.
    */
-  function withdrawRafflePrizes() external virtual;
+  function withdrawRafflePrizes() external;
 }

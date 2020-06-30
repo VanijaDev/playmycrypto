@@ -1,11 +1,10 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity 0.5.8;
 
 import "./Partnership.sol";
 import "./IExpiryMoveDuration.sol";
 import "./IGamePausable.sol";
 import "./GameRaffle.sol";
-import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
+import "./_Pausable.sol";
 
 
 /**
@@ -42,7 +41,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   uint256 private constant FEE_PERCENT = 1;
 
-  uint256 public minBet = 10 finney; //  also used as fee add to TopGames, unpause
+  uint256 public minBet = 50 trx; //  also used as fee add to TopGames, unpause
   
   uint256[5] public topGames; //  show above other games
 
@@ -131,7 +130,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _partner Address for partner.
    * TESTED
    */
-  constructor(address payable _partner) Partnership (_partner, 1 ether) public {
+  constructor(address payable _partner) Partnership (_partner, 100 trx) public {
     updatePartner(_partner);
   }
 
@@ -154,7 +153,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _duration Game duration.
    * TESTED
    */
-  function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
+  function updateGameMoveDuration(uint16 _duration) external onlyOwner {
     require(_duration > 0, "Should be > 0");
     gameMoveDuration = _duration;    
   }
@@ -165,7 +164,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @return Whether game move is expired.
    * TESTED
    */
-  function gameMoveExpired(uint256 _id) public view override returns(bool) {
+  function gameMoveExpired(uint256 _id) public view returns(bool) {
     if(games[_id].prevMoveTimestamp != 0) {
       return games[_id].prevMoveTimestamp.add(gameMoveDuration) < now; 
     }
@@ -176,7 +175,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game id.
    * TESTED
    */
-  function finishExpiredGame(uint256 _id) external override {
+  function finishExpiredGame(uint256 _id) external {
     Game storage game = games[_id];
 
     require(game.creator != address(0), "No game with such id");
@@ -212,7 +211,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @return Is game paused.
    * TESTED
    */
-  function gameOnPause(uint256 _id) public view override returns(bool) { 
+  function gameOnPause(uint256 _id) public view returns(bool) { 
     return games[_id].paused;
   }
 
@@ -221,7 +220,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game index.
    * TESTED
    */
-  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
+  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external {
     games[_id].paused = true;
 
     if (isTopGame(_id)) {
@@ -235,7 +234,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game index.
    * TESTED
    */
-  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
+  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable {
     require(msg.value == minBet, "Wrong fee");
 
     games[_id].paused = false;
@@ -474,7 +473,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * TESTED
    */
    
-  function withdrawRafflePrizes() external override {
+  function withdrawRafflePrizes() external {
     require(rafflePrizePendingForAddress[msg.sender] > 0, "No raffle prize");
 
     uint256 prize = rafflePrizePendingForAddress[msg.sender];

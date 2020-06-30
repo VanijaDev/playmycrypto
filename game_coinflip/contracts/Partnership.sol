@@ -1,8 +1,7 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity 0.5.8;
 
-import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./_Ownable.sol";
+import "./_SafeMath.sol";
 
 /**
  * @dev Contract module which provides a basic fu=nctionality for donates to partner address.

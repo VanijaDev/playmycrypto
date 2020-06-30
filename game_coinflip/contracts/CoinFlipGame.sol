@@ -1,18 +1,12 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity 0.5.8;
 
 import "./Partnership.sol";
 import "./GameRaffle.sol";
-import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
+import "./_Pausable.sol";
 
 /**
   * @notice IMPORTANT: owner should create first game.
-  * @notice CoinFlipGame can be created by creator and run by joined playr. Creator is not required to be online or perform any actions for game to be played.
-  */
-
-/**
-  * Testing:
-  *    update suspendedTimeDuration to 1 minute
+  * @notice CoinFlipGame can be created by creator and run by joined player. Creator is not required to be online or perform any actions for game to be played.
   */
 
 contract CoinFlipGame is Pausable, Partnership, GameRaffle {
@@ -29,7 +23,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle {
 
   uint256 private constant FEE_PERCENT = 1;
 
-  uint256 public minBet = 10 finney;
+  uint256 public minBet = 50 trx;
   uint256 public suspendedTimeDuration = 1 hours;
 
   uint256[5] public topGames;
@@ -94,7 +88,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle {
     * @param _partner Address for partner.
     * TESTED
     */
-  constructor(address payable _partner) Partnership (_partner, 1 ether) public {
+  constructor(address payable _partner) Partnership (_partner, 1000 trx) public {
     updatePartner(_partner);
   }
 
@@ -278,7 +272,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle {
    * GameRaffle
    * TESTED
    */
-  function withdrawRafflePrizes() external override {
+  function withdrawRafflePrizes() external {
     require(rafflePrizePendingForAddress[msg.sender] > 0, "No raffle prize");
 
     uint256 prize = rafflePrizePendingForAddress[msg.sender];
