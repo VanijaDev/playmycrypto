@@ -1,9 +1,9 @@
 import BlockchainManager from "../managers/blockchainManager/blockchainManager";
-import { PromiseManager } from "../managers/promiseManager";
-import { Game } from "../game";
-import { Utils } from "../utils";
+import {PromiseManager} from "../managers/promiseManager";
+import {Game} from "../game";
+import {Utils} from "../utils";
 import BigNumber from "bignumber.js";
-import { ProfileManager } from "../managers/profileManager";
+import {ProfileManager} from "../managers/profileManager";
 
 //  TODO:
 //  - remove unused game views
@@ -12,7 +12,7 @@ const RPS = {
   ownerAddress: "",
   minBet: 0,
   currentGameView: "",
-  
+
   selectedMove: 0,
   selectedPrevMove: 0,
   skipNextMove: false,
@@ -36,14 +36,39 @@ const RPS = {
     waitingForOpponent: "rpswfopponent",
     waitingForOpponentMove: "rpswfopponentmove",
     join: "rpsjoingame",
+    waitOpponentMove: "rpswfopponentmove",
+    creatorMove: "rpscreatormove",
+    opponentMove: "rpsopponentmove",
     playMove: "rpsplaymove",
     makeMove: "rpsmakemove",
     won: "rpsyouwon",
     lost: "rpsyoulost",
-    draw: "rpsdraw"
+    draw: "rpsdraw",
   },
 
-  updateGameView: async function() {
+  InnerGameViews: {
+    waitingForOpponent: {
+      gamePaused: 'gamePaused',
+      makeTop: 'make_top_block_makeTop'
+    },
+    waitingForOpponentMove: {
+      moveExpired: 'moveExpired'
+    },
+    creatorMove: {
+      playMove: 'creatorPlayMoveButton',
+      previousNextMove: 'previousNextMoveCreator',
+      moveExpired: 'moveExpiredCreator'
+    },
+    opponentMove: {
+      playMove: 'opponentPlayMoveButton',
+      claimExpired: 'claimExpiredButton',
+      opponentMove: 'opponentMoveBlock',
+      moveExpired: 'moveExpiredOpponent',
+    }
+
+  },
+
+  updateGameView: async function () {
     console.log("RPS - updateGameView");
 
     showSpinner(Spinner.gameView);
@@ -59,7 +84,7 @@ const RPS = {
     $('#cf_game_referral_join_rps')[0].placeholder = this.ownerAddress;
     $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
     $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
-    $('#seed_start_rps')[0].placeholder ="Any string, but MEMORIZE it !";
+    $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
     $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
@@ -94,7 +119,7 @@ const RPS = {
             this.showGameView(this.GameView.waitingForOpponentMove, gameInfo);
           }
           break;
-      
+
         default:
           console.error("showGameViewForCurrentAccount - gameInfo.state");
           break;
@@ -104,7 +129,7 @@ const RPS = {
     hideSpinner(Spinner.gameView);
   },
 
-  resultViewForGame: function(_gameInfo) {
+  resultViewForGame: function (_gameInfo) {
     // console.log(_gameInfo);
     let resultView = this.GameView.lost;
 
@@ -122,7 +147,7 @@ const RPS = {
     this.showGameView(this.GameView.join, _gameInfo);
   },
 
-  showGameView: function (_viewName, _gameInfo){
+  showGameView: function (_viewName, _gameInfo) {
     // console.log("showGameView: ", _viewName, _gameInfo);
 
     this.selectedMove = this.Move.none;
@@ -135,13 +160,13 @@ const RPS = {
     document.getElementById(_viewName).classList.remove("display-none");
   },
 
-  updateGameViewInfo: function (_viewName, _gameInfo){
+  updateGameViewInfo: function (_viewName, _gameInfo) {
     // console.log("updateGameView: ", _viewName, _gameInfo);
     this.populateViewWithGameInfo(_viewName, _gameInfo);
   },
 
-  hideAllGameViews: async function (){
-    document.getElementById(this.GameView.startNew).classList.add("display-none");    
+  hideAllGameViews: async function () {
+    document.getElementById(this.GameView.startNew).classList.add("display-none");
     document.getElementById(this.GameView.waitingForOpponent).classList.add("display-none");
     document.getElementById(this.GameView.waitingForOpponentMove).classList.add("display-none");
     document.getElementById(this.GameView.join).classList.add("display-none");
@@ -196,7 +221,7 @@ const RPS = {
 
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = isGameCreator ? gameMoveResults[0] : gameMoveResults[1];
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = isGameCreator ? gameMoveResults[1] : gameMoveResults[0];
-        
+
         this.updateExpiredUIFor(this.GameView.waitingForOpponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
         break;
 
@@ -219,7 +244,7 @@ const RPS = {
         this.updateExpiredUIFor(this.GameView.makeMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
         break;
 
-        case this.GameView.playMove:
+      case this.GameView.playMove:
         document.getElementById(this.GameView.playMove + "_game_id").innerHTML = _gameInfo.id;
         document.getElementById(this.GameView.playMove + "_game_creator").innerHTML = _gameInfo.creator;
         document.getElementById(this.GameView.playMove + "_game_opponent").innerHTML = _gameInfo.opponent;
@@ -230,7 +255,7 @@ const RPS = {
 
         this.updateExpiredUIFor(this.GameView.playMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
 
-        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);    
+        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);
         if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
           document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("display-none");
           this.skipNextMove = false;
@@ -246,13 +271,13 @@ const RPS = {
     }
   },
 
-  updateExpiredUIFor: async function(_viewName, _isExpired, _prevMoveTimestamp) {
+  updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
     switch (_viewName) {
       case this.GameView.waitingForOpponentMove:
         if (_isExpired) {
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
-          
+
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
           document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
         } else {
@@ -275,7 +300,7 @@ const RPS = {
         } else {
           document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("display-none");
           document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
-          
+
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
           let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
@@ -293,7 +318,7 @@ const RPS = {
         } else {
           document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
           document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
-          
+
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
           let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
@@ -307,8 +332,8 @@ const RPS = {
     }
   },
 
-  gameMoveResults: async function(_gameId) {
-    let result = [0,0]; //  creator, joiner
+  gameMoveResults: async function (_gameId) {
+    let result = [0, 0]; //  creator, joiner
 
     let rowMoves_0 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 0);
     // console.log("rowMoves_0: ", rowMoves_0);
@@ -318,13 +343,13 @@ const RPS = {
 
     switch (this.rowWinner(rowMoves_0)) {
       case this.MoveWinner.creator:
-        result[0] = result[0]+=1;
+        result[0] = result[0] += 1;
         break;
 
       case this.MoveWinner.opponent:
-        result[1] = result[1]+=1;
+        result[1] = result[1] += 1;
         break;
-    
+
       default:
         break;
     }
@@ -335,14 +360,14 @@ const RPS = {
     if (rowMoves_1[0] == 0) {
       return result;
     }
-    
+
     switch (this.rowWinner(rowMoves_1)) {
       case this.MoveWinner.creator:
-        result[0] = result[0]+=1;
+        result[0] = result[0] += 1;
         break;
 
       case this.MoveWinner.opponent:
-        result[1] = result[1]+=1;
+        result[1] = result[1] += 1;
         break;
 
       default:
@@ -358,22 +383,22 @@ const RPS = {
 
     switch (this.rowWinner(rowMoves_2)) {
       case this.MoveWinner.creator:
-        result[0] = result[0]+=1;
+        result[0] = result[0] += 1;
         break;
 
       case this.MoveWinner.opponent:
-        result[1] = result[1]+=1;
+        result[1] = result[1] += 1;
         break;
-    
+
       default:
         break;
     }
     // console.log("result_2: ", result);
-    
+
     return result;
   },
 
-  rowWinner: function(_rowMoves) {
+  rowWinner: function (_rowMoves) {
     let creatorMark = _rowMoves[0];
     let opponentMark = _rowMoves[1];
 
@@ -400,7 +425,7 @@ const RPS = {
     return this.MoveWinner.draw;
   },
 
-  clearView: function(_viewName) {
+  clearView: function (_viewName) {
     console.log("clearView: ", _viewName);
 
     if (this.countdown) {
@@ -437,7 +462,7 @@ const RPS = {
         document.getElementById("cf_game_referral_join_rps").value = "";
         this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
-      
+
       case this.GameView.makeMove:
         document.getElementById(this.GameView.makeMove + "_game_id").value = "";
         document.getElementById(this.GameView.makeMove + "_game_creator").value = "";
@@ -463,7 +488,7 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_game_bet").innerHTML = "...";
         document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = "...";
         document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = "...";
-        
+
         document.getElementById(this.GameView.playMove + "_score_you").innerHTML = "...";
         document.getElementById(this.GameView.playMove + "_score_opponent").innerHTML = "...";
 
@@ -474,11 +499,11 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_move_expired").classList.add("display-none");
 
         document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
-        
+
         this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         this.updateSelectedMoveImgs(_viewName, this.Move.none, true);
         break;
-        
+
       case this.GameView.won:
       case this.GameView.lost:
       case this.GameView.draw:
@@ -537,12 +562,12 @@ const RPS = {
       case this.Move.scissors:
         if (_viewName.localeCompare(this.GameView.playMove)) {
           document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-scissor-big.svg";
-        }      
+        }
         document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
         document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
         document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.add("move_bg_selected");
         break;
-    
+
       default:
 
         break;
@@ -551,14 +576,14 @@ const RPS = {
 
   updateMoveExpirationCountdown: function (_viewName, _endTime) {
     // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
-    this.countdown = setInterval(function() {
+    this.countdown = setInterval(function () {
       let remain = Utils.getTimeRemaining(_endTime);
 
       switch (_viewName) {
         case RPS.GameView.waitingForOpponentMove:
           document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = remain.minutes;
           document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = remain.seconds;
-          
+
           if (remain.total <= 0) {
             document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "0";
             document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "0";
@@ -568,11 +593,11 @@ const RPS = {
             document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
           }
           break;
-  
+
         case RPS.GameView.makeMove:
           document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = remain.minutes;
           document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = remain.seconds;
-          
+
           if (remain.total <= 0) {
             document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = "0";
             document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = "0";
@@ -600,7 +625,7 @@ const RPS = {
             document.getElementById(RPS.GameView.playMove + "_play_move_btn").classList.add("disabled");
           }
           break;
-  
+
         default:
           break;
       }
@@ -613,7 +638,7 @@ const RPS = {
 
   /** UI HANDLERS */
 
-  moveClicked: function(_move) {
+  moveClicked: function (_move) {
     console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
 
     if (_move > 10) {
@@ -626,7 +651,7 @@ const RPS = {
     }
   },
 
-  startGameClicked: async function() {
+  startGameClicked: async function () {
     console.log('%c startGameClicked_RPS', 'color: #e51dff');
 
     let bet = document.getElementById("cf_update_bet_input_rps").value;
@@ -667,28 +692,28 @@ const RPS = {
       value: Utils.etherToWei(bet),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("CREATE GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideAndClearNotifView();
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("CREATE GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        RPS.showGameViewForCurrentAccount();
+        ProfileManager.update();
+        hideAndClearNotifView();
+      })
+      .once('error', function (error, receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Create game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Create game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  joinGameClicked: async function() {
+  joinGameClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
 
     let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(window.BlockchainManager.rockPaperScissorsContract, window.BlockchainManager.currentAccount));
@@ -714,7 +739,7 @@ const RPS = {
 
     let gameId = document.getElementById("rpsjoingame_gameId").innerHTML;
     let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
-    
+
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
       showAlert('error', 'Not enough balance to join game.');
@@ -727,28 +752,28 @@ const RPS = {
       value: bet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("JOIN GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideAndClearNotifView();
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("JOIN GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        RPS.showGameViewForCurrentAccount();
+        ProfileManager.update();
+        hideAndClearNotifView();
+      })
+      .once('error', function (error, receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Join game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Join game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  makeMoveClicked: async function() {
+  makeMoveClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
 
     if (this.selectedMove == 0) {
@@ -762,28 +787,28 @@ const RPS = {
       from: window.BlockchainManager.currentAccount,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("MAKE MOVE transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideAndClearNotifView();
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("MAKE MOVE transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        RPS.showGameViewForCurrentAccount();
+        ProfileManager.update();
+        hideAndClearNotifView();
+      })
+      .once('error', function (error, receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Make move error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Make move error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  playMoveClicked: async function() {
+  playMoveClicked: async function () {
     console.log('%c playMoveClicked', 'color: #e51dff');
 
     //  prev
@@ -807,7 +832,7 @@ const RPS = {
         showAlert("error", "Please select next move.");
         return;
       }
-  
+
       if (seedStr.length == 0) {
         showAlert("error", "Please enter next move seed phrase.");
         return;
@@ -828,37 +853,37 @@ const RPS = {
       from: window.BlockchainManager.currentAccount,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("PLAY MOVE transaction ", hash);
-    })
-    .once('receipt', async function(receipt){
-      ProfileManager.update();
-      hideAndClearNotifView();
+      .on('transactionHash', function (hash) {
+        // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("PLAY MOVE transaction ", hash);
+      })
+      .once('receipt', async function (receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
 
-      const gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
-      if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
-        RPS.showGameViewForCurrentAccount();
-      } else {
-        let resultView = RPS.resultViewForGame(gameInfo);
-        RPS.showGameView(resultView, null);
+        const gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+        if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
+          RPS.showGameViewForCurrentAccount();
+        } else {
+          let resultView = RPS.resultViewForGame(gameInfo);
+          RPS.showGameView(resultView, null);
 
+          hideSpinner(Spinner.gameView);
+        }
+      })
+      .once('error', function (error, receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
         hideSpinner(Spinner.gameView);
-      }
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
-      
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Play move error...");
-        throw new Error(error, receipt);
-      }
-    });
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Play move error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  quitGameClicked: async function(_viewName) {
+  quitGameClicked: async function (_viewName) {
     console.log('%c quitGameClicked_RPS: %s', 'color: #e51dff', _viewName);
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
@@ -868,35 +893,35 @@ const RPS = {
       gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
     }
     console.log("gameId: ", gameId);
-    
+
     showSpinner(Spinner.gameView);
     window.BlockchainManager.rockPaperScissorsContract.methods.quitGame(gameId).send({
       from: window.BlockchainManager.currentAccount,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("QUIT GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      RPS.showGameView(RPS.GameView.lost, null);
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("QUIT GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        RPS.showGameView(RPS.GameView.lost, null);
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Quit game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Quit game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  claimExpiredGameClicked: async function(_viewName) {
+  claimExpiredGameClicked: async function (_viewName) {
     console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', _viewName);
 
     let gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
@@ -904,35 +929,35 @@ const RPS = {
       gameId = document.getElementById("rpsmakemove_game_id").innerHTML;
     }
     console.log("gameId: ", gameId);
-    
+
     showSpinner(Spinner.gameView);
     window.BlockchainManager.rockPaperScissorsContract.methods.finishExpiredGame(gameId).send({
       from: window.BlockchainManager.currentAccount,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("CLAIM EXPIRED GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      RPS.showGameView(RPS.GameView.won, null);
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("CLAIM EXPIRED GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        RPS.showGameView(RPS.GameView.won, null);
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Claim expired game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Claim expired game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  increaseBetClicked: async function() {
+  increaseBetClicked: async function () {
     console.log('%c increaseBetClicked_RPS:', 'color: #e51dff');
 
     let bet = document.getElementById("rpswfopponent_increse_bet").value;
@@ -942,39 +967,39 @@ const RPS = {
     }
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    
+
     showSpinner(Spinner.gameView);
     window.BlockchainManager.rockPaperScissorsContract.methods.increaseBetForGameBy(gameId).send({
       from: window.BlockchainManager.currentAccount,
       value: Utils.etherToWei(bet).toString(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("INCREASE BET transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
-      
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.updateCurrentAccountBalanceUI();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("INCREASE BET transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Increase bet error...");
-        throw new Error(error, receipt);
-      }
+        RPS.showGameViewForCurrentAccount();
+        ProfileManager.updateCurrentAccountBalanceUI();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Increase bet error...");
+          throw new Error(error, receipt);
+        }
+
+      });
   },
 
-  pauseGameClicked: async function() {
+  pauseGameClicked: async function () {
     console.log('%c pauseGameClicked_RPS:', 'color: #e51dff');
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
@@ -984,36 +1009,36 @@ const RPS = {
     gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
   },
 
-  pauseGame: async function(_gameId) {
+  pauseGame: async function (_gameId) {
     console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
 
     window.BlockchainManager.rockPaperScissorsContract.methods.pauseGame(_gameId).send({
       from: window.BlockchainManager.currentAccount,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("PAUSE GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      hideAndClearNotifView();
-      ProfileManager.update();
-      RPS.showGameViewForCurrentAccount();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("PAUSE GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        hideAndClearNotifView();
+        ProfileManager.update();
+        RPS.showGameViewForCurrentAccount();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Pause game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Pause game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
-  unpauseGame: async function(_gameId) {
+  unpauseGame: async function (_gameId) {
     console.log('%c unpauseGame_RPS:', 'color: #e51dff');
 
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
@@ -1026,31 +1051,31 @@ const RPS = {
       value: Game.minBet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("UNPAUSE GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      ProfileManager.update();
-      hideAndClearNotifView();
-      RPS.showGameViewForCurrentAccount();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("UNPAUSE GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
+        RPS.showGameViewForCurrentAccount();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Unpause game error...");
-        throw new Error(error, receipt);
-      }
-    });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Unpause game error...");
+          throw new Error(error, receipt);
+        }
+      });
   },
 
   makeTopClicked: async function () {
     console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
-    
+
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
       showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
       return;
@@ -1063,26 +1088,26 @@ const RPS = {
       value: Game.minBet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-    .on('transactionHash', function(hash){
-      // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("MAKE TOP GAME transaction ", hash);
-    })
-    .once('receipt', function(receipt){
-      ProfileManager.update();
-      hideAndClearNotifView();
-      RPS.showGameViewForCurrentAccount();
-      hideSpinner(Spinner.gameView);
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      ProfileManager.update();
-      hideAndClearNotifView();
-      hideSpinner(Spinner.gameView);
+      .on('transactionHash', function (hash) {
+        // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("MAKE TOP GAME transaction ", hash);
+      })
+      .once('receipt', function (receipt) {
+        ProfileManager.update();
+        hideAndClearNotifView();
+        RPS.showGameViewForCurrentAccount();
+        hideSpinner(Spinner.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideAndClearNotifView();
+        hideSpinner(Spinner.gameView);
 
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "MAKE TOP GAME error...");
-        throw new Error(error, receipt);
-      }
-    })
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "MAKE TOP GAME error...");
+          throw new Error(error, receipt);
+        }
+      })
   },
 
   closeResultView: function () {

@@ -9,7 +9,7 @@
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet }}</b></span>
+        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
@@ -53,7 +53,7 @@
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet }}</b></span>
+        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
@@ -91,7 +91,7 @@
           <div class="col-4 pr-0">
             <p class="mb-1 mt-4">{{ $t('GAME_BET') }}:</p>
             <span class="f16">
-              <b id="gameBet_makeTop">{{ currentBet }}</b>
+              <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
             </span>
           </div>
           <div class="col-8 pr-0">
@@ -105,7 +105,7 @@
           <div class="col-5 offset-1">
             <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
           </div>
-          <div class="col-5">
+          <div class="col-5 button-border-left">
             <button class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
           </div>
         </div>
@@ -158,7 +158,7 @@
           <div class="col-5 offset-1">
             <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
           </div>
-          <div class="col-5">
+          <div class="col-5 button-border-left">
             <button class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
           </div>
         </div>
@@ -217,7 +217,7 @@
     name: "CoinflipGameComponent",
     data: function () {
       return {
-        currentBet: ''
+        currentBet: 0
       }
     },
     computed: {

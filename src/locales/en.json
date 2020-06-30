@@ -66,5 +66,12 @@
   "YOU_WON": "Yeay, you won",
   "CLOSE": "CLOSE",
   "YOU_LOST": "Sorry, but you lost",
-  "YOU_DRAW": "Well, it’s draw"
+  "YOU_DRAW": "Well, it’s draw",
+  "CLAIM_EXPIRED": "CLAIM EXPIRED",
+  "WAITING_OPPONENT_MOVE": "WAITING FOR OPPONENT’S MOVE",
+  "MOVE_EXPIRED": "MOVE EXPIRED",
+  "MOVE_EXPIRED_CLAIM": "you can claim prize for expired move",
+  "PLAY_MOVE": "PLAY MOVE",
+  "ENTER_SEED2": "Enter seed phrase to finish previous move",
+  "EXPIRED2": "sorry, but your move expired"
 }

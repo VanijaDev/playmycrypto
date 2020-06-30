@@ -808,6 +808,11 @@ button:focus, input:focus {
     float: right;
     border-radius: 2px;
     color: #FFF;
+
+    &.disabled {
+      opacity: .6;
+      pointer-events: none;
+    }
   }
 
   .btn-medium-orange {
@@ -829,13 +834,12 @@ button:focus, input:focus {
     left: 12px;
     right: 0;
 
-    .offset-1 {
-      border-right: 1px solid #61A4FF;
+    .button-border-left {
+      border-left: 1px solid #61A4FF;
     }
 
     .btn-small-orange {
       width: 100%;
-      font-size: 13px;
       padding: 3px 5px;
     }
   }
@@ -947,6 +951,16 @@ button:focus, input:focus {
   }
 }
 
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.clock-icon {
+  width: 12px;
+  height: 12px;
+  vertical-align: text-bottom;
+}
+
 .list-no-style {
   list-style: none;
 }
@@ -959,6 +973,18 @@ button:focus, input:focus {
   }
 }
 
+.game-result {
+  background: rgba(255, 255, 255, 0.8);
+  width: 214px;
+  margin: auto;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 26px;
+  color: #2F80ED;
+  padding: 7px;
+  border-radius: 0 0 10px 10px;
+}
+
 #listCurrentlyPlayingGames img {
   margin-right: 10px;
 }
@@ -969,6 +995,30 @@ button:focus, input:focus {
 
 .green {
   color: #009C03;
+}
+
+.scores-block {
+  background: #FFF;
+  padding: 18px 0;
+  width: 300px;
+  margin: auto;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #2F80ED;
+
+  .scores {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    padding: 4px 30px;
+    margin: 0 20px;
+    font-size: 22px;
+  }
+
+  .one-side {
+    min-width: 65px;
+    display: inline-block;
+  }
 }
 
 @media all and (max-width: 480px) {
