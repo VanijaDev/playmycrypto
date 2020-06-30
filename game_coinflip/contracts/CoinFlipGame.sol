@@ -332,6 +332,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle {
     }
     topGames = topGamesTmp;
     devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit CF_GameAddedToTop(_id, msg.sender);
   }
