@@ -1,41 +1,16 @@
-# OXO Games
+# Coin flip game flow
 
-## Project setup
-```
-npm install
-```
+* creator creates game
+* opponent joins game
+* joining game runs coin flip logic and winners gets determined
+* fees and donations are payed after game played
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# Tic Tac Toe game flow
 
-#### Show message:
-```
-showTopBannerMessage(textBefore, hash)
-```
-
-#### Hide message:
-```
-hideTopBannerMessage()
-```
-
-#### Add block loader:
-```
-window.CommonManager.showSpinner(_spinnerViewType)
-```
-
-#### Hide block loader:
-```
-window.CommonManager.hideSpinner(_spinnerViewType)
-```
-
-#### Show back timer (seconds, callback):
-window.CommonManager.showBackTimer(10, function(){
-   console.log('Inner callback function')
-})
+* creator creates game
+* opponent joins
+  * random for first move
+* play (make moves)
+* prize gets accumulated, but not sent automatically after each game
+* all fees & commissions are calculated & payed during prize withdrawal

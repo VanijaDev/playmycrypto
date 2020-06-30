@@ -1,0 +1,31 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VanijaDev/generous_crypto_games_ethereum.git"
+  },
+  "name": "game_rock_paper_scissors",
+  "version": "1.0.0",
+  "description": "rock paper scissors game for Ethereum Blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "Ethereum",
+    "Blockchain",
+    "crypto"
+  ],
+  "author": "Ivan Solomichev",
+  "license": "ISC",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "4.2.0",
+    "openzeppelin-solidity": "3.0.1",
+    "openzeppelin-test-helpers": "^0.5.1",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle-flattener": "^1.4.4"
+  }
+}
