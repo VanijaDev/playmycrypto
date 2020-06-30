@@ -11,14 +11,23 @@
             </div>
           </div>
 
-          <div class="tmp-block">
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfstart')">Screen 1</button>
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfjoin')">Screen 2</button>
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfmaketop')">Screen 3</button>
-            <!-- <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Screen 4</button> -->
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youWon')">Screen 5</button>
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youLost')">Screen 6</button>
-            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Screen 7</button>
+          <div class="tmp-block" v-if="currentGame === 'cf'">
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfstart')">Start</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfjoin')">Join</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfmaketop')">Make Top</button>
+            <!-- <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Pause</button> -->
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youWon')">Won</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youLost')">Lost</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Draw</button>
+          </div>
+
+          <div class="tmp-block" v-if="currentGame === 'rps'">
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsstart')">Start</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpswfopponent')">Waiting Opponent</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsJoin')">Join</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpswfopponentmove')">Waiting Move</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsCreatorMove')">Creator Move</button>
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsOpponentMove')">Opponent Move</button>
           </div>
 
           <div class="mt-5">
