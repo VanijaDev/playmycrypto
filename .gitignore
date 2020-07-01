@@ -22,3 +22,4 @@ pnpm-debug.log*
 *.sw?
 
 public/*.js
+src/blockchain/contract/contract.js
