@@ -47,13 +47,13 @@
     <div class="row hidden game-block" id="cfjoin">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
-        <span id="gameId_start">0</span>
+        <span id="cf_game_id_join">0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_CREATOR') }}:</p>
-        <span id="gameCreator_start">0x0</span>
+        <span id="cf_game_creator_join" class="f10">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet ? currentBet : 0 }}</b></span>
+        <span class="f16"><b id="cf_game_bet_join">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">

@@ -517,7 +517,6 @@ const Game = {
   },
 
   gameClicked: function (_element) {
-    console.log('%c gameClicked', 'color: #e51dff');
     let idx = $(_element.parentElement).index();
     // console.log("CLICK game gameId: ", Game.availableGameIds[idx]);
     this.joinGame(idx, false);
@@ -530,7 +529,7 @@ const Game = {
   },
 
   joinGame: async function (_gameIdx, _isTopGame) {
-    // console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
+    console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 

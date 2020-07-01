@@ -47,8 +47,13 @@ const CoinFlip = {
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
+  showJoinGame: function (_gameInfo) {
+    // console.log("showJoinGame: ", _gameInfo);
+    this.showGameView("cfjoin", _gameInfo);
+  },
+
   showGameView: function (_viewName, _gameInfo){
-    console.log("showGameView: ", _viewName, _gameInfo);
+    // console.log("showGameView: ", _viewName, _gameInfo);
     if (_viewName != "youwon" && _viewName != "youlost") {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
@@ -78,10 +83,10 @@ const CoinFlip = {
         break;
 
       case "cfjoin":
-        // document.getElementById("gameId_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        // document.getElementById("gameCreator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        // document.getElementById("gameBet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        // document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
+        document.getElementById("cf_game_id_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+        document.getElementById("cf_game_creator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+        document.getElementById("cf_game_bet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+        // document.getElementById("cf_coin_oin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
       break;
 
       default:
@@ -216,14 +221,6 @@ const CoinFlip = {
 
 
 
-
-
-
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView("cfjoin", _gameInfo);
-  },
 
   showGamePlayed: function (_gameInfo) {
     // console.log("showGamePlayed: ", _gameInfo);

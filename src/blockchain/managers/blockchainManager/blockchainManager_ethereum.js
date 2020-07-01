@@ -37,8 +37,8 @@ const BlockchainManager_ethereum = {
          * Ropsten = 3
          * Kovan = 42
         */
-        if (ethereum.networkVersion != "3") {
-          throw new Error("Wrong Network. Please use Ganache for testing.")
+        if (ethereum.networkVersion != "5777") {
+          throw new Error("Wrong Network. Please use Ganache for testing. Change in BlockchainManager_ethereum -> connectToMetaMask")
         }
       } catch (error) {
         this.initted = false;
