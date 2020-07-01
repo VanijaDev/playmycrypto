@@ -68,6 +68,8 @@ const RPS = {
 
   },
 
+  // $('[data-group="waitingForOpponent"]')
+
   updateGameView: async function () {
     console.log("RPS - updateGameView");
 

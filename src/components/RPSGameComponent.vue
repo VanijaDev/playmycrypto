@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row game-block hidden" id="rpsstart">
+    <div class="row game-block" id="rpsstart">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <div class="mt-1 pt-2 text-left">
           <div>
@@ -9,7 +9,7 @@
           </div>
           <div>
             <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-            <input type="text" id="SeedPhrase"/>
+            <input type="text" id="seedPhrase" v-model="currentSeedPhrase"/>
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
@@ -356,7 +356,7 @@
       </div>
     </div>
 
-    <div class="row game-block " id="rpsopponentmove">
+    <div class="row game-block hidden" id="rpsopponentmove">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
 
         <div class="mt-1 pt-2 text-left opacity-text">
@@ -457,6 +457,7 @@
         currentBet: 0,
         gameValue: null,
         prevGameValue: null,
+        currentSeedPhrase: '',
       }
     },
     computed: {
@@ -464,7 +465,7 @@
         return this.$store.state.currency
       },
       moveDisabled() {
-        return parseFloat(this.currentBet) <= 0 || !this.gameValue;
+        return parseFloat(this.currentBet) <= 0 || !this.gameValue || this.currentSeedPhrase.length === 0;
       },
       moveJoinDisabled() {
         return this.gameValue === null;
