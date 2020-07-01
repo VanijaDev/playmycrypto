@@ -542,11 +542,11 @@ const Game = {
 
   startRaffle: function () {
     console.log('%c startRaffle', 'color: #e51dff');
-    showSpinner(Spinner.raffle);
+    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
     this.raffleStartedByMe = true;
 
-    this.gameType.methods.runRaffle().send({
-      from: window.BlockchainManager.currentAccount
+    window.BlockchainManager.gameInst(window.CommonManager.currentGame).methods.runRaffle().send({
+      from: window.BlockchainManager.currentAccount()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -556,7 +556,7 @@ const Game = {
         ProfileManager.update();
 
         Game.updateRaffleStateInfoForGame(Game.gameType, true);
-        hideAndClearNotifView();
+        hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         showAlert('error', "runRaffle");
@@ -564,7 +564,7 @@ const Game = {
         throw new Error(error, receipt);
       })
       .then(() => {
-        hideSpinner(Spinner.raffle);
+        window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
       });
   },
 }

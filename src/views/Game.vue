@@ -11,15 +11,15 @@
             </div>
           </div>
 
-          <div class="tmp-block" v-if="currentGame === 'cf'">
+          <!-- <div class="tmp-block" v-if="currentGame === 'cf'">
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfstart')">Start</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfjoin')">Join</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfmaketop')">Make Top</button>
-            <!-- <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Pause</button> -->
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Pause</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youWon')">Won</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youLost')">Lost</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Draw</button>
-          </div>
+          </div> -->
 
           <div class="tmp-block" v-if="currentGame === 'rps'">
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsstart')">Start</button>
