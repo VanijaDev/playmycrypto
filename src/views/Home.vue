@@ -11,7 +11,7 @@
           </div>
           <div class="col">
             <b>2%</b>
-            <p >{{ $t("ADVANTAGES.TEXT_6") }}</p>
+            <p>{{ $t("ADVANTAGES.TEXT_6") }}</p>
           </div>
           <div class="col">
             <b>2%</b>
@@ -201,6 +201,7 @@
     mounted() {
       console.log('Open home page');
 
+      let manager = window.BlockchainManager;
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/index.js');
       document.head.appendChild(recaptchaScript);
@@ -210,6 +211,12 @@
           window.Index.pageLoaded = true;
           window.Index.setup();
           clearInterval(loadInterval);
+
+          setTimeout(function () {
+            if (manager) {
+              window.BlockchainManager = manager;
+            }
+          }, 300);
         }
       }, 50);
     },
