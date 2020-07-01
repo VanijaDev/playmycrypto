@@ -127,6 +127,7 @@
     data: function () {
       return {
         currentGame: '',
+        managerInterval: null
       }
     },
     computed: {
@@ -136,6 +137,14 @@
     },
     mounted() {
       let manager = window.BlockchainManager;
+      if (manager) {
+        this.managerInterval = setInterval(function () {
+          if (!window.BlockchainManager.initted) {
+            window.BlockchainManager = manager;
+            clearInterval(this.managerInterval);
+          }
+        }, 50);
+      }
 
       this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
@@ -148,12 +157,7 @@
       let loadInterval = setInterval(function () {
         if (typeof window.Game !== 'undefined') {
           clearInterval(loadInterval);
-
           setTimeout(function () {
-            if (manager) {
-              window.BlockchainManager = manager;
-            }
-
             window.Game.pageLoaded = true;
             window.Game.setup();
           }, 300);
@@ -164,6 +168,10 @@
       console.log('Leave game page');
       window.Game.gameType = -1;
       document.getElementById("gameName").innerHTML = "";
+
+      if (this.managerInterval) {
+        clearInterval(this.managerInterval);
+      }
       next()
     },
   }

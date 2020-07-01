@@ -1,9 +1,9 @@
 import Web3 from 'web3';
-import { Utils } from "../../utils";
-import { ProfileManager } from "../profileManager";
-import { CoinFlipData, RockPaperScissorsData } from "../../contract/contract";
+import {Utils} from "../../utils";
+import {ProfileManager} from "../profileManager";
+import {CoinFlipData, RockPaperScissorsData} from "../../contract/contract";
 import Types from "../../types";
-import { PromiseManager } from '../promiseManager';
+import {PromiseManager} from '../promiseManager';
 import BigNumber from 'bignumber.js';
 
 
@@ -31,13 +31,13 @@ const BlockchainManager_ethereum = {
         await ethereum.enable();
 
         this.currentNetworkVersion = ethereum.networkVersion;
-        /** 
+        /**
          * Ganache = 5777
          * Main Net = 1
          * Ropsten = 3
          * Kovan = 42
-        */
-        if (ethereum.networkVersion != "5777") {
+         */
+        if (ethereum.networkVersion != "3") {
           throw new Error("Wrong Network. Please use Ganache for testing. Change in BlockchainManager_ethereum -> connectToMetaMask")
         }
       } catch (error) {
@@ -80,9 +80,9 @@ const BlockchainManager_ethereum = {
     ProfileManager.update();
   },
 
-  accountChanged: async function() {
+  accountChanged: async function () {
     // console.log('%c BlockchainManager_ethereum - accountChanged', 'color: #00aa00');
-    
+
     if (!this.initted) {
       console.log("! initted");
       return;
@@ -92,7 +92,7 @@ const BlockchainManager_ethereum = {
     ProfileManager.update();
   },
 
-  gameInst: function(_gameType) {
+  gameInst: function (_gameType) {
     // console.log("gameInst e: ", _gameType);
     let gameInst;
 
@@ -104,7 +104,7 @@ const BlockchainManager_ethereum = {
       case Types.Game.rps:
         gameInst = this.contract_inst_rps;
         break;
-    
+
       default:
         console.error("bm_e gameInst");
         break;
@@ -122,7 +122,7 @@ const BlockchainManager_ethereum = {
 
     return new BigNumber(referralFees_cf).plus(referralFees_rps);
   },
-  
+
   ongoinRafflePrize: async function () {
     let ongoinRafflePrize_cf = await PromiseManager.ongoinRafflePrizePromise(Types.Game.cf);
     // console.log("ongoinRafflePrize_cf: ", ongoinRafflePrize_cf.toString());
@@ -131,7 +131,7 @@ const BlockchainManager_ethereum = {
 
     return new BigNumber(ongoinRafflePrize_cf).plus(ongoinRafflePrize_rps);
   },
-  
+
   partnerFeeUsedTotal: async function (_gameType) {
     let partnerFeeTotalUsed = await PromiseManager.partnerFeeUsedTotalPromise(_gameType);
     // console.log("partnerFeeTotalUsed: ", _gameType, partnerFeeTotalUsed.toString());
@@ -172,7 +172,7 @@ const BlockchainManager_ethereum = {
    * HELPERS
    */
 
-  getBalance: async function() {
+  getBalance: async function () {
     return await web3.eth.getBalance(this.currentAccount);
   },
 
