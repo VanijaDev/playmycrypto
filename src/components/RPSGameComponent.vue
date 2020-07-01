@@ -69,13 +69,13 @@
           <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
           <div class="row">
-            <div class="col-4 pr-0">
+            <div class="col-sm-4 pr-0">
               <p class="mb-2 mt-4 f10">{{ $t('GAME_BET') }}:</p>
               <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
             </div>
-            <div class="col-8 pr-0">
-              <label class="pt-4 f10">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
-              <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input" v-model="currentBet"/>
+            <div class="col-sm-8 pr-0">
+              <label class="text-center pt-sm-4 f10">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
+              <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
               <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
             </div>
           </div>
@@ -294,11 +294,11 @@
 
         <div id="previousNextMoveCreator" data-group="creatorMove">
           <div class="row mt-5">
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4 text-sm-right">
               <h5>Previous move:</h5>
             </div>
             <div class="col-sm-6">
-              <div class="text-left">
+              <div class="text-sm-left text-center">
                 <button class="btn btn-link game-move-item game-move-small mr-4" v-bind:class="{active: prevGameValue===1}" @click="selectPreviousValue(1)">
                   <img src="/img/game-icon-scissor-big.svg" v-if="prevGameValue!==1">
                   <img src="/img/game-icon-scissor-white.svg" v-if="prevGameValue===1">
@@ -314,18 +314,18 @@
                 </button>
               </div>
 
-              <div class="opacity-text mt-3">
+              <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED2') }}:</label>
                 <input type="text" id="seedPhrase"/>
               </div>
             </div>
           </div>
           <div class="row mt-5">
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4 text-sm-right">
               <h5>Next move:</h5>
             </div>
             <div class="col-sm-6">
-              <div class="text-left">
+              <div class="text-sm-left text-center">
                 <button class="btn btn-link game-move-item game-move-middle mr-4" v-bind:class="{active: gameValue===1}" @click="selectValue(1)">
                   <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
                   <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
@@ -340,7 +340,7 @@
                 </button>
               </div>
 
-              <div class="opacity-text mt-3">
+              <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED') }}:</label>
                 <input type="text" id="seedPhrase"/>
               </div>
@@ -593,6 +593,16 @@
     }
     .desktop-move {
       display: none;
+    }
+
+    .game-area .bottom-buttons {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      margin-top: 10px;
+    }
+    .game-area .btn-small-orange {
+      float: none;
     }
   }
 </style>

@@ -1120,6 +1120,17 @@ button:focus, input:focus {
   .rounded-button.float-right {
     float: none !important;
   }
+
+  .align-self-start {
+    margin-left: 20px;
+  }
+
+  .mr-game-name {
+    position: absolute;
+    font-size: 16px;
+    top: 78px;
+    left: -8px;
+  }
 }
 
 .pending-dot {

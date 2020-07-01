@@ -1,4 +1,3 @@
-import BlockchainManager from "./blockchainManager/blockchainManager";
 import {PromiseManager} from "./promiseManager";
 import {Utils} from "../utils";
 import BigNumber from "bignumber.js";
@@ -269,7 +268,7 @@ let ProfileManager = {
     }
   },
 
-  
+
   /**
    * HELPERS
    */
@@ -293,7 +292,9 @@ let ProfileManager = {
         var btn = document.createElement("BUTTON");
         btn.classList.add("btn");
         btn.classList.add("btn-animated");
-        btn.onclick = function(){ProfileManager.pendingClicked(this, _pendingTarget, gameType);};
+        btn.onclick = function () {
+          ProfileManager.pendingClicked(this, _pendingTarget, gameType);
+        };
 
         var img = document.createElement('IMG');
         img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(gameType) + ".svg");
