@@ -183,6 +183,7 @@
     data: function () {
       return {
         visibleInfoTooltip: 0,
+        managerInterval: null
       }
     },
     computed: {
@@ -202,6 +203,15 @@
       console.log('Open home page');
 
       let manager = window.BlockchainManager;
+      if (manager) {
+        this.managerInterval = setInterval(function () {
+          if (!window.BlockchainManager.initted) {
+            window.BlockchainManager = manager;
+            clearInterval(this.managerInterval);
+          }
+        }, 50);
+      }
+
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/index.js');
       document.head.appendChild(recaptchaScript);
@@ -211,19 +221,16 @@
           window.Index.pageLoaded = true;
           window.Index.setup();
           clearInterval(loadInterval);
-
-          setTimeout(function () {
-            if (manager) {
-              window.BlockchainManager = manager;
-            }
-          }, 300);
         }
       }, 50);
     },
     beforeRouteLeave(to, from, next) {
       console.log('Leave home page');
-
       window.Index.onUnload();
+
+      if (this.managerInterval) {
+        clearInterval(this.managerInterval);
+      }
       next()
     },
     directives: {
