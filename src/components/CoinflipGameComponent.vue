@@ -60,8 +60,8 @@
         <h3 class="mt-4 mb-4 f18">{{ $t('JOIN_GAME') }}</h3>
         <h2 class="f24">{{ $t('COIN_SIDE') }}:</h2>
 
-        <button id="ethereumFlip" class="btn btn-link" onclick="window.CoinFlip.coinSideChanged(0)">
-          <img src="/img/ethereum-orange.svg">
+        <button id="ethereumFlip" class="btn btn-link">
+          <img id="cf_coin_join" src="/img/ethereum-orange.svg">
         </button>
 
         <form class="row mt-4 pt-2">
@@ -71,7 +71,7 @@
           </div>
         </form>
 
-        <button class="btn btn-start-game" onclick="window.CoinFlip.startGame()">
+        <button class="btn btn-start-game" onclick="window.CoinFlip.coinflipJoinAndPlay()">
           <img src="/img/icon-btn-start.svg" class="mr-3">
           {{ $t('JOIN_GAME') }}
         </button>
@@ -183,7 +183,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-won.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_WON') }}!</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 
@@ -191,7 +191,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-lose.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_LOST') }}...</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 
@@ -199,7 +199,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-draw.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_DRAW') }}.</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 

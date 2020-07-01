@@ -529,7 +529,7 @@ const Game = {
   },
 
   joinGame: async function (_gameIdx, _isTopGame) {
-    console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
+    console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 

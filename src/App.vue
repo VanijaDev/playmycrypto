@@ -262,7 +262,7 @@
         }
 
         console.log('%c index - networkChanged', 'color: #00aa00');
-        window.BlockchainManager.setup();
+        // window.BlockchainManager.setup();
       });
     },
 

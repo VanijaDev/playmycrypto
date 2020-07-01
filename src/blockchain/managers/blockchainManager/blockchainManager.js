@@ -102,70 +102,6 @@ const BlockchainManager = {
     return this.currentBlockchain.gameInst(_gameType);
   },
 
-
-  // connectToMetaMask: async function () {
-  //   // console.log('%c BlockchainManager - connectToMetaMask', 'color: #00aa00');
-
-  //   // Modern dapp browsers...
-  //   if (window.ethereum) {
-  //     console.log("Modern dapp browsers...");
-
-  //     window.web3 = new Web3(ethereum);
-
-  //     try {
-  //       await ethereum.enable();
-
-  //       this.currentNetworkVersion = ethereum.networkVersion;
-  //       /**
-  //        * Ganache = 5777
-  //        * Main Net = 1
-  //        * Ropsten = 3
-  //        * Kovan = 42
-  //       */
-  //       if (ethereum.networkVersion != "3") {
-  //         throw new Error("Wrong Network. Please use Ropsten for testing.")
-  //       }
-  //     } catch (error) {
-  //       window.BlockchainManager.initted = false;
-  //       showAlert('error', error.message);
-  //       return false;
-  //     }
-  //   }
-  //   // Legacy dapp browsers...
-  //   else if (window.web3) {
-  //     console.log("Legacy dapp browsers...");
-  //     // window.web3 = new Web3(web3.currentProvider);
-  //       window.BlockchainManager.initted = false;
-  //     showAlert('error', 'Legacy dapp browsers... Working on compatibility.');
-  //     throw new Error('Please install MetaMask.')
-  //   }
-  //   // Non-dapp browsers...
-  //   else {
-  //     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-  //     window.BlockchainManager.initted = false;
-  //     return false;
-  //   }
-
-  //   ethereum.autoRefreshOnNetworkChange = false;
-  //   window.BlockchainManager.initted = true;
-  //   return true;
-  // },
-
-  // setup: async function () {
-  //   console.log('%c BlockchainManager - setup', 'color: #00aa00');
-
-  //   if (!await this.connectToMetaMask()) {
-  //     return;
-  //   }
-
-  //   this.currentAccount = (await ethereum.enable())[0];
-  //   this.coinFlipContract = CoinFlipData.build();
-  //   this.rockPaperScissorsContract = RockPaperScissorsData.build();
-  //   this.blockchainChanged(0);
-
-  //   ProfileManager.update();
-  // },
-
   blockchainChanged: function (_blockchainType) {
     return;
 
@@ -246,7 +182,7 @@ const BlockchainManager = {
   gasPriceNormalizedString: async function () {
     let gasPrice = await web3.eth.getGasPrice();
     console.log("gasPrice: ", gasPrice);
-    let gasPriceNormalizedString = (parseInt(gasPrice) * 120).toString();
+    let gasPriceNormalizedString = (parseInt(gasPrice) * 1.2).toString();
     console.log("     !!! gasPriceNormalizedString: ", gasPriceNormalizedString);
     return gasPriceNormalizedString;
   },
