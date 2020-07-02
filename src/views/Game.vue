@@ -119,10 +119,10 @@
     </div>
 
     <div id="translations"
-         v-bind:data-creator="$t('CREATOR')"
-         v-bind:data-bet="$t('BET')"
-         v-bind:data-winner="$t('WINNER')"
-         v-bind:data-prize="$t('PRIZE')"
+         v-bind:data-CREATOR="$t('CREATOR')"
+         v-bind:data-BET="$t('BET')"
+         v-bind:data-WINNER="$t('WINNER')"
+         v-bind:data-PRIZE="$t('PRIZE')"
     ></div>
   </div>
 </template>

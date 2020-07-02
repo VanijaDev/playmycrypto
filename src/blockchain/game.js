@@ -618,18 +618,18 @@ String.prototype.composetmp = (function () {
   }
 }());
 
-var $t = $('#translations');
+var $t = $('#translations').data();
 
 var TableAvailableGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('creator') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.creator + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('bet') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.bet + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
   '</p>' +
@@ -640,12 +640,12 @@ var TopGamesTemplate = '<li>' +
   '<div class="bordered blue-border mt-1 game-cell" onclick="Game.topGameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('creator') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.creator + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('bet') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.bet + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
 
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
@@ -657,12 +657,12 @@ var RaffleGamesTemplate = '<li>' +
   '<div class="bordered mt-1"">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('winner') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.winner + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('prize') + ':</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.prize + ':</span>' +
   '<span class="text-primary"><b>{{amount}}</b></span>' +
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
   '<span class="float-right text-black-50">{{timeago}}</span>' +
