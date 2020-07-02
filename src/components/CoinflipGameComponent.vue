@@ -47,21 +47,21 @@
     <div class="row hidden game-block" id="cfjoin">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <p class="mb-1">{{ $t('GAME_ID') }}:</p>
-        <span id="gameId_start">0</span>
+        <span id="cf_game_id_join">0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_CREATOR') }}:</p>
-        <span id="gameCreator_start">0x0</span>
+        <span id="cf_game_creator_join" class="f10">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-        <span class="f16"><b id="gameBetCurrent_start">{{ currentBet ? currentBet : 0 }}</b></span>
+        <span class="f16"><b id="cf_game_bet_join">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
       <div class="col-sm-8 border-left text-center inner-column">
         <h3 class="mt-4 mb-4 f18">{{ $t('JOIN_GAME') }}</h3>
         <h2 class="f24">{{ $t('COIN_SIDE') }}:</h2>
 
-        <button id="ethereumFlip" class="btn btn-link" onclick="window.CoinFlip.coinSideChanged(0)">
-          <img src="/img/ethereum-orange.svg">
+        <button id="ethereumFlip" class="btn btn-link">
+          <img id="cf_coin_join" src="/img/ethereum-orange.svg">
         </button>
 
         <form class="row mt-4 pt-2">
@@ -71,7 +71,7 @@
           </div>
         </form>
 
-        <button class="btn btn-start-game" onclick="window.CoinFlip.startGame()">
+        <button class="btn btn-start-game" onclick="window.CoinFlip.coinflipJoinAndPlay()">
           <img src="/img/icon-btn-start.svg" class="mr-3">
           {{ $t('JOIN_GAME') }}
         </button>
@@ -183,7 +183,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-won.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_WON') }}!</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 
@@ -191,7 +191,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-lose.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_LOST') }}...</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 
@@ -199,7 +199,7 @@
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-draw.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_DRAW') }}.</h2>
-        <button class="btn btn-medium-orange">{{ $t('CLOSE') }}</button>
+        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
 

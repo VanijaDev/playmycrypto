@@ -47,9 +47,14 @@ const CoinFlip = {
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
+  showJoinGame: function (_gameInfo) {
+    // console.log("showJoinGame: ", _gameInfo);
+    this.showGameView("cfjoin", _gameInfo);
+  },
+
   showGameView: function (_viewName, _gameInfo){
-    console.log("showGameView: ", _viewName, _gameInfo);
-    if (_viewName != "youwon" && _viewName != "youlost") {
+    // console.log("showGameView: ", _viewName, _gameInfo);
+    if (_viewName != "youWon" && _viewName != "youLost") {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
 
@@ -78,11 +83,11 @@ const CoinFlip = {
         break;
 
       case "cfjoin":
-        // document.getElementById("gameId_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        // document.getElementById("gameCreator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        // document.getElementById("gameBet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        // document.getElementById("frontCoinJoin").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
-      break;
+        document.getElementById("cf_game_id_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+        document.getElementById("cf_game_creator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+        document.getElementById("cf_game_bet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+        document.getElementById("cf_coin_join").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
+        break;
 
       default:
         break;
@@ -127,7 +132,7 @@ const CoinFlip = {
     .once('receipt', function(receipt){
       CoinFlip.showGameViewForCurrentAccount();
       ProfileManager.update();
-      hideAndClearNotifView();
+      hideTopBannerMessage();
     })
     .once('error', function (error, receipt) {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
@@ -162,7 +167,7 @@ const CoinFlip = {
     .once('receipt', function(receipt){
       CoinFlip.showGameViewForCurrentAccount();
       ProfileManager.update();
-      hideAndClearNotifView();
+      hideTopBannerMessage();
     })
     .once('error', function(error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
       console.log("MAKE TOP: ERROR");
@@ -198,7 +203,7 @@ const CoinFlip = {
     .once('receipt', function(receipt){
       CoinFlip.showGameViewForCurrentAccount();
       ProfileManager.update();
-      hideAndClearNotifView();
+      hideTopBannerMessage();
     })
     .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
@@ -210,32 +215,61 @@ const CoinFlip = {
     });
   },
 
+  coinflipJoinAndPlay: async function () {
+    console.log('%c coinflipJoinAndPlay', 'color: #e51dff');
 
+    let referral = document.getElementById("cf_game_referral_join").value;
+    if (referral.length > 0) {
+      if (!web3.utils.isAddress(referral)) {
+        showAlert("error", "Wrong referral address.");
+        return;
+      }
+    } else {
+      referral = this.ownerAddress;
+    }
 
+    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, document.getElementById("cf_game_id_join").innerHTML);
+    let bet = gameInfo.bet;
 
+    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
+      showAlert('error', 'Not enough balance to join game.');
+      return;
+    }
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.joinAndPlayGame(document.getElementById("cf_game_id_join").innerHTML, referral).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: bet,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function(hash){
+      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("JOIN GAME transaction: ", hash);
+    })
+    .once('receipt', function(receipt){
+      // console.log("receipt: ", receipt.events.GamePlayed.returnValues);
+      ProfileManager.update();
+      hideTopBannerMessage();
+      CoinFlip.showGamePlayed(receipt.events.GamePlayed.returnValues);
+    })
+    .once('error', function (error, receipt) {
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-
-
-
-
-
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView("cfjoin", _gameInfo);
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "JOIN GAME error...");
+        throw new Error(error, receipt);
+      }
+    });
   },
 
   showGamePlayed: function (_gameInfo) {
-    // console.log("showGamePlayed: ", _gameInfo);
+    console.log("showGamePlayed: ", _gameInfo);
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    hideAndClearNotifView();
     if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && $("#cfmaketop").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youWon", _gameInfo) : this.showGameView("youLost", _gameInfo);
     } else if ($("#cfjoin").css("display") !== "none") {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youwon", _gameInfo) : this.showGameView("youlost", _gameInfo);
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView("youWon", _gameInfo) : this.showGameView("youLost", _gameInfo);
     }
   },
-
 
   closeResultView: function () {
     this.showGameViewForCurrentAccount();
@@ -258,52 +292,6 @@ const CoinFlip = {
       default:
         break;
     }
-  }, 
-
-  coinflipJoinAndPlay: async function () {
-    console.log('%c coinflipJoinAndPlay', 'color: #e51dff');
-
-    let referral = document.getElementById("cf_game_referral_join").value;
-    if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
-        return;
-      }
-    } else {
-      referral = this.ownerAddress;
-    }
-
-    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.coinFlipContract, document.getElementById("gameId_join").innerHTML);
-    let bet = gameInfo.bet;
-    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
-      showAlert('error', 'Not enough balance to join game.');
-      return;
-    }
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.coinFlipContract.methods.joinAndPlayGame(document.getElementById("gameId_join").innerHTML, referral).send({
-      from: window.BlockchainManager.currentAccount(),
-      value: bet,
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-    .on('transactionHash', function(hash){
-      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("JOIN GAME transaction: ", hash);
-    })
-    // .once('receipt', function(receipt){
-    //   console.log("receipt: ", receipt.events.GamePlayed.returnValues);
-
-    //   hideAndClearNotifView();
-    //   CoinFlip.showGamePlayed(receipt.events.GamePlayed.returnValues);
-    // })
-    .once('error', function (error, receipt) {
-      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "JOIN GAME error...");
-        throw new Error(error, receipt);
-      }
-    });
   }
 };
 

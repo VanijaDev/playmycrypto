@@ -1,4 +1,3 @@
-import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 import {PromiseManager} from "./managers/promiseManager";
 import {CoinFlip} from "./gameView/coinFlip";
 import {RPS} from "./gameView/rps";
@@ -517,7 +516,6 @@ const Game = {
   },
 
   gameClicked: function (_element) {
-    console.log('%c gameClicked', 'color: #e51dff');
     let idx = $(_element.parentElement).index();
     // console.log("CLICK game gameId: ", Game.availableGameIds[idx]);
     this.joinGame(idx, false);
@@ -530,7 +528,7 @@ const Game = {
   },
 
   joinGame: async function (_gameIdx, _isTopGame) {
-    // console.log("joinGame _gameIdx: ", _gameIdx, ", top: ", _isTopGame);
+    console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 
@@ -543,21 +541,21 @@ const Game = {
 
   startRaffle: function () {
     console.log('%c startRaffle', 'color: #e51dff');
-    showSpinner(Spinner.raffle);
+    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
     this.raffleStartedByMe = true;
 
-    this.gameType.methods.runRaffle().send({
-      from: window.BlockchainManager.currentAccount
+    window.BlockchainManager.gameInst(window.CommonManager.currentGame).methods.runRaffle().send({
+      from: window.BlockchainManager.currentAccount()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("RUN RAFFLE transaction ", hash);
+        showTopBannerMessage("START RAFFLE transaction ", hash);
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
 
         Game.updateRaffleStateInfoForGame(Game.gameType, true);
-        hideAndClearNotifView();
+        hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         showAlert('error', "runRaffle");
@@ -565,7 +563,7 @@ const Game = {
         throw new Error(error, receipt);
       })
       .then(() => {
-        hideSpinner(Spinner.raffle);
+        window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
       });
   },
 }
@@ -620,16 +618,18 @@ String.prototype.composetmp = (function () {
   }
 }());
 
+var $t = $('#translations');
+
 var TableAvailableGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('creator') + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('bet') + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
   '</p>' +
@@ -640,12 +640,12 @@ var TopGamesTemplate = '<li>' +
   '<div class="bordered blue-border mt-1 game-cell" onclick="Game.topGameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("CREATOR") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('creator') + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("BET") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('bet') + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
 
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
@@ -657,12 +657,12 @@ var RaffleGamesTemplate = '<li>' +
   '<div class="bordered mt-1"">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("WINNER") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('winner') + ':</span>' +
   '<span class="one-line">{{address}}</span>' +
   '</p>' +
   '<p>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
-  '<span class="pl-2 pr-2 text-black-50 creator-title">{{ $t("PRIZE") }}:</span>' +
+  '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.data('prize') + ':</span>' +
   '<span class="text-primary"><b>{{amount}}</b></span>' +
   '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
   '<span class="float-right text-black-50">{{timeago}}</span>' +

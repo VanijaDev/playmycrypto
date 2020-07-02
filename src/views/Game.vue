@@ -11,15 +11,15 @@
             </div>
           </div>
 
-          <div class="tmp-block" v-if="currentGame === 'cf'">
+          <!-- <div class="tmp-block" v-if="currentGame === 'cf'">
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfstart')">Start</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfjoin')">Join</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('cfmaketop')">Make Top</button>
-            <!-- <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Pause</button> -->
+            <button class="btn btn-primary mr-2" onclick="window.showGameBlock('pausedGame')">Pause</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youWon')">Won</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('youLost')">Lost</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Draw</button>
-          </div>
+          </div> -->
 
           <div class="tmp-block" v-if="currentGame === 'rps'">
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsstart')">Start</button>
@@ -117,6 +117,13 @@
         </div>
       </div>
     </div>
+
+    <div id="translations"
+         v-bind:data-creator="$t('CREATOR')"
+         v-bind:data-bet="$t('BET')"
+         v-bind:data-winner="$t('WINNER')"
+         v-bind:data-prize="$t('PRIZE')"
+    ></div>
   </div>
 </template>
 
@@ -127,6 +134,7 @@
     data: function () {
       return {
         currentGame: '',
+        managerInterval: null
       }
     },
     computed: {
@@ -136,6 +144,14 @@
     },
     mounted() {
       let manager = window.BlockchainManager;
+      if (manager) {
+        this.managerInterval = setInterval(function () {
+          if (!window.BlockchainManager.initted) {
+            window.BlockchainManager = manager;
+            clearInterval(this.managerInterval);
+          }
+        }, 50);
+      }
 
       this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
@@ -148,12 +164,7 @@
       let loadInterval = setInterval(function () {
         if (typeof window.Game !== 'undefined') {
           clearInterval(loadInterval);
-
           setTimeout(function () {
-            if (manager) {
-              window.BlockchainManager = manager;
-            }
-
             window.Game.pageLoaded = true;
             window.Game.setup();
           }, 300);
@@ -164,6 +175,10 @@
       console.log('Leave game page');
       window.Game.gameType = -1;
       document.getElementById("gameName").innerHTML = "";
+
+      if (this.managerInterval) {
+        clearInterval(this.managerInterval);
+      }
       next()
     },
   }

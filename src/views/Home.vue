@@ -11,7 +11,7 @@
           </div>
           <div class="col">
             <b>2%</b>
-            <p >{{ $t("ADVANTAGES.TEXT_6") }}</p>
+            <p>{{ $t("ADVANTAGES.TEXT_6") }}</p>
           </div>
           <div class="col">
             <b>2%</b>
@@ -183,6 +183,7 @@
     data: function () {
       return {
         visibleInfoTooltip: 0,
+        managerInterval: null
       }
     },
     computed: {
@@ -201,6 +202,16 @@
     mounted() {
       console.log('Open home page');
 
+      let manager = window.BlockchainManager;
+      if (manager) {
+        this.managerInterval = setInterval(function () {
+          if (!window.BlockchainManager.initted) {
+            window.BlockchainManager = manager;
+            clearInterval(this.managerInterval);
+          }
+        }, 50);
+      }
+
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('src', '/index.js');
       document.head.appendChild(recaptchaScript);
@@ -215,8 +226,11 @@
     },
     beforeRouteLeave(to, from, next) {
       console.log('Leave home page');
-
       window.Index.onUnload();
+
+      if (this.managerInterval) {
+        clearInterval(this.managerInterval);
+      }
       next()
     },
     directives: {
