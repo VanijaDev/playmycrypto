@@ -11,6 +11,9 @@
             </router-link>
           </div>
           <div id="gameName" class="mr-game-name"></div>
+          <div class="contacts">
+            <a href="https://t.me/playmycrypto" target="blank" class="tele-link">Join Telegram group</a>
+            </div>
           <div class="row align-self-start">
             <div class="choose-crypto">
               Choose crypto:
