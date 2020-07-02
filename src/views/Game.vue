@@ -64,11 +64,11 @@
 
               </div>
             </div>
-            <div class="how-to-play shadow-block p20">
-              <h2 class="text-primary mb-4">
-                {{ $t('HOW_TO_PLAY') }}
-              </h2>
-              <div id="BlockHowToPlay" class="cards-pills-list scrollbar-inner" v-html="$t('HOW_TO_PLAY_TEXT')"></div>
+            <div class="how-to-play shadow-block">
+              <div class="header position-relative">
+                <h2 class="text-uppercase f22 text-center pt-2">{{ $t('HOW_TO_PLAY') }}</h2>
+              </div>
+              <div id="BlockHowToPlayCF" class="cards-pills-list scrollbar-inner p20" v-html="$t('HOW_TO_PLAY_TEXT')"></div>
             </div>
           </div>
         </div>
