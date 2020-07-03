@@ -68,7 +68,8 @@
               <div class="header position-relative">
                 <h2 class="text-uppercase f22 text-center pt-2">{{ $t('HOW_TO_PLAY') }}</h2>
               </div>
-              <div id="BlockHowToPlayCF" class="cards-pills-list scrollbar-inner p20" v-html="$t('HOW_TO_PLAY_TEXT')"></div>
+              <div id="BlockHowToPlayCF" class="cards-pills-list scrollbar-inner p20" v-if="currentGame === 'cf'" v-html="$t('HOW_TO_PLAY_CF')"></div>
+              <div id="BlockHowToPlayRPS" class="cards-pills-list scrollbar-inner p20" v-if="currentGame === 'rps'" v-html="$t('HOW_TO_PLAY_RPS')"></div>
             </div>
           </div>
         </div>
