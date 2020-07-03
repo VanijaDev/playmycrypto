@@ -5,7 +5,7 @@ import {Utils} from "./utils";
 import {NotificationManager} from "./managers/notificationManager";
 import {BigNumber} from "bignumber.js";
 import {ProfileManager} from "./managers/profileManager";
-import {HowToPlayConstructor} from "./howToPlay/howToPlayConstructor";
+// import {HowToPlayConstructor} from "./howToPlay/howToPlayConstructor";
 import Types from "./types";
 
 const Game = {
@@ -66,7 +66,7 @@ const Game = {
       this.initialSetupDone = true;
       this.gameType = window.CommonManager.currentGame;
 
-      this.setupHowToPlay();
+      // this.setupHowToPlay();
       this.subscribeToEvents(this.gameType);
     }
   },
@@ -79,11 +79,11 @@ const Game = {
     }
   },
 
-  setupHowToPlay: function () {
-    console.log('%c Game - setupHowToPlay', 'color: #00aa00');
-    let instructions = (this.gameType == Types.Game.cf) ? HowToPlayConstructor.template_cf() : HowToPlayConstructor.template_rps();
-    $('#how-to-play').append(instructions);
-  },
+  // setupHowToPlay: function () {
+  //   console.log('%c Game - setupHowToPlay', 'color: #00aa00');
+  //   let instructions = (this.gameType == Types.Game.cf) ? HowToPlayConstructor.template_cf() : HowToPlayConstructor.template_rps();
+  //   $('#how-to-play').append(instructions);
+  // },
 
   subscribeToEvents: function (_gameType) {
     NotificationManager.eventHandler = this;

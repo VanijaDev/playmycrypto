@@ -1,85 +1,93 @@
 import BlockchainManager from "../managers/blockchainManager/blockchainManager";
-import {PromiseManager} from "../managers/promiseManager";
-import {Game} from "../game";
-import {Utils} from "../utils";
+import { PromiseManager } from "../managers/promiseManager";
+import {  Game } from "../game";
+import { Utils } from "../utils";
 import BigNumber from "bignumber.js";
-import {ProfileManager} from "../managers/profileManager";
+import { ProfileManager } from "../managers/profileManager";
+import Types from "../types";
 
-//  TODO:
-//  - remove unused game views
 
 const RPS = {
-  ownerAddress: "",
-  minBet: 0,
-  currentGameView: "",
+  // ownerAddress: "",
+  // minBet: 0,
+  // currentGameView: "",
 
-  selectedMove: 0,
-  selectedPrevMove: 0,
-  skipNextMove: false,
-  countdown: null,
+  // selectedMove: 0,
+  // selectedPrevMove: 0,
+  // skipNextMove: false,
+  // countdown: null,
 
-  Move: {
-    none: 0,
-    rock: 1,
-    paper: 2,
-    scissors: 3
-  },
+  // Move: {
+  //   none: 0,
+  //   rock: 1,
+  //   paper: 2,
+  //   scissors: 3
+  // },
 
-  MoveWinner: {
-    draw: 0,
-    creator: 1,
-    opponent: 2
-  },
+  // MoveWinner: {
+  //   draw: 0,
+  //   creator: 1,
+  //   opponent: 2
+  // },
 
-  GameView: {
-    startNew: "rpsstart",
-    waitingForOpponent: "rpswfopponent",
-    waitingForOpponentMove: "rpswfopponentmove",
-    join: "rpsjoingame",
-    waitOpponentMove: "rpswfopponentmove",
-    creatorMove: "rpscreatormove",
-    opponentMove: "rpsopponentmove",
-    playMove: "rpsplaymove",
-    makeMove: "rpsmakemove",
-    won: "rpsyouwon",
-    lost: "rpsyoulost",
-    draw: "rpsdraw",
-  },
+  // GameView: {
+  //   startNew: "rpsstart",
+  //   waitingForOpponent: "rpswfopponent",
+  //   waitingForOpponentMove: "rpswfopponentmove",
+  //   join: "rpsjoingame",
+  //   waitOpponentMove: "rpswfopponentmove",
+  //   creatorMove: "rpscreatormove",
+  //   opponentMove: "rpsopponentmove",
+  //   playMove: "rpsplaymove",
+  //   makeMove: "rpsmakemove",
+  //   won: "rpsyouwon",
+  //   lost: "rpsyoulost",
+  //   draw: "rpsdraw",
+  // },
 
-  InnerGameViews: {
-    waitingForOpponent: {
-      gamePaused: 'gamePaused',
-      makeTop: 'make_top_block_makeTop'
-    },
-    waitingForOpponentMove: {
-      moveExpired: 'moveExpired'
-    },
-    creatorMove: {
-      playMove: 'creatorPlayMoveButton',
-      previousNextMove: 'previousNextMoveCreator',
-      moveExpired: 'moveExpiredCreator'
-    },
-    opponentMove: {
-      playMove: 'opponentPlayMoveButton',
-      claimExpired: 'claimExpiredButton',
-      opponentMove: 'opponentMoveBlock',
-      moveExpired: 'moveExpiredOpponent',
-    }
+  // InnerGameViews: {
+  //   waitingForOpponent: {
+  //     gamePaused: 'gamePaused',
+  //     makeTop: 'make_top_block_makeTop'
+  //   },
+  //   waitingForOpponentMove: {
+  //     moveExpired: 'moveExpired'
+  //   },
+  //   creatorMove: {
+  //     playMove: 'creatorPlayMoveButton',
+  //     previousNextMove: 'previousNextMoveCreator',
+  //     moveExpired: 'moveExpiredCreator'
+  //   },
+  //   opponentMove: {
+  //     playMove: 'opponentPlayMoveButton',
+  //     claimExpired: 'claimExpiredButton',
+  //     opponentMove: 'opponentMoveBlock',
+  //     moveExpired: 'moveExpiredOpponent',
+  //   }
 
-  },
+  // },
 
   // $('[data-group="waitingForOpponent"]')
 
   updateGameView: async function () {
     console.log("RPS - updateGameView");
 
-    showSpinner(Spinner.gameView);
-    this.ownerAddress = await PromiseManager.getOwnerPromise(window.BlockchainManager.rockPaperScissorsContract);
-    this.minBet = await PromiseManager.minBetForGamePromise(window.BlockchainManager.rockPaperScissorsContract);
+    // showSpinner(Spinner.gameView);
+    // this.ownerAddress = await PromiseManager.getOwnerPromise(window.BlockchainManager.rockPaperScissorsContract);
+    // this.minBet = await PromiseManager.minBetForGamePromise(window.BlockchainManager.rockPaperScissorsContract);
 
-    this.setPlaceholders();
-    this.showGameViewForCurrentAccount();
+    // this.setPlaceholders();
+    // this.showGameViewForCurrentAccount();
   },
+
+
+
+
+
+
+
+
+
 
   setPlaceholders: function () {
     $('#cf_game_referral_start_rps')[0].placeholder = this.ownerAddress;
@@ -637,6 +645,7 @@ const RPS = {
       }
     }, 1000);
   },
+
 
   /** UI HANDLERS */
 
