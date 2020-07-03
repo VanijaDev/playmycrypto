@@ -1171,3 +1171,10 @@ button:focus, input:focus {
   font-weight: bolder;
   text-decoration: underline;
 }
+
+#gameBlock {
+  .money-icon {
+    width: 14px;
+    vertical-align: bottom;
+  }
+}
