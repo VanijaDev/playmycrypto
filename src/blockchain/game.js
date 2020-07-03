@@ -48,6 +48,7 @@ const Game = {
     if (this.gameType == Types.Game.cf) {
       document.getElementById("gameName").innerHTML = "CoinFlip";
       CoinFlip.updateGameView();
+      await this.updateSuspendedViewForGame(this.gameType);
     } else if (this.gameType == Types.Game.rps) {
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
       // RPS.updateGameView();  TODO
@@ -56,7 +57,6 @@ const Game = {
     }
 
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    await this.updateSuspendedViewForGame(this.gameType);
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
   },
@@ -66,7 +66,6 @@ const Game = {
       this.initialSetupDone = true;
       this.gameType = window.CommonManager.currentGame;
 
-      // this.setupHowToPlay();
       this.subscribeToEvents(this.gameType);
     }
   },
@@ -78,12 +77,6 @@ const Game = {
       return Types.Game.rps;
     }
   },
-
-  // setupHowToPlay: function () {
-  //   console.log('%c Game - setupHowToPlay', 'color: #00aa00');
-  //   let instructions = (this.gameType == Types.Game.cf) ? HowToPlayConstructor.template_cf() : HowToPlayConstructor.template_rps();
-  //   $('#how-to-play').append(instructions);
-  // },
 
   subscribeToEvents: function (_gameType) {
     NotificationManager.eventHandler = this;
@@ -125,11 +118,14 @@ const Game = {
 
   loadTopGamesForGame: async function (_gameType) {
     window.CommonManager.showSpinner(Types.SpinnerView.topGames);
+    let ownGame;
 
     if (_gameType == Types.Game.cf) {
       console.log("loadTopGamesForGame - CF");
+      ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
     } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
       console.log("loadTopGamesForGame - RPS");
+      ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
     }
 
     $('#topGamesBlock').empty();
@@ -137,8 +133,6 @@ const Game = {
 
     let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
     this.topGameIds = this.topGameIds.concat(topGameIds_tmp);
-
-    let ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
 
     let ownGameTopGamesIdx = this.topGameIds.indexOf(ownGame);
 
