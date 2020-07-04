@@ -72,32 +72,33 @@ const RPS = {
   updateGameView: async function () {
     console.log("RPS - updateGameView");
 
-    // showSpinner(Spinner.gameView);
-    // this.ownerAddress = await PromiseManager.getOwnerPromise(window.BlockchainManager.rockPaperScissorsContract);
-    // this.minBet = await PromiseManager.minBetForGamePromise(window.BlockchainManager.rockPaperScissorsContract);
+    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
+    this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
-    // this.setPlaceholders();
+    this.setPlaceholders();
     // this.showGameViewForCurrentAccount();
   },
 
-
-
-
-
-
-
-
-
-
   setPlaceholders: function () {
-    $('#cf_game_referral_start_rps')[0].placeholder = this.ownerAddress;
-    $('#cf_game_referral_join_rps')[0].placeholder = this.ownerAddress;
-    $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
-    $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
-    $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
-    $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#rps_game_referral_start')[0].placeholder = this.ownerAddress;
+    $('#rps_next_move_seed_start')[0].placeholder = "Any string, but MEMORIZE it !";
+    $('#rps_bet_input_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#rps_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    // $('#cf_game_referral_join_rps')[0].placeholder = this.ownerAddress;
+    // $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
+    // $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
+    // $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
+    // $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    // $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
+
+
+
+
+
+
+
 
   showGameViewForCurrentAccount: async function () {
     showSpinner(Spinner.gameView);
@@ -444,7 +445,7 @@ const RPS = {
 
     switch (_viewName) {
       case this.GameView.startNew:
-        document.getElementById("cf_game_referral_start_rps").value = "";
+        document.getElementById("rps_game_referral_start").value = "";
         document.getElementById("seed_start_rps").value = "";
         document.getElementById("cf_update_bet_input_rps").value = "";
         this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
@@ -687,7 +688,7 @@ const RPS = {
     let seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
-    let referral = document.getElementById("cf_game_referral_start_rps").value;
+    let referral = document.getElementById("rps_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");

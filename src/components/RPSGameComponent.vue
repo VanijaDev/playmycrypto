@@ -5,17 +5,17 @@
         <div class="mt-1 pt-2 text-left">
           <div>
             <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="Referal"/>
+            <input type="text" id="rps_game_referral_start" class="game_view-value referral-addr"/>
           </div>
           <div>
             <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-            <input type="text" id="seedPhrase" v-model="currentSeedPhrase"/>
+            <input type="text" id="rps_next_move_seed_start" v-model="currentSeedPhrase"/>
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
               {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
             </label>
-            <input type="number" step="0.01" min="0.01" id="Bet" class="bet-input" v-model="currentBet"/>
+            <input type="number" step="0.01" min="0.01" id="rps_bet_input_start" class="bet-input" v-model="currentBet"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveDisabled}" @click="startMove()">
@@ -75,7 +75,7 @@
             </div>
             <div class="col-sm-8 pr-0">
               <label class="text-center pt-sm-4 f10">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
-              <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <input id="rps_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
               <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
             </div>
           </div>
@@ -129,7 +129,7 @@
 
           <div>
             <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="Referal"/>
+            <input type="text" id="cf_game_referral_join_rps"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
@@ -454,7 +454,7 @@
     name: "RPSGameComponent",
     data: function () {
       return {
-        currentBet: 0,
+        currentBet: 0.01,
         gameValue: null,
         prevGameValue: null,
         currentSeedPhrase: '',

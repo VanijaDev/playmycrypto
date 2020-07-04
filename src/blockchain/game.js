@@ -5,7 +5,6 @@ import {Utils} from "./utils";
 import {NotificationManager} from "./managers/notificationManager";
 import {BigNumber} from "bignumber.js";
 import {ProfileManager} from "./managers/profileManager";
-// import {HowToPlayConstructor} from "./howToPlay/howToPlayConstructor";
 import Types from "./types";
 
 const Game = {
@@ -51,7 +50,7 @@ const Game = {
       await this.updateSuspendedViewForGame(this.gameType);
     } else if (this.gameType == Types.Game.rps) {
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
-      // RPS.updateGameView();  TODO
+      RPS.updateGameView();
     } else {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
