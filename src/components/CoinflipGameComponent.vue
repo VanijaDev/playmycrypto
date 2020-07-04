@@ -8,7 +8,10 @@
         <span id="gameCreator_start">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
-        <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
+        <p class="mb-1 mt-4">{{ $t('GAME_BET') }}
+          <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+          <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+        </p>
         <span class="f16"><b id="gameBetCurrent_start">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
@@ -30,7 +33,9 @@
           </div>
           <div class="col-4 col-sm-2">
             <label for="bet" class="f10 text-left opacity-text">
-              {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
+              {{ $t('BET') }}
+              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </label>
             <input type="number" step="0.01" min="0.01" class="form-bet game_view-value" id="cf_bet_input" v-model="currentBet">
           </div>
@@ -52,7 +57,10 @@
         <span id="cf_game_creator_join" class="f10">0x0</span>
         <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
         <span id="gameOpponent_start">0x0</span>
-        <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
+        <p class="mb-1 mt-4">{{ $t('GAME_BET') }}
+          <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+          <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+        </p>
         <span class="f16"><b id="cf_game_bet_join">{{ currentBet ? currentBet : 0 }}</b></span>
       </div>
 
@@ -95,7 +103,10 @@
             </span>
           </div>
           <div class="col-8 pr-0">
-            <label class="pt-4">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
+            <label class="pt-4">{{ $t('UPDATE_BET') }}
+              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+            </label>
             <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 bet-input" v-model="currentBet"/>
             <button class="btn btn-small-orange" onclick="window.CoinFlip.increaseBetClicked()">{{ $t('UPDATE') }}</button>
           </div>

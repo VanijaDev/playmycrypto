@@ -13,7 +13,9 @@
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
-              {{ $t('BET') }} <span class="text-uppercase">({{ currency }})</span>:
+              {{ $t('BET') }}
+              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </label>
             <input type="number" step="0.01" min="0.01" id="rps_bet_input_start" class="bet-input" v-model="currentBet"/>
           </div>
@@ -74,8 +76,11 @@
               <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
             </div>
             <div class="col-sm-8 pr-0">
-              <label class="text-center pt-sm-4 f10">{{ $t('UPDATE_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</label>
-              <input id="rps_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <label class="text-center pt-sm-4 f10">{{ $t('UPDATE_BET') }}
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+              </label>
+              <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
               <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
             </div>
           </div>
@@ -104,7 +109,10 @@
 
         <div id="gamePaused" class="mt-5 pt-5 hidden" data-group="waitingForOpponent">
           <h2 class="paused-game mb-0">{{ $t('GAME_PAUSED') }}</h2>
-          <p class="f18">{{ $t('UNPAUSE_COST') }} <span id="unpauseCost">0.01</span> ({{ currency }})</p>
+          <p class="f18">{{ $t('UNPAUSE_COST') }}
+            <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+            <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+          </p>
         </div>
       </div>
     </div>
@@ -122,7 +130,10 @@
 
           <div class="row">
             <div class="col-6 pr-0">
-              <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</p>
+              <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+              </p>
               <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
             </div>
           </div>
@@ -184,7 +195,10 @@
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
           <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
-          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</p>
+          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
+            <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+            <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+          </p>
           <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
@@ -244,7 +258,10 @@
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
           <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
-          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</p>
+          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
+            <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+            <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+          </p>
           <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
@@ -367,7 +384,10 @@
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
           <span id="gameOpponent_makeTop" class="f10">0x0</span>
 
-          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }} (<span class="text-uppercase">{{ currency }}</span>):</p>
+          <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
+            <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+            <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+          </p>
           <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
