@@ -122,9 +122,11 @@ const Game = {
     if (_gameType == Types.Game.cf) {
       console.log("loadTopGamesForGame - CF");
       ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
-    } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
+    } else if (_gameType == Types.Game.rps) {
       console.log("loadTopGamesForGame - RPS");
-      ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
+      ownGame = await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
+    } else {
+      throw('loadTopGamesForGame - wrong _gameType');
     }
 
     $('#topGamesBlock').empty();
