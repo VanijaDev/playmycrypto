@@ -324,7 +324,7 @@ const Game = {
 
   //  NOTIFICATION HELPERS
   onGameUpdated: async function (_gameId) {
-    console.log('%c onGameUpdated %s', 'color: #1d34ff', _gameId);
+    console.log('%c game - onGameUpdated %s', 'color: #1d34ff', _gameId);
 
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, _gameId);
     if (gameInfo.paused) {
@@ -341,9 +341,9 @@ const Game = {
 
   onGameAddedToTop: function (_gameType, _gameId, _creator) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
+      console.log('%c game - onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c onGameAddedToTop - RPS: %s %s', 'color: #1d34ff', _gameId, _creator);
+      console.log('%c game - onGameAddedToTop - RPS: %s %s', 'color: #1d34ff', _gameId, _creator);
     }
 
     if (this.isGamePresentInAnyList(_gameId)) {

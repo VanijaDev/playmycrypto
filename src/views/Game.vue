@@ -175,6 +175,7 @@
     beforeRouteLeave(to, from, next) {
       console.log('Leave game page');
       window.Game.gameType = -1;
+      window.Game.onUnload();
       document.getElementById("gameName").innerHTML = "";
 
       if (this.managerInterval) {

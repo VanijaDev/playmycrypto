@@ -550,6 +550,42 @@ const RPS = {
     (_move > 10) ? this.selectedPrevMove = _move % 10 : this.selectedMove = _move;
   },
 
+  makeTopClicked: async function () {
+    console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
+
+    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
+      showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.addTopGame(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Game.minBet,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+      .on('transactionHash', function (hash) {
+        // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("MAKE TOP GAME transaction: ", hash);
+      })
+      .once('receipt', function (receipt) {
+        ProfileManager.update();
+        hideTopBannerMessage();
+        RPS.showGameViewForCurrentAccount();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "MAKE TOP GAME error...");
+          throw new Error(error, receipt);
+        }
+      })
+  },
 
 
 
@@ -758,15 +794,15 @@ const RPS = {
       return;
     }
 
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.joinGame(gameId, referral, this.selectedMove).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.joinGame(gameId, referral, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount(),
       value: bet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("JOIN GAME transaction ", hash);
+        showTopBannerMessage("JOIN GAME transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
@@ -776,7 +812,7 @@ const RPS = {
       .once('error', function (error, receipt) {
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Join game error...");
@@ -794,14 +830,14 @@ const RPS = {
     }
 
     let gameId = document.getElementById("rpsmakemove_game_id").innerHTML;
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.opponentNextMove(gameId, this.selectedMove).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.opponentNextMove(gameId, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("MAKE MOVE transaction ", hash);
+        showTopBannerMessage("MAKE MOVE transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
@@ -811,7 +847,7 @@ const RPS = {
       .once('error', function (error, receipt) {
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Make move error...");
@@ -851,7 +887,7 @@ const RPS = {
       }
     }
 
-    showSpinner(Spinner.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     let gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
 
@@ -861,13 +897,13 @@ const RPS = {
     const seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
-    window.BlockchainManager.rockPaperScissorsContract.methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
-      from: window.BlockchainManager.currentAccount,
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
+      from: window.BlockchainManager.currentAccount(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("PLAY MOVE transaction ", hash);
+        showTopBannerMessage("PLAY MOVE transaction: ", hash);
       })
       .once('receipt', async function (receipt) {
         ProfileManager.update();
@@ -880,13 +916,13 @@ const RPS = {
           let resultView = RPS.resultViewForGame(gameInfo);
           RPS.showGameView(resultView, null);
 
-          hideSpinner(Spinner.gameView);
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
         }
       })
       .once('error', function (error, receipt) {
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Play move error...");
@@ -906,25 +942,25 @@ const RPS = {
     }
     console.log("gameId: ", gameId);
 
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.quitGame(gameId).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("QUIT GAME transaction ", hash);
+        showTopBannerMessage("QUIT GAME transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.lost, null);
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Quit game error...");
@@ -942,25 +978,25 @@ const RPS = {
     }
     console.log("gameId: ", gameId);
 
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.finishExpiredGame(gameId).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.finishExpiredGame(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("CLAIM EXPIRED GAME transaction ", hash);
+        showTopBannerMessage("CLAIM EXPIRED GAME transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.won, null);
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Claim expired game error...");
@@ -980,15 +1016,15 @@ const RPS = {
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
 
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.increaseBetForGameBy(gameId).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.increaseBetForGameBy(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
       value: Utils.etherToWei(bet).toString(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("INCREASE BET transaction ", hash);
+        showTopBannerMessage("INCREASE BET transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
@@ -996,12 +1032,12 @@ const RPS = {
         RPS.showGameViewForCurrentAccount();
         ProfileManager.updateCurrentAccountBalanceUI();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Increase bet error...");
@@ -1015,7 +1051,7 @@ const RPS = {
     console.log('%c pauseGameClicked_RPS:', 'color: #e51dff');
 
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    showSpinner(Spinner.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
     gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
@@ -1024,24 +1060,24 @@ const RPS = {
   pauseGame: async function (_gameId) {
     console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
 
-    window.BlockchainManager.rockPaperScissorsContract.methods.pauseGame(_gameId).send({
-      from: window.BlockchainManager.currentAccount,
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.pauseGame(_gameId).send({
+      from: window.BlockchainManager.currentAccount(),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("PAUSE GAME transaction ", hash);
+        showTopBannerMessage("PAUSE GAME transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         hideTopBannerMessage();
         ProfileManager.update();
         RPS.showGameViewForCurrentAccount();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Pause game error...");
@@ -1058,68 +1094,31 @@ const RPS = {
       return;
     }
 
-    window.BlockchainManager.rockPaperScissorsContract.methods.unpauseGame(_gameId).send({
-      from: window.BlockchainManager.currentAccount,
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.unpauseGame(_gameId).send({
+      from: window.BlockchainManager.currentAccount(),
       value: Game.minBet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("UNPAUSE GAME transaction ", hash);
+        showTopBannerMessage("UNPAUSE GAME transaction: ", hash);
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
         hideTopBannerMessage();
         RPS.showGameViewForCurrentAccount();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
         hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Unpause game error...");
           throw new Error(error, receipt);
         }
       });
-  },
-
-  makeTopClicked: async function () {
-    console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
-
-    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
-      return;
-    }
-
-    showSpinner(Spinner.gameView);
-    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    window.BlockchainManager.rockPaperScissorsContract.methods.addTopGame(gameId).send({
-      from: window.BlockchainManager.currentAccount,
-      value: Game.minBet,
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("MAKE TOP GAME transaction ", hash);
-      })
-      .once('receipt', function (receipt) {
-        ProfileManager.update();
-        hideTopBannerMessage();
-        RPS.showGameViewForCurrentAccount();
-        hideSpinner(Spinner.gameView);
-      })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
-        hideTopBannerMessage();
-        hideSpinner(Spinner.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "MAKE TOP GAME error...");
-          throw new Error(error, receipt);
-        }
-      })
   },
 
   closeResultView: function () {

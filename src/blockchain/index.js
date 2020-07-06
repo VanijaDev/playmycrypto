@@ -32,8 +32,8 @@ const Index = {
   },
 
   setupOnce: function () {
-    console.log('%c index - setupOnce', 'color: #00aa00');
     if (!this.initialSetupDone) {
+      console.log('%c index - setupOnce', 'color: #00aa00');
       this.initialSetupDone = true;
 
       NotificationManager.eventHandler = this;
