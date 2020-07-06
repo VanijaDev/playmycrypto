@@ -9,7 +9,7 @@
           </div>
           <div>
             <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-            <input type="text" id="rps_next_move_seed_start" v-model="currentSeedPhrase"/>
+            <input type="text" id="rps_next_move_seed_start" class="game_view-value referral-addr" v-model="currentSeedPhrase"/>
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
@@ -80,7 +80,7 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </label>
-              <input id="cf_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <input id="rps_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
               <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
             </div>
           </div>
@@ -140,7 +140,7 @@
 
           <div>
             <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="cf_game_referral_join_rps"/>
+            <input type="text" id="rps_game_referral_join" class="game_view-value referral-addr"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
@@ -234,7 +234,11 @@
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block mb-2">
           <span class="one-side">YOU</span>
-          <span class="scores">3:2</span>
+          <span class="scores">
+            <span id="rps_scores_you_waiting_for_opponent_move">0</span>
+            <span> : </span>
+            <span id="rps_scores_opponent_waiting_for_opponent_move">0</span>
+          </span>
           <span class="one-side">OPPONENT</span>
         </div>
         <h2 class="f24">{{ $t('WAITING_OPPONENT_MOVE') }}</h2>
@@ -302,7 +306,11 @@
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block">
           <span class="one-side">YOU</span>
-          <span class="scores">3:2</span>
+          <span class="scores">
+            <span id="rps_scores_you_creator_move">0</span>
+            <span> : </span>
+            <span id="rps_scores_opponent_creator_move">0</span>
+          </span>
           <span class="one-side">OPPONENT</span>
         </div>
         <div class="game-result">
@@ -333,7 +341,7 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED2') }}:</label>
-                <input type="text" id="seedPhrase"/>
+                <input type="text" id="rps_previous_move_seed_playmove" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
@@ -359,7 +367,7 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED') }}:</label>
-                <input type="text" id="seedPhrase"/>
+                <input type="text" id="rps_next_move_seed_playmove" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
