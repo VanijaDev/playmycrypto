@@ -5,11 +5,11 @@
         <div class="mt-1 pt-2 text-left">
           <div>
             <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="rps_game_referral_start" class="game_view-value referral-addr"/>
+            <input type="text" id="rpsstart_game_referral" class="game_view-value referral-addr"/>
           </div>
           <div>
             <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-            <input type="text" id="rps_next_move_seed_start" class="game_view-value referral-addr" v-model="currentSeedPhrase"/>
+            <input type="text" id="rpsstart_next_move_seed" class="game_view-value referral-addr" v-model="currentSeedPhrase"/>
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
@@ -17,7 +17,7 @@
               <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
               <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </label>
-            <input type="number" step="0.01" min="0.01" id="rps_bet_input_start" class="bet-input" v-model="currentBet"/>
+            <input type="number" step="0.01" min="0.01" id="rpsstart_next_move_seed" class="bet-input" v-model="currentBet"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveDisabled}" onclick="window.RPS.startGameClicked()">
@@ -140,7 +140,7 @@
 
           <div>
             <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-1">{{ $t('ENTER_REFERRAL') }}:</label>
-            <input type="text" id="rps_game_referral_join" class="game_view-value referral-addr"/>
+            <input type="text" id="rpsjoingame_game_referral" class="game_view-value referral-addr"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
@@ -341,7 +341,7 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED2') }}:</label>
-                <input type="text" id="rps_previous_move_seed_playmove" class="game_view-value referral-addr"/>
+                <input type="text" id="rpsplaymove_previous_move_seed" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
@@ -367,7 +367,7 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED') }}:</label>
-                <input type="text" id="rps_next_move_seed_playmove" class="game_view-value referral-addr"/>
+                <input type="text" id="rpsplaymove_next_move_seed" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
