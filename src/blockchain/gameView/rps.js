@@ -32,7 +32,7 @@ const RPS = {
 
   GameView: {
     startNew: "rpsstart",
-    // waitingForOpponent: "rpswfopponent",
+    waitingForOpponent: "rpswfopponent",
     // waitingForOpponentMove: "rpswfopponentmove",
     // join: "rpsjoingame",
     // waitOpponentMove: "rpswfopponentmove",
@@ -96,23 +96,21 @@ const RPS = {
   showGameViewForCurrentAccount: async function () {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
   
-
     let gameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     console.log("showGameViewForCurrentAccount gameId: ", gameId);
     
     if (gameId == 0) {
       this.showGameView(this.GameView.startNew, null);
     } else {
-      return;
-      let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
-      // console.log("gameInfo: ", gameInfo);
+      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
+      console.log("gameInfo: ", gameInfo);
 
       switch (parseInt(gameInfo.state)) {
-        case Utils.GameState.waitingForOpponent:
+        case Types.GameState.waitingForOpponent:
           (this.currentGameView == this.GameView.waitingForOpponent) ? this.updateGameViewInfo(this.GameView.waitingForOpponent, gameInfo) : this.showGameView(this.GameView.waitingForOpponent, gameInfo);
           break;
 
-        case Utils.GameState.started:
+        case Types.GameState.started:
           let isNextMover = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.nextMover);
           if (isNextMover) {
             let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.creator);
@@ -142,6 +140,7 @@ const RPS = {
     this.selectedPrevMove = this.Move.none;
     this.currentGameView = _viewName;
 
+    window.showGameBlock(_viewName);
     // this.hideAllGameViews(); //  TODO: remove
     this.populateViewWithGameInfo(_viewName, _gameInfo);
   },
@@ -155,18 +154,17 @@ const RPS = {
       return;
     }
 
-    const isMoveExpired = await PromiseManager.getGameMoveExpiredPromise(Types.Game.rps, _gameInfo.id);
+    const isMoveExpired = await PromiseManager.gameMoveExpiredPromise(Types.Game.rps, _gameInfo.id);
     const isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), _gameInfo.creator);
     const gameMoveResults = await this.gameMoveResults(_gameInfo.id);
     console.log("gameMoveResults: ", gameMoveResults);
-
     switch (_viewName) {
       case this.GameView.waitingForOpponent:
         document.getElementById(this.GameView.waitingForOpponent + "_game_id").innerHTML = _gameInfo.id;
         document.getElementById(this.GameView.waitingForOpponent + "_game_creator").innerHTML = _gameInfo.creator;
-        document.getElementById(this.GameView.waitingForOpponent + "_game_opponent").innerHTML = "";
+        document.getElementById(this.GameView.waitingForOpponent + "_game_opponent").innerHTML = "0x";
         document.getElementById(this.GameView.waitingForOpponent + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
-
+return;
         let isPaused = _gameInfo.paused;
         if (isPaused) {
           document.getElementById(this.GameView.waitingForOpponent + "_paused").classList.remove("display-none");
@@ -177,7 +175,7 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponent + "_paused").classList.add("display-none");
           document.getElementById(this.GameView.waitingForOpponent + "_pauseBtn").innerHTML = "Pause game";
 
-          (await PromiseManager.isTopGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id)) ? document.getElementById("rpswfopponent_makeTop").classList.add("display-none") : document.getElementById("rpswfopponent_makeTop").classList.remove("display-none");
+          (await PromiseManager.isTopGamePromise(Types.Game.rps, _gameInfo.id)) ? document.getElementById("rpswfopponent_makeTop").classList.add("display-none") : document.getElementById("rpswfopponent_makeTop").classList.remove("display-none");
         }
         break;
 
@@ -223,7 +221,7 @@ const RPS = {
 
         this.updateExpiredUIFor(this.GameView.playMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
 
-        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);
+        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
         if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
           document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("display-none");
           this.skipNextMove = false;
@@ -390,7 +388,7 @@ const RPS = {
   gameMoveResults: async function (_gameId) {
     let result = [0, 0]; //  creator, joiner
 
-    let rowMoves_0 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 0);
+    let rowMoves_0 = await PromiseManager.showRowMovesPromise(Types.Game.rps, _gameId, 0);
     // console.log("rowMoves_0: ", rowMoves_0);
     if (rowMoves_0[0] == 0) {
       return result;
@@ -410,7 +408,7 @@ const RPS = {
     }
     // console.log("result_0: ", result);
 
-    let rowMoves_1 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 1);
+    let rowMoves_1 = await PromiseManager.showRowMovesPromise(Types.Game.rps, _gameId, 1);
     // console.log("rowMoves_1: ", rowMoves_1);
     if (rowMoves_1[0] == 0) {
       return result;
@@ -430,7 +428,7 @@ const RPS = {
     }
     // console.log("result_1: ", result);
 
-    let rowMoves_2 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 2);
+    let rowMoves_2 = await PromiseManager.showRowMovesPromise(Types.Game.rps, _gameId, 2);
     // console.log("rowMoves_2: ", rowMoves_2);
     if (rowMoves_2[0] == 0) {
       return result;
@@ -478,6 +476,70 @@ const RPS = {
     }
 
     return this.MoveWinner.draw;
+  },
+
+
+
+  startGameClicked: async function () {
+    console.log('%c startGameClicked_RPS', 'color: #e51dff');
+
+    let bet = document.getElementById("rps_bet_input_start").value;
+    let seedStr = document.getElementById("rps_next_move_seed_start").value;
+
+    if (this.selectedMove == 0) {
+      showAlert("error", "Please select move.");
+      return;
+    } else if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      return;
+    } else if (new BigNumber(await window.BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
+      showAlert("error", "Not enough funds.");
+      return;
+    } else if (seedStr.length == 0) {
+      showAlert("error", "Please enter seed phrase");
+      return;
+    }
+
+    let seedStrHash = web3.utils.soliditySha3(seedStr);
+    // console.log("seedStrHash: ", seedStrHash);
+    let seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
+    // console.log("seedHash:    ", seedHash);
+
+    let referral = document.getElementById("rps_game_referral_start").value;
+    if (referral.length > 0) {
+      if (!web3.utils.isAddress(referral)) {
+        showAlert("error", "Wrong referral address.");
+        return;
+      }
+    } else {
+      referral = this.ownerAddress;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.createGame(referral, seedHash).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Utils.etherToWei(bet),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("CREATE GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Create game error...");
+        throw new Error(error, receipt);
+      }
+    });
   },
 
 
@@ -554,7 +616,7 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
         }
@@ -572,7 +634,7 @@ const RPS = {
           document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
         }
@@ -590,7 +652,7 @@ const RPS = {
           document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
         }
@@ -664,75 +726,10 @@ const RPS = {
     }, 1000);
   },
 
-
-  
-
-  startGameClicked: async function () {
-    console.log('%c startGameClicked_RPS', 'color: #e51dff');
-
-    let bet = document.getElementById("rps_bet_input_start").value;
-    let seedStr = document.getElementById("rps_next_move_seed_start").value;
-
-    if (this.selectedMove == 0) {
-      showAlert("error", "Please select move.");
-      return;
-    } else if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
-      return;
-    } else if (new BigNumber(await window.BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
-      showAlert("error", "Not enough funds.");
-      return;
-    } else if (seedStr.length == 0) {
-      showAlert("error", "Please enter seed phrase");
-      return;
-    }
-
-    let seedStrHash = web3.utils.soliditySha3(seedStr);
-    // console.log("seedStrHash: ", seedStrHash);
-    let seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
-    // console.log("seedHash:    ", seedHash);
-
-    let referral = document.getElementById("rps_game_referral_start").value;
-    if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
-        return;
-      }
-    } else {
-      referral = this.ownerAddress;
-    }
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.createGame(referral, seedHash).send({
-      from: window.BlockchainManager.currentAccount(),
-      value: Utils.etherToWei(bet),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-    .on('transactionHash', function (hash) {
-      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("CREATE GAME transaction: ", hash);
-    })
-    .once('receipt', function (receipt) {
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideTopBannerMessage();
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideTopBannerMessage();
-      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Create game error...");
-        throw new Error(error, receipt);
-      }
-    });
-  },
-
   joinGameClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
 
-    let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(window.BlockchainManager.rockPaperScissorsContract, window.BlockchainManager.currentAccount));
+    let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount));
     if (ongoingGameId != 0) {
       showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
       return;
@@ -754,7 +751,7 @@ const RPS = {
     }
 
     let gameId = document.getElementById("rpsjoingame_gameId").innerHTML;
-    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
 
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
@@ -877,7 +874,7 @@ const RPS = {
         ProfileManager.update();
         hideTopBannerMessage();
 
-        const gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+        const gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
         if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
           RPS.showGameViewForCurrentAccount();
         } else {
@@ -1021,7 +1018,7 @@ const RPS = {
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     showSpinner(Spinner.gameView);
 
-    let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
+    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
     gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
   },
 

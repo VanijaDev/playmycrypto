@@ -25,7 +25,16 @@ const Types = {
     rock: 0,
     paper: 1,
     scissors: 2
-  }
+  },
+
+  GameState: {
+    waitingForOpponent: 0,
+    started: 1,
+    winnerPresent: 2,
+    draw: 3,
+    quitted: 4,
+    expired:5
+  },
 }
 
 export default Types;

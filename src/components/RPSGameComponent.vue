@@ -64,16 +64,16 @@
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <div class="mt-0 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cf_gameId_makeTop" class="f10">0</span>
+          <span id="rpswfopponent_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="gameCreator_makeTop" class="f10">0x0</span>
+          <span id="rpswfopponent_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="gameOpponent_makeTop" class="f10">0x0</span>
+          <span id="rpswfopponent_game_opponent" class="f10">0x0</span>
 
           <div class="row">
             <div class="col-sm-4 pr-0">
               <p class="mb-2 mt-4 f10">{{ $t('GAME_BET') }}:</p>
-              <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
+              <b id="rpswfopponent_game_bet">{{ currentBet ? currentBet : 0 }}</b>
             </div>
             <div class="col-sm-8 pr-0">
               <label class="text-center pt-sm-4 f10">{{ $t('UPDATE_BET') }}

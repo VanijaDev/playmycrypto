@@ -440,18 +440,18 @@ const Game = {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
-      if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.draw)) == 0) {
+      if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.draw)) == 0) {
         if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
           return;
         }
         resultView = RPS.GameView.draw;
-      } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.winnerPresent)) == 0) {
+      } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.winnerPresent)) == 0) {
         if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
           return;
         }
         resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
-      } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.quitted)) == 0 ||
-        (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Utils.GameState.expired)) == 0) {
+      } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.quitted)) == 0 ||
+        (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.expired)) == 0) {
         resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else {
         throw("onGameFinished - ERROR");

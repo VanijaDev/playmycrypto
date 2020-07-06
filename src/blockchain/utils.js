@@ -2,16 +2,6 @@ import BigNumber from "bignumber.js";
 import Types from "./types";
 
 const Utils = {
-
-  GameState: {
-    waitingForOpponent: 0,
-    started: 1,
-    winnerPresent: 2,
-    draw: 3,
-    quitted: 4,
-    expired:5
-  },
-
   zeroAddress_eth: "0x0000000000000000000000000000000000000000",
 
   gamesIconsSmall: ['icon-coinflip-sm', 'icon-rock-paper-scissors-sm', 'icon-tic-tac-toe-sm'],

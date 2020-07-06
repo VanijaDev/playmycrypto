@@ -275,19 +275,19 @@ const Index = {
 
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
-        case Utils.GameState.winnerPresent:
+        case Types.GameState.winnerPresent:
           infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
           break;
 
-        case Utils.GameState.draw:
+        case Types.GameState.draw:
           infoStr = "Ongoing game has just ended in a DRAW.";
           break;
 
-        case Utils.GameState.quitted:
+        case Types.GameState.quitted:
           infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
           break;
 
-        case Utils.GameState.expired:
+        case Types.GameState.expired:
           infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
           break;
       }
