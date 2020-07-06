@@ -1,6 +1,6 @@
 import {PromiseManager} from "./managers/promiseManager";
 import {CoinFlip} from "./gameView/coinFlip";
-import {RPS} from "./gameView/rps";
+import RPS from "./gameView/rps";
 import {Utils} from "./utils";
 import {NotificationManager} from "./managers/notificationManager";
 import {BigNumber} from "bignumber.js";

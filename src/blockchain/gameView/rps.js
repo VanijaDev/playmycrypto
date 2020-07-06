@@ -10,19 +10,19 @@ import Types from "../types";
 const RPS = {
   // ownerAddress: "",
   // minBet: 0,
-  // currentGameView: "",
+  currentGameView: "",
 
-  // selectedMove: 0,
-  // selectedPrevMove: 0,
+  selectedMove: 0,
+  selectedPrevMove: 0,
   // skipNextMove: false,
-  // countdown: null,
+  countdown: null,
 
-  // Move: {
-  //   none: 0,
-  //   rock: 1,
-  //   paper: 2,
-  //   scissors: 3
-  // },
+  Move: {
+    none: 0,
+    rock: 1,
+    paper: 2,
+    scissors: 3
+  },
 
   // MoveWinner: {
   //   draw: 0,
@@ -30,20 +30,20 @@ const RPS = {
   //   opponent: 2
   // },
 
-  // GameView: {
-  //   startNew: "rpsstart",
-  //   waitingForOpponent: "rpswfopponent",
-  //   waitingForOpponentMove: "rpswfopponentmove",
-  //   join: "rpsjoingame",
-  //   waitOpponentMove: "rpswfopponentmove",
-  //   creatorMove: "rpscreatormove",
-  //   opponentMove: "rpsopponentmove",
-  //   playMove: "rpsplaymove",
-  //   makeMove: "rpsmakemove",
-  //   won: "rpsyouwon",
-  //   lost: "rpsyoulost",
-  //   draw: "rpsdraw",
-  // },
+  GameView: {
+    startNew: "rpsstart",
+    // waitingForOpponent: "rpswfopponent",
+    // waitingForOpponentMove: "rpswfopponentmove",
+    // join: "rpsjoingame",
+    // waitOpponentMove: "rpswfopponentmove",
+    // creatorMove: "rpscreatormove",
+    // opponentMove: "rpsopponentmove",
+    // playMove: "rpsplaymove",
+    // makeMove: "rpsmakemove",
+    // won: "rpsyouwon",
+    // lost: "rpsyoulost",
+    // draw: "rpsdraw",
+  },
 
   // InnerGameViews: {
   //   waitingForOpponent: {
@@ -72,12 +72,12 @@ const RPS = {
   updateGameView: async function () {
     console.log("RPS - updateGameView");
 
-    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
     this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
     this.setPlaceholders();
-    // this.showGameViewForCurrentAccount();
+    this.showGameViewForCurrentAccount();
   },
 
   setPlaceholders: function () {
@@ -93,22 +93,17 @@ const RPS = {
     // $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
-
-
-
-
-
-
-
   showGameViewForCurrentAccount: async function () {
-    showSpinner(Spinner.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+  
 
-    let gameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(window.BlockchainManager.rockPaperScissorsContract, window.BlockchainManager.currentAccount));
-    // console.log("showGameViewForCurrentAccount gameId: ", gameId);
-
+    let gameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    console.log("showGameViewForCurrentAccount gameId: ", gameId);
+    
     if (gameId == 0) {
       this.showGameView(this.GameView.startNew, null);
     } else {
+      return;
       let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
       // console.log("gameInfo: ", gameInfo);
 
@@ -137,71 +132,33 @@ const RPS = {
       }
     }
 
-    hideSpinner(Spinner.gameView);
-  },
-
-  resultViewForGame: function (_gameInfo) {
-    // console.log(_gameInfo);
-    let resultView = this.GameView.lost;
-
-    if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
-      resultView = RPS.GameView.draw;
-    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) {
-      resultView = RPS.GameView.won;
-    }
-
-    return resultView;
-  },
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView(this.GameView.join, _gameInfo);
+    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    // console.log("showGameView: ", _viewName, _gameInfo);
+    console.log("showGameView: ", _viewName, _gameInfo);
 
     this.selectedMove = this.Move.none;
     this.selectedPrevMove = this.Move.none;
     this.currentGameView = _viewName;
 
-    this.hideAllGameViews();
+    // this.hideAllGameViews(); //  TOD: remove
     this.populateViewWithGameInfo(_viewName, _gameInfo);
-
-    document.getElementById(_viewName).classList.remove("display-none");
-  },
-
-  updateGameViewInfo: function (_viewName, _gameInfo) {
-    // console.log("updateGameView: ", _viewName, _gameInfo);
-    this.populateViewWithGameInfo(_viewName, _gameInfo);
-  },
-
-  hideAllGameViews: async function () {
-    document.getElementById(this.GameView.startNew).classList.add("display-none");
-    document.getElementById(this.GameView.waitingForOpponent).classList.add("display-none");
-    document.getElementById(this.GameView.waitingForOpponentMove).classList.add("display-none");
-    document.getElementById(this.GameView.join).classList.add("display-none");
-    document.getElementById(this.GameView.makeMove).classList.add("display-none");
-    document.getElementById(this.GameView.playMove).classList.add("display-none");
-    document.getElementById(this.GameView.won).classList.add("display-none");
-    document.getElementById(this.GameView.lost).classList.add("display-none");
-    document.getElementById(this.GameView.draw).classList.add("display-none");
-    return;
   },
 
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
-    this.clearView(_viewName);
+    // this.clearView(_viewName);  TODO: ask Vova
 
     if (!_gameInfo) {
       return;
     }
 
-    const isMoveExpired = await PromiseManager.getGameMoveExpiredPromise(window.BlockchainManager.rockPaperScissorsContract, _gameInfo.id);
-    const isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount, _gameInfo.creator);
+    const isMoveExpired = await PromiseManager.getGameMoveExpiredPromise(Types.Game.rps, _gameInfo.id);
+    const isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), _gameInfo.creator);
     const gameMoveResults = await this.gameMoveResults(_gameInfo.id);
-    // console.log("gameMoveResults: ", gameMoveResults);
+    console.log("gameMoveResults: ", gameMoveResults);
 
     switch (_viewName) {
       case this.GameView.waitingForOpponent:
@@ -282,160 +239,6 @@ const RPS = {
     }
   },
 
-  updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
-    switch (_viewName) {
-      case this.GameView.waitingForOpponentMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
-          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
-        } else {
-          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
-        }
-        break;
-
-      case this.GameView.makeMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("display-none");
-          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.add("disabled");
-        } else {
-          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("display-none");
-          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
-        }
-        break;
-
-      case this.GameView.playMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("display-none");
-          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
-        } else {
-          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
-        }
-        break;
-
-      default:
-        console.error("updateExpiredUIFor - no view: " + _viewName);
-        break;
-    }
-  },
-
-  gameMoveResults: async function (_gameId) {
-    let result = [0, 0]; //  creator, joiner
-
-    let rowMoves_0 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 0);
-    // console.log("rowMoves_0: ", rowMoves_0);
-    if (rowMoves_0[0] == 0) {
-      return result;
-    }
-
-    switch (this.rowWinner(rowMoves_0)) {
-      case this.MoveWinner.creator:
-        result[0] = result[0] += 1;
-        break;
-
-      case this.MoveWinner.opponent:
-        result[1] = result[1] += 1;
-        break;
-
-      default:
-        break;
-    }
-    // console.log("result_0: ", result);
-
-    let rowMoves_1 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 1);
-    // console.log("rowMoves_1: ", rowMoves_1);
-    if (rowMoves_1[0] == 0) {
-      return result;
-    }
-
-    switch (this.rowWinner(rowMoves_1)) {
-      case this.MoveWinner.creator:
-        result[0] = result[0] += 1;
-        break;
-
-      case this.MoveWinner.opponent:
-        result[1] = result[1] += 1;
-        break;
-
-      default:
-        break;
-    }
-    // console.log("result_1: ", result);
-
-    let rowMoves_2 = await PromiseManager.getShowRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 2);
-    // console.log("rowMoves_2: ", rowMoves_2);
-    if (rowMoves_2[0] == 0) {
-      return result;
-    }
-
-    switch (this.rowWinner(rowMoves_2)) {
-      case this.MoveWinner.creator:
-        result[0] = result[0] += 1;
-        break;
-
-      case this.MoveWinner.opponent:
-        result[1] = result[1] += 1;
-        break;
-
-      default:
-        break;
-    }
-    // console.log("result_2: ", result);
-
-    return result;
-  },
-
-  rowWinner: function (_rowMoves) {
-    let creatorMark = _rowMoves[0];
-    let opponentMark = _rowMoves[1];
-
-    if (!creatorMark.localeCompare(this.Move.rock.toString())) {
-      if (!opponentMark.localeCompare(this.Move.paper.toString())) {
-        return this.MoveWinner.opponent;
-      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
-        return this.MoveWinner.creator;
-      }
-    } else if (!creatorMark.localeCompare(this.Move.paper.toString())) {
-      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
-        return this.MoveWinner.creator;
-      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
-        return this.MoveWinner.opponent;
-      }
-    } else if (!creatorMark.localeCompare(this.Move.scissors.toString())) {
-      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
-        return this.MoveWinner.opponent;
-      } else if (!opponentMark.localeCompare(this.Move.paper.toString())) {
-        return this.MoveWinner.creator;
-      }
-    }
-
-    return this.MoveWinner.draw;
-  },
-
   clearView: function (_viewName) {
     console.log("clearView: ", _viewName);
 
@@ -446,9 +249,9 @@ const RPS = {
     switch (_viewName) {
       case this.GameView.startNew:
         document.getElementById("rps_game_referral_start").value = "";
-        document.getElementById("seed_start_rps").value = "";
-        document.getElementById("cf_update_bet_input_rps").value = "";
-        this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
+        document.getElementById("rps_next_move_seed_start").value = "";
+        document.getElementById("rps_bet_input_start").value = "0.01";
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false); TODO: ask Vova
         break;
 
       case this.GameView.waitingForOpponent:
@@ -526,64 +329,272 @@ const RPS = {
     }
   },
 
-  updateSelectedMoveImgs: function (_viewName, _move, _isPrevMove) {
-    // console.log('%c updateSelectedMoveImgs_RPS: %s %s', 'color: #e51dff', _viewName, _move);
+  // updateSelectedMoveImgs: function (_viewName, _move, _isPrevMove) {
+  //   console.log('%c updateSelectedMoveImgs_RPS: %s %s', 'color: #e51dff', _viewName, _move);
+  //   let prefix = "";
+  //   if (!_viewName.localeCompare(this.GameView.startNew)) {
+  //     prefix = "start_";
+  //   } else if (!_viewName.localeCompare(this.GameView.join)) {
+  //     prefix = "rpsjoingame_";
+  //   } else if (!_viewName.localeCompare(this.GameView.makeMove)) {
+  //     prefix = "rpsmakemove_";
+  //   } else if (!_viewName.localeCompare(this.GameView.playMove)) {
+  //     prefix = "rpsplaymove_";
+  //   }
 
-    let prefix = "";
-    if (!_viewName.localeCompare(this.GameView.startNew)) {
-      prefix = "start_";
-    } else if (!_viewName.localeCompare(this.GameView.join)) {
-      prefix = "rpsjoingame_";
-    } else if (!_viewName.localeCompare(this.GameView.makeMove)) {
-      prefix = "rpsmakemove_";
-    } else if (!_viewName.localeCompare(this.GameView.playMove)) {
-      prefix = "rpsplaymove_";
+  //   const suffix = _isPrevMove ? "_prev" : "";
+
+  //   switch (_move) {
+  //     case this.Move.none:
+  //       if (_viewName.localeCompare(this.GameView.playMove)) {
+  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-ask-big.svg";
+  //       }
+  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       break;
+
+  //     case this.Move.rock:
+  //       if (_viewName.localeCompare(this.GameView.playMove)) {
+  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-rock-big.svg";
+  //       }
+  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.add("move_bg_selected");
+  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       break;
+
+  //     case this.Move.paper:
+  //       if (_viewName.localeCompare(this.GameView.playMove)) {
+  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-paper-big.svg";
+  //       }
+  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.add("move_bg_selected");
+  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       break;
+
+  //     case this.Move.scissors:
+  //       if (_viewName.localeCompare(this.GameView.playMove)) {
+  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-scissor-big.svg";
+  //       }
+  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
+  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.add("move_bg_selected");
+  //       break;
+
+  //     default:
+
+  //       break;
+  //   }
+  // },
+
+  gameMoveResults: async function (_gameId) {
+    let result = [0, 0]; //  creator, joiner
+
+    let rowMoves_0 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 0);
+    // console.log("rowMoves_0: ", rowMoves_0);
+    if (rowMoves_0[0] == 0) {
+      return result;
     }
 
-    const suffix = _isPrevMove ? "_prev" : "";
-
-    switch (_move) {
-      case this.Move.none:
-        if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-ask-big.svg";
-        }
-        document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
+    switch (this.rowWinner(rowMoves_0)) {
+      case this.MoveWinner.creator:
+        result[0] = result[0] += 1;
         break;
 
-      case this.Move.rock:
-        if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-rock-big.svg";
-        }
-        document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.add("move_bg_selected");
-        document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        break;
-
-      case this.Move.paper:
-        if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-paper-big.svg";
-        }
-        document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.add("move_bg_selected");
-        document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        break;
-
-      case this.Move.scissors:
-        if (_viewName.localeCompare(this.GameView.playMove)) {
-          document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-scissor-big.svg";
-        }
-        document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-        document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.add("move_bg_selected");
+      case this.MoveWinner.opponent:
+        result[1] = result[1] += 1;
         break;
 
       default:
+        break;
+    }
+    // console.log("result_0: ", result);
 
+    let rowMoves_1 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 1);
+    // console.log("rowMoves_1: ", rowMoves_1);
+    if (rowMoves_1[0] == 0) {
+      return result;
+    }
+
+    switch (this.rowWinner(rowMoves_1)) {
+      case this.MoveWinner.creator:
+        result[0] = result[0] += 1;
+        break;
+
+      case this.MoveWinner.opponent:
+        result[1] = result[1] += 1;
+        break;
+
+      default:
+        break;
+    }
+    // console.log("result_1: ", result);
+
+    let rowMoves_2 = await PromiseManager.showRowMovesPromise(window.BlockchainManager.rockPaperScissorsContract, _gameId, 2);
+    // console.log("rowMoves_2: ", rowMoves_2);
+    if (rowMoves_2[0] == 0) {
+      return result;
+    }
+
+    switch (this.rowWinner(rowMoves_2)) {
+      case this.MoveWinner.creator:
+        result[0] = result[0] += 1;
+        break;
+
+      case this.MoveWinner.opponent:
+        result[1] = result[1] += 1;
+        break;
+
+      default:
+        break;
+    }
+    // console.log("result_2: ", result);
+
+    return result;
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  resultViewForGame: function (_gameInfo) {
+    // console.log(_gameInfo);
+    let resultView = this.GameView.lost;
+
+    if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
+      resultView = RPS.GameView.draw;
+    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) {
+      resultView = RPS.GameView.won;
+    }
+
+    return resultView;
+  },
+
+  showJoinGame: function (_gameInfo) {
+    // console.log("showJoinGame: ", _gameInfo);
+    this.showGameView(this.GameView.join, _gameInfo);
+  },
+
+  updateGameViewInfo: function (_viewName, _gameInfo) {
+    // console.log("updateGameView: ", _viewName, _gameInfo);
+    this.populateViewWithGameInfo(_viewName, _gameInfo);
+  },
+
+  // hideAllGameViews: async function () {
+  //   document.getElementById(this.GameView.startNew).classList.add("display-none");
+  //   document.getElementById(this.GameView.waitingForOpponent).classList.add("display-none");
+  //   document.getElementById(this.GameView.waitingForOpponentMove).classList.add("display-none");
+  //   document.getElementById(this.GameView.join).classList.add("display-none");
+  //   document.getElementById(this.GameView.makeMove).classList.add("display-none");
+  //   document.getElementById(this.GameView.playMove).classList.add("display-none");
+  //   document.getElementById(this.GameView.won).classList.add("display-none");
+  //   document.getElementById(this.GameView.lost).classList.add("display-none");
+  //   document.getElementById(this.GameView.draw).classList.add("display-none");
+  //   return;
+  // },
+
+
+  updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
+    switch (_viewName) {
+      case this.GameView.waitingForOpponentMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
+        } else {
+          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
+        }
+        break;
+
+      case this.GameView.makeMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.add("disabled");
+        } else {
+          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("display-none");
+          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
+        }
+        break;
+
+      case this.GameView.playMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
+        } else {
+          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(window.BlockchainManager.rockPaperScissorsContract));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
+        }
+        break;
+
+      default:
+        console.error("updateExpiredUIFor - no view: " + _viewName);
         break;
     }
   },
+
+  rowWinner: function (_rowMoves) {
+    let creatorMark = _rowMoves[0];
+    let opponentMark = _rowMoves[1];
+
+    if (!creatorMark.localeCompare(this.Move.rock.toString())) {
+      if (!opponentMark.localeCompare(this.Move.paper.toString())) {
+        return this.MoveWinner.opponent;
+      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
+        return this.MoveWinner.creator;
+      }
+    } else if (!creatorMark.localeCompare(this.Move.paper.toString())) {
+      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
+        return this.MoveWinner.creator;
+      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
+        return this.MoveWinner.opponent;
+      }
+    } else if (!creatorMark.localeCompare(this.Move.scissors.toString())) {
+      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
+        return this.MoveWinner.opponent;
+      } else if (!opponentMark.localeCompare(this.Move.paper.toString())) {
+        return this.MoveWinner.creator;
+      }
+    }
+
+    return this.MoveWinner.draw;
+  },
+
 
   updateMoveExpirationCountdown: function (_viewName, _endTime) {
     // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
@@ -1131,6 +1142,4 @@ const RPS = {
 
 window.RPS = RPS;
 
-export {
-  RPS
-};
+export default RPS;

@@ -379,33 +379,9 @@ let PromiseManager = {
     });
   },
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  getGameMoveExpiredPromise: function (_gameInst, _gameId) {
+  gameMoveExpiredPromise: function (_gameType, _gameId) {
     return new Promise(resolve => {
-      _gameInst.methods.gameMoveExpired(_gameId).call()
+      window.BlockchainManager.gameInst(_gameType).methods.gameMoveExpired(_gameId).call()
       .then(result => {
         resolve(result);
       })
@@ -414,22 +390,45 @@ let PromiseManager = {
       });
     });
   },
+  
+  showRowMovesPromise: function (_gameType, _gameId, _row) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.showRowMoves(_gameId, _row).call()
+      .then(result => {
+        resolve(result);
+      })
+      .catch(err => {
+        throw new Error(err);
+      });
+    });
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   getCreatorMoveHashesForGamePromise: function (_gameInst, _gameId) {
     return new Promise(resolve => {
       _gameInst.methods.getCreatorMoveHashesForGame(_gameId).call()
-      .then(result => {
-        resolve(result);
-      })
-      .catch(err => {
-        throw new Error(err);
-      });
-    });
-  },
-
-  getShowRowMovesPromise: function (_gameInst, _gameId, _row) {
-    return new Promise(resolve => {
-      _gameInst.methods.showRowMoves(_gameId, _row).call()
       .then(result => {
         resolve(result);
       })

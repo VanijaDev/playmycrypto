@@ -39,15 +39,15 @@
         </div>
 
         <div class="mb-sm-0 mb-3">
-          <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectValue(1)">
+          <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
             <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
             <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
           </button>
-          <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectValue(2)">
+          <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
             <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
             <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
           </button>
-          <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectValue(3)">
+          <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
             <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
             <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
           </button>
@@ -162,15 +162,15 @@
         </div>
 
         <div class="mb-sm-0 mb-3">
-          <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectValue(1)">
+          <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
             <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
             <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
           </button>
-          <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectValue(2)">
+          <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
             <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
             <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
           </button>
-          <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectValue(3)">
+          <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
             <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
             <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
           </button>
@@ -351,15 +351,15 @@
             </div>
             <div class="col-sm-6">
               <div class="text-sm-left text-center">
-                <button class="btn btn-link game-move-item game-move-middle mr-4" v-bind:class="{active: gameValue===1}" @click="selectValue(1)">
+                <button class="btn btn-link game-move-item game-move-middle mr-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
                   <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
                   <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
                 </button>
-                <button class="btn btn-link game-move-item game-move-middle mr-4 ml-3" v-bind:class="{active: gameValue===2}" @click="selectValue(2)">
+                <button class="btn btn-link game-move-item game-move-middle mr-4 ml-3" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
                   <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
                   <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
                 </button>
-                <button class="btn btn-link game-move-item game-move-middle ml-3" v-bind:class="{active: gameValue===3}" @click="selectValue(3)">
+                <button class="btn btn-link game-move-item game-move-middle ml-3" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
                   <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
                   <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
                 </button>
@@ -452,15 +452,15 @@
           </div>
 
           <div class="mb-sm-0 mb-3">
-            <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectValue(1)">
+            <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
               <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
               <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
             </button>
-            <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectValue(2)">
+            <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
               <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
               <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
             </button>
-            <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectValue(3)">
+            <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
               <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
               <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
             </button>
@@ -500,7 +500,7 @@
       }
     },
     methods: {
-      selectValue(value) {
+      selectMoveValue(value) {
         console.log(`Value selected: ${value}`);
         this.gameValue = value;
       },
