@@ -80,8 +80,8 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </label>
-              <input id="rps_update_bet_input" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
-              <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
+              <input id="rpswfopponent_update_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <button class="btn btn-small-orange" onclick="window.RPS.">{{ $t('UPDATE') }}</button>
             </div>
           </div>
         </div>

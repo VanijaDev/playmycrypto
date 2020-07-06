@@ -84,7 +84,7 @@ const RPS = {
     $('#rps_game_referral_start')[0].placeholder = this.ownerAddress;
     $('#rps_next_move_seed_start')[0].placeholder = "Any string, but MEMORIZE it !";
     $('#rps_bet_input_start')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    $('#rps_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#rpswfopponent_update_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rps_game_referral_join')[0].placeholder = this.ownerAddress;
     $('#rps_previous_move_seed_playmove')[0].placeholder = "String from previous move";
     $('#rps_next_move_seed_playmove')[0].placeholder = "Any string, but MEMORIZE it !";
@@ -586,6 +586,48 @@ const RPS = {
         }
       })
   },
+  
+  increaseBetClicked: async function () {
+    console.log('%c increaseBetClicked_RPS:', 'color: #e51dff');
+
+    let bet = document.getElementById("rpswfopponent_update_bet").value;
+    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      return;
+    }
+
+    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.increaseBetForGameBy(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Utils.etherToWei(bet).toString(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+      .on('transactionHash', function (hash) {
+        // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage("INCREASE BET transaction: ", hash);
+      })
+      .once('receipt', function (receipt) {
+        console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
+
+        RPS.showGameViewForCurrentAccount();
+        ProfileManager.updateCurrentAccountBalanceUI();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showAlert('error', "Increase bet error...");
+          throw new Error(error, receipt);
+        }
+
+      });
+  },
 
 
 
@@ -1002,48 +1044,6 @@ const RPS = {
           showAlert('error', "Claim expired game error...");
           throw new Error(error, receipt);
         }
-      });
-  },
-
-  increaseBetClicked: async function () {
-    console.log('%c increaseBetClicked_RPS:', 'color: #e51dff');
-
-    let bet = document.getElementById("rpswfopponent_increse_bet").value;
-    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
-      return;
-    }
-
-    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.increaseBetForGameBy(gameId).send({
-      from: window.BlockchainManager.currentAccount(),
-      value: Utils.etherToWei(bet).toString(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("INCREASE BET transaction: ", hash);
-      })
-      .once('receipt', function (receipt) {
-        console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
-
-        RPS.showGameViewForCurrentAccount();
-        ProfileManager.updateCurrentAccountBalanceUI();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-      })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Increase bet error...");
-          throw new Error(error, receipt);
-        }
-
       });
   },
 
