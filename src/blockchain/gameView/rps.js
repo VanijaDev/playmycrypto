@@ -164,18 +164,17 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponent + "_game_creator").innerHTML = _gameInfo.creator;
         document.getElementById(this.GameView.waitingForOpponent + "_game_opponent").innerHTML = "0x";
         document.getElementById(this.GameView.waitingForOpponent + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
-return;
-        let isPaused = _gameInfo.paused;
-        if (isPaused) {
-          document.getElementById(this.GameView.waitingForOpponent + "_paused").classList.remove("display-none");
-          document.getElementById(this.GameView.waitingForOpponent + "_pauseBtn").innerHTML = "Unpause game";
 
-          document.getElementById(this.GameView.waitingForOpponent + "_makeTop").classList.add("display-none");
+        if (_gameInfo.paused) {
+          $('#'+_viewName+'_paused_block')[0].classList.remove("hidden");
+          $('#'+_viewName+'_pause_btn')[0].innerHTML = "UNPAUSE GAME";  //  TODO: ask Vova how to change text
+
+          $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden");
         } else {
-          document.getElementById(this.GameView.waitingForOpponent + "_paused").classList.add("display-none");
-          document.getElementById(this.GameView.waitingForOpponent + "_pauseBtn").innerHTML = "Pause game";
+          $('#'+_viewName+'_paused_block')[0].classList.add("hidden");
+          $('#'+_viewName+'_pause_btn')[0].innerHTML = "PAUSE GAME";  //  TODO: ask Vova how to change text
 
-          (await PromiseManager.isTopGamePromise(Types.Game.rps, _gameInfo.id)) ? document.getElementById("rpswfopponent_makeTop").classList.add("display-none") : document.getElementById("rpswfopponent_makeTop").classList.remove("display-none");
+          (await PromiseManager.isTopGamePromise(Types.Game.rps, _gameInfo.id)) ? $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden") : $('#'+_viewName+'_makeTop_block')[0].classList.remove("hidden");
         }
         break;
 

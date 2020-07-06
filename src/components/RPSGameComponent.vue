@@ -88,10 +88,10 @@
 
         <div class="bottom-buttons row">
           <div class="col-5 offset-1">
-            <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+            <button id="rpswfopponent_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
           </div>
           <div class="col-5 pr-2 button-border-left">
-            <button class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
+            <button id="rpswfopponent_pause_btn" class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
           </div>
         </div>
       </div>
@@ -100,14 +100,14 @@
         <h3 class="mt-4 mb-4 f18">{{ $t('WAITING_FOR_OPPONENT') }}</h3>
         <div class="row mt-5 pt-4"></div>
 
-        <div id="make_top_block_makeTop" class="align-button-bottom hidden" data-group="waitingForOpponent">
+        <div id="rpswfopponent_makeTop_block" class="align-button-bottom hidden" data-group="rpswfopponent_make_top">
           <button id="make_top_btc_makeTop" class="btn btn-start-game btn-make-top" onclick="window.RPS.makeTopClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-3">
             {{ $t('MAKE_TOP_GAME') }}
           </button>
         </div>
 
-        <div id="gamePaused" class="mt-5 pt-5 hidden" data-group="waitingForOpponent">
+        <div id="rpswfopponent_paused_block" class="mt-5 pt-5 hidden" data-group="rpswfopponent_paused">
           <h2 class="paused-game mb-0">{{ $t('GAME_PAUSED') }}</h2>
           <p class="f18">{{ $t('UNPAUSE_COST') }}
             <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
