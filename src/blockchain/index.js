@@ -294,7 +294,7 @@ const Index = {
 
       showTopBannerMessage(infoStr, null);
       setTimeout(function () {
-        hideAndClearNotifView();
+        hideTopBannerMessage();
       }, 5000);
 
       ProfileManager.update();

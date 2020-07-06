@@ -142,7 +142,7 @@ const RPS = {
     this.selectedPrevMove = this.Move.none;
     this.currentGameView = _viewName;
 
-    // this.hideAllGameViews(); //  TOD: remove
+    // this.hideAllGameViews(); //  TODO: remove
     this.populateViewWithGameInfo(_viewName, _gameInfo);
   },
 
@@ -453,7 +453,41 @@ const RPS = {
     return result;
   },
 
+  rowWinner: function (_rowMoves) {
+    let creatorMark = _rowMoves[0];
+    let opponentMark = _rowMoves[1];
 
+    if (!creatorMark.localeCompare(this.Move.rock.toString())) {
+      if (!opponentMark.localeCompare(this.Move.paper.toString())) {
+        return this.MoveWinner.opponent;
+      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
+        return this.MoveWinner.creator;
+      }
+    } else if (!creatorMark.localeCompare(this.Move.paper.toString())) {
+      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
+        return this.MoveWinner.creator;
+      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
+        return this.MoveWinner.opponent;
+      }
+    } else if (!creatorMark.localeCompare(this.Move.scissors.toString())) {
+      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
+        return this.MoveWinner.opponent;
+      } else if (!opponentMark.localeCompare(this.Move.paper.toString())) {
+        return this.MoveWinner.creator;
+      }
+    }
+
+    return this.MoveWinner.draw;
+  },
+
+
+  /** UI HANDLERS */
+
+  moveClicked: function (_move) {
+    console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
+
+    (_move > 10) ? this.selectedPrevMove = _move % 10 : this.selectedMove = _move;
+  },
 
 
 
@@ -568,34 +602,6 @@ const RPS = {
     }
   },
 
-  rowWinner: function (_rowMoves) {
-    let creatorMark = _rowMoves[0];
-    let opponentMark = _rowMoves[1];
-
-    if (!creatorMark.localeCompare(this.Move.rock.toString())) {
-      if (!opponentMark.localeCompare(this.Move.paper.toString())) {
-        return this.MoveWinner.opponent;
-      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
-        return this.MoveWinner.creator;
-      }
-    } else if (!creatorMark.localeCompare(this.Move.paper.toString())) {
-      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
-        return this.MoveWinner.creator;
-      } else if (!opponentMark.localeCompare(this.Move.scissors.toString())) {
-        return this.MoveWinner.opponent;
-      }
-    } else if (!creatorMark.localeCompare(this.Move.scissors.toString())) {
-      if (!opponentMark.localeCompare(this.Move.rock.toString())) {
-        return this.MoveWinner.opponent;
-      } else if (!opponentMark.localeCompare(this.Move.paper.toString())) {
-        return this.MoveWinner.creator;
-      }
-    }
-
-    return this.MoveWinner.draw;
-  },
-
-
   updateMoveExpirationCountdown: function (_viewName, _endTime) {
     // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
     this.countdown = setInterval(function () {
@@ -659,26 +665,13 @@ const RPS = {
   },
 
 
-  /** UI HANDLERS */
-
-  moveClicked: function (_move) {
-    console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
-
-    if (_move > 10) {
-      //  prev
-      this.selectedPrevMove = _move % 10;
-      this.updateSelectedMoveImgs(this.currentGameView, this.selectedPrevMove, true);
-    } else {
-      this.selectedMove = _move;
-      this.updateSelectedMoveImgs(this.currentGameView, _move, false);
-    }
-  },
+  
 
   startGameClicked: async function () {
     console.log('%c startGameClicked_RPS', 'color: #e51dff');
 
-    let bet = document.getElementById("cf_update_bet_input_rps").value;
-    let seedStr = document.getElementById("seed_start_rps").value;
+    let bet = document.getElementById("rps_bet_input_start").value;
+    let seedStr = document.getElementById("rps_next_move_seed_start").value;
 
     if (this.selectedMove == 0) {
       showAlert("error", "Please select move.");
@@ -709,31 +702,31 @@ const RPS = {
       referral = this.ownerAddress;
     }
 
-    showSpinner(Spinner.gameView);
-    window.BlockchainManager.rockPaperScissorsContract.methods.createGame(referral, seedHash).send({
-      from: window.BlockchainManager.currentAccount,
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.createGame(referral, seedHash).send({
+      from: window.BlockchainManager.currentAccount(),
       value: Utils.etherToWei(bet),
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-      .on('transactionHash', function (hash) {
-        // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("CREATE GAME transaction ", hash);
-      })
-      .once('receipt', function (receipt) {
-        RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
-        hideAndClearNotifView();
-      })
-      .once('error', function (error, receipt) {
-        ProfileManager.update();
-        hideAndClearNotifView();
-        hideSpinner(Spinner.gameView);
+    .on('transactionHash', function (hash) {
+      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("CREATE GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Create game error...");
-          throw new Error(error, receipt);
-        }
-      });
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Create game error...");
+        throw new Error(error, receipt);
+      }
+    });
   },
 
   joinGameClicked: async function () {
@@ -782,11 +775,11 @@ const RPS = {
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -817,11 +810,11 @@ const RPS = {
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -882,7 +875,7 @@ const RPS = {
       })
       .once('receipt', async function (receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
 
         const gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, gameId);
         if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
@@ -896,7 +889,7 @@ const RPS = {
       })
       .once('error', function (error, receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -929,12 +922,12 @@ const RPS = {
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.lost, null);
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -965,12 +958,12 @@ const RPS = {
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.won, null);
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -1006,12 +999,12 @@ const RPS = {
 
         RPS.showGameViewForCurrentAccount();
         ProfileManager.updateCurrentAccountBalanceUI();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -1044,14 +1037,14 @@ const RPS = {
         showTopBannerMessage("PAUSE GAME transaction ", hash);
       })
       .once('receipt', function (receipt) {
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         ProfileManager.update();
         RPS.showGameViewForCurrentAccount();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -1080,13 +1073,13 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         RPS.showGameViewForCurrentAccount();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -1117,13 +1110,13 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         RPS.showGameViewForCurrentAccount();
         hideSpinner(Spinner.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         ProfileManager.update();
-        hideAndClearNotifView();
+        hideTopBannerMessage();
         hideSpinner(Spinner.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {

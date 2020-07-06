@@ -20,7 +20,7 @@
             <input type="number" step="0.01" min="0.01" id="rps_bet_input_start" class="bet-input" v-model="currentBet"/>
           </div>
 
-          <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveDisabled}" @click="startMove()">
+          <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveDisabled}" onclick="window.RPS.startGameClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('MAKE_MOVE') }}
           </button>
@@ -503,14 +503,15 @@
       selectMoveValue(value) {
         console.log(`Value selected: ${value}`);
         this.gameValue = value;
+        window.RPS.moveClicked(value);
       },
       selectPreviousValue(value) {
         console.log(`Previous value selected: ${value}`);
         this.prevGameValue = value;
       },
-      startMove() {
-        console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
-      },
+      // startMove() {
+      //   console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
+      // },
       joinGame() {
         console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
       },
