@@ -80,7 +80,8 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </label>
-              <input id="rpswfopponent_increase_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <input id="rpswfopponent_increase_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input"
+                     v-model="currentBet"/>
               <button class="btn btn-small-orange" onclick="window.RPS.increaseBetClicked()">{{ $t('UPDATE') }}</button>
             </div>
           </div>
@@ -615,8 +616,6 @@
   }
 
   .game-area .inner-column {
-    padding: .8rem 2rem !important;
-
     &.second-inner-column {
       padding: .8rem 1rem .8rem 1rem !important;
     }
