@@ -122,11 +122,11 @@
 
         <div class="mt-0 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cf_gameId_makeTop" class="f10">0</span>
+          <span id="rpsjoingame_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="gameCreator_makeTop" class="f10">0x0</span>
+          <span id="rpsjoingame_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="gameOpponent_makeTop" class="f10">0x0</span>
+          <span id="rpsjoingame_game_opponent" class="f10">0x0</span>
 
           <div class="row">
             <div class="col-6 pr-0">
@@ -134,7 +134,7 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </p>
-              <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
+              <b id="rpsjoingame_game_bet">{{ currentBet ? currentBet : 0 }}</b>
             </div>
           </div>
 

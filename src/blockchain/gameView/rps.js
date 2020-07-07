@@ -6,6 +6,7 @@ import BigNumber from "bignumber.js";
 import { ProfileManager } from "../managers/profileManager";
 import Types from "../types";
 
+var $t = $('#translations').data();
 
 const RPS = {
   // ownerAddress: "",
@@ -34,7 +35,7 @@ const RPS = {
     startNew: "rpsstart",
     waitingForOpponent: "rpswfopponent",
     // waitingForOpponentMove: "rpswfopponentmove",
-    // join: "rpsjoingame",
+    join: "rpsjoingame",
     // waitOpponentMove: "rpswfopponentmove",
     // creatorMove: "rpscreatormove",
     // opponentMove: "rpsopponentmove",
@@ -177,7 +178,7 @@ const RPS = {
           $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden");
         } else {
           $('#'+_viewName+'_paused_block')[0].classList.add("hidden");
-          $('#'+_viewName+'_pause_btn')[0].innerHTML = "PAUSE GAME";  //  TODO: ask Vova how to change text
+          $('#'+_viewName+'_pause_btn')[0].innerHTML = $t.PAUSE_GAME // "PAUSE GAME";  //  TODO: ask Vova how to change text
 
           (await PromiseManager.isTopGamePromise(Types.Game.rps, _gameInfo.id)) ? $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden") : $('#'+_viewName+'_makeTop_block')[0].classList.remove("hidden");
         }
@@ -196,9 +197,9 @@ const RPS = {
         break;
 
       case this.GameView.join:
-        document.getElementById(this.GameView.join + "_gameId").innerHTML = _gameInfo.id;
-        document.getElementById(this.GameView.join + "_gameCreator").innerHTML = _gameInfo.creator;
-        document.getElementById(this.GameView.join + "_gameOpponent").innerHTML = "0x0";
+        document.getElementById(this.GameView.join + "_game_id").innerHTML = _gameInfo.id;
+        document.getElementById(this.GameView.join + "_game_creator").innerHTML = _gameInfo.creator;
+        document.getElementById(this.GameView.join + "_game_opponent").innerHTML = "0x0";
         document.getElementById(this.GameView.join + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
         break;
 
@@ -776,11 +777,6 @@ const RPS = {
     }
 
     return resultView;
-  },
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView(this.GameView.join, _gameInfo);
   },
 
   updateGameViewInfo: function (_viewName, _gameInfo) {
