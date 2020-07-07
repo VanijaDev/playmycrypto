@@ -138,7 +138,9 @@ const RPS = {
     // console.log("showGameView: ", _viewName, _gameInfo);
 
     if (!this.currentGameView.localeCompare(_viewName)) {
-      return;
+      if (_viewName.localeCompare(this.GameView.join)) {
+        return;
+      }
     }
 
     this.selectedMove = this.Move.none;
@@ -152,7 +154,7 @@ const RPS = {
   },
 
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
     this.clearView(_viewName);
 
@@ -277,7 +279,7 @@ const RPS = {
         break;
 
       case this.GameView.join:
-        document.getElementById("cf_game_referral_join_rps").value = "";
+        document.getElementById("rpsjoingame_game_referral").value = "";
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
@@ -924,7 +926,7 @@ const RPS = {
 
   joinGameClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
-
+TODO
     let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount));
     if (ongoingGameId != 0) {
       showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);

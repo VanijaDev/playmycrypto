@@ -531,7 +531,7 @@ const Game = {
     if (this.gameType == Types.Game.cf) {
       CoinFlip.showJoinGame(gameInfo);
     } else if (this.gameType == Types.Game.rps) {
-      RPS.showGameView(RPS.GameView.join, null);
+      RPS.showGameView(RPS.GameView.join, gameInfo);
     }
   },
 

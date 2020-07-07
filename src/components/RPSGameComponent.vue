@@ -144,7 +144,7 @@
             <input type="text" id="rpsjoingame_game_referral" class="game_view-value referral-addr"/>
           </div>
 
-          <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
+          <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveJoinDisabled}" onclick="window.RPS.joinGameClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('JOIN_GAME') }}
           </button>
@@ -539,9 +539,9 @@
       // startMove() {
       //   console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
       // },
-      joinGame() {
-        console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
-      },
+      // joinGame() {
+      //   console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
+      // },
     }
   };
 </script>
