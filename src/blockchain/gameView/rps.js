@@ -82,15 +82,15 @@ const RPS = {
 
   setPlaceholders: function () {
     $('#rpsstart_game_referral')[0].placeholder = this.ownerAddress;
-    $('#rpsstart_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
-    $('#rpsstart_next_move_seed')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    $('#rpswfopponent_update_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#rpsstart_seed')[0].placeholder = "Any string, but MEMORIZE it !";
+    $('#rpsstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#rpswfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rpsjoingame_game_referral')[0].placeholder = this.ownerAddress;
     $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
     $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
     // $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
     // $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    // $('#rpswfopponent_increse_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    // $('#rpswfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   showGameViewForCurrentAccount: async function () {
@@ -134,7 +134,7 @@ const RPS = {
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    console.log("showGameView: ", _viewName, _gameInfo);
+    // console.log("showGameView: ", _viewName, _gameInfo);
 
     if (!this.currentGameView.localeCompare(_viewName)) {
       return;
@@ -144,6 +144,7 @@ const RPS = {
     this.selectedPrevMove = this.Move.none;
     this.currentGameView = _viewName;
 
+    this.clearView(_viewName);
     window.showGameBlock(_viewName);
     // this.hideAllGameViews(); //  TODO: remove
     this.populateViewWithGameInfo(_viewName, _gameInfo);
@@ -250,13 +251,13 @@ const RPS = {
     switch (_viewName) {
       case this.GameView.startNew:
         document.getElementById("rpsstart_game_referral").value = "";
-        document.getElementById("rpsstart_next_move_seed").value = "";
-        document.getElementById("rpsstart_next_move_seed").value = "0.01";
+        document.getElementById("rpsstart_seed").value = "";
+        document.getElementById("rpsstart_bet").value = "0.01";
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false); TODO: ask Vova
         break;
 
       case this.GameView.waitingForOpponent:
-        document.getElementById(this.GameView.waitingForOpponent + "_increse_bet").value = "";
+        document.getElementById(this.GameView.waitingForOpponent + "_increase_bet").value = "";
         break;
 
       case this.GameView.waitingForOpponentMove:
@@ -486,8 +487,8 @@ const RPS = {
   startGameClicked: async function () {
     console.log('%c startGameClicked_RPS', 'color: #e51dff');
 
-    let bet = document.getElementById("rpsstart_next_move_seed").value;
-    let seedStr = document.getElementById("rpsstart_next_move_seed").value;
+    let bet = document.getElementById("rpsstart_bet").value;
+    let seedStr = document.getElementById("rpsstart_seed").value;
 
     if (this.selectedMove == 0) {
       showAlert("error", "Please select move.");
@@ -594,7 +595,7 @@ const RPS = {
   increaseBetClicked: async function () {
     console.log('%c increaseBetClicked_RPS:', 'color: #e51dff');
 
-    let bet = document.getElementById("rpswfopponent_update_bet").value;
+    let bet = document.getElementById("rpswfopponent_increase_bet").value;
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
       showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
       return;

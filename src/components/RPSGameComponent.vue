@@ -9,7 +9,7 @@
           </div>
           <div>
             <label for="SeedPhrase" class="f10 opacity-text text-left opacity-text mt-3 mb-1">{{ $t('ENTER_SEED') }}:</label>
-            <input type="text" id="rpsstart_next_move_seed" class="game_view-value referral-addr" v-model="currentSeedPhrase"/>
+            <input type="text" id="rpsstart_seed" class="game_view-value referral-addr" v-model="currentSeedPhrase"/>
           </div>
           <div>
             <label for="Bet" class="f10 text-left opacity-text mt-3 mb-1">
@@ -17,12 +17,12 @@
               <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
               <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
             </label>
-            <input type="number" step="0.01" min="0.01" id="rpsstart_next_move_seed" class="bet-input" v-model="currentBet"/>
+            <input type="number" step="0.01" min="0.01" id="rpsstart_bet" class="bet-input" v-model="currentBet"/>
           </div>
 
           <button class="btn btn-start-game desktop-move" v-bind:class="{disabled: moveDisabled}" onclick="window.RPS.startGameClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
-            {{ $t('MAKE_MOVE') }}
+            {{ $t('START_GAME') }}
           </button>
         </div>
       </div>
@@ -80,7 +80,7 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </label>
-              <input id="rpswfopponent_update_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
+              <input id="rpswfopponent_increase_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
               <button class="btn btn-small-orange" onclick="window.RPS.increaseBetClicked()">{{ $t('UPDATE') }}</button>
             </div>
           </div>
