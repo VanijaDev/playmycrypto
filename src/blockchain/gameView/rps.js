@@ -154,7 +154,7 @@ const RPS = {
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
     // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
-    // this.clearView(_viewName);  TODO: ask Vova
+    this.clearView(_viewName);
 
     if (!_gameInfo) {
       return;
@@ -178,7 +178,7 @@ const RPS = {
           $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden");
         } else {
           $('#'+_viewName+'_paused_block')[0].classList.add("hidden");
-          $('#'+_viewName+'_pause_btn')[0].innerHTML = $t.PAUSE_GAME // "PAUSE GAME";  //  TODO: ask Vova how to change text
+          $('#'+_viewName+'_pause_btn')[0].innerHTML = "PAUSE GAME";  //  TODO: ask Vova how to change text
 
           (await PromiseManager.isTopGamePromise(Types.Game.rps, _gameInfo.id)) ? $('#'+_viewName+'_makeTop_block')[0].classList.add("hidden") : $('#'+_viewName+'_makeTop_block')[0].classList.remove("hidden");
         }
@@ -251,10 +251,11 @@ const RPS = {
 
     switch (_viewName) {
       case this.GameView.startNew:
-        document.getElementById("rpsstart_game_referral").value = "";
-        document.getElementById("rpsstart_seed").value = "";
-        document.getElementById("rpsstart_bet").value = "0.01";
-        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false); TODO: ask Vova
+        document.getElementById(this.GameView.startNew + "_game_referral").value = "";
+        document.getElementById(this.GameView.startNew + "_seed").value = "";
+        document.getElementById(this.GameView.startNew + "_bet").value = "0.01";
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
+        selectMoveValue(null);
         break;
 
       case this.GameView.waitingForOpponent:
@@ -277,7 +278,7 @@ const RPS = {
 
       case this.GameView.join:
         document.getElementById("cf_game_referral_join_rps").value = "";
-        this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
       case this.GameView.makeMove:
@@ -295,7 +296,7 @@ const RPS = {
         document.getElementById(this.GameView.makeMove + "_move_expired").classList.add("display-none");
 
         document.getElementById(this.GameView.makeMove + "_claim_expired_btn").classList.add("disabled");
-        this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
       case this.GameView.playMove:
@@ -317,8 +318,8 @@ const RPS = {
 
         document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
 
-        this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
-        this.updateSelectedMoveImgs(_viewName, this.Move.none, true);
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
+        // this.updateSelectedMoveImgs(_viewName, this.Move.none, true);
         break;
 
       case this.GameView.won:
