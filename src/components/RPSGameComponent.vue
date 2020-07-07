@@ -523,6 +523,9 @@
         return this.gameValue === null;
       }
     },
+    mounted() {
+      window.selectMoveValue = this.selectMoveValue
+    },
     methods: {
       selectMoveValue(value) {
         console.log(`Value selected: ${value}`);
