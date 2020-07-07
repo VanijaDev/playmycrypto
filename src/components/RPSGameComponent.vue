@@ -81,7 +81,7 @@
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
               </label>
               <input id="rpswfopponent_update_bet" type="number" step="0.01" min="0.01" class="col-5 offset-3 mr-1 offset-sm-0 bet-input" v-model="currentBet"/>
-              <button class="btn btn-small-orange" onclick="window.RPS.">{{ $t('UPDATE') }}</button>
+              <button class="btn btn-small-orange" onclick="window.RPS.increaseBetClicked()">{{ $t('UPDATE') }}</button>
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@
             <button id="rpswfopponent_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
           </div>
           <div class="col-5 pr-2 button-border-left">
-            <button id="rpswfopponent_pause_btn" class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
+            <button id="rpswfopponent_pause_btn" class="btn btn-small-orange" onclick="window.RPS.pauseGameClicked()">{{ $t('PAUSE_GAME') }}</button>
           </div>
         </div>
       </div>
