@@ -5,8 +5,8 @@
         <div class="col-sm-8">
           <div class="shadow-block inner-padding game-block">
             <div class="game-area" id="gameBlock">
-              <cf-game v-if="currentGame === 'cf'"></cf-game>
-              <rps-game v-if="currentGame === 'rps'"></rps-game>
+              <cf-game v-if="currentGame === 'cf'" ref="cfGame"></cf-game>
+              <rps-game v-if="currentGame === 'rps'" ref="rpsGame"></rps-game>
               <ttt-game v-if="currentGame === 'ttt'"></ttt-game>
             </div>
           </div>
