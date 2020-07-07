@@ -97,6 +97,10 @@ const CoinFlip = {
 
   //  HANDLE UI ELEMENT ACTIONS
   startGame: async function () {
+
+    window.showGameBlock("youLost")
+    return;
+
     let referral = document.getElementById("cf_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {

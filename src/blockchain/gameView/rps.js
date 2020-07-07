@@ -40,9 +40,9 @@ const RPS = {
     // opponentMove: "rpsopponentmove",
     // playMove: "rpsplaymove",
     // makeMove: "rpsmakemove",
-    // won: "rpsyouwon",
-    // lost: "rpsyoulost",
-    // draw: "rpsdraw",
+    won: "youWon",
+    lost: "youLost",
+    draw: "itsDraw",
   },
 
   // InnerGameViews: {
@@ -134,7 +134,11 @@ const RPS = {
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    // console.log("showGameView: ", _viewName, _gameInfo);
+    console.log("showGameView: ", _viewName, _gameInfo);
+
+    if (!this.currentGameView.localeCompare(_viewName)) {
+      return;
+    }
 
     this.selectedMove = this.Move.none;
     this.selectedPrevMove = this.Move.none;
@@ -640,7 +644,7 @@ const RPS = {
   },
 
   pauseGame: async function (_gameId) {
-    console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
+    // console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
 
     window.BlockchainManager.gameInst(Types.Game.rps).methods.pauseGame(_gameId).send({
       from: window.BlockchainManager.currentAccount(),
@@ -669,7 +673,7 @@ const RPS = {
   },
 
   unpauseGame: async function (_gameId) {
-    console.log('%c unpauseGame_RPS:', 'color: #e51dff');
+    // console.log('%c unpauseGame_RPS:', 'color: #e51dff');
 
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
       showAlert('error', 'Unpause Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough funds.');
@@ -701,6 +705,49 @@ const RPS = {
         throw new Error(error, receipt);
       }
     });
+  },
+
+  quitGameClicked: async function () {
+    console.log('%c quitGameClicked_RPS', 'color: #e51dff');
+
+    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
+    if (!this.currentGameView.localeCompare(this.GameView.waitingForOpponentMove)) {
+      gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
+    } else if (!this.currentGameView.localeCompare(this.GameView.playMove)) {
+      gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
+    }
+    console.log("gameId: ", gameId);
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("QUIT GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameView(RPS.GameView.lost, null);
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    })
+    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Quit game error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
+  closeResultView: function () {
+    // console.log('%c closeResultView_RPS:', 'color: #e51dff');
+    this.showGameViewForCurrentAccount();
   },
 
 
@@ -1047,44 +1094,6 @@ const RPS = {
       });
   },
 
-  quitGameClicked: async function (_viewName) {
-    console.log('%c quitGameClicked_RPS: %s', 'color: #e51dff', _viewName);
-
-    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    if (!_viewName.localeCompare(this.GameView.waitingForOpponentMove)) {
-      gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
-    } else if (!_viewName.localeCompare(this.GameView.playMove)) {
-      gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
-    }
-    console.log("gameId: ", gameId);
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
-      from: window.BlockchainManager.currentAccount(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("QUIT GAME transaction: ", hash);
-      })
-      .once('receipt', function (receipt) {
-        RPS.showGameView(RPS.GameView.lost, null);
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-      })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Quit game error...");
-          throw new Error(error, receipt);
-        }
-      });
-  },
-
   claimExpiredGameClicked: async function (_viewName) {
     console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', _viewName);
 
@@ -1119,11 +1128,6 @@ const RPS = {
           throw new Error(error, receipt);
         }
       });
-  },
-
-  closeResultView: function () {
-    // console.log('%c closeResultView_RPS:', 'color: #e51dff');
-    this.showGameViewForCurrentAccount();
   },
 
 }

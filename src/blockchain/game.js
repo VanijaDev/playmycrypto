@@ -438,23 +438,26 @@ const Game = {
   onGameFinished: async function (_id) {
     console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
+    if (this.isGamePresentInAnyList(_id)) {
+      this.removeGameWithId(_id);
+    }
+    Game.updateRaffleStateInfoForGame(Game.gameType, false);
+
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
+      if (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.creator)) {
+        return;
+      }
+
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.draw)) == 0) {
-        if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
-          return;
-        }
         resultView = RPS.GameView.draw;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.winnerPresent)) == 0) {
-        if (!Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.opponent)) {
-          return;
-        }
-        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.quitted)) == 0 ||
         (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.expired)) == 0) {
-        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else {
         throw("onGameFinished - ERROR");
       }
@@ -462,8 +465,6 @@ const Game = {
       RPS.showGameView(resultView, null);
       ProfileManager.update();
     }
-
-    Game.updateRaffleStateInfoForGame(Game.gameType, false);
   },
 
   onGameMovePlayed: function (_gameId, _nextMover) {

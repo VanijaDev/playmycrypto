@@ -88,7 +88,7 @@
 
         <div class="bottom-buttons row">
           <div class="col-5 offset-1">
-            <button id="rpswfopponent_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+            <button id="rpswfopponent_quit_btn" class="btn btn-small-orange" onclick="window.RPS.quitGameClicked()">{{ $t('QUIT_GAME') }}</button>
           </div>
           <div class="col-5 pr-2 button-border-left">
             <button id="rpswfopponent_pause_btn" class="btn btn-small-orange" onclick="window.RPS.pauseGameClicked()">{{ $t('PAUSE_GAME') }}</button>
@@ -472,6 +472,29 @@
           <p class="f18">{{ $t('EXPIRED2') }}</p>
         </div>
 
+      </div>
+    </div>
+    <div class="row hidden game-block" id="youWon">
+      <div class="inner-column game-image-padding text-center">
+        <img src="/img/icon-big-won.svg" alt="">
+        <h2 class="mt-4 mb-4">{{ $t('YOU_WON') }}!</h2>
+        <button class="btn btn-medium-orange" onclick="window.RPS.closeResultView()">{{ $t('CLOSE') }}</button>
+      </div>
+    </div>
+
+    <div class="row hidden game-block" id="youLost">
+      <div class="inner-column game-image-padding text-center">
+        <img src="/img/icon-big-lose.svg" alt="">
+        <h2 class="mt-4 mb-4">{{ $t('YOU_LOST') }}...</h2>
+        <button class="btn btn-medium-orange" onclick="window.RPS.closeResultView()">{{ $t('CLOSE') }}</button>
+      </div>
+    </div>
+
+    <div class="row hidden game-block" id="itsDraw">
+      <div class="inner-column game-image-padding text-center">
+        <img src="/img/icon-big-draw.svg" alt="">
+        <h2 class="mt-4 mb-4">{{ $t('YOU_DRAW') }}.</h2>
+        <button class="btn btn-medium-orange" onclick="window.RPS.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
   </div>
