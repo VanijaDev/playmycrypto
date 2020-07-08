@@ -190,35 +190,37 @@
 
         <div class="mt-1 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cf_gameId_makeTop" class="f10">0</span>
+          <span id="rpswfopponentmove_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="gameCreator_makeTop" class="f10">0x0</span>
+          <span id="rpswfopponentmove_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="gameOpponent_makeTop" class="f10">0x0</span>
+          <span id="rpswfopponentmove_game_opponent" class="f10">0x0</span>
 
           <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
             <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
             <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
           </p>
-          <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
+          <b id="rpswfopponentmove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Last move at:</p>
+              <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="date mr-2 text-white-50">30.01.20</span>
-                <span>12:31</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> min</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
               <p class="mb-0">Can claim at:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span class="date mr-2 text-white-50">30.01.20</span>
                 <span>12:31</span>
               </p>
-            </div>
+            </div> -->
           </div>
 
           <div class="bottom-buttons row">
@@ -274,18 +276,20 @@
               <p class="mb-0">Last move at:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="date mr-2 text-white-50">30.01.20</span>
-                <span>12:31</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> min</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
               <p class="mb-0">Can claim at:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span class="date mr-2 text-white-50">30.01.20</span>
                 <span>12:31</span>
               </p>
-            </div>
+            </div> -->
           </div>
 
           <button id="creatorPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
@@ -404,18 +408,20 @@
               <p class="mb-0">Last move at:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="date mr-2 text-white-50">30.01.20</span>
-                <span>12:31</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> min</span>
+                <span class="f13">12</span>
+                <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
               <p class="mb-0">Can claim at:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span class="date mr-2 text-white-50">30.01.20</span>
                 <span>12:31</span>
               </p>
-            </div>
+            </div> -->
           </div>
 
           <button id="opponentPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">

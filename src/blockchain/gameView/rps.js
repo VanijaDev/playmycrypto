@@ -112,9 +112,9 @@ const RPS = {
           break;
 
         case Types.GameState.started:
-          let isNextMover = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.nextMover);
+          let isNextMover = Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.nextMover);
           if (isNextMover) {
-            let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount, gameInfo.creator);
+            let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.creator);
             if (isGameCreator) {
               this.showGameView(this.GameView.playMove, gameInfo);
             } else {
@@ -775,7 +775,7 @@ const RPS = {
 
     if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
       resultView = RPS.GameView.draw;
-    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount)) {
+    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) {
       resultView = RPS.GameView.won;
     }
 
@@ -926,8 +926,8 @@ const RPS = {
 
   joinGameClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
-TODO
-    let ongoingGameId = parseInt(await PromiseManager.getOngoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount));
+
+    let ongoingGameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (ongoingGameId != 0) {
       showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
       return;
@@ -938,7 +938,7 @@ TODO
       return;
     }
 
-    let referral = document.getElementById("cf_game_referral_join_rps").value;
+    let referral = document.getElementById("rpsjoingame_game_creator").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
         showAlert("error", "Wrong referral address.");
@@ -948,7 +948,7 @@ TODO
       referral = this.ownerAddress;
     }
 
-    let gameId = document.getElementById("rpsjoingame_gameId").innerHTML;
+    let gameId = document.getElementById("rpsjoingame_game_id").innerHTML;
     let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
 
     let bet = gameInfo.bet;
@@ -963,25 +963,25 @@ TODO
       value: bet,
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
-      .on('transactionHash', function (hash) {
-        // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("JOIN GAME transaction: ", hash);
-      })
-      .once('receipt', function (receipt) {
-        RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
-        hideTopBannerMessage();
-      })
-      .once('error', function (error, receipt) {
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    .on('transactionHash', function (hash) {
+      // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("JOIN GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Join game error...");
-          throw new Error(error, receipt);
-        }
-      });
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Join game error...");
+        throw new Error(error, receipt);
+      }
+    });
   },
 
   makeMoveClicked: async function () {
