@@ -225,7 +225,7 @@
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button id="rpswfopponentmove_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+              <button id="rpswfopponentmove_quit_btn" class="btn btn-small-orange disabled">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left">
               <button id="rpswfopponentmove_claim_expired_btn" class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
@@ -246,7 +246,7 @@
         </div>
         <h2 class="f24">{{ $t('WAITING_OPPONENT_MOVE') }}</h2>
 
-        <div id="rpswfopponentmove_move_expired" class="mt-5 pt-5 hidden" data-group="waitOpponentMove">
+        <div id="rpswfopponentmove_move_expired" class="mt-5 pt-5 hidden" data-group="rpswfopponentmove">
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
           <p class="f18">{{ $t('MOVE_EXPIRED_CLAIM') }}</p>
         </div>

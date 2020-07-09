@@ -403,9 +403,9 @@ let PromiseManager = {
     });
   },
 
-  moveDurationPromise: function (_gameInst) {
+  moveDurationPromise: function (_gameType) {
     return new Promise(resolve => {
-      _gameInst.methods.gameMoveDuration().call()
+      window.BlockchainManager.gameInst(_gameType).methods.gameMoveDuration().call()
       .then(result => {
         resolve(result);
       })

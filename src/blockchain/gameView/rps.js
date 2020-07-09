@@ -194,7 +194,7 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = isGameCreator ? gameMoveResults[0] : gameMoveResults[1];
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = isGameCreator ? gameMoveResults[1] : gameMoveResults[0];
 
-        // this.updateExpiredUIFor(this.GameView.waitingForOpponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
+        this.updateExpiredUIFor(this.GameView.waitingForOpponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
         break;
 
       case this.GameView.join:
@@ -229,10 +229,10 @@ const RPS = {
 
         let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
         if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
-          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("display-none");
+          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("hidden");
           this.skipNextMove = false;
         } else {
-          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.add("display-none");
+          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.add("hidden");
           this.skipNextMove = true;
         }
         break;
@@ -274,7 +274,7 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "...";
 
-        document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.add("display-none");
+        document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.add("hidden");
 
         document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.add("disabled");
         document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
@@ -296,8 +296,8 @@ const RPS = {
         document.getElementById(this.GameView.makeMove + "_score_you").innerHTML = "...";
         document.getElementById(this.GameView.makeMove + "_score_opponent").innerHTML = "...";
 
-        document.getElementById(this.GameView.makeMove + "_move_action").classList.add("display-none");
-        document.getElementById(this.GameView.makeMove + "_move_expired").classList.add("display-none");
+        document.getElementById(this.GameView.makeMove + "_move_action").classList.add("hidden");
+        document.getElementById(this.GameView.makeMove + "_move_expired").classList.add("hidden");
 
         document.getElementById(this.GameView.makeMove + "_claim_expired_btn").classList.add("disabled");
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
@@ -317,8 +317,8 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_previous_move_seed").value = "";
         document.getElementById(this.GameView.playMove + "_next_move_seed").value = "";
 
-        document.getElementById(this.GameView.playMove + "_move_action").classList.add("display-none");
-        document.getElementById(this.GameView.playMove + "_move_expired").classList.add("display-none");
+        document.getElementById(this.GameView.playMove + "_move_action").classList.add("hidden");
+        document.getElementById(this.GameView.playMove + "_move_expired").classList.add("hidden");
 
         document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
 
@@ -850,15 +850,15 @@ const RPS = {
   },
 
   // hideAllGameViews: async function () {
-  //   document.getElementById(this.GameView.startNew).classList.add("display-none");
-  //   document.getElementById(this.GameView.waitingForOpponent).classList.add("display-none");
-  //   document.getElementById(this.GameView.waitingForOpponentMove).classList.add("display-none");
-  //   document.getElementById(this.GameView.join).classList.add("display-none");
-  //   document.getElementById(this.GameView.makeMove).classList.add("display-none");
-  //   document.getElementById(this.GameView.playMove).classList.add("display-none");
-  //   document.getElementById(this.GameView.won).classList.add("display-none");
-  //   document.getElementById(this.GameView.lost).classList.add("display-none");
-  //   document.getElementById(this.GameView.draw).classList.add("display-none");
+  //   document.getElementById(this.GameView.startNew).classList.add("hidden");
+  //   document.getElementById(this.GameView.waitingForOpponent).classList.add("hidden");
+  //   document.getElementById(this.GameView.waitingForOpponentMove).classList.add("hidden");
+  //   document.getElementById(this.GameView.join).classList.add("hidden");
+  //   document.getElementById(this.GameView.makeMove).classList.add("hidden");
+  //   document.getElementById(this.GameView.playMove).classList.add("hidden");
+  //   document.getElementById(this.GameView.won).classList.add("hidden");
+  //   document.getElementById(this.GameView.lost).classList.add("hidden");
+  //   document.getElementById(this.GameView.draw).classList.add("hidden");
   //   return;
   // },
 
@@ -870,10 +870,12 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
 
-          // document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
           document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
         } else {
           document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.add("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
           let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
@@ -887,10 +889,10 @@ const RPS = {
           document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = 0;
 
-          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("hidden");
           document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.add("disabled");
         } else {
-          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("display-none");
+          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("hidden");
           document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
@@ -905,11 +907,11 @@ const RPS = {
           document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
 
-          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("display-none");
+          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("hidden");
           document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
         } else {
           document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("display-none");
+          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("hidden");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
           let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
@@ -940,7 +942,7 @@ const RPS = {
 
             document.getElementById(RPS.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
             document.getElementById(RPS.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
           }
           break;
 
@@ -954,8 +956,8 @@ const RPS = {
 
             document.getElementById(RPS.GameView.makeMove + "_quit_btn").classList.add("disabled");
             document.getElementById(RPS.GameView.makeMove + "_claim_expired_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.makeMove + "_move_action").classList.add("display-none");
-            document.getElementById(RPS.GameView.makeMove + "_move_expired").classList.remove("display-none");
+            document.getElementById(RPS.GameView.makeMove + "_move_action").classList.add("hidden");
+            document.getElementById(RPS.GameView.makeMove + "_move_expired").classList.remove("hidden");
             document.getElementById(RPS.GameView.makeMove + "_make_move_btn").classList.add("disabled");
           }
           break;
@@ -970,8 +972,8 @@ const RPS = {
 
             document.getElementById(RPS.GameView.playMove + "_quit_btn").classList.remove("disabled");
             document.getElementById(RPS.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
-            document.getElementById(RPS.GameView.playMove + "_move_action").classList.add("display-none");
-            document.getElementById(RPS.GameView.playMove + "_move_expired").classList.remove("display-none");
+            document.getElementById(RPS.GameView.playMove + "_move_action").classList.add("hidden");
+            document.getElementById(RPS.GameView.playMove + "_move_expired").classList.remove("hidden");
             document.getElementById(RPS.GameView.playMove + "_play_move_btn").classList.add("disabled");
           }
           break;
