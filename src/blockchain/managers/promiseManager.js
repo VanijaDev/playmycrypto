@@ -403,6 +403,18 @@ let PromiseManager = {
     });
   },
 
+  moveDurationPromise: function (_gameInst) {
+    return new Promise(resolve => {
+      _gameInst.methods.gameMoveDuration().call()
+      .then(result => {
+        resolve(result);
+      })
+      .catch(err => {
+        throw new Error(err);
+      });
+    });
+  },
+
 
 
 
@@ -429,18 +441,6 @@ let PromiseManager = {
   getCreatorMoveHashesForGamePromise: function (_gameInst, _gameId) {
     return new Promise(resolve => {
       _gameInst.methods.getCreatorMoveHashesForGame(_gameId).call()
-      .then(result => {
-        resolve(result);
-      })
-      .catch(err => {
-        throw new Error(err);
-      });
-    });
-  },
-
-  getMoveDurationPromise: function (_gameInst) {
-    return new Promise(resolve => {
-      _gameInst.methods.gameMoveDuration().call()
       .then(result => {
         resolve(result);
       })

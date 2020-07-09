@@ -109,6 +109,7 @@
   "MAKE_MOVE_ERR": "MAKE MOVE error...",
   "PLAY_MOVE_TX": "PLAY MOVE transaction: ",
   "PLAY_MOVE_ERR": "PLAY MOVE error...",
+  "CLAIM_EXPIRED": "CALIM EXPIRED",
   "CLAIM_EXPIRED_TX": "CALIM EXPIRED GAME transaction: ",
   "CLAIM_EXPIRED_ERR": "CLAIM EXPIRED error..."
 }

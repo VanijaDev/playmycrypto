@@ -207,9 +207,9 @@
               <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="f13">12</span>
+                <span id="rpswfopponentmove_move_remain_min"  class="f13">...</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span class="f13">12</span>
+                <span id="rpswfopponentmove_move_remain_sec"  class="f13">...</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
@@ -225,10 +225,10 @@
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+              <button id="rpswfopponentmove_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left">
-              <button class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button id="rpswfopponentmove_claim_expired_btn" class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
@@ -238,15 +238,15 @@
         <div class="scores-block mb-2">
           <span class="one-side">YOU</span>
           <span class="scores">
-            <span id="rps_scores_you_waiting_for_opponent_move">0</span>
+            <span id="rpswfopponentmove_score_you">0</span>
             <span> : </span>
-            <span id="rps_scores_opponent_waiting_for_opponent_move">0</span>
+            <span id="rpswfopponentmove_score_opponent">0</span>
           </span>
           <span class="one-side">OPPONENT</span>
         </div>
         <h2 class="f24">{{ $t('WAITING_OPPONENT_MOVE') }}</h2>
 
-        <div id="moveExpired" class="mt-5 pt-5 hidden" data-group="waitOpponentMove">
+        <div id="rpswfopponentmove_move_expired" class="mt-5 pt-5 hidden" data-group="waitOpponentMove">
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
           <p class="f18">{{ $t('MOVE_EXPIRED_CLAIM') }}</p>
         </div>

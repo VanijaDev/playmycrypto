@@ -34,9 +34,8 @@ const RPS = {
   GameView: {
     startNew: "rpsstart",
     waitingForOpponent: "rpswfopponent",
-    // waitingForOpponentMove: "rpswfopponentmove",
+    waitingForOpponentMove: "rpswfopponentmove",
     join: "rpsjoingame",
-    // waitOpponentMove: "rpswfopponentmove",
     // creatorMove: "rpscreatormove",
     // opponentMove: "rpsopponentmove",
     // playMove: "rpsplaymove",
@@ -195,7 +194,7 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = isGameCreator ? gameMoveResults[0] : gameMoveResults[1];
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = isGameCreator ? gameMoveResults[1] : gameMoveResults[0];
 
-        this.updateExpiredUIFor(this.GameView.waitingForOpponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
+        // this.updateExpiredUIFor(this.GameView.waitingForOpponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
         break;
 
       case this.GameView.join:
@@ -271,6 +270,9 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponentMove + "_game_bet").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = "...";
+
+        document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "...";
+        document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "...";
 
         document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.add("display-none");
 
@@ -755,6 +757,66 @@ const RPS = {
     this.showGameViewForCurrentAccount();
   },
 
+  joinGameClicked: async function () {
+    console.log('%c joinGameClicked', 'color: #e51dff');
+
+    let ongoingGameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    if (ongoingGameId != 0) {
+      showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
+      return;
+    }
+
+    if (this.selectedMove == 0) {
+      showAlert("error", "Please select move.");
+      return;
+    }
+
+    let referral = document.getElementById("rpsjoingame_game_referral").value;
+    if (referral.length > 0) {
+      if (!web3.utils.isAddress(referral)) {
+        showAlert("error", "Wrong referral address.");
+        return;
+      }
+    } else {
+      referral = this.ownerAddress;
+    }
+
+    let gameId = document.getElementById("rpsjoingame_game_id").innerHTML;
+    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
+
+    let bet = gameInfo.bet;
+    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
+      showAlert('error', 'Not enough balance to join game.');
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.joinGame(gameId, referral, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount(),
+      value: bet,
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("JOIN GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Join game error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
 
 
 
@@ -808,13 +870,13 @@ const RPS = {
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
 
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
+          // document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("display-none");
           document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
         } else {
           document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
 
           let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
+          let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
           let endTime = parseInt(lastMoveTime.plus(moveDuration));
           this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
         }
@@ -922,66 +984,6 @@ const RPS = {
         clearInterval(this.countdown);
       }
     }, 1000);
-  },
-
-  joinGameClicked: async function () {
-    console.log('%c joinGameClicked', 'color: #e51dff');
-
-    let ongoingGameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    if (ongoingGameId != 0) {
-      showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
-      return;
-    }
-
-    if (this.selectedMove == 0) {
-      showAlert("error", "Please select move.");
-      return;
-    }
-
-    let referral = document.getElementById("rpsjoingame_game_creator").value;
-    if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
-        return;
-      }
-    } else {
-      referral = this.ownerAddress;
-    }
-
-    let gameId = document.getElementById("rpsjoingame_game_id").innerHTML;
-    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
-
-    let bet = gameInfo.bet;
-    if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
-      showAlert('error', 'Not enough balance to join game.');
-      return;
-    }
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.joinGame(gameId, referral, this.selectedMove).send({
-      from: window.BlockchainManager.currentAccount(),
-      value: bet,
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-    .on('transactionHash', function (hash) {
-      // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage("JOIN GAME transaction: ", hash);
-    })
-    .once('receipt', function (receipt) {
-      RPS.showGameViewForCurrentAccount();
-      ProfileManager.update();
-      hideTopBannerMessage();
-    })
-    .once('error', function (error, receipt) {
-      ProfileManager.update();
-      hideTopBannerMessage();
-      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Join game error...");
-        throw new Error(error, receipt);
-      }
-    });
   },
 
   makeMoveClicked: async function () {
