@@ -337,6 +337,131 @@ const RPS = {
     }
   },
 
+  updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
+    switch (_viewName) {
+      case this.GameView.waitingForOpponentMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
+        } else {
+          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.add("disabled");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
+        }
+        break;
+
+      case this.GameView.makeMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("hidden");
+          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.add("disabled");
+        } else {
+          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("hidden");
+          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
+        }
+        break;
+
+      case this.GameView.playMove:
+        if (_isExpired) {
+          document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
+          document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
+
+          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("hidden");
+          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
+        } else {
+          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("hidden");
+
+          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
+          let endTime = parseInt(lastMoveTime.plus(moveDuration));
+          this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
+        }
+        break;
+
+      default:
+        console.error("updateExpiredUIFor - no view: " + _viewName);
+        break;
+    }
+  },
+
+  updateMoveExpirationCountdown: function (_viewName, _endTime) {
+    // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
+    this.countdown = setInterval(function () {
+      let remain = Utils.getTimeRemaining(_endTime);
+
+      switch (_viewName) {
+        case RPS.GameView.waitingForOpponentMove:
+          document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = remain.minutes;
+          document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = remain.seconds;
+
+          if (remain.total <= 0) {
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "0";
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "0";
+
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
+            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
+          }
+          break;
+
+        case RPS.GameView.makeMove:
+          document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = remain.minutes;
+          document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = remain.seconds;
+
+          if (remain.total <= 0) {
+            document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = "0";
+            document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = "0";
+
+            document.getElementById(RPS.GameView.makeMove + "_quit_btn").classList.add("disabled");
+            document.getElementById(RPS.GameView.makeMove + "_claim_expired_btn").classList.remove("disabled");
+            document.getElementById(RPS.GameView.makeMove + "_move_action").classList.add("hidden");
+            document.getElementById(RPS.GameView.makeMove + "_move_expired").classList.remove("hidden");
+            document.getElementById(RPS.GameView.makeMove + "_make_move_btn").classList.add("disabled");
+          }
+          break;
+
+        case RPS.GameView.playMove:
+          document.getElementById(RPS.GameView.playMove + "_move_remain_min").innerHTML = remain.minutes;
+          document.getElementById(RPS.GameView.playMove + "_move_remain_sec").innerHTML = remain.seconds;
+
+          if (remain.total <= 0) {
+            document.getElementById(RPS.GameView.playMove + "_move_remain_min").innerHTML = "0";
+            document.getElementById(RPS.GameView.playMove + "_move_remain_sec").innerHTML = "0";
+
+            document.getElementById(RPS.GameView.playMove + "_quit_btn").classList.remove("disabled");
+            document.getElementById(RPS.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
+            document.getElementById(RPS.GameView.playMove + "_move_action").classList.add("hidden");
+            document.getElementById(RPS.GameView.playMove + "_move_expired").classList.remove("hidden");
+            document.getElementById(RPS.GameView.playMove + "_play_move_btn").classList.add("disabled");
+          }
+          break;
+
+        default:
+          break;
+      }
+
+      if (remain.total <= 0) {
+        clearInterval(this.countdown);
+      }
+    }, 1000);
+  },
+
   // updateSelectedMoveImgs: function (_viewName, _move, _isPrevMove) {
   //   console.log('%c updateSelectedMoveImgs_RPS: %s %s', 'color: #e51dff', _viewName, _move);
   //   let prefix = "";
@@ -488,7 +613,8 @@ const RPS = {
     return this.MoveWinner.draw;
   },
 
-
+  
+  /** UI HANDLERS */
 
   startGameClicked: async function () {
     console.log('%c startGameClicked_RPS', 'color: #e51dff');
@@ -551,9 +677,6 @@ const RPS = {
       }
     });
   },
-
-
-  /** UI HANDLERS */
 
   moveClicked: function (_move) {
     console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
@@ -817,6 +940,40 @@ const RPS = {
     });
   },
 
+  claimExpiredGameClicked: async function () {
+    console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff');
+
+
+    let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
+    console.log("gameId: ", gameId);
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.finishExpiredGame(gameId).send({
+      from: window.BlockchainManager.currentAccount(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("CLAIM EXPIRED GAME transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameView(RPS.GameView.won, null);
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    })
+    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Claim expired game error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
 
 
 
@@ -861,132 +1018,6 @@ const RPS = {
   //   document.getElementById(this.GameView.draw).classList.add("hidden");
   //   return;
   // },
-
-
-  updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
-    switch (_viewName) {
-      case this.GameView.waitingForOpponentMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
-          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
-        } else {
-          document.getElementById(this.GameView.waitingForOpponentMove + "_quit_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.add("disabled");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.waitingForOpponentMove, endTime);
-        }
-        break;
-
-      case this.GameView.makeMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.makeMove + "_move_expired").classList.remove("hidden");
-          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.add("disabled");
-        } else {
-          document.getElementById(this.GameView.makeMove + "_move_action").classList.remove("hidden");
-          document.getElementById(this.GameView.makeMove + "_make_move_btn").classList.remove("disabled");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.makeMove, endTime);
-        }
-        break;
-
-      case this.GameView.playMove:
-        if (_isExpired) {
-          document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
-          document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
-
-          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("hidden");
-          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
-        } else {
-          document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("hidden");
-
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
-        }
-        break;
-
-      default:
-        console.error("updateExpiredUIFor - no view: " + _viewName);
-        break;
-    }
-  },
-
-  updateMoveExpirationCountdown: function (_viewName, _endTime) {
-    // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
-    this.countdown = setInterval(function () {
-      let remain = Utils.getTimeRemaining(_endTime);
-
-      switch (_viewName) {
-        case RPS.GameView.waitingForOpponentMove:
-          document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = remain.minutes;
-          document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = remain.seconds;
-
-          if (remain.total <= 0) {
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "0";
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "0";
-
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_quit_btn").classList.add("disabled");
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_claim_expired_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.waitingForOpponentMove + "_move_expired").classList.remove("hidden");
-          }
-          break;
-
-        case RPS.GameView.makeMove:
-          document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = remain.minutes;
-          document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = remain.seconds;
-
-          if (remain.total <= 0) {
-            document.getElementById(RPS.GameView.makeMove + "_move_remain_min").innerHTML = "0";
-            document.getElementById(RPS.GameView.makeMove + "_move_remain_sec").innerHTML = "0";
-
-            document.getElementById(RPS.GameView.makeMove + "_quit_btn").classList.add("disabled");
-            document.getElementById(RPS.GameView.makeMove + "_claim_expired_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.makeMove + "_move_action").classList.add("hidden");
-            document.getElementById(RPS.GameView.makeMove + "_move_expired").classList.remove("hidden");
-            document.getElementById(RPS.GameView.makeMove + "_make_move_btn").classList.add("disabled");
-          }
-          break;
-
-        case RPS.GameView.playMove:
-          document.getElementById(RPS.GameView.playMove + "_move_remain_min").innerHTML = remain.minutes;
-          document.getElementById(RPS.GameView.playMove + "_move_remain_sec").innerHTML = remain.seconds;
-
-          if (remain.total <= 0) {
-            document.getElementById(RPS.GameView.playMove + "_move_remain_min").innerHTML = "0";
-            document.getElementById(RPS.GameView.playMove + "_move_remain_sec").innerHTML = "0";
-
-            document.getElementById(RPS.GameView.playMove + "_quit_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
-            document.getElementById(RPS.GameView.playMove + "_move_action").classList.add("hidden");
-            document.getElementById(RPS.GameView.playMove + "_move_expired").classList.remove("hidden");
-            document.getElementById(RPS.GameView.playMove + "_play_move_btn").classList.add("disabled");
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      if (remain.total <= 0) {
-        clearInterval(this.countdown);
-      }
-    }, 1000);
-  },
 
   makeMoveClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
@@ -1096,43 +1127,7 @@ const RPS = {
           throw new Error(error, receipt);
         }
       });
-  },
-
-  claimExpiredGameClicked: async function (_viewName) {
-    console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', _viewName);
-
-    let gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
-    if (!_viewName.localeCompare(this.GameView.makeMove)) {
-      gameId = document.getElementById("rpsmakemove_game_id").innerHTML;
-    }
-    console.log("gameId: ", gameId);
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.finishExpiredGame(gameId).send({
-      from: window.BlockchainManager.currentAccount(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("CLAIM EXPIRED GAME transaction: ", hash);
-      })
-      .once('receipt', function (receipt) {
-        RPS.showGameView(RPS.GameView.won, null);
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-      })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Claim expired game error...");
-          throw new Error(error, receipt);
-        }
-      });
-  },
+  }
 
 }
 

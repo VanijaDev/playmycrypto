@@ -228,7 +228,7 @@
               <button id="rpswfopponentmove_quit_btn" class="btn btn-small-orange disabled">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left">
-              <button id="rpswfopponentmove_claim_expired_btn" class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button id="rpswfopponentmove_claim_expired_btn" class="btn btn-small-orange disabled" onclick="window.RPS.claimExpiredGameClicked()">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
