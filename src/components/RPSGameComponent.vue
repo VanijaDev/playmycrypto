@@ -207,9 +207,9 @@
               <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span id="rpswfopponentmove_move_remain_min"  class="f13">...</span>
+                <span id="rpswfopponentmove_move_remain_min" class="f13">...</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span id="rpswfopponentmove_move_remain_sec"  class="f13">...</span>
+                <span id="rpswfopponentmove_move_remain_sec" class="f13">...</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
@@ -259,26 +259,26 @@
 
         <div class="mt-1 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cf_gameId_makeTop" class="f10">0</span>
+          <span id="rpscreatormove_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="gameCreator_makeTop" class="f10">0x0</span>
+          <span id="rpscreatormove_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="gameOpponent_makeTop" class="f10">0x0</span>
+          <span id="rpscreatormove_game_opponent" class="f10">0x0</span>
 
           <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
             <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
             <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
           </p>
-          <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
+          <b id="rpscreatormove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Last move at:</p>
+              <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="f13">12</span>
+                <span id="rpscreatormove_move_remain_min" class="f13">...</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span class="f13">12</span>
+                <span id="rpscreatormove_move_remain_sec" class="f13">...</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
@@ -292,17 +292,17 @@
             </div> -->
           </div>
 
-          <button id="creatorPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
+          <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('PLAY_MOVE') }}
           </button>
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+              <button id="rpscreatormove_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left">
-              <button class="btn btn-small-orange">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button id="rpscreatormove_claim_expired_btn" class="btn btn-small-orange">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
@@ -312,9 +312,9 @@
         <div class="scores-block">
           <span class="one-side">YOU</span>
           <span class="scores">
-            <span id="rps_scores_you_creator_move">0</span>
+            <span id="rpscreatormove_score_you">0</span>
             <span> : </span>
-            <span id="rps_scores_opponent_creator_move">0</span>
+            <span id="rpscreatormove_score_opponent">0</span>
           </span>
           <span class="one-side">OPPONENT</span>
         </div>
@@ -322,7 +322,7 @@
           You Won Move :)
         </div>
 
-        <div id="previousNextMoveCreator" data-group="creatorMove">
+        <div id="rpscreatormove_prev_next_move_creator_block" class="hidden" data-group="creatorMove">
           <div class="row mt-5">
             <div class="col-sm-4 text-sm-right">
               <h5>Previous move:</h5>
@@ -346,7 +346,7 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED2') }}:</label>
-                <input type="text" id="rpsplaymove_previous_move_seed" class="game_view-value referral-addr"/>
+                <input type="text" id="rpscreatormove_previous_move_seed" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
@@ -372,13 +372,13 @@
 
               <div class="opacity-text mt-3 pl-3 pr-3 pl-sm-0 pr-sm-0">
                 <label for="Referal" class="f10 opacity-text text-left opacity-text mt-2 mb-2">{{ $t('ENTER_SEED') }}:</label>
-                <input type="text" id="rpsplaymove_next_move_seed" class="game_view-value referral-addr"/>
+                <input type="text" id="rpscreatormove_next_move_seed" class="game_view-value referral-addr"/>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="moveExpiredCreator" class="mt-5 pt-5 hidden" data-group="creatorMove">
+        <div id="rpscreatormove_move_expired" class="mt-5 pt-5 hidden" data-group="creatorMove">
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
           <p class="f18">{{ $t('MOVE_EXPIRED_CLAIM') }}</p>
         </div>

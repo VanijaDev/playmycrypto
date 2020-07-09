@@ -38,7 +38,7 @@ const RPS = {
     join: "rpsjoingame",
     // creatorMove: "rpscreatormove",
     // opponentMove: "rpsopponentmove",
-    // playMove: "rpsplaymove",
+    playMove: "rpscreatormove",
     // makeMove: "rpsmakemove",
     won: "youWon",
     lost: "youLost",
@@ -86,8 +86,8 @@ const RPS = {
     $('#rpsstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rpswfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#rpsjoingame_game_referral')[0].placeholder = this.ownerAddress;
-    $('#rpsplaymove_previous_move_seed')[0].placeholder = "String from previous move";
-    $('#rpsplaymove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
+    $('#rpscreatormove_previous_move_seed')[0].placeholder = "String from previous move";
+    $('#rpscreatormove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
     // $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
     // $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     // $('#rpswfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
@@ -115,9 +115,9 @@ const RPS = {
           if (isNextMover) {
             let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.creator);
             if (isGameCreator) {
-              this.showGameView(this.GameView.playMove, gameInfo);
+              this.showGameView(this.GameView.playMove, gameInfo);  //  DOING
             } else {
-              this.showGameView(this.GameView.makeMove, gameInfo);
+              this.showGameView(this.GameView.makeMove, gameInfo);  //  TODO
             }
           } else {
             this.showGameView(this.GameView.waitingForOpponentMove, gameInfo);
@@ -227,14 +227,14 @@ const RPS = {
 
         this.updateExpiredUIFor(this.GameView.playMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
 
-        let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
-        if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
-          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("hidden");
-          this.skipNextMove = false;
-        } else {
-          document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.add("hidden");
-          this.skipNextMove = true;
-        }
+        // let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
+        // if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
+        //   document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("hidden");
+        //   this.skipNextMove = false;
+        // } else {
+        //   document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.add("hidden");
+        //   this.skipNextMove = true;
+        // }
         break;
 
       default:
@@ -317,8 +317,8 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_previous_move_seed").value = "";
         document.getElementById(this.GameView.playMove + "_next_move_seed").value = "";
 
-        document.getElementById(this.GameView.playMove + "_move_action").classList.add("hidden");
-        document.getElementById(this.GameView.playMove + "_move_expired").classList.add("hidden");
+        // document.getElementById(this.GameView.playMove + "_move_action").classList.add("hidden");
+        // document.getElementById(this.GameView.playMove + "_move_expired").classList.add("hidden");
 
         document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
 
@@ -381,16 +381,19 @@ const RPS = {
           document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = 0;
           document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = 0;
 
-          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("hidden");
           document.getElementById(this.GameView.playMove + "_play_move_btn").classList.add("disabled");
+          document.getElementById(this.GameView.playMove + "_prev_next_move_creator_block").classList.add("hidden");
+          document.getElementById(this.GameView.playMove + "_move_expired").classList.remove("hidden");
+          document.getElementById(this.GameView.playMove + "_quit_btn").classList.add("disabled");
+          document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.remove("disabled");
         } else {
           document.getElementById(this.GameView.playMove + "_play_move_btn").classList.remove("disabled");
-          document.getElementById(this.GameView.playMove + "_move_action").classList.remove("hidden");
+          document.getElementById(this.GameView.playMove + "_prev_next_move_creator_block").classList.remove("hidden");
+          document.getElementById(this.GameView.playMove + "_move_expired").classList.add("hidden");
+          document.getElementById(this.GameView.playMove + "_quit_btn").classList.remove("disabled");
+          document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
 
-          let lastMoveTime = new BigNumber(_prevMoveTimestamp);
-          let moveDuration = new BigNumber(await PromiseManager.getMoveDurationPromise(Types.Game.rps));
-          let endTime = parseInt(lastMoveTime.plus(moveDuration));
-          this.updateMoveExpirationCountdown(this.GameView.playMove, endTime);
+          this.updateMoveExpirationCountdown(this.GameView.playMove, _prevMoveTimestamp);
         }
         break;
 
@@ -400,10 +403,15 @@ const RPS = {
     }
   },
 
-  updateMoveExpirationCountdown: function (_viewName, _endTime) {
+  updateMoveExpirationCountdown: async function (_viewName, _prevMoveTimestamp) {
     // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
+    
+    let lastMoveTime = new BigNumber(_prevMoveTimestamp);
+    let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
+    let endTime = parseInt(lastMoveTime.plus(moveDuration));
+
     this.countdown = setInterval(function () {
-      let remain = Utils.getTimeRemaining(_endTime);
+      let remain = Utils.getTimeRemaining(endTime);
 
       switch (_viewName) {
         case RPS.GameView.waitingForOpponentMove:
@@ -443,12 +451,6 @@ const RPS = {
           if (remain.total <= 0) {
             document.getElementById(RPS.GameView.playMove + "_move_remain_min").innerHTML = "0";
             document.getElementById(RPS.GameView.playMove + "_move_remain_sec").innerHTML = "0";
-
-            document.getElementById(RPS.GameView.playMove + "_quit_btn").classList.remove("disabled");
-            document.getElementById(RPS.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
-            document.getElementById(RPS.GameView.playMove + "_move_action").classList.add("hidden");
-            document.getElementById(RPS.GameView.playMove + "_move_expired").classList.remove("hidden");
-            document.getElementById(RPS.GameView.playMove + "_play_move_btn").classList.add("disabled");
           }
           break;
 
@@ -472,7 +474,7 @@ const RPS = {
   //   } else if (!_viewName.localeCompare(this.GameView.makeMove)) {
   //     prefix = "rpsmakemove_";
   //   } else if (!_viewName.localeCompare(this.GameView.playMove)) {
-  //     prefix = "rpsplaymove_";
+  //     prefix = "rpscreatormove_";
   //   }
 
   //   const suffix = _isPrevMove ? "_prev" : "";
@@ -844,7 +846,7 @@ const RPS = {
     if (!this.currentGameView.localeCompare(this.GameView.waitingForOpponentMove)) {
       gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
     } else if (!this.currentGameView.localeCompare(this.GameView.playMove)) {
-      gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
+      gameId = document.getElementById("rpscreatormove_game_id").innerHTML;
     }
     console.log("gameId: ", gameId);
 
@@ -941,8 +943,7 @@ const RPS = {
   },
 
   claimExpiredGameClicked: async function () {
-    console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff');
-
+    console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', this.currentGameView);
 
     let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
     console.log("gameId: ", gameId);
@@ -1063,14 +1064,14 @@ const RPS = {
       return;
     }
 
-    let seedStrPrev = document.getElementById("rpsplaymove_previous_move_seed").value;
+    let seedStrPrev = document.getElementById("rpscreatormove_previous_move_seed").value;
     if (seedStrPrev.length == 0) {
       showAlert("error", "Please enter previous seed phrase.");
       return;
     }
 
     //  next
-    let seedStr = document.getElementById("rpsplaymove_next_move_seed").value;
+    let seedStr = document.getElementById("rpscreatormove_next_move_seed").value;
     if (this.skipNextMove) {
       this.selectedMove = 1;
     } else {
@@ -1087,7 +1088,7 @@ const RPS = {
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    let gameId = document.getElementById("rpsplaymove_game_id").innerHTML;
+    let gameId = document.getElementById("rpscreatormove_game_id").innerHTML;
 
     const prevSeedHash = web3.utils.soliditySha3(seedStrPrev);
     const seedStrHash = web3.utils.soliditySha3(seedStr);
