@@ -76,7 +76,6 @@
   "MOVE_EXPIRED_LOST": "sorry, your move expired and you LOST the game",
   "PLAY_MOVE": "PLAY MOVE",
   "ENTER_SEED2": "Enter seed phrase to finish previous move",
-  "EXPIRED2": "sorry, but your move expired",
   "SEED_STR_PLACEHOLDER": "Any string, but MEMORIZE it !",
   "STR_FROM_PREV_MOVE": "String from previous move",
   "SELECT_MOVE": "Please select move",

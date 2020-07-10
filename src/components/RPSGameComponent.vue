@@ -33,23 +33,23 @@
 
         <div class="no-value mt-4 mt-sm-5 mb-4 mb-sm-5">
           <img src="/img/game-icon-ask-big.svg" v-if="!gameValue">
-          <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===1">
-          <img src="/img/game-icon-rock-big.svg" v-if="gameValue===2">
-          <img src="/img/game-icon-paper-big.svg" v-if="gameValue===3">
+          <img src="/img/game-icon-rock-big.svg" v-if="gameValue===1">
+          <img src="/img/game-icon-paper-big.svg" v-if="gameValue===2">
+          <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===3">
         </div>
 
         <div class="mb-sm-0 mb-3">
           <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
-            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
-            <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
+            <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==1">
+            <img src="/img/game-icon-rock-white.svg" v-if="gameValue===1">
           </button>
           <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
-            <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
-            <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
+            <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==2">
+            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===2">
           </button>
           <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
-            <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
-            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
+            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==3">
+            <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===3">
           </button>
         </div>
 
@@ -157,23 +157,23 @@
 
         <div class="no-value mt-4 mt-sm-5 mb-4 mb-sm-5">
           <img src="/img/game-icon-ask-big.svg" v-if="!gameValue">
-          <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===1">
-          <img src="/img/game-icon-rock-big.svg" v-if="gameValue===2">
-          <img src="/img/game-icon-paper-big.svg" v-if="gameValue===3">
+          <img src="/img/game-icon-rock-big.svg" v-if="gameValue===1">
+          <img src="/img/game-icon-paper-big.svg" v-if="gameValue===2">
+          <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===3">
         </div>
 
         <div class="mb-sm-0 mb-3">
           <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
-            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
-            <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
+            <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==1">
+            <img src="/img/game-icon-rock-white.svg" v-if="gameValue===1">
           </button>
           <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
-            <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
-            <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
+            <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==2">
+            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
           </button>
           <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
-            <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
-            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
+            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==3">
+            <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===3">
           </button>
         </div>
 
@@ -207,9 +207,9 @@
               <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span id="rpswfopponentmove_move_remain_min" class="f13">...</span>
+                <span id="rpswfopponentmove_move_remain_min" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span id="rpswfopponentmove_move_remain_sec" class="f13">...</span>
+                <span id="rpswfopponentmove_move_remain_sec" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
@@ -276,20 +276,12 @@
               <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span id="rpscreatormove_move_remain_min" class="f13">...</span>
+                <span id="rpscreatormove_move_remain_min" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span id="rpscreatormove_move_remain_sec" class="f13">...</span>
+                <span id="rpscreatormove_move_remain_sec" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
-            <!-- <div class="col-6">
-              <p class="mb-0">Can claim at:</p>
-              <p class="mt-1">
-                <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="date mr-2 text-white-50">30.01.20</span>
-                <span>12:31</span>
-              </p>
-            </div> -->
           </div>
 
           <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" onclick="window.RPS.playMoveClicked()">
@@ -318,9 +310,9 @@
           </span>
           <span class="one-side">OPPONENT</span>
         </div>
-        <div class="game-result">
+        <!-- <div class="game-result">
           You Won Move :)
-        </div>
+        </div> -->
 
         <div id="rpscreatormove_prev_next_move_creator_block" class="hidden" data-group="creatorMove">
           <div class="row mt-5">
@@ -329,18 +321,18 @@
             </div>
             <div class="col-sm-6">
               <div class="text-sm-left text-center">
-                <button class="btn btn-link game-move-item game-move-small mr-4" v-bind:class="{active: prevGameValue===1}" @click="selectPreviousValue(1)">
-                  <img src="/img/game-icon-scissor-big.svg" v-if="prevGameValue!==1">
-                  <img src="/img/game-icon-scissor-white.svg" v-if="prevGameValue===1">
+                <button class="btn btn-link game-move-item game-move-small mr-4" v-bind:class="{active: prevGameValue===11}" @click="selectPreviousValue(11)">
+                  <img src="/img/game-icon-rock-big.svg" v-if="prevGameValue!==11">
+                  <img src="/img/game-icon-rock-white.svg" v-if="prevGameValue===11">
                 </button>
-                <button class="btn btn-link game-move-item game-move-small mr-4 ml-3" v-bind:class="{active: prevGameValue===2}"
-                        @click="selectPreviousValue(2)">
-                  <img src="/img/game-icon-rock-big.svg" v-if="prevGameValue!==2">
-                  <img src="/img/game-icon-rock-white.svg" v-if="prevGameValue===2">
+                <button class="btn btn-link game-move-item game-move-small mr-4 ml-3" v-bind:class="{active: prevGameValue===12}"
+                        @click="selectPreviousValue(12)">
+                  <img src="/img/game-icon-paper-big.svg" v-if="prevGameValue!==12">
+                  <img src="/img/game-icon-paper-white.svg" v-if="prevGameValue===12">
                 </button>
-                <button class="btn btn-link game-move-item game-move-small ml-3" v-bind:class="{active: prevGameValue===3}" @click="selectPreviousValue(3)">
-                  <img src="/img/game-icon-paper-big.svg" v-if="prevGameValue!==3">
-                  <img src="/img/game-icon-paper-white.svg" v-if="prevGameValue===3">
+                <button class="btn btn-link game-move-item game-move-small ml-3" v-bind:class="{active: prevGameValue===13}" @click="selectPreviousValue(13)">
+                  <img src="/img/game-icon-scissor-big.svg" v-if="prevGameValue!==13">
+                  <img src="/img/game-icon-scissor-white.svg" v-if="prevGameValue===13">
                 </button>
               </div>
 
@@ -350,23 +342,23 @@
               </div>
             </div>
           </div>
-          <div class="row mt-5">
+          <div id="rpscreatormove_next_move_action" class="row mt-5">
             <div class="col-sm-4 text-sm-right">
               <h5>Next move:</h5>
             </div>
             <div class="col-sm-6">
               <div class="text-sm-left text-center">
                 <button class="btn btn-link game-move-item game-move-middle mr-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
-                  <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
-                  <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
+                  <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==1">
+                  <img src="/img/game-icon-rock-white.svg" v-if="gameValue===1">
                 </button>
                 <button class="btn btn-link game-move-item game-move-middle mr-4 ml-3" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
-                  <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
-                  <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
+                  <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==2">
+                  <img src="/img/game-icon-paper-white.svg" v-if="gameValue===2">
                 </button>
                 <button class="btn btn-link game-move-item game-move-middle ml-3" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
-                  <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
-                  <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
+                  <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==3">
+                  <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===3">
                 </button>
               </div>
 
@@ -391,50 +383,42 @@
 
         <div class="mt-1 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cf_gameId_makeTop" class="f10">0</span>
+          <span id="rpsopponentmove_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="gameCreator_makeTop" class="f10">0x0</span>
+          <span id="rpsopponentmove_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="gameOpponent_makeTop" class="f10">0x0</span>
+          <span id="rpsopponentmove_game_opponent" class="f10">0x0</span>
 
           <p class="mb-0 mt-4 f10">{{ $t('GAME_BET') }}
             <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
             <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
           </p>
-          <b id="gameBet_makeTop">{{ currentBet ? currentBet : 0 }}</b>
+          <b id="rpsopponentmove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Last move at:</p>
+              <p class="mb-0">Move expires in:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="f13">12</span>
+                <span id="rpsopponentmove_move_remain_min" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> min</span>
-                <span class="f13">12</span>
+                <span id="rpsopponentmove_move_remain_sec" class="f13">0</span>
                 <span class="date mr-2 text-white-50"> sec</span>
               </p>
             </div>
-            <!-- <div class="col-6">
-              <p class="mb-0">Can claim at:</p>
-              <p class="mt-1">
-                <img src="/img/clock.svg" class="mr-1 clock-icon">
-                <span class="date mr-2 text-white-50">30.01.20</span>
-                <span>12:31</span>
-              </p>
-            </div> -->
           </div>
 
-          <button id="opponentPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}">
+          <button id="rpsopponentmove_make_move_btn" class="btn btn-start-game desktop-move mb-3" onclick="window.RPS.makeMoveClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('MAKE_MOVE') }}
           </button>
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button class="btn btn-small-orange disabled">{{ $t('QUIT_GAME') }}</button>
+              <button id="rpsopponentmove_quit_btn" class="btn btn-small-orange disabled" onclick="window.RPS.quitGameClicked()">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left" id="claimExpiredButton">
-              <button class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button id="rpsopponentmove_claim_expired_btn" class="btn btn-small-orange disabled" onclick="window.RPS.claimExpiredGameClicked()">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
@@ -443,40 +427,44 @@
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block">
           <span class="one-side">YOU</span>
-          <span class="scores">3:2</span>
+          <span class="scores">
+            <span id="rpsopponentmove_score_you">0</span>
+            <span> : </span>
+            <span id="rpsopponentmove_score_opponent">0</span>
+          </span>
           <span class="one-side">OPPONENT</span>
         </div>
-        <div class="game-result">
+        <!-- <div class="game-result">
           You Won Move :)
-        </div>
+        </div> -->
 
         <div id="opponentMoveBlock" data-group="opponentMove">
           <div class="no-value mt-4 mt-sm-5 mb-4 mb-sm-5">
             <img src="/img/game-icon-ask-big.svg" v-if="!gameValue">
-            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===1">
-            <img src="/img/game-icon-rock-big.svg" v-if="gameValue===2">
-            <img src="/img/game-icon-paper-big.svg" v-if="gameValue===3">
+            <img src="/img/game-icon-rock-big.svg" v-if="gameValue===1">
+            <img src="/img/game-icon-paper-big.svg" v-if="gameValue===2">
+            <img src="/img/game-icon-scissor-big.svg" v-if="gameValue===3">
           </div>
 
           <div class="mb-sm-0 mb-3">
             <button class="btn btn-link game-move-item mr-4 mr-sm-5 ml-sm-4" v-bind:class="{active: gameValue===1}" @click="selectMoveValue(1)">
-              <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==1">
-              <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===1">
+              <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==1">
+              <img src="/img/game-icon-rock-white.svg" v-if="gameValue===1">
             </button>
             <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
-              <img src="/img/game-icon-rock-big.svg" v-if="gameValue!==2">
-              <img src="/img/game-icon-rock-white.svg" v-if="gameValue===2">
+              <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==2">
+              <img src="/img/game-icon-paper-white.svg" v-if="gameValue===2">
             </button>
             <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
-              <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==3">
-              <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
+              <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==3">
+              <img src="/img/game-icon-scissor-white.svg" v-if="gameValue===3">
             </button>
           </div>
         </div>
 
-        <div id="moveExpiredOpponent" class="mt-5 pt-5 hidden" data-group="opponentMove">
+        <div id="rpsopponentmove_move_expired" class="mt-5 pt-5 hidden" data-group="opponentMove">
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
-          <p class="f18">{{ $t('EXPIRED2') }}</p>
+          <p class="f18">{{ $t('MOVE_EXPIRED_LOST') }}</p>
         </div>
 
       </div>
@@ -541,6 +529,7 @@
       selectPreviousValue(value) {
         console.log(`Previous value selected: ${value}`);
         this.prevGameValue = value;
+        window.RPS.moveClicked(value);
       }
     }
   };

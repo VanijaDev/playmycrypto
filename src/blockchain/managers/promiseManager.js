@@ -415,32 +415,9 @@ let PromiseManager = {
     });
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  getCreatorMoveHashesForGamePromise: function (_gameInst, _gameId) {
+  creatorMoveHashesForGamePromise: function (_gameType, _gameId) {
     return new Promise(resolve => {
-      _gameInst.methods.getCreatorMoveHashesForGame(_gameId).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getCreatorMoveHashesForGame(_gameId).call()
       .then(result => {
         resolve(result);
       })
@@ -448,7 +425,7 @@ let PromiseManager = {
         throw new Error(err);
       });
     });
-  },
+  }
 }
 
 export {

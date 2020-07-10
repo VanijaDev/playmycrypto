@@ -9,13 +9,13 @@ import Types from "../types";
 var $t = $('#translations').data();
 
 const RPS = {
-  // ownerAddress: "",
-  // minBet: 0,
+  ownerAddress: "",
+  minBet: 0,
   currentGameView: "",
 
   selectedMove: 0,
   selectedPrevMove: 0,
-  // skipNextMove: false,
+  skipNextMove: false,
   countdown: null,
 
   Move: {
@@ -25,47 +25,23 @@ const RPS = {
     scissors: 3
   },
 
-  // MoveWinner: {
-  //   draw: 0,
-  //   creator: 1,
-  //   opponent: 2
-  // },
+  MoveWinner: {
+    draw: 0,
+    creator: 1,
+    opponent: 2
+  },
 
   GameView: {
     startNew: "rpsstart",
     waitingForOpponent: "rpswfopponent",
     waitingForOpponentMove: "rpswfopponentmove",
     join: "rpsjoingame",
-    // creatorMove: "rpscreatormove",
-    // opponentMove: "rpsopponentmove",
+    opponentMove: "rpsopponentmove",
     playMove: "rpscreatormove",
-    // makeMove: "rpsmakemove",
     won: "youWon",
     lost: "youLost",
     draw: "itsDraw",
   },
-
-  // InnerGameViews: {
-  //   waitingForOpponent: {
-  //     gamePaused: 'gamePaused',
-  //     makeTop: 'make_top_block_makeTop'
-  //   },
-  //   waitingForOpponentMove: {
-  //     moveExpired: 'moveExpired'
-  //   },
-  //   creatorMove: {
-  //     playMove: 'creatorPlayMoveButton',
-  //     previousNextMove: 'previousNextMoveCreator',
-  //     moveExpired: 'moveExpiredCreator'
-  //   },
-  //   opponentMove: {
-  //     playMove: 'opponentPlayMoveButton',
-  //     claimExpired: 'claimExpiredButton',
-  //     opponentMove: 'opponentMoveBlock',
-  //     moveExpired: 'moveExpiredOpponent',
-  //   }
-
-  // },
 
   // $('[data-group="waitingForOpponent"]')
 
@@ -88,9 +64,6 @@ const RPS = {
     $('#rpsjoingame_game_referral')[0].placeholder = this.ownerAddress;
     $('#rpscreatormove_previous_move_seed')[0].placeholder = "String from previous move";
     $('#rpscreatormove_next_move_seed')[0].placeholder = "Any string, but MEMORIZE it !";
-    // $('#seed_start_rps')[0].placeholder = "Any string, but MEMORIZE it !";
-    // $('#cf_update_bet_input_rps')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-    // $('#rpswfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   showGameViewForCurrentAccount: async function () {
@@ -115,9 +88,9 @@ const RPS = {
           if (isNextMover) {
             let isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.creator);
             if (isGameCreator) {
-              this.showGameView(this.GameView.playMove, gameInfo);  //  DOING
+              this.showGameView(this.GameView.playMove, gameInfo);
             } else {
-              this.showGameView(this.GameView.makeMove, gameInfo);  //  TODO
+              this.showGameView(this.GameView.opponentMove, gameInfo);
             }
           } else {
             this.showGameView(this.GameView.waitingForOpponentMove, gameInfo);
@@ -134,7 +107,7 @@ const RPS = {
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    console.log("showGameView: ", _viewName, _gameInfo);
+    // console.log("showGameView: ", _viewName, _gameInfo);
 
     if (!this.currentGameView.localeCompare(_viewName)) {
       if (_viewName.localeCompare(this.GameView.join)) {
@@ -204,16 +177,16 @@ const RPS = {
         document.getElementById(this.GameView.join + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
         break;
 
-      case this.GameView.makeMove:
-        document.getElementById(this.GameView.makeMove + "_game_id").innerHTML = _gameInfo.id;
-        document.getElementById(this.GameView.makeMove + "_game_creator").innerHTML = _gameInfo.creator;
-        document.getElementById(this.GameView.makeMove + "_game_opponent").innerHTML = _gameInfo.opponent;
-        document.getElementById(this.GameView.makeMove + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
+      case this.GameView.opponentMove:
+        document.getElementById(this.GameView.opponentMove + "_game_id").innerHTML = _gameInfo.id;
+        document.getElementById(this.GameView.opponentMove + "_game_creator").innerHTML = _gameInfo.creator;
+        document.getElementById(this.GameView.opponentMove + "_game_opponent").innerHTML = _gameInfo.opponent;
+        document.getElementById(this.GameView.opponentMove + "_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet, 5);
 
-        document.getElementById(this.GameView.makeMove + "_score_you").innerHTML = gameMoveResults[1];
-        document.getElementById(this.GameView.makeMove + "_score_opponent").innerHTML = gameMoveResults[0];
+        document.getElementById(this.GameView.opponentMove + "_score_you").innerHTML = gameMoveResults[1];
+        document.getElementById(this.GameView.opponentMove + "_score_opponent").innerHTML = gameMoveResults[0];
 
-        this.updateExpiredUIFor(this.GameView.makeMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
+        this.updateExpiredUIFor(this.GameView.opponentMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
         break;
 
       case this.GameView.playMove:
@@ -227,14 +200,14 @@ const RPS = {
 
         this.updateExpiredUIFor(this.GameView.playMove, isMoveExpired, _gameInfo.prevMoveTimestamp);
 
-        // let creatorMoveHashes = await PromiseManager.getCreatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
-        // if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
-        //   document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.remove("hidden");
-        //   this.skipNextMove = false;
-        // } else {
-        //   document.getElementById(this.GameView.playMove + "_move_action").children[1].classList.add("hidden");
-        //   this.skipNextMove = true;
-        // }
+        let creatorMoveHashes = await PromiseManager.creatorMoveHashesForGamePromise(Types.Game.rps, _gameInfo.id);
+        if (!(new BigNumber(creatorMoveHashes[2]).comparedTo(new BigNumber("0")))) {
+          document.getElementById(this.GameView.playMove + "_next_move_action").classList.remove("hidden");
+          this.skipNextMove = false;
+        } else {
+          document.getElementById(this.GameView.playMove + "_next_move_action").classList.add("hidden");
+          this.skipNextMove = true;
+        }
         break;
 
       default:
@@ -285,21 +258,21 @@ const RPS = {
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
-      case this.GameView.makeMove:
-        document.getElementById(this.GameView.makeMove + "_game_id").value = "";
-        document.getElementById(this.GameView.makeMove + "_game_creator").value = "";
-        document.getElementById(this.GameView.makeMove + "_game_opponent").value = "";
-        document.getElementById(this.GameView.makeMove + "_game_bet").innerHTML = "...";
-        document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = "...";
-        document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = "...";
+      case this.GameView.opponentMove:
+        document.getElementById(this.GameView.opponentMove + "_game_id").value = "";
+        document.getElementById(this.GameView.opponentMove + "_game_creator").value = "";
+        document.getElementById(this.GameView.opponentMove + "_game_opponent").value = "";
+        document.getElementById(this.GameView.opponentMove + "_game_bet").innerHTML = "...";
+        document.getElementById(this.GameView.opponentMove + "_move_remain_min").innerHTML = "...";
+        document.getElementById(this.GameView.opponentMove + "_move_remain_sec").innerHTML = "...";
 
-        document.getElementById(this.GameView.makeMove + "_score_you").innerHTML = "0";
-        document.getElementById(this.GameView.makeMove + "_score_opponent").innerHTML = "0";
+        document.getElementById(this.GameView.opponentMove + "_score_you").innerHTML = "0";
+        document.getElementById(this.GameView.opponentMove + "_score_opponent").innerHTML = "0";
 
-        document.getElementById(this.GameView.makeMove + "_move_action").classList.add("hidden");
-        document.getElementById(this.GameView.makeMove + "_move_expired").classList.add("hidden");
+        // document.getElementById(this.GameView.opponentMove + "_next_move_action").classList.add("hidden");
+        document.getElementById(this.GameView.opponentMove + "_move_expired").classList.add("hidden");
 
-        document.getElementById(this.GameView.makeMove + "_claim_expired_btn").classList.add("disabled");
+        document.getElementById(this.GameView.opponentMove + "_claim_expired_btn").classList.add("disabled");
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
         break;
 
@@ -317,7 +290,7 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_previous_move_seed").value = "";
         document.getElementById(this.GameView.playMove + "_next_move_seed").value = "";
 
-        // document.getElementById(this.GameView.playMove + "_move_action").classList.add("hidden");
+        // document.getElementById(this.GameView.playMove + "_next_move_action").classList.add("hidden");
         // document.getElementById(this.GameView.playMove + "_move_expired").classList.add("hidden");
 
         document.getElementById(this.GameView.playMove + "_claim_expired_btn").classList.add("disabled");
@@ -338,7 +311,6 @@ const RPS = {
   },
 
   updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
-    console.log('%c updateExpiredUIFor: %s %s %s', 'color: #1d59ff', _viewName, _isExpired, _prevMoveTimestamp);
     this.updateExpiredUIFunctional(_viewName, _isExpired);
     
     if (_isExpired) {
@@ -363,17 +335,17 @@ const RPS = {
         }
         break;
 
-      case this.GameView.makeMove:
+      case this.GameView.opponentMove:
         if (_isExpired) {
           document.getElementById(_viewName + "_quit_btn").classList.add("disabled");
           document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_move_action").classList.add("hidden");
+          // document.getElementById(_viewName + "_next_move_action").classList.add("hidden");
           document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
           document.getElementById(_viewName + "_make_move_btn").classList.add("disabled");
         } else {
           document.getElementById(_viewName + "_quit_btn").classList.remove("disabled");
           document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_move_action").classList.remove("hidden");
+          // document.getElementById(_viewName + "_next_move_action").classList.remove("hidden");
           document.getElementById(_viewName + "_move_expired").classList.add("hidden");
           document.getElementById(_viewName + "_make_move_btn").classList.remove("disabled");
         }
@@ -401,9 +373,7 @@ const RPS = {
     }
   },
 
-  updateMoveExpirationCountdown: async function (_viewName, _prevMoveTimestamp) {
-    console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _prevMoveTimestamp);
-    
+  updateMoveExpirationCountdown: async function (_viewName, _prevMoveTimestamp) {    
     let lastMoveTime = new BigNumber(_prevMoveTimestamp);
     let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
     let endTime = parseInt(lastMoveTime.plus(moveDuration));
@@ -425,64 +395,6 @@ const RPS = {
       }
     }, 1000);
   },
-
-  // updateSelectedMoveImgs: function (_viewName, _move, _isPrevMove) {
-  //   console.log('%c updateSelectedMoveImgs_RPS: %s %s', 'color: #e51dff', _viewName, _move);
-  //   let prefix = "";
-  //   if (!_viewName.localeCompare(this.GameView.startNew)) {
-  //     prefix = "start_";
-  //   } else if (!_viewName.localeCompare(this.GameView.join)) {
-  //     prefix = "rpsjoingame_";
-  //   } else if (!_viewName.localeCompare(this.GameView.makeMove)) {
-  //     prefix = "rpsmakemove_";
-  //   } else if (!_viewName.localeCompare(this.GameView.playMove)) {
-  //     prefix = "rpscreatormove_";
-  //   }
-
-  //   const suffix = _isPrevMove ? "_prev" : "";
-
-  //   switch (_move) {
-  //     case this.Move.none:
-  //       if (_viewName.localeCompare(this.GameView.playMove)) {
-  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-ask-big.svg";
-  //       }
-  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       break;
-
-  //     case this.Move.rock:
-  //       if (_viewName.localeCompare(this.GameView.playMove)) {
-  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-rock-big.svg";
-  //       }
-  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.add("move_bg_selected");
-  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       break;
-
-  //     case this.Move.paper:
-  //       if (_viewName.localeCompare(this.GameView.playMove)) {
-  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-paper-big.svg";
-  //       }
-  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.add("move_bg_selected");
-  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       break;
-
-  //     case this.Move.scissors:
-  //       if (_viewName.localeCompare(this.GameView.playMove)) {
-  //         document.getElementById(prefix + "selected_move_img").src = "/img/game-icon-scissor-big.svg";
-  //       }
-  //       document.getElementById(prefix + "small_rock_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_paper_img" + suffix).parentElement.classList.remove("move_bg_selected");
-  //       document.getElementById(prefix + "small_scissors_img" + suffix).parentElement.classList.add("move_bg_selected");
-  //       break;
-
-  //     default:
-
-  //       break;
-  //   }
-  // },
 
   gameMoveResults: async function (_gameId) {
     let result = [0, 0]; //  creator, joiner
@@ -607,7 +519,7 @@ const RPS = {
 
     let referral = document.getElementById("rpsstart_game_referral").value;
     if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
+      if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showAlert("error", "Wrong referral address.");
         return;
       }
@@ -855,7 +767,7 @@ const RPS = {
 
     let referral = document.getElementById("rpsjoingame_game_referral").value;
     if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
+      if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showAlert("error", "Wrong referral address.");
         return;
       }
@@ -1040,19 +952,6 @@ const RPS = {
     this.populateViewWithGameInfo(_viewName, _gameInfo);
   },
 
-  // hideAllGameViews: async function () {
-  //   document.getElementById(this.GameView.startNew).classList.add("hidden");
-  //   document.getElementById(this.GameView.waitingForOpponent).classList.add("hidden");
-  //   document.getElementById(this.GameView.waitingForOpponentMove).classList.add("hidden");
-  //   document.getElementById(this.GameView.join).classList.add("hidden");
-  //   document.getElementById(this.GameView.makeMove).classList.add("hidden");
-  //   document.getElementById(this.GameView.playMove).classList.add("hidden");
-  //   document.getElementById(this.GameView.won).classList.add("hidden");
-  //   document.getElementById(this.GameView.lost).classList.add("hidden");
-  //   document.getElementById(this.GameView.draw).classList.add("hidden");
-  //   return;
-  // },
-
   makeMoveClicked: async function () {
     console.log('%c joinGameClicked', 'color: #e51dff');
 
@@ -1061,7 +960,7 @@ const RPS = {
       return;
     }
 
-    let gameId = document.getElementById("rpsmakemove_game_id").innerHTML;
+    let gameId = document.getElementById(this.GameView.opponentMove + "_game_id").innerHTML;
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.opponentNextMove(gameId, this.selectedMove).send({
       from: window.BlockchainManager.currentAccount(),
@@ -1087,7 +986,6 @@ const RPS = {
         }
       });
   }
-
 }
 
 window.RPS = RPS;
