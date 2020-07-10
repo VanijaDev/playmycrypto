@@ -249,6 +249,7 @@ const RPS = {
     if (this.countdown) {
       clearInterval(this.countdown);
     }
+    selectMoveValue(null);
 
     switch (_viewName) {
       case this.GameView.startNew:
@@ -256,7 +257,6 @@ const RPS = {
         document.getElementById(this.GameView.startNew + "_seed").value = "";
         document.getElementById(this.GameView.startNew + "_bet").value = "0.01";
         // this.updateSelectedMoveImgs(_viewName, this.Move.none, false);
-        selectMoveValue(null);
         break;
 
       case this.GameView.waitingForOpponent:
@@ -338,6 +338,7 @@ const RPS = {
   },
 
   updateExpiredUIFor: async function (_viewName, _isExpired, _prevMoveTimestamp) {
+    console.log('%c updateExpiredUIFor: %s %s %s', 'color: #1d59ff', _viewName, _isExpired, _prevMoveTimestamp);
     this.updateExpiredUIFunctional(_viewName, _isExpired);
     
     if (_isExpired) {
@@ -365,7 +366,7 @@ const RPS = {
       case this.GameView.makeMove:
         if (_isExpired) {
           document.getElementById(_viewName + "_quit_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_claim_expired_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
           document.getElementById(_viewName + "_move_action").classList.add("hidden");
           document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
           document.getElementById(_viewName + "_make_move_btn").classList.add("disabled");
@@ -384,7 +385,7 @@ const RPS = {
           document.getElementById(_viewName + "_prev_next_move_creator_block").classList.add("hidden");
           document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
           document.getElementById(_viewName + "_quit_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_claim_expired_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
         } else {
           document.getElementById(_viewName + "_play_move_btn").classList.remove("disabled");
           document.getElementById(_viewName + "_prev_next_move_creator_block").classList.remove("hidden");
@@ -401,7 +402,7 @@ const RPS = {
   },
 
   updateMoveExpirationCountdown: async function (_viewName, _prevMoveTimestamp) {
-    // console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _endTime);
+    console.log('%c updateMoveExpirationCountdown: %s %s', 'color: #1d59ff', _viewName, _prevMoveTimestamp);
     
     let lastMoveTime = new BigNumber(_prevMoveTimestamp);
     let moveDuration = new BigNumber(await PromiseManager.moveDurationPromise(Types.Game.rps));
@@ -803,12 +804,7 @@ const RPS = {
   quitGameClicked: async function () {
     console.log('%c quitGameClicked_RPS', 'color: #e51dff');
 
-    let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
-    if (!this.currentGameView.localeCompare(this.GameView.waitingForOpponentMove)) {
-      gameId = document.getElementById("rpswfopponentmove_game_id").innerHTML;
-    } else if (!this.currentGameView.localeCompare(this.GameView.playMove)) {
-      gameId = document.getElementById("rpscreatormove_game_id").innerHTML;
-    }
+    let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
     console.log("gameId: ", gameId);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
@@ -903,6 +899,81 @@ const RPS = {
     });
   },
 
+  playMoveClicked: async function () {
+    console.log('%c playMoveClicked', 'color: #e51dff');
+
+    //  prev
+    if (this.selectedPrevMove == 0) {
+      showAlert("error", "Please select previous move.");
+      return;
+    }
+
+    let seedStrPrev = document.getElementById("rpscreatormove_previous_move_seed").value;
+    if (seedStrPrev.length == 0) {
+      showAlert("error", "Please enter previous seed phrase.");
+      return;
+    }
+
+    //  next
+    let seedStr = document.getElementById("rpscreatormove_next_move_seed").value;
+    if (this.skipNextMove) {
+      this.selectedMove = 1;
+    } else {
+      if (this.selectedMove == 0) {
+        showAlert("error", "Please select next move.");
+        return;
+      }
+
+      if (seedStr.length == 0) {
+        showAlert("error", "Please enter next move seed phrase.");
+        return;
+      }
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+
+    let gameId = document.getElementById("rpscreatormove_game_id").innerHTML;
+
+    const prevSeedHash = web3.utils.soliditySha3(seedStrPrev);
+    const seedStrHash = web3.utils.soliditySha3(seedStr);
+    // console.log("seedStrHash: ", seedStrHash);
+    const seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
+    // console.log("seedHash:    ", seedHash);
+
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
+      from: window.BlockchainManager.currentAccount(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("PLAY MOVE transaction: ", hash);
+    })
+    .once('receipt', async function (receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+
+      const gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
+      if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
+        RPS.showGameViewForCurrentAccount();
+      } else {
+        let resultView = RPS.resultViewForGame(gameInfo);
+        RPS.showGameView(resultView, null);
+
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      }
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showAlert('error', "Play move error...");
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
   claimExpiredGameClicked: async function () {
     console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', this.currentGameView);
 
@@ -935,6 +1006,7 @@ const RPS = {
       }
     });
   },
+  
 
 
 
@@ -1011,81 +1083,6 @@ const RPS = {
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showAlert('error', "Make move error...");
-          throw new Error(error, receipt);
-        }
-      });
-  },
-
-  playMoveClicked: async function () {
-    console.log('%c playMoveClicked', 'color: #e51dff');
-
-    //  prev
-    if (this.selectedPrevMove == 0) {
-      showAlert("error", "Please select previous move.");
-      return;
-    }
-
-    let seedStrPrev = document.getElementById("rpscreatormove_previous_move_seed").value;
-    if (seedStrPrev.length == 0) {
-      showAlert("error", "Please enter previous seed phrase.");
-      return;
-    }
-
-    //  next
-    let seedStr = document.getElementById("rpscreatormove_next_move_seed").value;
-    if (this.skipNextMove) {
-      this.selectedMove = 1;
-    } else {
-      if (this.selectedMove == 0) {
-        showAlert("error", "Please select next move.");
-        return;
-      }
-
-      if (seedStr.length == 0) {
-        showAlert("error", "Please enter next move seed phrase.");
-        return;
-      }
-    }
-
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-
-    let gameId = document.getElementById("rpscreatormove_game_id").innerHTML;
-
-    const prevSeedHash = web3.utils.soliditySha3(seedStrPrev);
-    const seedStrHash = web3.utils.soliditySha3(seedStr);
-    // console.log("seedStrHash: ", seedStrHash);
-    const seedHash = web3.utils.soliditySha3(this.selectedMove, seedStrHash);
-    // console.log("seedHash:    ", seedHash);
-
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
-      from: window.BlockchainManager.currentAccount(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("PLAY MOVE transaction: ", hash);
-      })
-      .once('receipt', async function (receipt) {
-        ProfileManager.update();
-        hideTopBannerMessage();
-
-        const gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
-        if ((new BigNumber(gameInfo.state.toString())).comparedTo(new BigNumber("1")) == 0) {
-          RPS.showGameViewForCurrentAccount();
-        } else {
-          let resultView = RPS.resultViewForGame(gameInfo);
-          RPS.showGameView(resultView, null);
-
-          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-        }
-      })
-      .once('error', function (error, receipt) {
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Play move error...");
           throw new Error(error, receipt);
         }
       });

@@ -292,17 +292,17 @@
             </div> -->
           </div>
 
-          <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
+          <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" onclick="window.RPS.playMoveClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('PLAY_MOVE') }}
           </button>
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button id="rpscreatormove_quit_btn" class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+              <button id="rpscreatormove_quit_btn" class="btn btn-small-orange disabled" onclick="window.RPS.quitGameClicked()">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left">
-              <button id="rpscreatormove_claim_expired_btn" class="btn btn-small-orange">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button id="rpscreatormove_claim_expired_btn" class="btn btn-small-orange disabled" onclick="window.RPS.claimExpiredGameClicked()">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
@@ -380,7 +380,7 @@
 
         <div id="rpscreatormove_move_expired" class="mt-5 pt-5 hidden" data-group="creatorMove">
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
-          <p class="f18">{{ $t('MOVE_EXPIRED_CLAIM') }}</p>
+          <p class="f18">{{ $t('MOVE_EXPIRED_LOST') }}</p>
         </div>
 
       </div>
@@ -424,17 +424,17 @@
             </div> -->
           </div>
 
-          <button id="opponentPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" @click="joinGame()">
+          <button id="opponentPlayMoveButton" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('MAKE_MOVE') }}
           </button>
 
           <div class="bottom-buttons row">
             <div class="col-5 offset-1">
-              <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
+              <button class="btn btn-small-orange disabled">{{ $t('QUIT_GAME') }}</button>
             </div>
             <div class="col-5 pr-2 button-border-left" id="claimExpiredButton">
-              <button class="btn btn-small-orange">{{ $t('CLAIM_EXPIRED') }}</button>
+              <button class="btn btn-small-orange disabled">{{ $t('CLAIM_EXPIRED') }}</button>
             </div>
           </div>
         </div>
@@ -541,13 +541,7 @@
       selectPreviousValue(value) {
         console.log(`Previous value selected: ${value}`);
         this.prevGameValue = value;
-      },
-      // startMove() {
-      //   console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
-      // },
-      // joinGame() {
-      //   console.log(`Move click. Selected value: ${this.gameValue}, bet: ${this.currentBet}`)
-      // },
+      }
     }
   };
 </script>
