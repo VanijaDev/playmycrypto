@@ -268,8 +268,8 @@ const RPS = {
         document.getElementById(this.GameView.waitingForOpponentMove + "_game_creator").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_game_opponent").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_game_bet").innerHTML = "...";
-        document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = "...";
-        document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = "...";
+        document.getElementById(this.GameView.waitingForOpponentMove + "_score_you").innerHTML = "0";
+        document.getElementById(this.GameView.waitingForOpponentMove + "_score_opponent").innerHTML = "0";
 
         document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_min").innerHTML = "...";
         document.getElementById(this.GameView.waitingForOpponentMove + "_move_remain_sec").innerHTML = "...";
@@ -293,8 +293,8 @@ const RPS = {
         document.getElementById(this.GameView.makeMove + "_move_remain_min").innerHTML = "...";
         document.getElementById(this.GameView.makeMove + "_move_remain_sec").innerHTML = "...";
 
-        document.getElementById(this.GameView.makeMove + "_score_you").innerHTML = "...";
-        document.getElementById(this.GameView.makeMove + "_score_opponent").innerHTML = "...";
+        document.getElementById(this.GameView.makeMove + "_score_you").innerHTML = "0";
+        document.getElementById(this.GameView.makeMove + "_score_opponent").innerHTML = "0";
 
         document.getElementById(this.GameView.makeMove + "_move_action").classList.add("hidden");
         document.getElementById(this.GameView.makeMove + "_move_expired").classList.add("hidden");
@@ -311,8 +311,8 @@ const RPS = {
         document.getElementById(this.GameView.playMove + "_move_remain_min").innerHTML = "...";
         document.getElementById(this.GameView.playMove + "_move_remain_sec").innerHTML = "...";
 
-        document.getElementById(this.GameView.playMove + "_score_you").innerHTML = "...";
-        document.getElementById(this.GameView.playMove + "_score_opponent").innerHTML = "...";
+        document.getElementById(this.GameView.playMove + "_score_you").innerHTML = "0";
+        document.getElementById(this.GameView.playMove + "_score_opponent").innerHTML = "0";
 
         document.getElementById(this.GameView.playMove + "_previous_move_seed").value = "";
         document.getElementById(this.GameView.playMove + "_next_move_seed").value = "";
@@ -332,7 +332,7 @@ const RPS = {
         break;
 
       default:
-        console.error("clearView: ", _viewName);
+        console.error("clearView: ", _viewName); 
         break;
     }
   },
