@@ -14,24 +14,22 @@
 
 <script src="./jquery.min.js"></script>
 <script>
-  function showTopBannerMessage(textBefore, hash) {
+  function showTopBannerMessage(textBefore, hash, autohide) {
     var topBannerMessage = textBefore;
     if (hash) {
       var linkStr = "https://etherscan.io/tx/" + hash;
       topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
     }
     $('.top-message').html(topBannerMessage).addClass('visible');
+    if (autohide) {
+      setTimeout(function () {
+        $('.top-message').html('').removeClass('visible');
+      }, 3000);
+    }
   }
 
   function hideTopBannerMessage() {
     $('.top-message').html('').removeClass('visible');
-  }
-
-  function showAlert(name, alerttext) {
-    $('.top-message').html(alerttext).addClass('visible');
-    setTimeout(function () {
-      $('.top-message').html('').removeClass('visible');
-    }, 3000)
   }
 
   function showGameBlock(id) {

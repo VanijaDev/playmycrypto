@@ -356,7 +356,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showAlert('error', "Error on withdraw referral fees transaction");
+              showTopBannerMessage("Error on withdraw referral fees transaction", null, true);
             }
 
             hideTopBannerMessage();
@@ -383,7 +383,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showAlert('error', "Error on withdraw game prizes transaction");
+              showTopBannerMessage("Error on withdraw game prizes transaction", null, true);
             }
             hideTopBannerMessage();
           });
@@ -406,7 +406,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showAlert('error', "Error on withdraw raffle prize transaction");
+              showTopBannerMessage("Error on withdraw raffle prize transaction", null, true);
             }
             hideTopBannerMessage();
           });

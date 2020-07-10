@@ -99,17 +99,16 @@ const CoinFlip = {
   startGame: async function () {
 
     window.showGameBlock("youLost")
-    return;
 
     let referral = document.getElementById("cf_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
+        showTopBannerMessage("Wrong referral address", null, true);
         return;
       }
 
       if (Utils.addressesEqual(BlockchainManager.currentAccount(), referral)) {
-        showAlert("error", "Wrong referral address. Cannot be same as creator");
+        showTopBannerMessage("Wrong referral address. Cannot be same as creator", null, true);
         return;
       }
     } else {
@@ -119,7 +118,8 @@ const CoinFlip = {
     let bet = document.getElementById("cf_bet_input").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName());
+      let str = "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -142,7 +142,7 @@ const CoinFlip = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "CREATE GAME error...");
+        showTopBannerMessage("CREATE GAME error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -152,7 +152,8 @@ const CoinFlip = {
     console.log("makeTopClicked");
 
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet) + '. Not enough crypto.');
+      let str = 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet) + '. Not enough crypto';
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -178,7 +179,7 @@ const CoinFlip = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "MAKE TOP GAME error...");
+        showTopBannerMessage("MAKE TOP GAME error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -188,7 +189,8 @@ const CoinFlip = {
     let bet = document.getElementById("cf_update_bet_input").value;
 
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      let str = "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -213,7 +215,7 @@ const CoinFlip = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Increase bet error...");
+        showTopBannerMessage("Increase bet error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -225,7 +227,7 @@ const CoinFlip = {
     let referral = document.getElementById("cf_game_referral_join").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
-        showAlert("error", "Wrong referral address.");
+        showTopBannerMessage("Wrong referral address", null, true);
         return;
       }
     } else {
@@ -236,7 +238,7 @@ const CoinFlip = {
     let bet = gameInfo.bet;
 
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
-      showAlert('error', 'Not enough balance to join game.');
+      showTopBannerMessage("Not enough balance to join game", null, true);
       return;
     }
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
@@ -259,7 +261,7 @@ const CoinFlip = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "JOIN GAME error...");
+        showTopBannerMessage("JOIN GAME error...", null, true);
         throw new Error(error, receipt);
       }
     });

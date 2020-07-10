@@ -90,6 +90,7 @@ const Game = {
   onUnload: function () {
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
+    window.RPS.onUnload();
   },
 
   updateSuspendedViewForGame: async function (_gameType) {
@@ -550,7 +551,7 @@ const Game = {
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        showAlert('error', "runRaffle");
+        showTopBannerMessage("Run raffle error...", null, true)
 
         throw new Error(error, receipt);
       })

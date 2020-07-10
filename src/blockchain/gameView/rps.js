@@ -44,6 +44,12 @@ const RPS = {
   },
 
   // $('[data-group="waitingForOpponent"]')
+  
+  onUnload: function() {
+    if (this.countdown) {
+      clearInterval(this.countdown);
+    }
+  },
 
   updateGameView: async function () {
     console.log("RPS - updateGameView");
@@ -489,6 +495,19 @@ const RPS = {
     return this.MoveWinner.draw;
   },
 
+  resultViewForGame: function (_gameInfo) {
+    // console.log(_gameInfo);
+    let resultView = this.GameView.lost;
+
+    if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
+      resultView = RPS.GameView.draw;
+    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) {
+      resultView = RPS.GameView.won;
+    }
+
+    return resultView;
+  },
+
   
   /** UI HANDLERS */
 
@@ -499,16 +518,17 @@ const RPS = {
     let seedStr = document.getElementById("rpsstart_seed").value;
 
     if (this.selectedMove == 0) {
-      showAlert("error", "Please select move.");
+      showTopBannerMessage("Please select move", null, true);
       return;
     } else if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      let str = "Wrong bet. Min bet: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
+      showTopBannerMessage(str, null, true);
       return;
     } else if (new BigNumber(await window.BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
-      showAlert("error", "Not enough funds.");
+      showTopBannerMessage("Not enough funds", null, true);
       return;
     } else if (seedStr.length == 0) {
-      showAlert("error", "Please enter seed phrase");
+      showTopBannerMessage("Please enter seed phrase", null, true);
       return;
     }
 
@@ -520,7 +540,7 @@ const RPS = {
     let referral = document.getElementById("rpsstart_game_referral").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
-        showAlert("error", "Wrong referral address.");
+        showTopBannerMessage("Wrong referral address", null, true);
         return;
       }
     } else {
@@ -548,7 +568,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Create game error...");
+        showTopBannerMessage("Create game error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -564,7 +584,8 @@ const RPS = {
     console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
 
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      showAlert('error', 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto.');
+      let str = 'Make Top Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough crypto';
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -591,7 +612,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "MAKE TOP GAME error...");
+        showTopBannerMessage("MAKE TOP GAME error...", null, true);
         throw new Error(error, receipt);
       }
     })
@@ -602,7 +623,8 @@ const RPS = {
 
     let bet = document.getElementById("rpswfopponent_increase_bet").value;
     if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      showAlert("error", "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName() + ".");
+      let str = "Min bet increase: " + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -632,7 +654,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Increase bet error...");
+        showTopBannerMessage("Increase bet error...", null, true);
         throw new Error(error, receipt);
       }
 
@@ -672,7 +694,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Pause game error...");
+        showTopBannerMessage("Pause error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -682,7 +704,8 @@ const RPS = {
     // console.log('%c unpauseGame_RPS:', 'color: #e51dff');
 
     if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      showAlert('error', 'Unpause Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough funds.');
+      let str = 'Unpause Game costs ' + Utils.weiToEtherFixed(Game.minBet, 2) + '. Not enough funds';
+      showTopBannerMessage(str, null, true);
       return;
     }
 
@@ -707,7 +730,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Unpause game error...");
+        showTopBannerMessage("Unpause game error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -740,7 +763,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Quit game error...");
+        showTopBannerMessage("Quit game error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -756,19 +779,20 @@ const RPS = {
 
     let ongoingGameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (ongoingGameId != 0) {
-      showAlert('error', "Single game participation allowed. You are already playing game with id " + ongoingGameId);
+      let str = "Single game participation allowed. You are already playing game with id " + ongoingGameId;
+      showTopBannerMessage(str, null, true);
       return;
     }
 
     if (this.selectedMove == 0) {
-      showAlert("error", "Please select move.");
+      showTopBannerMessage("Please select move", null, true);
       return;
     }
 
     let referral = document.getElementById("rpsjoingame_game_referral").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
-        showAlert("error", "Wrong referral address.");
+        showTopBannerMessage("Wrong referral address", null, true);
         return;
       }
     } else {
@@ -780,7 +804,7 @@ const RPS = {
 
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
-      showAlert('error', 'Not enough balance to join game.');
+      showTopBannerMessage("Not enough balance to join game", null, true);
       return;
     }
 
@@ -805,7 +829,7 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Join game error...");
+        showTopBannerMessage("Join game error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -816,13 +840,13 @@ const RPS = {
 
     //  prev
     if (this.selectedPrevMove == 0) {
-      showAlert("error", "Please select previous move.");
+      showTopBannerMessage("Please select previous move", null, true);
       return;
     }
 
     let seedStrPrev = document.getElementById("rpscreatormove_previous_move_seed").value;
     if (seedStrPrev.length == 0) {
-      showAlert("error", "Please enter previous seed phrase.");
+      showTopBannerMessage("Please enter previous seed phrase", null, true);
       return;
     }
 
@@ -832,12 +856,12 @@ const RPS = {
       this.selectedMove = 1;
     } else {
       if (this.selectedMove == 0) {
-        showAlert("error", "Please select next move.");
+        showTopBannerMessage("Please select next move", null, true);
         return;
       }
 
       if (seedStr.length == 0) {
-        showAlert("error", "Please enter next move seed phrase.");
+        showTopBannerMessage("Please enter next move seed phrase", null, true);
         return;
       }
     }
@@ -880,7 +904,42 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Play move error...");
+        showTopBannerMessage("Play move error...", null, true);
+        throw new Error(error, receipt);
+      }
+    });
+  },
+
+  makeMoveClicked: async function () {
+    console.log('%c joinGameClicked', 'color: #e51dff');
+
+    if (this.selectedMove == 0) {
+      showTopBannerMessage("Please select move", null, true);
+      return;
+    }
+
+    let gameId = document.getElementById(this.GameView.opponentMove + "_game_id").innerHTML;
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.rps).methods.opponentNextMove(gameId, this.selectedMove).send({
+      from: window.BlockchainManager.currentAccount(),
+      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage("MAKE MOVE transaction: ", hash);
+    })
+    .once('receipt', function (receipt) {
+      RPS.showGameViewForCurrentAccount();
+      ProfileManager.update();
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) {
+      ProfileManager.update();
+      hideTopBannerMessage();
+      window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+      if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+        showTopBannerMessage("Make move error...", null, true);
         throw new Error(error, receipt);
       }
     });
@@ -913,78 +972,10 @@ const RPS = {
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
       if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-        showAlert('error', "Claim expired game error...");
+        showTopBannerMessage("Claim expired game error...", null, true);
         throw new Error(error, receipt);
       }
     });
-  },
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  resultViewForGame: function (_gameInfo) {
-    // console.log(_gameInfo);
-    let resultView = this.GameView.lost;
-
-    if (Utils.addressesEqual(_gameInfo.winner, Utils.zeroAddress_eth)) {
-      resultView = RPS.GameView.draw;
-    } else if (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) {
-      resultView = RPS.GameView.won;
-    }
-
-    return resultView;
-  },
-
-  updateGameViewInfo: function (_viewName, _gameInfo) {
-    // console.log("updateGameView: ", _viewName, _gameInfo);
-    this.populateViewWithGameInfo(_viewName, _gameInfo);
-  },
-
-  makeMoveClicked: async function () {
-    console.log('%c joinGameClicked', 'color: #e51dff');
-
-    if (this.selectedMove == 0) {
-      showAlert("error", "Please select move.");
-      return;
-    }
-
-    let gameId = document.getElementById(this.GameView.opponentMove + "_game_id").innerHTML;
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.rps).methods.opponentNextMove(gameId, this.selectedMove).send({
-      from: window.BlockchainManager.currentAccount(),
-      gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    })
-      .on('transactionHash', function (hash) {
-        // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("MAKE MOVE transaction: ", hash);
-      })
-      .once('receipt', function (receipt) {
-        RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
-        hideTopBannerMessage();
-      })
-      .once('error', function (error, receipt) {
-        ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showAlert('error', "Make move error...");
-          throw new Error(error, receipt);
-        }
-      });
   }
 }
 
