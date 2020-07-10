@@ -134,7 +134,7 @@ const RPS = {
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    // console.log("showGameView: ", _viewName, _gameInfo);
+    console.log("showGameView: ", _viewName, _gameInfo);
 
     if (!this.currentGameView.localeCompare(_viewName)) {
       if (_viewName.localeCompare(this.GameView.join)) {
@@ -153,7 +153,7 @@ const RPS = {
   },
 
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
     this.clearView(_viewName);
 

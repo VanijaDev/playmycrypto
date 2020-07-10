@@ -447,10 +447,6 @@ const Game = {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
-      if (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.creator)) {
-        return;
-      }
-
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.draw)) == 0) {
         resultView = RPS.GameView.draw;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.winnerPresent)) == 0) {
