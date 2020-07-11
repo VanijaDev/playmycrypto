@@ -29,15 +29,9 @@ const BlockchainManager_ethereum = {
       try {
         await ethereum.enable();
 
-        this.currentNetworkVersion = ethereum.networkVersion;
-        /**
-         * Ganache = 5777
-         * Main Net = 1
-         * Ropsten = 3
-         * Kovan = 42
-         */
-        if (ethereum.networkVersion != "5777") {
-          throw new Error("Wrong Network. Please use Ganache for testing. Change in BlockchainManager_ethereum -> connectToMetaMask")
+        if (!this.isValidNetwork(ethereum.networkVersion)) {
+          showTopBannerMessage("Wrong Network. Please use Ganache for testing.", null, false);
+          return false;
         }
       } catch (error) {
         this.initted = false;
@@ -49,13 +43,13 @@ const BlockchainManager_ethereum = {
     else if (window.web3) {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
-      this.initted = false;
       showTopBannerMessage('Legacy dapp browsers... Working on compatibility.', null, true);
-      throw new Error('Please install MetaMask.')
+      this.initted = false;
+      return false;
     }
     // Non-dapp browsers...
     else {
-      console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+      showTopBannerMessage('Non-Ethereum browser detected. You should consider trying MetaMask!', null, true);
       this.initted = false;
       return false;
     }
@@ -69,7 +63,7 @@ const BlockchainManager_ethereum = {
     console.log('%c BlockchainManager_ethereum - setup', 'color: #00aa00');
 
     if (!await this.connectToMetaMask()) {
-      return;
+      return false;
     }
 
     this.currentAccount = (await ethereum.enable())[0];
@@ -77,6 +71,8 @@ const BlockchainManager_ethereum = {
     this.contract_inst_rps = RockPaperScissorsData.build();
 
     ProfileManager.update();
+
+    return true;
   },
 
   accountChanged: async function () {
@@ -91,8 +87,31 @@ const BlockchainManager_ethereum = {
     ProfileManager.update();
   },
 
+  networkChanged: async function(_networkVersion) {
+    console.log('%c BlockchainManager_ethereum - networkChanged: %s', 'color: #00aa00', _networkVersion);
+    
+    if (this.isValidNetwork(_networkVersion)) {
+      hideTopBannerMessage();
+      return true;
+    }
+
+    showTopBannerMessage("Wrong Network. Please use Ganache for testing.", null, false);
+    return false;
+  },
+
+  isValidNetwork: function(_networkVersion) {
+    /**
+     * Ganache = 5777
+     * Main Net = 1
+     * Ropsten = 3
+     * Kovan = 42
+     */
+    return (_networkVersion == "5777");
+  },
+
   gameInst: function (_gameType) {
     // console.log("gameInst e: ", _gameType);
+
     let gameInst;
 
     switch (_gameType) {

@@ -21,14 +21,22 @@ const Index = {
 
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
+    
+    this.pageLoaded = false;
+    this.initialSetupDone = false;
 
     window.CommonManager.setCurrentView(Types.View.index);
 
     await window.BlockchainManager.init();
-    ProfileManager.profileUpdateHandler = this;
-    await this.refreshData();
-
-    this.setupOnce();
+    
+    if (window.BlockchainManager.initted) {
+      ProfileManager.profileUpdateHandler = this;
+      await this.refreshData();
+  
+      this.setupOnce();
+    } else {
+      //  TODO: show dummy data
+    }
   },
 
   setupOnce: function () {

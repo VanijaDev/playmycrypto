@@ -21,9 +21,11 @@ const BlockchainManager = {
       console.log('%c BlockchainManager - init', 'color: #00aa00');
 
       this.setCurrentBlockchain(Types.BlockchainType.ethereum);
-      await this.currentBlockchain.setup();
-
-      this.initted = true;
+      if (await this.currentBlockchain.setup()) {
+        this.initted = true;
+      } else {
+        this.initted = false;
+      }
     }
   },
 
@@ -49,6 +51,20 @@ const BlockchainManager = {
   accountChanged: async function () {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
     this.currentBlockchain.accountChanged();
+  },
+
+  networkChanged_eth: async function(_accounts) {
+    if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
+      this.initted = false;
+
+      if (this.currentBlockchain.networkChanged(_accounts)) {
+        if (await this.currentBlockchain.setup()) {
+          this.initted = true;
+        } else {
+          this.initted = false;
+        }
+      }
+    }
   },
 
   //  API

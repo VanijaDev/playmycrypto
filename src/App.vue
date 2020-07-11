@@ -258,23 +258,11 @@
         window.BlockchainManager.accountChanged();
       });
 
-      window.ethereum.on('networkChanged', function (accounts) {
-        console.log(accounts);
-        if (!window.Index || !window.Index.pageLoaded) {
-          return;
-        }
-
-        console.log('%c index - networkChanged', 'color: #00aa00');
-
-        /**
-         * Ganache = 5777
-         * Main Net = 1
-         * Ropsten = 3
-         * Kovan = 42
-         */
-        if (window.ethereum.networkVersion != "5777") {
-          window.showTopBannerMessage("Wrong Network. Please use Ganache for testing.");
-          throw new Error("Wrong Network. Please use Ganache for testing. Change in BlockchainManager_ethereum -> connectToMetaMask")
+      window.ethereum.on('networkChanged', async function (networkId) {
+        // console.log('%c index - networkChanged: %s', 'color: #00aa00', networkId);
+        await window.BlockchainManager.networkChanged_eth(networkId);
+        if (window.BlockchainManager.initted) {
+          window.Index.setup();
         }
       });
     },
