@@ -79,7 +79,7 @@ const BlockchainManager_ethereum = {
     // console.log('%c BlockchainManager_ethereum - accountChanged', 'color: #00aa00');
 
     if (!this.initted) {
-      console.log("! initted");
+      console.error("! initted");
       return;
     }
 

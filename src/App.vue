@@ -249,18 +249,13 @@
     mounted() {
       window.CommonManager = CommonManager;
       window.ethereum.on('accountsChanged', function (accounts) {
-        console.log(accounts);
-        if (!window.Index || !window.Index.pageLoaded) {
-          return;
-        }
-
-        console.log('%c App - accountsChanged', 'color: #00aa00');
+        console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
         window.BlockchainManager.accountChanged();
       });
 
       window.ethereum.on('networkChanged', async function (networkId) {
-        // console.log('%c index - networkChanged: %s', 'color: #00aa00', networkId);
-        await window.BlockchainManager.networkChanged_eth(networkId);
+        console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
+        await window.BlockchainManager.networkChanged(networkId);
         if (window.BlockchainManager.initted) {
           window.Index.setup();
         }

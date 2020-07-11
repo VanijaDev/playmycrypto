@@ -53,7 +53,7 @@ const BlockchainManager = {
     this.currentBlockchain.accountChanged();
   },
 
-  networkChanged_eth: async function(_accounts) {
+  networkChanged: async function(_accounts) {
     if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
       this.initted = false;
 
