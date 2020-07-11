@@ -27,17 +27,13 @@ const Game = {
   maxGamesToAddCount: 2, // max count of games to be added each "load more"
   raffleParticipants: 0,
 
-  pageLoaded: false,
   initialSetupDone: false,
   gameType: 0,
 
 
   setup: async function () {
-    if (!this.pageLoaded) {
-      return;
-    }
     console.log('%c Game - setup', 'color: #00aa00');
-
+   
     if (!window.BlockchainManager.initted) {
       await window.BlockchainManager.init();
     }
@@ -88,6 +84,7 @@ const Game = {
   },
 
   onUnload: function () {
+    this.initialSetupDone = false;
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
     window.RPS.onUnload();
@@ -111,6 +108,10 @@ const Game = {
     // clear data
     this.availableGamesFetchStartIndex = -1;
     this.availableGameIds.splice(0, this.availableGameIds.length);
+    this.topGameIds.splice(0, this.topGameIds.length);
+
+    $('#TopGames').empty();
+    $("#AvailableGames").empty();
 
     this.loadTopGamesForGame(_gameType);
     this.loadAvailableGamesPortionForGame(_gameType);
@@ -129,9 +130,6 @@ const Game = {
     } else {
       throw('loadTopGamesForGame - wrong _gameType');
     }
-
-    $('#topGamesBlock').empty();
-    this.topGameIds = [];
 
     let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
     this.topGameIds = this.topGameIds.concat(topGameIds_tmp);
@@ -207,12 +205,12 @@ const Game = {
     // console.log("addGameWithInfo: ", _gameInfo, _isTopGame, _prepend);
     if (_isTopGame) {
       if (_prepend) {
-        $('#topGamesBlock').prepend(TopGamesTemplate.composetmp({
+        $('#TopGames').prepend(TopGamesTemplate.composetmp({
           'address': _gameInfo.creator,
           'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
         }));
       } else {
-        $('#topGamesBlock').append(TopGamesTemplate.composetmp({
+        $('#TopGames').append(TopGamesTemplate.composetmp({
           'address': _gameInfo.creator,
           'bet': Utils.weiToEtherFixed(_gameInfo.bet.toString())
         }));
@@ -242,7 +240,7 @@ const Game = {
       console.log("from TopGames");
 
       let idx = this.topGameIds.indexOf(_gameId);
-      $('#topGamesBlock')[0].removeChild($('#topGamesBlock')[0].children[idx]);
+      $('#TopGames')[0].removeChild($('#TopGames')[0].children[idx]);
       this.topGameIds.splice(idx, 1);
     } else if (this.availableGameIds.includes(_gameId)) {
       console.log("from AvailableGames");
@@ -567,38 +565,6 @@ window.Game = Game;
 export {
   Game
 };
-
-// window.addEventListener('load', async function () {
-//   console.log('%c Game - load', 'color: #00aa00');
-
-//   Game.pageLoaded = true;
-//   await window.BlockchainManager.init();
-//   await Game.setup();
-// });
-
-// window.addEventListener('onunload', async () => {
-//   console.log('%c index - onunload', 'color: #00aa00');
-
-//   Index.onUnload();
-// });
-
-
-// ethereum.on('accountsChanged', async function (accounts) {
-//   if (Game.pageLoaded) {
-//     console.log('%c Game - accountsChanged', 'color: #00aa00');
-//     await window.BlockchainManager.accountChanged();
-//     await Game.setup();
-//   }
-// });
-
-// ethereum.on('networkChanged', async function (accounts) {
-//   if (Game.pageLoaded) {
-//     console.log('%c Game - networkChanged', 'color: #00aa00');
-//     await window.BlockchainManager.setup();
-//     await Game.setup();
-//   }
-// });
-
 
 //  HELPERS
 

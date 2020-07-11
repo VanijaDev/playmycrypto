@@ -89,7 +89,7 @@
               <h2 class="text-primary p20 mb-0 pb-0">
                 {{ $t('TOP_GAMES') }}
               </h2>
-              <div class="inner-padding scrollbar-inner list-no-style" id="topGamesBlock">
+              <div class="inner-padding scrollbar-inner list-no-style" id="TopGames">
               </div>
             </div>
 
@@ -169,7 +169,6 @@
         if (typeof window.Game !== 'undefined') {
           clearInterval(loadInterval);
           setTimeout(function () {
-            window.Game.pageLoaded = true;
             window.Game.setup();
           }, 300);
         }

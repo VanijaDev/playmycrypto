@@ -76,10 +76,10 @@ const BlockchainManager_ethereum = {
   },
 
   accountChanged: async function (_account) {
-    // console.log('%c BlockchainManager_ethereum - accountChanged', 'color: #00aa00');
+    console.log('%c BlockchainManager_ethereum - accountChanged', 'color: #00aa00');
 
     if (!this.initted) {
-      console.error("! initted");
+      console.error("BlockchainManager_ethereum - accountChanged, !initted");
       return;
     }
 
@@ -89,6 +89,11 @@ const BlockchainManager_ethereum = {
 
   networkChanged: async function(_networkVersion) {
     console.log('%c BlockchainManager_ethereum - networkChanged: %s', 'color: #00aa00', _networkVersion);
+
+    if (!this.initted) {
+      console.error("BlockchainManager_ethereum - networkChanged, !initted");
+      return;
+    }
     
     if (this.isValidNetwork(_networkVersion)) {
       hideTopBannerMessage();

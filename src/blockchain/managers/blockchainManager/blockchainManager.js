@@ -54,6 +54,7 @@ const BlockchainManager = {
   },
 
   networkChanged: async function(_accounts) {
+    // console.log('%c BlockchainManager - networkChanged', 'color: #00aa00');
     if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
       this.initted = false;
 

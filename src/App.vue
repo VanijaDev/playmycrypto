@@ -207,6 +207,7 @@
 
 <script>
   import ClickOutside from 'vue-click-outside'
+  import Types from "./blockchain/types";
 
   export default {
     data: function () {
@@ -248,14 +249,24 @@
     mounted() {
       window.ethereum.on('accountsChanged', function (accounts) {
         // console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
-        window.BlockchainManager.accountChanged(accounts[0]);
+
+        if (window.BlockchainManager && window.BlockchainManager.initted) {
+          window.BlockchainManager.accountChanged(accounts[0]);
+          if (window.CommonManager.currentView == Types.View.game) {
+            window.Game.setup();
+          }
+        }
       });
 
       window.ethereum.on('networkChanged', async function (networkId) {
         // console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
-        await window.BlockchainManager.networkChanged(networkId);
-        if (window.BlockchainManager.initted) {
-          window.Index.setup();
+        if (window.BlockchainManager && window.BlockchainManager.initted) {
+          await window.BlockchainManager.networkChanged(networkId);
+          if (window.CommonManager.currentView == Types.View.index) {
+            window.Index.setup();
+          } else if (window.CommonManager.currentView == Types.View.game) {
+            window.Game.setup();
+          }
         }
       });
     },
