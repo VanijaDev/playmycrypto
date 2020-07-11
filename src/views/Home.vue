@@ -178,6 +178,8 @@
 
 <script>
   import ClickOutside from 'vue-click-outside'
+  import CommonManager from '../blockchain/managers/CommonManager'
+  import Types from "../blockchain/types";
 
   export default {
     data: function () {
@@ -202,6 +204,7 @@
     mounted() {
       console.log('Open home page');
 
+      window.CommonManager.setCurrentView(Types.View.index);
       let manager = window.BlockchainManager;
       if (manager) {
         this.managerInterval = setInterval(function () {

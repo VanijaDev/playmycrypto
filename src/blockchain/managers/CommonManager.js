@@ -88,4 +88,6 @@ const CommonManager = {
   }
 }
 
+window.CommonManager = CommonManager;
+
 export default CommonManager;

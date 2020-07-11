@@ -157,6 +157,8 @@
 
       this.currentGame = window.location.pathname.replace('/', '');
       console.log('Open game page. Current game:', this.currentGame);
+
+      window.CommonManager.setCurrentView(Types.View.game);
       window.CommonManager.setCurrentGame((this.currentGame === Types.Game.cf) ? Types.Game.cf : Types.Game.rps);
 
       let recaptchaScript = document.createElement('script');

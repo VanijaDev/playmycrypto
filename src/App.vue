@@ -207,7 +207,6 @@
 
 <script>
   import ClickOutside from 'vue-click-outside'
-  import CommonManager from './blockchain/managers/CommonManager'
 
   export default {
     data: function () {
@@ -247,14 +246,13 @@
     },
 
     mounted() {
-      window.CommonManager = CommonManager;
       window.ethereum.on('accountsChanged', function (accounts) {
-        console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
-        window.BlockchainManager.accountChanged();
+        // console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
+        window.BlockchainManager.accountChanged(accounts[0]);
       });
 
       window.ethereum.on('networkChanged', async function (networkId) {
-        console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
+        // console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
         await window.BlockchainManager.networkChanged(networkId);
         if (window.BlockchainManager.initted) {
           window.Index.setup();

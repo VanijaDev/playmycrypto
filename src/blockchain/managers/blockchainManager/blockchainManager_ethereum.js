@@ -75,7 +75,7 @@ const BlockchainManager_ethereum = {
     return true;
   },
 
-  accountChanged: async function () {
+  accountChanged: async function (_account) {
     // console.log('%c BlockchainManager_ethereum - accountChanged', 'color: #00aa00');
 
     if (!this.initted) {
@@ -83,7 +83,7 @@ const BlockchainManager_ethereum = {
       return;
     }
 
-    this.currentAccount = (await ethereum.enable())[0];
+    this.currentAccount = _account;
     ProfileManager.update();
   },
 

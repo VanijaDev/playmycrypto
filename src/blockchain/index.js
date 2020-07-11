@@ -25,8 +25,6 @@ const Index = {
     this.pageLoaded = false;
     this.initialSetupDone = false;
 
-    window.CommonManager.setCurrentView(Types.View.index);
-
     await window.BlockchainManager.init();
     
     if (window.BlockchainManager.initted) {

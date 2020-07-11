@@ -48,9 +48,9 @@ const BlockchainManager = {
     }
   },
 
-  accountChanged: async function () {
+  accountChanged: async function (_account) {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
-    this.currentBlockchain.accountChanged();
+    this.currentBlockchain.accountChanged(_account);
   },
 
   networkChanged: async function(_accounts) {
