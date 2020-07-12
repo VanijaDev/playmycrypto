@@ -222,6 +222,11 @@ const RPS = {
     }
   },
 
+  updateGameViewInfo: function (_viewName, _gameInfo) {
+    // console.log("updateGameView: ", _viewName, _gameInfo);
+    this.populateViewWithGameInfo(_viewName, _gameInfo);
+  },
+
   clearView: function (_viewName) {
     console.log("clearView: ", _viewName);
 
