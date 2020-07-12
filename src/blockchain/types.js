@@ -27,6 +27,14 @@ const Types = {
     scissors: 2
   },
 
+  GameView_CF: {
+    start: "cfstart",
+    waitingForOpponent: "cfmaketop",
+    join: "cfjoin",
+    won: "cfWon",
+    lost: "cfLost"
+  },
+
   GameState: {
     waitingForOpponent: 0,
     started: 1,

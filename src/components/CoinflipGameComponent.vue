@@ -190,7 +190,7 @@
       </div>
     </div> -->
 
-    <div class="row hidden game-block" id="youWon">
+    <div class="row hidden game-block" id="cfWon">
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-won.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_WON') }}!</h2>
@@ -198,18 +198,10 @@
       </div>
     </div>
 
-    <div class="row hidden game-block" id="youLost">
+    <div class="row hidden game-block" id="cfLost">
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-lose.svg" alt="">
         <h2 class="mt-4 mb-4">{{ $t('YOU_LOST') }}...</h2>
-        <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
-      </div>
-    </div>
-
-    <div class="row hidden game-block" id="itsDraw">
-      <div class="inner-column game-image-padding text-center">
-        <img src="/img/icon-big-draw.svg" alt="">
-        <h2 class="mt-4 mb-4">{{ $t('YOU_DRAW') }}.</h2>
         <button class="btn btn-medium-orange" onclick="window.CoinFlip.closeResultView()">{{ $t('CLOSE') }}</button>
       </div>
     </div>
