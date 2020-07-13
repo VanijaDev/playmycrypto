@@ -169,7 +169,7 @@
           </button>
           <button class="btn btn-link game-move-item mr-4 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===2}" @click="selectMoveValue(2)">
             <img src="/img/game-icon-paper-big.svg" v-if="gameValue!==2">
-            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===3">
+            <img src="/img/game-icon-paper-white.svg" v-if="gameValue===2">
           </button>
           <button class="btn btn-link game-move-item mr-1 ml-2 mr-sm-5 ml-sm-5" v-bind:class="{active: gameValue===3}" @click="selectMoveValue(3)">
             <img src="/img/game-icon-scissor-big.svg" v-if="gameValue!==3">
