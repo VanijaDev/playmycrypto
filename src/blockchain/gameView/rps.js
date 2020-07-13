@@ -559,10 +559,11 @@ const RPS = {
       gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
     })
     .on('transactionHash', function (hash) {
-      // console.log('%c startGame transactionHash: %s', 'color: #1d34ff', hash);
+      // console.log('%c CREATE GAME transactionHash: %s', 'color: #1d34ff', hash);
       showTopBannerMessage("CREATE GAME transaction: ", hash);
     })
     .once('receipt', function (receipt) {
+      // console.log('%c CREATE GAME receipt: %s', 'color: #1d34ff', receipt);
       RPS.showGameViewForCurrentAccount();
       ProfileManager.update();
       hideTopBannerMessage();
