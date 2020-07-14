@@ -88,6 +88,7 @@ const Game = {
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
     window.RPS.onUnload();
+    hideTopBannerMessage();
   },
 
   updateSuspendedViewForGame: async function (_gameType) {

@@ -248,7 +248,7 @@
 
     mounted() {
       window.ethereum.on('accountsChanged', function (accounts) {
-        // console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
+        console.log('%c App - accountsChanged: %s', 'color: #00aa00', accounts[0]);
 
         if (window.BlockchainManager && window.BlockchainManager.initted) {
           window.BlockchainManager.accountChanged(accounts[0]);

@@ -43,13 +43,13 @@ const BlockchainManager_ethereum = {
     else if (window.web3) {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
-      showTopBannerMessage('Legacy dapp browsers... Working on compatibility.', null, true);
+      showTopBannerMessage('Legacy dapp browsers... Working on compatibility.', null, false);
       this.initted = false;
       return false;
     }
     // Non-dapp browsers...
     else {
-      showTopBannerMessage('Non-Ethereum browser detected. You should consider trying MetaMask!', null, true);
+      showTopBannerMessage('Non-Ethereum browser detected. You should consider trying MetaMask!', null, false);
       this.initted = false;
       return false;
     }
@@ -129,7 +129,7 @@ const BlockchainManager_ethereum = {
         break;
 
       default:
-        console.error("bm_e gameInst");
+        console.error("bm_e gameInst", _gameType);
         break;
     }
     return gameInst;

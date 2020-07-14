@@ -233,7 +233,9 @@ const RPS = {
     if (this.countdown) {
       clearInterval(this.countdown);
     }
+    
     selectMoveValue(null);
+    selectPreviousValue(null);
 
     switch (_viewName) {
       case this.GameView.startNew:

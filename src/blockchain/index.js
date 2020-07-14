@@ -51,6 +51,7 @@ const Index = {
     ProfileManager.profileUpdateHandler = null;
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
+    hideTopBannerMessage();
   },
 
   refreshData: function () {
@@ -225,6 +226,14 @@ const Index = {
       showTopBannerMessage("Rock Paper Scissors: you have pending move");
     }
   },
+  
+  onGameMovePlayed: function (_id, _nextMover) {
+    console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
+
+    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      showTopBannerMessage("Rock Paper Scissors: you have pending move");
+    }
+  },
 
   onRafflePrizeWithdrawn: function (_gameType, _winner) {
     if (_gameType == Types.Game.cf) {
@@ -277,12 +286,12 @@ const Index = {
 
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       // console.log("YES participant");
-      let gameInfo = await PromiseManager.gameInfoPromise(window.BlockchainManager.rockPaperScissorsContract, _id);
+      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
 
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
         case Types.GameState.winnerPresent:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
           break;
 
         case Types.GameState.draw:
@@ -290,11 +299,11 @@ const Index = {
           break;
 
         case Types.GameState.quitted:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
           break;
 
         case Types.GameState.expired:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount)) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
           break;
       }
 

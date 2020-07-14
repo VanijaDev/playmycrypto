@@ -21,14 +21,14 @@
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('itsDraw')">Draw</button>
           </div> -->
 
-          <div class="tmp-block" v-if="currentGame === 'rps'">
+          <!-- <div class="tmp-block" v-if="currentGame === 'rps'">
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsstart')">Start</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpswfopponent')">Waiting Opponent</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsjoingame')">Join</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpswfopponentmove')">Waiting Move</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpscreatormove')">Creator Move</button>
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsopponentmove')">Opponent Move</button>
-          </div>
+          </div> -->
 
           <div class="mt-5">
             <div class="raffle shadow-block" id="raffleBlock">

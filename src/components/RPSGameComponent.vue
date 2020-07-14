@@ -284,7 +284,7 @@
             </div>
           </div>
 
-          <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: moveJoinDisabled}" onclick="window.RPS.playMoveClicked()">
+          <button id="rpscreatormove_play_move_btn" class="btn btn-start-game desktop-move mb-3" v-bind:class="{disabled: playMoveDisabled}" onclick="window.RPS.playMoveClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-2">
             {{ $t('PLAY_MOVE') }}
           </button>
@@ -504,6 +504,7 @@
         gameValue: null,
         prevGameValue: null,
         currentSeedPhrase: '',
+        prevSeedPhrase: '',
       }
     },
     computed: {
@@ -515,10 +516,14 @@
       },
       moveJoinDisabled() {
         return this.gameValue === null;
-      }
+      },
+      playMoveDisabled() {
+        return false;// !this.gameValue || !this.prevGameValue || this.currentSeedPhrase.length || this.prevSeedPhrase.length === 0;
+      },
     },
     mounted() {
       window.selectMoveValue = this.selectMoveValue
+      window.selectPreviousValue = this.selectPreviousValue
     },
     methods: {
       selectMoveValue(value) {

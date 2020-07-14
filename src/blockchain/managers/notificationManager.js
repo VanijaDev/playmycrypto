@@ -126,6 +126,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_RPS.gameMovePlayed:
           console.log("NotificationHashes_RPS.gameMovePlayed");
+          this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameOpponentMoved:
