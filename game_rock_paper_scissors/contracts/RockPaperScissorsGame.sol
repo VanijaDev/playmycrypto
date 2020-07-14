@@ -238,7 +238,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     require(msg.value == minBet, "Wrong fee");
 
     games[_id].paused = false;
+    
     devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit RPS_GameUnpaused(_id, games[_id].creator);
   }
