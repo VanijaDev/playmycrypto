@@ -133,7 +133,10 @@
         <div class="row mt-5 pt-4"></div>
 
         <div id="make_top_block_makeTop" class="make_top_block_makeTop">
-          <p class="f18 font-weight-bold">{{ $t('MAKE_TOP_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
+          <p class="f18 font-weight-bold">{{ $t('MAKE_TOP_COST') }} <span id="unpausedCost">0.01</span>   
+          <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
+          <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+        </p>
           <button id="make_top_btc_makeTop" class="btn btn-start-game btn-make-top" onclick="window.CoinFlip.makeTopClicked()">
             <img src="/img/icon-btn-start.svg" class="mr-3">
             {{ $t('MAKE_TOP_GAME') }}
