@@ -94,7 +94,7 @@
                 </router-link>
               </div>
 
-              <div class="one-game">
+              <!-- <div class="one-game">
                 <router-link to="/ttt">
                 <span class="play-now">
                   {{ $t("NOW_PLAYING") }}
@@ -103,7 +103,7 @@
                   <img src="/img/icon-tic-tac-toe.svg" class="game-icon">
                   <span class="title">Tic-Tac-Toe</span>
                 </router-link>
-              </div>
+              </div> -->
 
               <div class="one-game new-game">
                 <img src="/img/icon-coming-soon.svg" class="game-icon">
