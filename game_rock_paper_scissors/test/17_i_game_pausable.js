@@ -268,5 +268,22 @@ contract("IGamePausable", (accounts) => {
             assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
             assert.equal(event.args.creator, CREATOR, "creator should be CREATOR");
         });
+
+
+        it("should update totalUsedInGame", async() => {
+            await game.pauseGame(1, {
+                from: CREATOR
+            });
+            let totalUsedInGameBefore = await game.totalUsedInGame.call();
+      
+            await game.unpauseGame(1, {
+                from: CREATOR,
+                value: ether("0.01")
+            });
+
+            let totalUsedInGameAfter = await game.totalUsedInGame.call();
+
+            assert.equal(0, totalUsedInGameAfter.sub(totalUsedInGameBefore).cmp(ether("0.01")), "wrong difference");
+          });
     });
 });
