@@ -1,4 +1,7 @@
+
 // File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol
+
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -12,11 +15,7 @@ pragma solidity ^0.6.0;
  *
  * This contract is only required for intermediate, library-like contracts.
  */
-contract Context {
-    // Empty internal constructor, to prevent people from mistakenly deploying
-    // an instance of this contract, which should be used via inheritance.
-    constructor () internal { }
-
+abstract contract Context {
     function _msgSender() internal view virtual returns (address payable) {
         return msg.sender;
     }
@@ -28,6 +27,8 @@ contract Context {
 }
 
 // File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol
+
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -95,7 +96,10 @@ contract Ownable is Context {
     }
 }
 
+
 // File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol
+
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -138,6 +142,10 @@ contract Pausable is Context {
 
     /**
      * @dev Modifier to make a function callable only when the contract is not paused.
+     *
+     * Requirements:
+     *
+     * - The contract must not be paused.
      */
     modifier whenNotPaused() {
         require(!_paused, "Pausable: paused");
@@ -146,6 +154,10 @@ contract Pausable is Context {
 
     /**
      * @dev Modifier to make a function callable only when the contract is paused.
+     *
+     * Requirements:
+     *
+     * - The contract must be paused.
      */
     modifier whenPaused() {
         require(_paused, "Pausable: not paused");
@@ -154,6 +166,10 @@ contract Pausable is Context {
 
     /**
      * @dev Triggers stopped state.
+     *
+     * Requirements:
+     *
+     * - The contract must not be paused.
      */
     function _pause() internal virtual whenNotPaused {
         _paused = true;
@@ -162,6 +178,10 @@ contract Pausable is Context {
 
     /**
      * @dev Returns to normal state.
+     *
+     * Requirements:
+     *
+     * - The contract must be paused.
      */
     function _unpause() internal virtual whenPaused {
         _paused = false;
@@ -327,6 +347,8 @@ abstract contract IExpiryMoveDuration {
 }
 // File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol
 
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.6.0;
 
 /**
@@ -350,6 +372,7 @@ library SafeMath {
      * Counterpart to Solidity's `+` operator.
      *
      * Requirements:
+     *
      * - Addition cannot overflow.
      */
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -366,6 +389,7 @@ library SafeMath {
      * Counterpart to Solidity's `-` operator.
      *
      * Requirements:
+     *
      * - Subtraction cannot overflow.
      */
     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -379,6 +403,7 @@ library SafeMath {
      * Counterpart to Solidity's `-` operator.
      *
      * Requirements:
+     *
      * - Subtraction cannot overflow.
      */
     function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
@@ -395,6 +420,7 @@ library SafeMath {
      * Counterpart to Solidity's `*` operator.
      *
      * Requirements:
+     *
      * - Multiplication cannot overflow.
      */
     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -420,6 +446,7 @@ library SafeMath {
      * uses an invalid opcode to revert (consuming all remaining gas).
      *
      * Requirements:
+     *
      * - The divisor cannot be zero.
      */
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -435,10 +462,10 @@ library SafeMath {
      * uses an invalid opcode to revert (consuming all remaining gas).
      *
      * Requirements:
+     *
      * - The divisor cannot be zero.
      */
     function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        // Solidity only automatically asserts when dividing by 0
         require(b > 0, errorMessage);
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
@@ -455,6 +482,7 @@ library SafeMath {
      * invalid opcode to revert (consuming all remaining gas).
      *
      * Requirements:
+     *
      * - The divisor cannot be zero.
      */
     function mod(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -470,6 +498,7 @@ library SafeMath {
      * invalid opcode to revert (consuming all remaining gas).
      *
      * Requirements:
+     *
      * - The divisor cannot be zero.
      */
     function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
@@ -790,7 +819,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     require(msg.value == minBet, "Wrong fee");
 
     games[_id].paused = false;
+    
     devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit RPS_GameUnpaused(_id, games[_id].creator);
   }
@@ -1103,6 +1134,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
     topGames = topGamesTmp;
     devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit RPS_GameAddedToTop(_id, games[_id].creator);
   }
