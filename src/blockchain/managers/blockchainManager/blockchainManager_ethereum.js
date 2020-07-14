@@ -100,7 +100,7 @@ const BlockchainManager_ethereum = {
       return true;
     }
 
-    showTopBannerMessage("Wrong Network. Please use Ganache for testing.", null, false);
+    showTopBannerMessage("Wrong Network. Please use Main network.", null, false);
     return false;
   },
 
@@ -111,7 +111,7 @@ const BlockchainManager_ethereum = {
      * Ropsten = 3
      * Kovan = 42
      */
-    return (_networkVersion == "5777");
+    return (_networkVersion == "3");
   },
 
   gameInst: function (_gameType) {
