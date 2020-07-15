@@ -198,31 +198,6 @@ const BlockchainManager_ethereum = {
   getBalance: async function () {
     return await web3.eth.getBalance(this.currentAccount);
   },
-
-  /**
-   * Increase current gasPrice for 20% to make tx mine faster.
-   */
-  // gasPriceNormalizedString: async function() {
-  //   let gasPrice = await web3.eth.getGasPrice();
-  //   console.log("gasPrice: ", gasPrice);
-  //   let gasPriceNormalizedString = (parseInt(gasPrice) * 120).toString();
-  //   console.log("     !!! gasPriceNormalizedString: ", gasPriceNormalizedString);
-  //   return gasPriceNormalizedString;
-  // },
-
-
-  /**
-   * PROMISES
-   */
-
-  // gameContractForGameType: function (_gameType) {
-  //   let gameContract = window.BlockchainManager.contract_inst_cf;
-
-  //   if (_gameType == Types.Game.rps) {
-  //     gameContract = window.BlockchainManager.contract_inst_rps;
-  //   }
-  //   return gameContract;
-  // }
 }
 
 export {
