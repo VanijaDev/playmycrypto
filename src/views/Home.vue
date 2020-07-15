@@ -202,7 +202,7 @@
       },
     },
     mounted() {
-      console.log('Open home page');
+      // console.log('Open home page');
 
       window.CommonManager.setCurrentView(Types.View.index);
       let manager = window.BlockchainManager;
@@ -228,7 +228,7 @@
       }, 50);
     },
     beforeRouteLeave(to, from, next) {
-      console.log('Leave home page');
+      // console.log('Leave home page');
       window.Index.onUnload();
 
       if (this.managerInterval) {

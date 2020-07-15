@@ -41,7 +41,7 @@ let ProfileManager = {
   },
 
   updateAfterWithdrawal: async function () {
-    console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
+    // console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
 
     this.updateCurrentAccountBalanceUI();
 
@@ -334,7 +334,7 @@ let ProfileManager = {
     console.log("pendingClicked - _pendingTarget: %s,  _gameType: %s", _pendingTarget, _gameType);
 
     let gameContract = window.BlockchainManager.gameInst(_gameType);
-    console.log("gameContract: ", gameContract);
+    // console.log("gameContract: ", gameContract);
 
     _btn.classList.add('disabled');
 

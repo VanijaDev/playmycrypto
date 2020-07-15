@@ -95,7 +95,7 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_CF.gameUpdated:
-          console.log("NotificationHashes_CF.gameUpdated");
+          // console.log("NotificationHashes_CF.gameUpdated");
           this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
           break;
 
@@ -110,7 +110,7 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_CF.partnerFeeTransferred:
-          console.log("NotificationHashes_CF.partnerFeeTransferred");
+          // console.log("NotificationHashes_CF.partnerFeeTransferred");
           break;
 
         //  RPS
@@ -125,12 +125,12 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_RPS.gameMovePlayed:
-          console.log("NotificationHashes_RPS.gameMovePlayed");
+          // console.log("NotificationHashes_RPS.gameMovePlayed");
           this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameOpponentMoved:
-          console.log("NotificationHashes_RPS.gameOpponentMoved");
+          // console.log("NotificationHashes_RPS.gameOpponentMoved");
           this.eventHandler.onGameOpponentMoved(new BigNumber(result.topics[1]).toString(), result.topics[2]);
           break;
 
@@ -145,7 +145,7 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_RPS.gameQuitted:
-          console.log("NotificationHashes_RPS.gameQuitted");
+          // console.log("NotificationHashes_RPS.gameQuitted");
           break;
 
         case this.NotificationHashes_RPS.gameUpdated:
@@ -175,15 +175,15 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_RPS.gamePaused:
-          console.log("NotificationHashes_RPS.gamePaused");
+          // ("NotificationHashes_RPS.gamePaused");
           break;
 
         case this.NotificationHashes_RPS.gameUnpaused:
-          console.log("NotificationHashes_RPS.gameUnpaused");
+          // console.log("NotificationHashes_RPS.gameUnpaused");
           break;
 
         case this.NotificationHashes_RPS.partnerFeeTransferred:
-          console.log("NotificationHashes_RPS.partnerFeeTransferred");
+          // console.log("NotificationHashes_RPS.partnerFeeTransferred");
           break;
       
         default:
@@ -223,7 +223,7 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_CF.gameAddedToTop:
-          console.log("NotificationHashes_CF.gameAddedToTop");
+          // console.log("NotificationHashes_CF.gameAddedToTop");
           this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
@@ -233,7 +233,7 @@ const NotificationManager = {
         //   break;
 
         case this.NotificationHashes_CF.gameUpdated:
-          console.log("NotificationHashes_CF.gameUpdated");
+          // console.log("NotificationHashes_CF.gameUpdated");
           this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
           break;
 
@@ -271,32 +271,32 @@ const NotificationManager = {
 
       switch (result.topics[0]) {
         case this.NotificationHashes_RPS.gameCreated:
-          console.log("NotificationHashes_RPS.gameCreated");
+          // console.log("NotificationHashes_RPS.gameCreated");
           this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1], result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameJoined:
-          console.log("NotificationHashes_RPS.gameJoined");
+          // console.log("NotificationHashes_RPS.gameJoined");
           this.eventHandler.onGameJoined(new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
         case this.NotificationHashes_RPS.gameMovePlayed:
-          console.log("NotificationHashes_RPS.gameMovePlayed");
+          // console.log("NotificationHashes_RPS.gameMovePlayed");
           this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameOpponentMoved:
-          console.log("NotificationHashes_RPS.gameOpponentMoved");
+          // console.log("NotificationHashes_RPS.gameOpponentMoved");
           this.eventHandler.onGameOpponentMoved(new BigNumber(result.topics[1]).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameFinished:
-          console.log("NotificationHashes_RPS.gameFinished");
+          // console.log("NotificationHashes_RPS.gameFinished");
           this.eventHandler.onGameFinished(new BigNumber(result.topics[1]).toString());
           break;
 
         case this.NotificationHashes_RPS.gamePrizesWithdrawn:
-          console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
+          // console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
           this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
           break;
 
@@ -305,39 +305,39 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_RPS.gameUpdated:
-          console.log("NotificationHashes_RPS.gameUpdated");
+          // console.log("NotificationHashes_RPS.gameUpdated");
           this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
           break;
 
         case this.NotificationHashes_RPS.gameAddedToTop:
-          console.log("NotificationHashes_RPS.gameAddedToTop");
+          // console.log("NotificationHashes_RPS.gameAddedToTop");
           this.eventHandler.onGameAddedToTop(Types.Game.rps, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.gameReferralWithdrawn:
-          console.log("NotificationHashes_RPS.gameReferralWithdrawn");
+          // console.log("NotificationHashes_RPS.gameReferralWithdrawn");
           break;
 
         case this.NotificationHashes_RPS.rafflePlayed:
-          console.log("NotificationHashes_RPS.rafflePlayed");
+          // console.log("NotificationHashes_RPS.rafflePlayed");
           break;
 
         case this.NotificationHashes_RPS.rafflePrizeWithdrawn:
-          console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
+          // console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
           break;
 
         case this.NotificationHashes_RPS.gamePaused:
-          console.log("NotificationHashes_RPS.gamePaused");
+          // console.log("NotificationHashes_RPS.gamePaused");
           this.eventHandler.onGamePaused((new BigNumber(result.topics[1])).toString());
           break;
 
         case this.NotificationHashes_RPS.gameUnpaused:
-          console.log("NotificationHashes_RPS.gameUnpaused");
+          // console.log("NotificationHashes_RPS.gameUnpaused");
           this.eventHandler.onGameUnpaused((new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
         case this.NotificationHashes_RPS.partnerFeeTransferred:
-          console.log("NotificationHashes_RPS.partnerFeeTransferred");
+          // console.log("NotificationHashes_RPS.partnerFeeTransferred");
           break;
       
         default:

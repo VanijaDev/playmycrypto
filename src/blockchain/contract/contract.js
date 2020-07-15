@@ -1,8 +1,8 @@
 const Web3 = require("web3");
 
 let CoinFlipData = {
-    // address: "0x5169f2E334d0EDF97509a127af41D9eb19DE4867",
-    address: "0xe98b6Bab5Bb6AE302E13FE12136bAf430Bfcd3d3",  //  Ropsten
+    address: "0xAC40758917170f1F627F2c0E8D3e4880c5f1f9B5",
+    // address: "0xe98b6Bab5Bb6AE302E13FE12136bAf430Bfcd3d3",  //  Ropsten
     abi: [
         {
             "inputs": [
@@ -1080,8 +1080,8 @@ let CoinFlipData = {
 }
 
 let RockPaperScissorsData = {
-    // address: "0x6Ef9162eCE4e71214ffb2E0E113077392A4EF370",
-    address: "0x64B1C694d91809D6A756B3cf9E2CB4DC6e860159",  //  Ropsten
+    address: "0x251500cc463F6Aae4dcA451adEcd24db8903d7C1",
+    // address: "0x64B1C694d91809D6A756B3cf9E2CB4DC6e860159",  //  Ropsten
     abi: [
         {
             "inputs": [

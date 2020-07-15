@@ -76,7 +76,7 @@ const RPS = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
   
     let gameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    console.log("showGameViewForCurrentAccount gameId: ", gameId);
+    // console.log("showGameViewForCurrentAccount gameId: ", gameId);
     
     if (gameId == 0) {
       this.showGameView(this.GameView.startNew, null);
@@ -143,7 +143,7 @@ const RPS = {
     const isMoveExpired = await PromiseManager.gameMoveExpiredPromise(Types.Game.rps, _gameInfo.id);
     const isGameCreator = Utils.addressesEqual(window.BlockchainManager.currentAccount(), _gameInfo.creator);
     const gameMoveResults = await this.gameMoveResults(_gameInfo.id);
-    console.log("gameMoveResults: ", gameMoveResults);
+    // console.log("gameMoveResults: ", gameMoveResults);
     switch (_viewName) {
       case this.GameView.waitingForOpponent:
         document.getElementById(this.GameView.waitingForOpponent + "_game_id").innerHTML = _gameInfo.id;
@@ -228,7 +228,7 @@ const RPS = {
   },
 
   clearView: function (_viewName) {
-    console.log("clearView: ", _viewName);
+    // console.log("clearView: ", _viewName);
 
     if (this.countdown) {
       clearInterval(this.countdown);
@@ -583,7 +583,7 @@ const RPS = {
   },
 
   moveClicked: function (_move) {
-    console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
+    // console.log('%c moveClicked_RPS: %s', 'color: #e51dff', _move);
 
     (_move > 10) ? this.selectedPrevMove = _move % 10 : this.selectedMove = _move;
   },
@@ -649,7 +649,7 @@ const RPS = {
       showTopBannerMessage("INCREASE BET transaction: ", hash);
     })
     .once('receipt', function (receipt) {
-      console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
+      // console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
 
       RPS.showGameViewForCurrentAccount();
       ProfileManager.updateCurrentAccountBalanceUI();
@@ -748,7 +748,7 @@ const RPS = {
     console.log('%c quitGameClicked_RPS', 'color: #e51dff');
 
     let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
-    console.log("gameId: ", gameId);
+    // console.log("gameId: ", gameId);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
@@ -957,7 +957,7 @@ const RPS = {
     console.log('%c claimExpiredGameClicked: %s', 'color: #e51dff', this.currentGameView);
 
     let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
-    console.log("gameId: ", gameId);
+    // console.log("gameId: ", gameId);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.finishExpiredGame(gameId).send({

@@ -111,7 +111,7 @@ const BlockchainManager_ethereum = {
      * Ropsten = 3
      * Kovan = 42
      */
-    return (_networkVersion == "3");
+    return (_networkVersion == "1");
   },
 
   gameInst: function (_gameType) {

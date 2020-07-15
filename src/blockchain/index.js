@@ -39,7 +39,7 @@ const Index = {
 
   setupOnce: function () {
     if (!this.initialSetupDone) {
-      console.log('%c index - setupOnce', 'color: #00aa00');
+      // console.log('%c index - setupOnce', 'color: #00aa00');
       this.initialSetupDone = true;
 
       NotificationManager.eventHandler = this;
@@ -55,7 +55,7 @@ const Index = {
   },
 
   refreshData: function () {
-    console.log('%c index - refreshData', 'color: #1d34ff');
+    // console.log('%c index - refreshData', 'color: #1d34ff');
 
     // Advantages
     Index.updateReferralFeesForAllGamesTotal();
@@ -142,11 +142,11 @@ const Index = {
 
   //  NOTIFICAtiON MNAGER EVENT HANDLERS
   onGameCreated: function (_gameType, _creator) {
-    console.log("onGameCreated - _gameType: ", _gameType, " _creator: ", _creator);
+    // console.log("onGameCreated - _gameType: ", _gameType, " _creator: ", _creator);
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameCreated_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameCreated_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameCreated_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameCreated_RPS', 'color: #1d34ff');
     }
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
@@ -158,7 +158,7 @@ const Index = {
   },
 
   onGamePlayed: function (_gameId) {
-    console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
+    // console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
@@ -170,9 +170,9 @@ const Index = {
 
   onGameUpdated: function (_gameType, _creator) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameUpdated_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameUpdated_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameUpdated_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameUpdated_RPS', 'color: #1d34ff');
     }
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
@@ -184,9 +184,9 @@ const Index = {
 
   onGameAddedToTop: function (_gameType) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameAddedToTop_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameAddedToTop_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
     }
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
@@ -194,9 +194,9 @@ const Index = {
 
   onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
+      // console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
     }
 
     Index.updateReferralFeesForAllGamesTotal();
@@ -206,9 +206,9 @@ const Index = {
 
   onGameRafflePlayed: function (_gameType, _winner) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameRafflePlayed_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameRafflePlayed_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
     Index.updateRafflePrizesWonTotal();
@@ -220,7 +220,7 @@ const Index = {
   },
 
   onGameOpponentMoved: function (_id, _nextMover) {
-    console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
+    // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       showTopBannerMessage("Rock Paper Scissors: you have pending move");
@@ -228,7 +228,7 @@ const Index = {
   },
   
   onGameMovePlayed: function (_id, _nextMover) {
-    console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
+    // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       showTopBannerMessage("Rock Paper Scissors: you have pending move");
@@ -237,9 +237,9 @@ const Index = {
 
   onRafflePrizeWithdrawn: function (_gameType, _winner) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onRafflePrizeWithdrawn_CF', 'color: #1d34ff');
+      // console.log('%c index - onRafflePrizeWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onRafflePrizeWithdrawn_RPS', 'color: #1d34ff');
+      // console.log('%c index - onRafflePrizeWithdrawn_RPS', 'color: #1d34ff');
     }
 
     Index.updateReferralFeesForAllGamesTotal();
@@ -253,9 +253,9 @@ const Index = {
 
   onGameReferralWithdrawn: function (_gameType, _address) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameReferralWithdrawn_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameReferralWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameReferralWithdrawn_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameReferralWithdrawn_RPS', 'color: #1d34ff');
     }
 
     if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
@@ -265,9 +265,9 @@ const Index = {
 
   onGameJoined: function (_gameType, _creator, _opponent) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
+      // console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
+      // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
     }
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
@@ -280,7 +280,7 @@ const Index = {
   },
 
   onGameFinished: async function (_id) {
-    console.log('%c index - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
+    // console.log('%c index - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
     Index.updateRunningGameAmounts();
 

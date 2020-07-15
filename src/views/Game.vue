@@ -156,7 +156,7 @@
       }
 
       this.currentGame = window.location.pathname.replace('/', '');
-      console.log('Open game page. Current game:', this.currentGame);
+      // console.log('Open game page. Current game:', this.currentGame);
 
       window.CommonManager.setCurrentView(Types.View.game);
       window.CommonManager.setCurrentGame((this.currentGame === Types.Game.cf) ? Types.Game.cf : Types.Game.rps);
@@ -175,7 +175,7 @@
       }, 50);
     },
     beforeRouteLeave(to, from, next) {
-      console.log('Leave game page');
+      // console.log('Leave game page');
       window.Game.gameType = -1;
       window.Game.onUnload();
       document.getElementById("gameName").innerHTML = "";

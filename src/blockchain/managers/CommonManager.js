@@ -72,7 +72,7 @@ const CommonManager = {
       if (--timer < 0) {
         clearInterval(backInterval);
         $('.timer-block').removeClass('visible');
-        console.log('Timer end');
+        // console.log('Timer end');
 
         if (callback) {
           callback();

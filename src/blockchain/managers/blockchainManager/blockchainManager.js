@@ -120,8 +120,6 @@ const BlockchainManager = {
   },
 
   blockchainChanged: function (_blockchainType) {
-    return;
-
     if (!this.initted) {
       return;
     }

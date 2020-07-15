@@ -527,12 +527,12 @@
     },
     methods: {
       selectMoveValue(value) {
-        console.log(`Value selected: ${value}`);
+        // console.log(`Value selected: ${value}`);
         this.gameValue = value;
         window.RPS.moveClicked(value);
       },
       selectPreviousValue(value) {
-        console.log(`Previous value selected: ${value}`);
+        // console.log(`Previous value selected: ${value}`);
         this.prevGameValue = value;
         window.RPS.moveClicked(value);
       }

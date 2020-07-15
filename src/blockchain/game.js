@@ -123,10 +123,10 @@ const Game = {
     let ownGame;
 
     if (_gameType == Types.Game.cf) {
-      console.log("loadTopGamesForGame - CF");
+      // console.log("loadTopGamesForGame - CF");
       ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
     } else if (_gameType == Types.Game.rps) {
-      console.log("loadTopGamesForGame - RPS");
+      // console.log("loadTopGamesForGame - RPS");
       ownGame = await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
     } else {
       throw('loadTopGamesForGame - wrong _gameType');
@@ -156,13 +156,13 @@ const Game = {
 
   loadAvailableGamesPortionForGame: async function (_gameType) {
     if (_gameType == Types.Game.cf) {
-      console.log("loadAvailableGamesPortionForGame - CF");
+      // console.log("loadAvailableGamesPortionForGame - CF");
     } else if (_gameType == window.BlockchainManager.rockPaperScissors) {
-      console.log("loadAvailableGamesPortionForGame - RPS");
+      // console.log("loadAvailableGamesPortionForGame - RPS");
     }
 
     if (this.availableGamesFetchStartIndex == 0) {
-      console.log('%c No games to load', 'color: #1d34ff');
+      // console.log('%c No games to load', 'color: #1d34ff');
       return;
     }
 
@@ -190,7 +190,7 @@ const Game = {
     }
 
     window.CommonManager.hideSpinner(Types.SpinnerView.availableGames);
-    console.log("availableGameIds: ", this.availableGameIds);
+    // console.log("availableGameIds: ", this.availableGameIds);
   },
 
   availableGameValidToAppend: function (_gameInfo) {
@@ -235,16 +235,16 @@ const Game = {
   },
 
   removeGameWithId: function (_gameId) {
-    console.log("removeGameWithId: ", _gameId);
+    // console.log("removeGameWithId: ", _gameId);
 
     if (this.topGameIds.includes(_gameId)) {
-      console.log("from TopGames");
+      // console.log("from TopGames");
 
       let idx = this.topGameIds.indexOf(_gameId);
       $('#TopGames')[0].removeChild($('#TopGames')[0].children[idx]);
       this.topGameIds.splice(idx, 1);
     } else if (this.availableGameIds.includes(_gameId)) {
-      console.log("from AvailableGames");
+      // console.log("from AvailableGames");
 
       let idx = this.availableGameIds.indexOf(_gameId);
       $('#AvailableGames')[0].removeChild($('#AvailableGames')[0].children[idx]);
@@ -256,7 +256,7 @@ const Game = {
 
   //  RAFFLE
   updateRaffleStateInfoForGame: async function (_gameType, _withHistory) {
-    console.log("updateRaffleStateInfoForGame");
+    // console.log("updateRaffleStateInfoForGame");
 
     window.CommonManager.showSpinner(Types.SpinnerView.raffle);
 
@@ -324,11 +324,11 @@ const Game = {
 
   //  NOTIFICATION HELPERS
   onGameUpdated: async function (_gameId) {
-    console.log('%c game - onGameUpdated %s', 'color: #1d34ff', _gameId);
+    // console.log('%c game - onGameUpdated %s', 'color: #1d34ff', _gameId);
 
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, _gameId);
     if (gameInfo.paused) {
-      console.log('skip');
+      // console.log('skip');
       return;
     }
 
@@ -341,9 +341,9 @@ const Game = {
 
   onGameAddedToTop: function (_gameType, _gameId, _creator) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c game - onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
+      // console.log('%c game - onGameAddedToTop - CF: %s %s', 'color: #1d34ff', _gameId, _creator);
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c game - onGameAddedToTop - RPS: %s %s', 'color: #1d34ff', _gameId, _creator);
+      // console.log('%c game - onGameAddedToTop - RPS: %s %s', 'color: #1d34ff', _gameId, _creator);
     }
 
     if (this.isGamePresentInAnyList(_gameId)) {
@@ -361,9 +361,9 @@ const Game = {
 
   onGameCreated: async function (_gameType, _gameId, _creator) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
+      // console.log('%c game - onGameCreated_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c game - onGameCreated_RPS', 'color: #1d34ff');
+      // console.log('%c game - onGameCreated_RPS', 'color: #1d34ff');
     }
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
@@ -373,7 +373,7 @@ const Game = {
   },
 
   onGameJoined: async function (_gameId, _creator, _opponent) {
-    console.log('%c game - onGameJoined_RPS', 'color: #1d34ff');
+    // console.log('%c game - onGameJoined_RPS', 'color: #1d34ff');
 
     if (this.isGamePresentInAnyList(_gameId)) {
       this.removeGameWithId(_gameId);
@@ -389,9 +389,9 @@ const Game = {
 
   onGamePlayed: async function (_gameType, _gameId, _creator, _opponent) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c game - onGamePlayed_CF %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
+      // console.log('%c game - onGamePlayed_CF %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
+      // console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
@@ -411,23 +411,23 @@ const Game = {
 
   onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Types.Game.cf) {
-      console.log('%c game - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
+      // console.log('%c game - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c game - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
+      // console.log('%c game - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
     }
 
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
   onGamePaused: function (_gameId) {
-    console.log('%c game - onGamePaused_RPS: %s', 'color: #1d34ff', _gameId);
+    // console.log('%c game - onGamePaused_RPS: %s', 'color: #1d34ff', _gameId);
     if (this.isGamePresentInAnyList(_gameId)) {
       this.removeGameWithId(_gameId);
     }
   },
 
   onGameUnpaused: async function (_gameId, _creator) {
-    console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
+    // console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
@@ -436,7 +436,7 @@ const Game = {
   },
 
   onGameFinished: async function (_id) {
-    console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
+    // console.log('%c game - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
     if (this.isGamePresentInAnyList(_id)) {
       this.removeGameWithId(_id);
@@ -464,7 +464,7 @@ const Game = {
   },
 
   onGameMovePlayed: function (_gameId, _nextMover) {
-    console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
+    // console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
@@ -472,7 +472,7 @@ const Game = {
   },
 
   onGameOpponentMoved: function (_gameId, _nextMover) {
-    console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
+    // console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       RPS.showGameViewForCurrentAccount();
@@ -486,9 +486,9 @@ const Game = {
     }
 
     if (_gameType == Types.Game.cf) {
-      console.log('%c Game - onGameRafflePlayed_CF', 'color: #1d34ff');
+      // console.log('%c Game - onGameRafflePlayed_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
-      console.log('%c Game - onGameRafflePlayed_RPS', 'color: #1d34ff');
+      // console.log('%c Game - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
     Game.updateRaffleStateInfoForGame(Game.gameType, true);
@@ -520,7 +520,7 @@ const Game = {
   },
 
   joinGame: async function (_gameIdx, _isTopGame) {
-    console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
+    // console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 
