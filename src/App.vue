@@ -21,7 +21,7 @@
             <button class="currency-select" v-bind:class="{'is-active': currency === 'eth'}" @click="setCurrency('eth')">
               <img src="/img/ethereum-logo.svg" alt="ETH">
             </button>
-            <button class="currency-select" v-bind:class="{'is-active': currency === 'trx'}" @click="setCurrency('trx')">
+            <button class="currency-select disabled" v-bind:class="{'is-active': currency === 'trx'}" @click="setCurrency('trx')">
               <img src="/img/icon-tron.svg" alt="Tron">
             </button>
 
@@ -78,10 +78,10 @@
                         <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2">
                         <em id="rockPaperScissorsPlayedTotalAmount">0</em>
                       </div>
-                      <div class="col-4 pr-0">
+                      <!-- <div class="col-4 pr-0">
                         <img src="/img/icon-tic-tac-toe-sm.svg" class="mr-2">
                         <em id="oxoTotalAmount">0</em>
-                      </div>
+                      </div> -->
                     </div>
                   </li>
 
@@ -127,12 +127,12 @@
                         <img src="/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
                         <img src="/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
                       </div>
-                      <div class="col-sm-6">
+                      <!-- <div class="col-sm-6">
                         <img src="/img/icon-tic-tac-toe-sm.svg" class="mr-2">
                         <em id="ReferralFeesWithdrawnOxo">0</em>
                         <img src="/img/icon_amount-eth.svg" width="24" class="ml-2" v-show="currency === 'eth'">
                         <img src="/img/icon_amount-trx.svg" width="24" class="ml-2" v-show="currency === 'trx'">
-                      </div>
+                      </div> -->
                     </div>
                   </li>
                   <li>
@@ -259,7 +259,7 @@
       });
 
       window.ethereum.on('networkChanged', async function (networkId) {
-        // console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
+        console.log('%c App - networkChanged: %s', 'color: #00aa00', networkId);
         if (window.BlockchainManager && window.BlockchainManager.initted) {
           await window.BlockchainManager.networkChanged(networkId);
           if (window.CommonManager.currentView == Types.View.index) {
