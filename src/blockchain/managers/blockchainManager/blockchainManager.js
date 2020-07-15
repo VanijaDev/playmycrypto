@@ -199,7 +199,7 @@ const BlockchainManager = {
   gasPriceNormalizedString: async function () {
     let gasPrice = await web3.eth.getGasPrice();
     console.log("gasPrice: ", gasPrice);
-    let gasPriceNormalizedString = (parseInt(gasPrice) * 1.2).toString();
+    let gasPriceNormalizedString = (gasPrice * 1.05).toFixed(0);
     console.log("     !!! gasPriceNormalizedString: ", gasPriceNormalizedString);
     return gasPriceNormalizedString;
   },
