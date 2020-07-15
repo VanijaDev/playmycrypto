@@ -78,23 +78,7 @@ const CoinFlip = {
         break;
 
       case Types.GameView_CF.waitingForOpponent:
-        // $('#gameId_start')[0].value = "0";
-        // $('#gameCreator_start')[0].value = "0x0";
-        // $('#gameOpponent_start')[0].value = "0x0";
-        // $('#gameBetCurrent_start')[0].value = "0";
-        // $('#cf_game_referral_start')[0].value = "";
-        // $('#cf_bet_input')[0].value = "0.01";
-        break;
-
       case Types.GameView_CF.join:
-        // $('#gameId_start')[0].value = "0";
-        // $('#gameCreator_start')[0].value = "0x0";
-        // $('#gameOpponent_start')[0].value = "0x0";
-        // $('#gameBetCurrent_start')[0].value = "0";
-        // $('#cf_game_referral_start')[0].value = "";
-        // $('#cf_bet_input')[0].value = "0.01";
-        break;
-
       case Types.GameView_CF.won:
       case Types.GameView_CF.lost:
         break;
