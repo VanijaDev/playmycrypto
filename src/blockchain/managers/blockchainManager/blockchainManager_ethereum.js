@@ -30,7 +30,10 @@ const BlockchainManager_ethereum = {
         await ethereum.enable();
 
         if (!this.isValidNetwork(ethereum.networkVersion)) {
-          showTopBannerMessage("Wrong Network. Please use Ganache for testing.", null, false);
+          showTopBannerMessage("Wrong Network. Please use Ethereum Main Network.", null, false);
+          $("#app-disabled")[0].classList.add("app-disabled");
+          $("#app-disabled")[0].classList.remove("hidden");
+          alert("Wrong Network. Please use Ethereum Main Network.")
           return false;
         }
       } catch (error) {
