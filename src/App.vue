@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="app-disabled" class="hidden"></div>
 
     <header>
       <div class="container">
