@@ -1,8 +1,3 @@
-// import Web3 from 'web3';
-// import { Utils } from "../../utils";
-// import { ProfileManager } from "../profileManager";
-// import { CoinFlipData, RockPaperScissorsData } from "../../../../blockchain/contract";
-
 import {BlockchainManager_ethereum} from "./blockchainManager_ethereum";
 import Types from "../../types";
 
@@ -200,21 +195,7 @@ const BlockchainManager = {
     let gasPriceNormalizedString = (gasPrice * 1.05).toFixed(0);
     console.log("     !!! gasPriceNormalizedString: ", gasPriceNormalizedString);
     return gasPriceNormalizedString;
-  },
-
-
-  /**
-   * PROMISES
-   */
-
-  // gameContractForGameType: function (_gameType) {
-  // let gameContract = this.coinFlipContract;
-
-  // if (_gameType == Types.Game.rps) {
-  //   gameContract = this.rockPaperScissorsContract;
-  // }
-  // return gameContract;
-  // }
+  }
 }
 
 window.BlockchainManager = BlockchainManager;
