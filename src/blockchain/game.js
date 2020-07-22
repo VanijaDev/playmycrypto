@@ -543,7 +543,7 @@ const Game = {
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_raffle_start, hash);
+        showTopBannerMessage($t.tx_raffle_run, hash);
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
