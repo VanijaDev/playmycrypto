@@ -6,6 +6,7 @@ import {ProfileManager} from "./managers/profileManager";
 import {PromiseManager} from "./managers/promiseManager";
 import Types from "./types";
 
+const $t = $('#translations').data();
 
 const Index = {
   version: "1.0.0",
@@ -223,7 +224,7 @@ const Index = {
     // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage("Rock Paper Scissors: you have pending move");
+      showTopBannerMessage($t.rps_pending_move);
     }
   },
   
@@ -231,7 +232,7 @@ const Index = {
     // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage("Rock Paper Scissors: you have pending move");
+      showTopBannerMessage($t.rps_pending_move);
     }
   },
 
@@ -273,7 +274,7 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage("Rock Paper Scissors: game was joined, you have pending move.");
+      showTopBannerMessage($t.rps_game_joined_pending_move);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
@@ -291,19 +292,19 @@ const Index = {
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
         case Types.GameState.winnerPresent:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game." : "Oh, you LOST ongoing game.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game : $t.lost_ongoing_game;
           break;
 
         case Types.GameState.draw:
-          infoStr = "Ongoing game has just ended in a DRAW.";
+          infoStr = $t.draw_ongoing_game;
           break;
 
         case Types.GameState.quitted:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game, opponent quitted." : "Oh, you LOST ongoing game, you quitted.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_quitted : $t.lost_ongoing_game_you_quitted;
           break;
 
         case Types.GameState.expired:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? "Congrats! You WON ongoing game, opponent's move expired." : "Oh, you LOST ongoing game, your move expired.";
+          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_expired : $t.lost_ongoing_game_you_expired;
           break;
       }
 

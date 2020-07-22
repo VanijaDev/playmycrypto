@@ -221,6 +221,14 @@
       v-bind:data-tx_raffle_prize="$t('RAFFLE PRIZE withdraw transaction ')"
       v-bind:data-tx_raffle_start="$t('RUN RAFFLE transaction ')"
       v-bind:data-rps_pending_move="$t('Rock Paper Scissors: you have pending move')"
+      v-bind:data-rps_game_joined_pending_move="$t('Rock Paper Scissors: game was joined, you have pending move')"
+      v-bind:data-won_ongoing_game="$t('Congrats! You WON ongoing game')"
+      v-bind:data-won_ongoing_game_opponent_quitted="$t('Congrats! You WON ongoing game, opponent quitted')"
+      v-bind:data-won_ongoing_game_opponent_expired="$t('Congrats! You WON ongoing game, opponent\'s move expired')"
+      v-bind:data-lost_ongoing_game="$t('Oh, you LOST ongoing game')"
+      v-bind:data-lost_ongoing_game_you_quitted="$t('Oh, you LOST ongoing game, you quitted')"
+      v-bind:data-lost_ongoing_game_you_expired="$t('Oh, you LOST ongoing game, your move expired')"
+      v-bind:data-draw_ongoing_game="$t('Ongoing game has just ended in a DRAW')"
     ></div>
   </div>
 </template>
