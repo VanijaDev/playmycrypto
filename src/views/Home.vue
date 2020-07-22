@@ -79,7 +79,7 @@
                     <b id="now_playing_coinflip">0</b>
                   </span>
                   <img src="/img/icon-coinflip.svg" class="game-icon">
-                  <span class="title">Coin Flip</span>
+                  <span class="title">{{ $t("COIN_FLIP") }}</span>
                 </router-link>
               </div>
 
@@ -90,7 +90,7 @@
                   <b id="now_playing_rps">0</b>
                 </span>
                   <img src="/img/icon-rock-paper-scissors.svg" class="game-icon">
-                  <span class="title">Rock Paper Scissors</span>
+                  <span class="title">{{ $t("ROCK_PAPER_SCISSORS") }}</span>
                 </router-link>
               </div>
 
