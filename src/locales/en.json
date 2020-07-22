@@ -115,5 +115,8 @@
   "CLAIM_EXPIRED_ERR": "CLAIM EXPIRED error...",
   "JOIN_TELE": "Join Telegram group",
   "COIN_FLIP": "Coin Flip",
-  "ROCK_PAPER_SCISSORS": "Rock Paper Scissors"
+  "ROCK_PAPER_SCISSORS": "Rock Paper Scissors",
+  "JOIN_NEXT_GAME_IN": "Join next game in",
+  "SUSPENDED_DECRIPTION": "Suspended time was introduced to avoid spamming",
+  "LOAD_MORE": "LOAD MORE"
 }

@@ -78,11 +78,11 @@
           <div class="shadow-block">
 
             <div class="timer-block text-primary">
-              <p class="mb-0">Join next game in</p>
+              <p class="mb-0">{{ $t('JOIN_NEXT_GAME_IN') }}</p>
               <p id="timerBack">
                 00:00
               </p>
-              <small>Suspended time was introduced to avoid spamming.</small>
+              <small>{{ $t('SUSPENDED_DECRIPTION') }}</small>
             </div>
 
             <div class="position-relative">
@@ -110,7 +110,7 @@
             <div class="inner-padding">
               <button class="btn long-btn btn-primary rounded-button full-width mt-2"
                       id="loadMoreAvailableGamesBtn" onclick="window.Game.loadMoreAvailableGames()">
-                LOAD MORE
+                {{ $t('LOAD_MORE') }}
               </button>
             </div>
 
