@@ -580,8 +580,6 @@ String.prototype.composetmp = (function () {
   }
 }());
 
-const $t = $('#translations').data();
-
 var TableAvailableGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
   '<p>' +
