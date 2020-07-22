@@ -208,17 +208,19 @@
       v-bind:data-bet="$t('BET')"
       v-bind:data-winner="$t('WINNER')"
       v-bind:data-prize="$t('PRIZE')"
+      v-bind:data-suffix_games="$t(' games')"
       v-bind:data-err_wrong_network="$t('Wrong Network. Please use Ethereum Main Network')"
       v-bind:data-err_legacy_browsers="$t('Legacy dapp browsers... Working on compatibility')"
       v-bind:data-err_non_eth_browser="$t('Non-Ethereum browser detected. You should consider trying MetaMask!')"
       v-bind:data-err_referral_fee_withdraw="$t('Error on REFERRAL FEE withdraw transaction')"
       v-bind:data-err_game_prize_withdraw="$t('Error on GAME PRIZE withdraw transaction')"
+      v-bind:data-err_run_raffle="$t('Error on RUN RAFFLE transaction')"
       v-bind:data-err_raffle_prize_withdraw="$t('Error on RAFFLE PRIZE withdraw transaction')"
-      v-bind:data-rps_pending_move="$t('Rock Paper Scissors: you have pending move')"
       v-bind:data-tx_referral_fee="$t('REFERRAL FEE withdraw transaction ')"
       v-bind:data-tx_game_prize="$t('GAME PRIZE withdraw transaction ')"
       v-bind:data-tx_raffle_prize="$t('RAFFLE PRIZE withdraw transaction ')"
-      v-bind:data-suffix_games="$t(' games')"
+      v-bind:data-tx_raffle_start="$t('RUN RAFFLE transaction ')"
+      v-bind:data-rps_pending_move="$t('Rock Paper Scissors: you have pending move')"
     ></div>
   </div>
 </template>

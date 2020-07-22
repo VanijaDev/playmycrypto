@@ -7,6 +7,8 @@ import {BigNumber} from "bignumber.js";
 import {ProfileManager} from "./managers/profileManager";
 import Types from "./types";
 
+const $t = $('#translations').data();
+
 const Game = {
 
   CF_Notifications: {
@@ -541,7 +543,7 @@ const Game = {
     })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage("START RAFFLE transaction ", hash);
+        showTopBannerMessage($t.tx_raffle_start, hash);
       })
       .once('receipt', function (receipt) {
         ProfileManager.update();
@@ -550,7 +552,7 @@ const Game = {
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        showTopBannerMessage("Run raffle error...", null, true)
+        showTopBannerMessage($t.err_run_raffle, null, true)
 
         throw new Error(error, receipt);
       })
