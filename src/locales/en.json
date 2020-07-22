@@ -37,6 +37,7 @@
   "GAME_BET": "Game bet",
   "START_NEW_GAME": "START NEW GAME",
   "CHOOSE_COIN_SIDE": "CHOOSE COIN SIDE",
+  "CHOOSE_CRYPTO": "Choose crypto",
   "ENTER_REFERRAL": "Enter referral (optional)",
   "BET": "Bet",
   "START_GAME": "START GAME",
@@ -111,5 +112,6 @@
   "PLAY_MOVE_ERR": "PLAY MOVE error...",
   "CLAIM_EXPIRED": "CALIM EXPIRED",
   "CLAIM_EXPIRED_TX": "CALIM EXPIRED GAME transaction: ",
-  "CLAIM_EXPIRED_ERR": "CLAIM EXPIRED error..."
+  "CLAIM_EXPIRED_ERR": "CLAIM EXPIRED error...",
+  "JOIN_TELE": "Join Telegram group"
 }

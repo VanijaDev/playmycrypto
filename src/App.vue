@@ -13,11 +13,11 @@
           </div>
           <div id="gameName" class="mr-game-name"></div>
           <div class="contacts">
-            <a href="https://t.me/playmycrypto" target="blank" class="tele-link">Join Telegram group</a>
+            <a href="https://t.me/playmycrypto" target="blank" class="tele-link">{{ $t('JOIN_TELE') }}</a>
             </div>
           <div class="row align-self-start">
             <div class="choose-crypto">
-              Choose crypto:
+              {{ $t('CHOOSE_CRYPTO') }}:
             </div>
             <button class="currency-select" v-bind:class="{'is-active': currency === 'eth'}" @click="setCurrency('eth')">
               <img src="/img/ethereum-logo.svg" alt="ETH">
