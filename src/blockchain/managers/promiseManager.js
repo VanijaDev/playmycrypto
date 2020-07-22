@@ -1,8 +1,3 @@
-// import Web3 from 'web3';
-// import { Utils } from "../utils";
-
-import BlockchainManager from "./blockchainManager/blockchainManager";
-
 let PromiseManager = {
   ongoingGameIdxForCreatorPromise: function (_gameType, _account) {
     return new Promise(resolve => {
