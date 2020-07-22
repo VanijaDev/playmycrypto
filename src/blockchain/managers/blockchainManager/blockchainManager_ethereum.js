@@ -5,6 +5,7 @@ import Types from "../../types";
 import {PromiseManager} from '../promiseManager';
 import BigNumber from 'bignumber.js';
 
+const $t = $('#translations').data();
 
 const BlockchainManager_ethereum = {
 
@@ -30,10 +31,10 @@ const BlockchainManager_ethereum = {
         await ethereum.enable();
 
         if (!this.isValidNetwork(ethereum.networkVersion)) {
-          showTopBannerMessage("Wrong Network. Please use Ethereum Main Network.", null, false);
+          showTopBannerMessage($t.err_wrong_network, null, false);
           $("#app-disabled")[0].classList.add("app-disabled");
           $("#app-disabled")[0].classList.remove("hidden");
-          alert("Wrong Network. Please use Ethereum Main Network.")
+          alert($t.err_wrong_network)
           return false;
         }
       } catch (error) {
@@ -46,13 +47,13 @@ const BlockchainManager_ethereum = {
     else if (window.web3) {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
-      showTopBannerMessage('Legacy dapp browsers... Working on compatibility.', null, false);
+      showTopBannerMessage($t.err_legacy_browsers, null, false);
       this.initted = false;
       return false;
     }
     // Non-dapp browsers...
     else {
-      showTopBannerMessage('Non-Ethereum browser detected. You should consider trying MetaMask!', null, false);
+      showTopBannerMessage($t.err_non_eth_browser, null, false);
       this.initted = false;
       return false;
     }
@@ -103,7 +104,7 @@ const BlockchainManager_ethereum = {
       return true;
     }
 
-    showTopBannerMessage("Wrong Network. Please use Main network.", null, false);
+    showTopBannerMessage($t.err_wrong_network, null, false);
     return false;
   },
 

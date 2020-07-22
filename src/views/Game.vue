@@ -118,14 +118,6 @@
         </div>
       </div>
     </div>
-
-    <div id="translations"
-         v-bind:data-CREATOR="$t('CREATOR')"
-         v-bind:data-BET="$t('BET')"
-         v-bind:data-WINNER="$t('WINNER')"
-         v-bind:data-PRIZE="$t('PRIZE')"
-         v-bind:data-PAUSE_GAME="$t('PAUSE_GAME')"
-    ></div>
   </div>
 </template>
 

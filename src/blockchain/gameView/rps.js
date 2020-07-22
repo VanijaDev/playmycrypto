@@ -6,7 +6,7 @@ import BigNumber from "bignumber.js";
 import { ProfileManager } from "../managers/profileManager";
 import Types from "../types";
 
-var $t = $('#translations').data();
+// const $t = $('#translations').data();
 
 const RPS = {
   ownerAddress: "",

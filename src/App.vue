@@ -203,6 +203,16 @@
       </div>
     </footer>
 
+    <div id="translations"
+      v-bind:data-CREATOR="$t('CREATOR')"
+      v-bind:data-BET="$t('BET')"
+      v-bind:data-WINNER="$t('WINNER')"
+      v-bind:data-PRIZE="$t('PRIZE')"
+      v-bind:data-PAUSE_GAME="$t('PAUSE_GAME')"
+      v-bind:data-ERR_WRONG_NETWORK="$t('Wrong Network. Please use Ethereum Main Network')"
+      v-bind:data-ERR_LEGACY_BROWSERS="$t('Legacy dapp browsers... Working on compatibility')"
+      v-bind:data-ERR_NON_ETH_BROWSER="$t('Non-Ethereum browser detected. You should consider trying MetaMask!')"
+    ></div>
   </div>
 </template>
 

@@ -118,5 +118,6 @@
   "ROCK_PAPER_SCISSORS": "Rock Paper Scissors",
   "JOIN_NEXT_GAME_IN": "Join next game in",
   "SUSPENDED_DECRIPTION": "Suspended time was introduced to avoid spamming",
-  "LOAD_MORE": "LOAD MORE"
+  "LOAD_MORE": "LOAD MORE",
+  "WRONG_NETWORK": "Wrong Network. Please use Ethereum Main Network"
 }

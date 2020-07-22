@@ -578,7 +578,7 @@ String.prototype.composetmp = (function () {
   }
 }());
 
-var $t = $('#translations').data();
+const $t = $('#translations').data();
 
 var TableAvailableGamesTemplate = '<li>' +
   '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
