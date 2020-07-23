@@ -204,13 +204,13 @@
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Move expires in:</p>
+              <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span id="rpswfopponentmove_move_remain_min" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> min</span>
+                <span class="date mr-2 text-white-50"> {{ $t('MIN') }}</span>
                 <span id="rpswfopponentmove_move_remain_sec" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> sec</span>
+                <span class="date mr-2 text-white-50"> {{ $t('SEC') }}</span>
               </p>
             </div>
             <!-- <div class="col-6">
@@ -236,13 +236,13 @@
 
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block mb-2">
-          <span class="one-side">YOU</span>
+          <span class="one-side">{{ $t('YOU') }}</span>
           <span class="scores">
             <span id="rpswfopponentmove_score_you">0</span>
             <span> : </span>
             <span id="rpswfopponentmove_score_opponent">0</span>
           </span>
-          <span class="one-side">OPPONENT</span>
+          <span class="one-side">{{ $t('OPPONENT') }}</span>
         </div>
         <h2 class="f24">{{ $t('WAITING_OPPONENT_MOVE') }}</h2>
 
@@ -273,13 +273,13 @@
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Move expires in:</p>
+              <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span id="rpscreatormove_move_remain_min" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> min</span>
+                <span class="date mr-2 text-white-50"> {{ $t('MIN') }}</span>
                 <span id="rpscreatormove_move_remain_sec" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> sec</span>
+                <span class="date mr-2 text-white-50"> {{ $t('SEC') }}</span>
               </p>
             </div>
           </div>
@@ -302,13 +302,13 @@
 
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block">
-          <span class="one-side">YOU</span>
+          <span class="one-side">{{ $t('YOU') }}</span>
           <span class="scores">
             <span id="rpscreatormove_score_you">0</span>
             <span> : </span>
             <span id="rpscreatormove_score_opponent">0</span>
           </span>
-          <span class="one-side">OPPONENT</span>
+          <span class="one-side">{{ $t('OPPONENT') }}</span>
         </div>
         <!-- <div class="game-result">
           You Won Move :)
@@ -317,7 +317,7 @@
         <div id="rpscreatormove_prev_next_move_creator_block" class="hidden" data-group="creatorMove">
           <div class="row mt-5">
             <div class="col-sm-4 text-sm-right">
-              <h5>Previous move:</h5>
+              <h5>{{ $t('PREV_MOVE') }}:</h5>
             </div>
             <div class="col-sm-6">
               <div class="text-sm-left text-center">
@@ -344,7 +344,7 @@
           </div>
           <div id="rpscreatormove_next_move_action" class="row mt-5">
             <div class="col-sm-4 text-sm-right">
-              <h5>Next move:</h5>
+              <h5>{{ $t('NEXT_MOVE') }}:</h5>
             </div>
             <div class="col-sm-6">
               <div class="text-sm-left text-center">
@@ -397,13 +397,13 @@
 
           <div class="row mt-4 f10">
             <div class="col-6 pr-0">
-              <p class="mb-0">Move expires in:</p>
+              <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon">
                 <span id="rpsopponentmove_move_remain_min" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> min</span>
+                <span class="date mr-2 text-white-50"> {{ $t('MIN') }}</span>
                 <span id="rpsopponentmove_move_remain_sec" class="f13">0</span>
-                <span class="date mr-2 text-white-50"> sec</span>
+                <span class="date mr-2 text-white-50"> {{ $t('MIN') }}</span>
               </p>
             </div>
           </div>
@@ -426,13 +426,13 @@
 
       <div class="col-sm-8 border-left text-center inner-column second-inner-column">
         <div class="scores-block">
-          <span class="one-side">YOU</span>
+          <span class="one-side">{{ $t('YOU') }}</span>
           <span class="scores">
             <span id="rpsopponentmove_score_you">0</span>
             <span> : </span>
             <span id="rpsopponentmove_score_opponent">0</span>
           </span>
-          <span class="one-side">OPPONENT</span>
+          <span class="one-side">{{ $t('OPPONENT') }}</span>
         </div>
         <!-- <div class="game-result">
           You Won Move :)
