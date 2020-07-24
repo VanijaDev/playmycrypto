@@ -40,7 +40,9 @@ main {
 }
 
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'SFProDisplay-Medium', sans-serif;
 }
 
@@ -65,7 +67,8 @@ h1, h2, h3 {
     height: 40px;
   }
 
-  u, a {
+  u,
+  a {
     color: #FFF;
     margin: 0 10px;
   }
@@ -79,7 +82,8 @@ h1, h2, h3 {
   margin-top: 6px;
 }
 
-button:focus, input:focus {
+button:focus,
+input:focus {
   outline: none;
 }
 
@@ -454,7 +458,7 @@ button:focus, input:focus {
     border-width: 11px;
   }
 
-  > li {
+  >li {
     padding: 16px 0;
 
     &:not(:last-child) {
@@ -619,7 +623,8 @@ button:focus, input:focus {
   padding: 6px;
 }
 
-.raffle, .how-to-play {
+.raffle,
+.how-to-play {
   float: left;
   width: 49%;
 
@@ -703,6 +708,8 @@ button:focus, input:focus {
   .how_to_section_title {
     font-family: 'SFProDisplay-Medium', sans-serif;
     margin-bottom: 0;
+    margin-top: 20px !important;
+    font-weight: bolder;
   }
 }
 
@@ -758,6 +765,7 @@ button:focus, input:focus {
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg);
     }
@@ -800,7 +808,9 @@ button:focus, input:focus {
   }
 
   .opacity-text {
-    label, p {
+
+    label,
+    p {
       opacity: .75;
     }
   }
@@ -1029,17 +1039,24 @@ button:focus, input:focus {
   h2 {
     font-size: 22px;
   }
-  .choose-crypto, .total-amounts, .total-amount-title, .new-game-title {
+
+  .choose-crypto,
+  .total-amounts,
+  .total-amount-title,
+  .new-game-title {
     display: none;
   }
+
   .currency-select {
     zoom: 0.8;
   }
+
   .user-profile {
     margin: 0 5px 0 0;
     width: 96px;
 
-    .profile-name, small {
+    .profile-name,
+    small {
       display: none;
     }
   }
@@ -1057,7 +1074,7 @@ button:focus, input:focus {
   .user-dropdown {
     width: 330px;
 
-    > li {
+    >li {
       padding: 6px 0;
     }
 
@@ -1089,16 +1106,21 @@ button:focus, input:focus {
     padding-left: 15px !important;
   }
 
-  .raffle, .how-to-play {
+  .raffle,
+  .how-to-play {
     width: 100%;
     margin-bottom: 20px;
   }
-  .raffle .scrollbar-inner, .scrollbar-inner {
+
+  .raffle .scrollbar-inner,
+  .scrollbar-inner {
     height: auto;
   }
+
   .game-area .inner-column {
     height: auto;
   }
+
   .info-column {
     text-align: center;
 
@@ -1118,9 +1140,11 @@ button:focus, input:focus {
     margin-top: 30px !important;
   }
 
-  .raffle .raffle-amount, .how-to-play .raffle-amount {
+  .raffle .raffle-amount,
+  .how-to-play .raffle-amount {
     font-size: 24px;
   }
+
   .rounded-button.float-right {
     float: none !important;
   }
