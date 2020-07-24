@@ -279,6 +279,7 @@
         Copyright ©
         <router-link to="/">OXO games</router-link>
         {{ $t('ALL_RIGHTS_RESERVED') }}.
+        <span style="float: right">v 1.0.1</span>
       </div>
     </footer>
 
