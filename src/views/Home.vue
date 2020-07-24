@@ -40,10 +40,10 @@
               v-click-outside="hideInfoTooltip"
             />
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_4") }}</p>
-            <span class="tooltip-info" v-show="visibleInfoTooltip===2">
+            <!-- <span class="tooltip-info" v-show="visibleInfoTooltip===2">
               <a href="https://onigiribank.com" target="blank">OnigiriBank</a>
               {{ $t("ADVANTAGES.TOOLTIP_4") }}
-            </span>
+            </span>-->
           </div>
           <div class="col">
             <b>100%</b>
