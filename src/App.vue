@@ -47,8 +47,8 @@
                 <div class="languages-dropdown" v-show="languagePopupOpened">
                   <button class="flag flag-en" v-show="language!=='en'" @click="setLocale('en')"></button>
                   <button class="flag flag-ua" v-show="language!=='ua'" @click="setLocale('ua')"></button>
-                  <button class="flag flag-jp" v-show="language!=='jp'" @click="setLocale('jp')"></button>
-                  <button class="flag flag-kr" v-show="language!=='kr'" @click="setLocale('kr')"></button>
+                  <!-- <button class="flag flag-jp" v-show="language!=='jp'" @click="setLocale('jp')"></button>
+                  <button class="flag flag-kr" v-show="language!=='kr'" @click="setLocale('kr')"></button>-->
                 </div>
               </div>
 
