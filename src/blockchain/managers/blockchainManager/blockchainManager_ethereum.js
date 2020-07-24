@@ -1,8 +1,15 @@
 import Web3 from 'web3';
-import {ProfileManager} from "../profileManager";
-import {CoinFlipData, RockPaperScissorsData} from "../../contract/contract";
+import {
+  ProfileManager
+} from "../profileManager";
+import {
+  CoinFlipData,
+  RockPaperScissorsData
+} from "../../contract/contract";
 import Types from "../../types";
-import {PromiseManager} from '../promiseManager';
+import {
+  PromiseManager
+} from '../promiseManager';
 import BigNumber from 'bignumber.js';
 
 const $t = $('#translations').data();
@@ -91,14 +98,14 @@ const BlockchainManager_ethereum = {
     ProfileManager.update();
   },
 
-  networkChanged: async function(_networkVersion) {
+  networkChanged: async function (_networkVersion) {
     console.log('%c BlockchainManager_ethereum - networkChanged: %s', 'color: #00aa00', _networkVersion);
 
     if (!this.initted) {
       console.error("BlockchainManager_ethereum - networkChanged, !initted");
       return;
     }
-    
+
     if (this.isValidNetwork(_networkVersion)) {
       hideTopBannerMessage();
       return true;
@@ -108,14 +115,14 @@ const BlockchainManager_ethereum = {
     return false;
   },
 
-  isValidNetwork: function(_networkVersion) {
+  isValidNetwork: function (_networkVersion) {
     /**
      * Ganache = 5777
      * Main Net = 1
      * Ropsten = 3
      * Kovan = 42
      */
-    return (_networkVersion == "5777");
+    return (_networkVersion == "1");
   },
 
   gameInst: function (_gameType) {
