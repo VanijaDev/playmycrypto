@@ -4,6 +4,7 @@ var config = {
   // TODO: Add common Configuration
   module: {},
   mode: "development",
+  devtool: 'eval-cheap-source-map'
 };
 
 var mainConfig = Object.assign({}, config, {
