@@ -1,3 +1,4 @@
+import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 import {
   NotificationManager
 } from "./managers/notificationManager";
