@@ -17,20 +17,21 @@
               href="https://t.me/playmycrypto"
               target="blank"
               class="tele-link"
-            >{{ $t('JOIN_TELE') }}</a>
+              >{{ $t("JOIN_TELE") }}</a
+            >
           </div>
           <div class="row align-self-start">
-            <div class="choose-crypto">{{ $t('CHOOSE_CRYPTO') }}:</div>
+            <div class="choose-crypto">{{ $t("CHOOSE_CRYPTO") }}:</div>
             <button
               class="currency-select"
-              v-bind:class="{'is-active': currency === 'eth'}"
+              v-bind:class="{ 'is-active': currency === 'eth' }"
               @click="setCurrency('eth')"
             >
               <img src="/img/ethereum-logo.svg" alt="ETH" />
             </button>
             <button
               class="currency-select disabled"
-              v-bind:class="{'is-active': currency === 'trx'}"
+              v-bind:class="{ 'is-active': currency === 'trx' }"
               @click="setCurrency('trx')"
             >
               <img src="/img/icon-tron.svg" alt="Tron" />
@@ -45,33 +46,46 @@
                 <div class="flag" v-bind:class="getCurrentFlag()"></div>
 
                 <div class="languages-dropdown" v-show="languagePopupOpened">
-                  <button class="flag flag-en" v-show="language!=='en'" @click="setLocale('en')"></button>
-                  <button class="flag flag-ua" v-show="language!=='ua'" @click="setLocale('ua')"></button>
+                  <button
+                    class="flag flag-en"
+                    v-show="language !== 'en'"
+                    @click="setLocale('en')"
+                  ></button>
+                  <button
+                    class="flag flag-ua"
+                    v-show="language !== 'ua'"
+                    @click="setLocale('ua')"
+                  ></button>
                   <!-- <button class="flag flag-jp" v-show="language!=='jp'" @click="setLocale('jp')"></button>
                   <button class="flag flag-kr" v-show="language!=='kr'" @click="setLocale('kr')"></button>-->
                 </div>
               </div>
 
-              <div class="profile-info position-relative" v-click-outside="hideUserPopup">
+              <div
+                class="profile-info position-relative"
+                v-click-outside="hideUserPopup"
+              >
                 <img
                   src="/img/icon-profile.svg"
                   class="float-right pointer"
                   @click="userPopupOpened = !userPopupOpened"
                 />
                 <div class="pointer float-left mr-2">
-                  <small>{{ $t('PROFILE') }}:</small>
+                  <small>{{ $t("PROFILE") }}:</small>
                   <div
                     class="profile-name"
                     id="playerAccount"
                     @click="userPopupOpened = !userPopupOpened"
-                  >0x000***000</div>
+                  >
+                    0x000***000
+                  </div>
                 </div>
 
                 <ul class="user-dropdown" v-show="userPopupOpened">
                   <li>
                     <div class="user-table row">
                       <div class="col-3">
-                        <h3>{{ $t('TOTAL_BALANCE') }}:</h3>
+                        <h3>{{ $t("TOTAL_BALANCE") }}:</h3>
                       </div>
                       <div class="col-6">
                         <img
@@ -90,7 +104,7 @@
                   </li>
 
                   <li>
-                    <h3>{{ $t('CURRENTLY_PLAYING') }}:</h3>
+                    <h3>{{ $t("CURRENTLY_PLAYING") }}:</h3>
                     <div id="listCurrentlyPlayingGames">
                       <!-- <img src="/img/icon-rock-paper-scissors-sm.svg"> -->
                     </div>
@@ -104,7 +118,10 @@
                         <em id="coinFlipPlayedTotalAmount">0</em>
                       </div>
                       <div class="col-4 pr-0">
-                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2" />
+                        <img
+                          src="/img/icon-rock-paper-scissors-sm.svg"
+                          class="mr-2"
+                        />
                         <em id="rockPaperScissorsPlayedTotalAmount">0</em>
                       </div>
                       <!-- <div class="col-4 pr-0">
@@ -117,7 +134,7 @@
                   <li>
                     <div class="user-table row mb-2">
                       <div class="col-sm-6 pr-0">
-                        <h3 class="mt-2">{{ $t('GAMEPLAY_PROFIT') }}:</h3>
+                        <h3 class="mt-2">{{ $t("GAMEPLAY_PROFIT") }}:</h3>
                       </div>
                       <div class="col-sm-5 pr-0">
                         <img
@@ -139,7 +156,7 @@
                     </div>
                     <div class="user-table row">
                       <div class="col-sm-6 pr-0">
-                        <h3 class="mt-2">{{ $t('TOTAL_PROFIT') }}:</h3>
+                        <h3 class="mt-2">{{ $t("TOTAL_PROFIT") }}:</h3>
                       </div>
                       <div class="col-sm-5 pr-0">
                         <img
@@ -162,7 +179,7 @@
                   </li>
 
                   <li>
-                    <h3>{{ $t('REFERRAL_FEE_RECEIVED') }}:</h3>
+                    <h3>{{ $t("REFERRAL_FEE_RECEIVED") }}:</h3>
                     <div class="user-table row">
                       <div class="col-sm-6 mb-2">
                         <img src="/img/icon-coinflip-sm.svg" class="mr-2" />
@@ -181,7 +198,10 @@
                         />
                       </div>
                       <div class="col-sm-6 mb-2">
-                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2" />
+                        <img
+                          src="/img/icon-rock-paper-scissors-sm.svg"
+                          class="mr-2"
+                        />
                         <em id="ReferralFeesWithdrawnRPS">0</em>
                         <img
                           src="/img/icon_amount-eth.svg"
@@ -205,44 +225,59 @@
                     </div>
                   </li>
                   <li>
-                    <h3>{{ $t('WITHDRAW_PENDING') }}:</h3>
+                    <h3>{{ $t("WITHDRAW_PENDING") }}:</h3>
                     <!--CartTabs-->
                     <div class="user-tabs">
-                      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <div
+                        class="btn-group btn-group-toggle"
+                        data-toggle="buttons"
+                      >
                         <button
                           class="btn btn-outline-primary"
-                          v-bind:class="{active:activeUserTab===1}"
-                          @click="activeUserTab=1"
+                          v-bind:class="{ active: activeUserTab === 1 }"
+                          @click="activeUserTab = 1"
                         >
-                          <div id="referralPendingPrizeBtn" class="pending-dot"></div>
-                          {{ $t('REFERRAL') }}
+                          <div
+                            id="referralPendingPrizeBtn"
+                            class="pending-dot"
+                          ></div>
+                          {{ $t("REFERRAL") }}
                         </button>
                         <button
                           class="btn btn-outline-primary"
-                          v-bind:class="{active:activeUserTab===2}"
-                          @click="activeUserTab=2"
+                          v-bind:class="{ active: activeUserTab === 2 }"
+                          @click="activeUserTab = 2"
                         >
-                          <div id="gamePendingPrizeBtn" class="pending-dot"></div>
-                          {{ $t('GAME_PRIZE') }}
+                          <div
+                            id="gamePendingPrizeBtn"
+                            class="pending-dot"
+                          ></div>
+                          {{ $t("GAME_PRIZE") }}
                         </button>
                         <button
                           class="btn btn-outline-primary"
-                          v-bind:class="{active:activeUserTab===3}"
-                          @click="activeUserTab=3"
+                          v-bind:class="{ active: activeUserTab === 3 }"
+                          @click="activeUserTab = 3"
                         >
-                          <div id="rafflePendingPrizeBtn" class="pending-dot"></div>
-                          {{ $t('RAFFLE_PRIZE') }}
+                          <div
+                            id="rafflePendingPrizeBtn"
+                            class="pending-dot"
+                          ></div>
+                          {{ $t("RAFFLE_PRIZE") }}
                         </button>
                       </div>
 
                       <div class="pt-3">
-                        <div id="withdrawReferral" v-show="activeUserTab===1">
+                        <div id="withdrawReferral" v-show="activeUserTab === 1">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
                           </button>-->
                         </div>
 
-                        <div id="withdrawGamePrize" v-show="activeUserTab===2">
+                        <div
+                          id="withdrawGamePrize"
+                          v-show="activeUserTab === 2"
+                        >
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
                           </button>
@@ -251,7 +286,10 @@
                           </button>-->
                         </div>
 
-                        <div id="withdrawRafflePrize" v-show="activeUserTab===3">
+                        <div
+                          id="withdrawRafflePrize"
+                          v-show="activeUserTab === 3"
+                        >
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
                           </button>-->
@@ -278,7 +316,7 @@
       <div class="container">
         Copyright ©
         <router-link to="/">OXO games</router-link>
-        {{ $t('ALL_RIGHTS_RESERVED') }}.
+        {{ $t("ALL_RIGHTS_RESERVED") }}.
         <span style="float: right">v 1.0.1</span>
       </div>
     </footer>
@@ -302,13 +340,23 @@
       v-bind:data-tx_raffle_prize="$t('TX_RAFFLE_PRIZE')"
       v-bind:data-tx_raffle_run="$t('TX_RAFFLE_RUN')"
       v-bind:data-rps_pending_move="$t('RPS_PENDING_MOVE')"
-      v-bind:data-rps_game_joined_pending_move="$t('RPS_GAME_JOINED_PENDING_MOVE')"
+      v-bind:data-rps_game_joined_pending_move="
+        $t('RPS_GAME_JOINED_PENDING_MOVE')
+      "
       v-bind:data-won_ongoing_game="$t('WON_ONGOING_GAME')"
-      v-bind:data-won_ongoing_game_opponent_quitted="$t('WON_ONGOING_GAME_OPPONENT_QUITTED')"
-      v-bind:data-won_ongoing_game_opponent_expired="$t('WON_ONGOING_GAME_OPPONENT_EXPIRED')"
+      v-bind:data-won_ongoing_game_opponent_quitted="
+        $t('WON_ONGOING_GAME_OPPONENT_QUITTED')
+      "
+      v-bind:data-won_ongoing_game_opponent_expired="
+        $t('WON_ONGOING_GAME_OPPONENT_EXPIRED')
+      "
       v-bind:data-lost_ongoing_game="$t('LOST_ONGOING_GAME')"
-      v-bind:data-lost_ongoing_game_you_quitted="$t('LOST_ONGOING_GAME_YOU_QUITTED')"
-      v-bind:data-lost_ongoing_game_you_expired="$t('LOST_ONGOING_GAME_YOU_EXPIRED')"
+      v-bind:data-lost_ongoing_game_you_quitted="
+        $t('LOST_ONGOING_GAME_YOU_QUITTED')
+      "
+      v-bind:data-lost_ongoing_game_you_expired="
+        $t('LOST_ONGOING_GAME_YOU_EXPIRED')
+      "
       v-bind:data-draw_ongoing_game="$t('DRAW_ONGOING_GAME')"
       v-bind:data-seed_str_placeholder="$t('SEED_STR_PLACEHOLDER')"
       v-bind:data-str_from_prev_move="$t('STR_FROM_PREV_MOVE')"
@@ -358,7 +406,7 @@ export default {
     return {
       userPopupOpened: false,
       languagePopupOpened: false,
-      activeUserTab: 1
+      activeUserTab: 1,
     };
   },
   computed: {
@@ -367,7 +415,7 @@ export default {
     },
     language() {
       return this.$store.state.language;
-    }
+    },
   },
   methods: {
     hideUserPopup() {
@@ -387,7 +435,7 @@ export default {
     },
     getCurrentFlag() {
       return "flag-" + this.language;
-    }
+    },
   },
 
   mounted() {
@@ -420,8 +468,8 @@ export default {
   },
 
   directives: {
-    ClickOutside
-  }
+    ClickOutside,
+  },
 };
 </script>
 
