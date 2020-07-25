@@ -1,7 +1,7 @@
 const Web3 = require("web3");
 
 let CoinFlipData = {
-    address: "0x9E79F2Ca1112CFcCE31e6595A0F0797Ce107b917",
+    address: "0x975c97078CfD1FdD24AAfc092E99B5AA9A61846D", //    Ganache
     abi: [{
             "inputs": [{
                 "internalType": "address payable",
@@ -939,7 +939,7 @@ let CoinFlipData = {
 }
 
 let RockPaperScissorsData = {
-    address: "0x08714db5743B6bc0006644eE4fE96F3ca7bC8EeC",
+    address: "0x08714db5743B6bc0006644eE4fE96F3ca7bC8EeC", //    Ganache
     abi: [{
             "inputs": [{
                 "internalType": "address payable",
