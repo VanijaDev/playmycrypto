@@ -1,5 +1,9 @@
-import {PromiseManager} from "./promiseManager";
-import {Utils} from "../utils";
+import {
+  PromiseManager
+} from "./promiseManager";
+import {
+  Utils
+} from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min"
@@ -257,7 +261,7 @@ let ProfileManager = {
     } else if (_gameType == Types.Game.rps) {
       return this.ongoingGameRPS.comparedTo(new BigNumber(_id)) == 0;
     } else {
-      throw("ERROR: " + _gameType + _id);
+      throw ("ERROR: " + _gameType + _id);
     }
   },
 
@@ -345,9 +349,9 @@ let ProfileManager = {
         // console.log('%c pendingClicked - withdrawReferral', 'color: #000baa');
 
         gameContract.methods.withdrawReferralFees().send({
-          from: window.BlockchainManager.currentAccount(),
-          gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-        })
+            from: window.BlockchainManager.currentAccount(),
+            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+          })
           .on('transactionHash', function (hash) {
             // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($t.tx_referral_fee, hash);
@@ -372,9 +376,9 @@ let ProfileManager = {
         let loopAmount = Math.min(pendingGames.length, 10);
 
         gameContract.methods.withdrawGamePrizes(loopAmount).send({
-          from: window.BlockchainManager.currentAccount(),
-          gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-        })
+            from: window.BlockchainManager.currentAccount(),
+            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+          })
           .on('transactionHash', function (hash) {
             // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($t.tx_game_prize, hash);
@@ -395,9 +399,9 @@ let ProfileManager = {
         // console.log('%c pendingClicked - withdrawRafflePrize', 'color: #000baa');
 
         gameContract.methods.withdrawRafflePrizes().send({
-          from: window.BlockchainManager.currentAccount(),
-          gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-        })
+            from: window.BlockchainManager.currentAccount(),
+            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+          })
           .on('transactionHash', function (hash) {
             // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($t.tx_raffle_prize, hash);
@@ -415,7 +419,7 @@ let ProfileManager = {
         break;
 
       default:
-        throw("pendingClicked - wrong _pendingTarget: ", _pendingTarget);
+        throw ("pendingClicked - wrong _pendingTarget: ", _pendingTarget);
         break;
     }
   },
