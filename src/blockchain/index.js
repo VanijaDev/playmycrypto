@@ -1,16 +1,21 @@
-import BlockchainManager from "./managers/blockchainManager/blockchainManager";
-import {NotificationManager} from "./managers/notificationManager";
-import {Utils} from "./utils";
+import {
+  NotificationManager
+} from "./managers/notificationManager";
+import {
+  Utils
+} from "./utils";
 import BigNumber from "bignumber.js";
-import {ProfileManager} from "./managers/profileManager";
-import {PromiseManager} from "./managers/promiseManager";
+import {
+  ProfileManager
+} from "./managers/profileManager";
+import {
+  PromiseManager
+} from "./managers/promiseManager";
 import Types from "./types";
 
 const $t = $('#translations').data();
 
 const Index = {
-  version: "1.0.0",
-
   pageLoaded: false,
   initialSetupDone: false,
   networkId: 0,
@@ -22,16 +27,16 @@ const Index = {
 
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
-    
+
     this.pageLoaded = false;
     this.initialSetupDone = false;
 
     await window.BlockchainManager.init();
-    
+
     if (window.BlockchainManager.initted) {
       ProfileManager.profileUpdateHandler = this;
       await this.refreshData();
-  
+
       this.setupOnce();
     } else {
       //  TODO: show dummy data
@@ -227,7 +232,7 @@ const Index = {
       showTopBannerMessage($t.rps_pending_move);
     }
   },
-  
+
   onGameMovePlayed: function (_id, _nextMover) {
     // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
