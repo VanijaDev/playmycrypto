@@ -400,6 +400,7 @@
 <script>
 import ClickOutside from "vue-click-outside";
 import Types from "./blockchain/types";
+import CommonManager from "./blockchain/managers/CommonManager";
 
 export default {
   data: function() {
@@ -438,7 +439,9 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
+    console.log("----------- App mounted");
+
     window.ethereum.on("accountsChanged", function(accounts) {
       console.log(
         "%c App - accountsChanged: %s",
@@ -446,18 +449,27 @@ export default {
         accounts[0]
       );
 
-      if (window.BlockchainManager && window.BlockchainManager.initted) {
-        window.BlockchainManager.accountChanged(accounts[0]);
-        if (window.CommonManager.currentView == Types.View.game) {
-          window.Game.setup();
+      if (window.BlockchainManager) {
+        if (window.BlockchainManager.isCurrentNetworkValid()) {
+          window.BlockchainManager.accountChanged(accounts[0]);
+          if (window.CommonManager.currentView == Types.View.game) {
+            console.log("----------- App mounted - accountsChanged");
+            window.Game.setup();
+          }
         }
       }
     });
 
-    window.ethereum.on("networkChanged", async function(networkId) {
-      console.log("%c App - networkChanged: %s", "color: #00aa00", networkId);
-      if (window.BlockchainManager && window.BlockchainManager.initted) {
-        await window.BlockchainManager.networkChanged(networkId);
+    window.ethereum.on("chainChanged", async function(chainId) {
+      console.log("%c App - chainChanged: %s", "color: #00aa00", chainId);
+
+      if (window.CommonManager.currentView == Types.View.index) {
+        window.Index.onUnload();
+      } else if (window.CommonManager.currentView == Types.View.game) {
+        window.Game.onUnload();
+      }
+
+      if (await window.BlockchainManager.chainChanged(chainId)) {
         if (window.CommonManager.currentView == Types.View.index) {
           window.Index.setup();
         } else if (window.CommonManager.currentView == Types.View.game) {

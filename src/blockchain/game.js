@@ -1,10 +1,22 @@
-import {PromiseManager} from "./managers/promiseManager";
-import {CoinFlip} from "./gameView/coinFlip";
+import {
+  PromiseManager
+} from "./managers/promiseManager";
+import {
+  CoinFlip
+} from "./gameView/coinFlip";
 import RPS from "./gameView/rps";
-import {Utils} from "./utils";
-import {NotificationManager} from "./managers/notificationManager";
-import {BigNumber} from "bignumber.js";
-import {ProfileManager} from "./managers/profileManager";
+import {
+  Utils
+} from "./utils";
+import {
+  NotificationManager
+} from "./managers/notificationManager";
+import {
+  BigNumber
+} from "bignumber.js";
+import {
+  ProfileManager
+} from "./managers/profileManager";
 import Types from "./types";
 
 const $t = $('#translations').data();
@@ -32,11 +44,15 @@ const Game = {
   initialSetupDone: false,
   gameType: 0,
 
+  blockchainManagerInitialized: function () {
+    this.setup();
+  },
 
   setup: async function () {
     console.log('%c Game - setup', 'color: #00aa00');
-   
-    if (!window.BlockchainManager.initted) {
+
+    if (!window.BlockchainManager.isInitted()) {
+      console.log("-------- not initted");
       await window.BlockchainManager.init();
     }
 
@@ -131,7 +147,7 @@ const Game = {
       // console.log("loadTopGamesForGame - RPS");
       ownGame = await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
     } else {
-      throw('loadTopGamesForGame - wrong _gameType');
+      throw ('loadTopGamesForGame - wrong _gameType');
     }
 
     let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
@@ -252,7 +268,7 @@ const Game = {
       $('#AvailableGames')[0].removeChild($('#AvailableGames')[0].children[idx]);
       this.availableGameIds.splice(idx, 1);
     } else {
-      throw("No game to remove");
+      throw ("No game to remove");
     }
   },
 
@@ -457,7 +473,7 @@ const Game = {
         (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.expired)) == 0) {
         resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
       } else {
-        throw("onGameFinished - ERROR");
+        throw ("onGameFinished - ERROR");
       }
 
       RPS.showGameView(resultView, null);
@@ -539,8 +555,8 @@ const Game = {
     this.raffleStartedByMe = true;
 
     window.BlockchainManager.gameInst(window.CommonManager.currentGame).methods.runRaffle().send({
-      from: window.BlockchainManager.currentAccount()
-    })
+        from: window.BlockchainManager.currentAccount()
+      })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
         showTopBannerMessage($t.tx_raffle_run, hash);

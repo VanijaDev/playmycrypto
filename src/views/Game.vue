@@ -33,87 +33,118 @@
           <div class="mt-5">
             <div class="raffle shadow-block" id="raffleBlock">
               <div class="header position-relative">
-                <div>{{ $t('RAFFLE') }}</div>
-                <div class="f13">{{ $t('IN_RAFFLE') }}:</div>
+                <div>{{ $t("RAFFLE") }}</div>
+                <div class="f13">{{ $t("IN_RAFFLE") }}:</div>
 
                 <div class="raffle-amount">
                   <b id="cryptoForRaffle">0.00000</b>
-                  <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'">
-                  <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'">
+                  <img
+                    src="/img/icon_amount-eth.svg"
+                    class="money-icon"
+                    v-show="currency === 'eth'"
+                  />
+                  <img
+                    src="/img/icon_amount-trx.svg"
+                    class="money-icon"
+                    v-show="currency === 'trx'"
+                  />
                 </div>
               </div>
               <div class="content">
                 <div class="participants">
-                  <img src="/img/game-icon-users.svg" class="mr-2">
-                  <span class="f16"> {{ $t('PARTICIPANTS') }}:</span>
+                  <img src="/img/game-icon-users.svg" class="mr-2" />
+                  <span class="f16"> {{ $t("PARTICIPANTS") }}:</span>
                   <b class="f18">
                     <span id="rafflePlayingAmount">0</span>
                     /
                     <span id="raffleActivationAmount">0</span>
                   </b>
-                  <button id="raffleStartBtn" onclick="window.Game.startRaffle()" class="btn long-btn btn-primary rounded-button float-right" disabled>{{
-                    $t('START')
-                    }}
+                  <button
+                    id="raffleStartBtn"
+                    onclick="window.Game.startRaffle()"
+                    class="btn long-btn btn-primary rounded-button float-right"
+                    disabled
+                  >
+                    {{ $t("START") }}
                   </button>
                 </div>
                 <div class="participants pt-3">
-                  <img src="/img/game-icon-quality.svg" class="mr-2">
-                  {{ $t('LAST_WINNER') }}:
+                  <img src="/img/game-icon-quality.svg" class="mr-2" />
+                  {{ $t("LAST_WINNER") }}:
                 </div>
-                <div class="scrollbar-inner list-no-style" id="BlockRaffle"></div>
-
+                <div
+                  class="scrollbar-inner list-no-style"
+                  id="BlockRaffle"
+                ></div>
               </div>
             </div>
             <div class="how-to-play shadow-block">
               <div class="header position-relative">
-                <h2 class="text-uppercase f22 text-center pt-2">{{ $t('HOW_TO_PLAY') }}</h2>
+                <h2 class="text-uppercase f22 text-center pt-2">
+                  {{ $t("HOW_TO_PLAY") }}
+                </h2>
               </div>
-              <div id="BlockHowToPlayCF" class="cards-pills-list scrollbar-inner p20" v-if="currentGame === 'cf'" v-html="$t('HOW_TO_PLAY_CF')"></div>
-              <div id="BlockHowToPlayRPS" class="cards-pills-list scrollbar-inner p20" v-if="currentGame === 'rps'" v-html="$t('HOW_TO_PLAY_RPS')"></div>
+              <div
+                id="BlockHowToPlayCF"
+                class="cards-pills-list scrollbar-inner p20"
+                v-if="currentGame === 'cf'"
+                v-html="$t('HOW_TO_PLAY_CF')"
+              ></div>
+              <div
+                id="BlockHowToPlayRPS"
+                class="cards-pills-list scrollbar-inner p20"
+                v-if="currentGame === 'rps'"
+                v-html="$t('HOW_TO_PLAY_RPS')"
+              ></div>
             </div>
           </div>
         </div>
 
         <div class="col-sm-4">
           <div class="shadow-block">
-
             <div class="timer-block text-primary">
-              <p class="mb-0">{{ $t('JOIN_NEXT_GAME_IN') }}</p>
+              <p class="mb-0">{{ $t("JOIN_NEXT_GAME_IN") }}</p>
               <p id="timerBack">
                 00:00
               </p>
-              <small>{{ $t('SUSPENDED_DECRIPTION') }}</small>
+              <small>{{ $t("SUSPENDED_DECRIPTION") }}</small>
             </div>
 
             <div class="position-relative">
               <h2 class="text-primary p20 mb-0 pb-0">
-                {{ $t('TOP_GAMES') }}
+                {{ $t("TOP_GAMES") }}
               </h2>
-              <div class="inner-padding scrollbar-inner list-no-style" id="TopGames">
-              </div>
+              <div
+                class="inner-padding scrollbar-inner list-no-style"
+                id="TopGames"
+              ></div>
             </div>
 
             <div class="bg-primary text-white mt-3 p-3">
-              <img src="/img/game-icon-money.svg">
-              {{ $t('LIST_OPENED_GAMES') }}:
+              <img src="/img/game-icon-money.svg" />
+              {{ $t("LIST_OPENED_GAMES") }}:
             </div>
 
             <div class="position-relative" id="availableGamesBlock">
               <h2 class="text-primary p20 mb-0 pb-0">
-                {{ $t('AVAILABLE_GAMES') }}
+                {{ $t("AVAILABLE_GAMES") }}
               </h2>
 
-              <div class="inner-padding scrollbar-inner list-no-style" id="AvailableGames">
-              </div>
+              <div
+                class="inner-padding scrollbar-inner list-no-style"
+                id="AvailableGames"
+              ></div>
             </div>
 
             <div class="inner-padding">
-              <button class="btn long-btn btn-primary rounded-button full-width mt-2"
-                      id="loadMoreAvailableGamesBtn" onclick="window.Game.loadMoreAvailableGames()">
-                {{ $t('LOAD_MORE') }}
+              <button
+                class="btn long-btn btn-primary rounded-button full-width mt-2"
+                id="loadMoreAvailableGamesBtn"
+                onclick="window.Game.loadMoreAvailableGames()"
+              >
+                {{ $t("LOAD_MORE") }}
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -122,60 +153,92 @@
 </template>
 
 <script>
-  import Types from '../blockchain/types'
+import Types from "../blockchain/types";
+import CommonManager from "../blockchain/managers/CommonManager";
 
-  export default {
-    data: function () {
-      return {
-        currentGame: '',
-        managerInterval: null
-      }
+export default {
+  data: function() {
+    return {
+      currentGame: "",
+      managerInterval: null,
+    };
+  },
+  computed: {
+    currency() {
+      return this.$store.state.currency;
     },
-    computed: {
-      currency() {
-        return this.$store.state.currency;
+  },
+  mounted() {
+    window.CommonManager.setCurrentView(Types.View.game);
+    window.CommonManager.setCurrentGame(
+      this.currentGame === Types.Game.cf ? Types.Game.cf : Types.Game.rps
+    );
+
+    this.currentGame = window.location.pathname.replace("/", "");
+    console.log("----------- Open Game page. Current game:", this.currentGame);
+
+    let recaptchaScript = document.createElement("script");
+    recaptchaScript.setAttribute("src", "/game.js");
+    document.head.appendChild(recaptchaScript);
+
+    let loadInterval = setInterval(function() {
+      if (typeof window.Game !== "undefined") {
+        clearInterval(loadInterval);
+        window.Game.setup();
       }
-    },
-    mounted() {
-      let manager = window.BlockchainManager;
-      if (manager) {
-        this.managerInterval = setInterval(function () {
-          if (!window.BlockchainManager.initted) {
-            window.BlockchainManager = manager;
-            clearInterval(this.managerInterval);
-          }
-        }, 50);
-      }
+    }, 100);
 
-      this.currentGame = window.location.pathname.replace('/', '');
-      // console.log('Open game page. Current game:', this.currentGame);
+    // window.CommonManager.setCurrentView(Types.View.game);
+    // window.CommonManager.setCurrentGame(
+    //   this.currentGame === Types.Game.cf ? Types.Game.cf : Types.Game.rps
+    // );
 
-      window.CommonManager.setCurrentView(Types.View.game);
-      window.CommonManager.setCurrentGame((this.currentGame === Types.Game.cf) ? Types.Game.cf : Types.Game.rps);
+    // let manager = window.BlockchainManager;
+    // if (manager) {
+    //   this.managerInterval = setInterval(function() {
+    //     if (window.BlockchainManager.isInitted()) {
+    //       window.BlockchainManager = manager;
+    //       clearInterval(this.managerInterval);
+    //     }
+    //   }, 50);
+    // }
 
-      let recaptchaScript = document.createElement('script');
-      recaptchaScript.setAttribute('src', '/game.js');
-      document.head.appendChild(recaptchaScript);
+    // this.currentGame = window.location.pathname.replace("/", "");
+    // console.log("----------- Open game page. Current game:", this.currentGame);
 
-      let loadInterval = setInterval(function () {
-        if (typeof window.Game !== 'undefined') {
-          clearInterval(loadInterval);
-          setTimeout(function () {
-            window.Game.setup();
-          }, 300);
-        }
-      }, 50);
-    },
-    beforeRouteLeave(to, from, next) {
-      // console.log('Leave game page');
-      window.Game.gameType = -1;
-      window.Game.onUnload();
-      document.getElementById("gameName").innerHTML = "";
+    // let recaptchaScript = document.createElement("script");
+    // recaptchaScript.setAttribute("src", "/game.js");
+    // document.head.appendChild(recaptchaScript);
 
-      if (this.managerInterval) {
-        clearInterval(this.managerInterval);
-      }
-      next()
-    },
-  }
+    // let loadInterval = setInterval(function() {
+    //   if (typeof window.Game !== "undefined") {
+    //     if (window.BlockchainManager && window.BlockchainManager.isInitted()) {
+    //       window.Game.setup();
+    //     } else {
+    //       window.BlockchainManager.eventHandler = window.Game;
+    //     }
+    //     clearInterval(loadInterval);
+    //     // setTimeout(function() {
+    //     //   if (
+    //     //     window.BlockchainManager &&
+    //     //     window.BlockchainManager.isInitted()
+    //     //   ) {
+    //     //     window.Game.setup();
+    //     //   }
+    //     // }, 300);
+    //   }
+    // }, 50);
+  },
+  beforeRouteLeave(to, from, next) {
+    // console.log('Leave game page');
+    window.Game.gameType = -1;
+    window.Game.onUnload();
+    document.getElementById("gameName").innerHTML = "";
+
+    if (this.managerInterval) {
+      clearInterval(this.managerInterval);
+    }
+    next();
+  },
+};
 </script>

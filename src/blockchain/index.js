@@ -17,8 +17,6 @@ import Types from "./types";
 const $t = $('#translations').data();
 
 const Index = {
-  pageLoaded: false,
-  initialSetupDone: false,
   networkId: 0,
 
   //  ProfileManager callback
@@ -29,32 +27,38 @@ const Index = {
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
-    this.pageLoaded = false;
-    this.initialSetupDone = false;
-
-    await window.BlockchainManager.init();
-
-    if (window.BlockchainManager.initted) {
-      ProfileManager.profileUpdateHandler = this;
-      await this.refreshData();
-
-      this.setupOnce();
+    if (!window.BlockchainManager.isInitted()) {
+      console.log("index - BlockchainManager - NO");
+      await BlockchainManager.init();
     } else {
-      //  TODO: show dummy data
+      console.log("index - BlockchainManager - YES");
     }
+
+    ProfileManager.setProfileUpdateHandler(this);
+    await this.refreshData();
+
+    //  events
+    NotificationManager.eventHandler = this;
+    NotificationManager.subscribeAll();
   },
 
-  setupOnce: function () {
-    if (!this.initialSetupDone) {
-      // console.log('%c index - setupOnce', 'color: #00aa00');
-      this.initialSetupDone = true;
-
-      NotificationManager.eventHandler = this;
-      NotificationManager.subscribeAll();
+  initBlockchainManager: async function () {
+    if (typeof window.BlockchainManager === "undefined") {
+      let getBlockchainManagerInterval = setInterval(async function () {
+        if (typeof window.BlockchainManager !== "undefined") {
+          clearInterval(getBlockchainManagerInterval);
+          await window.BlockchainManager.init();
+          console.log("------- index.js BM initted");
+        }
+      }, 100);
+    } else {
+      console.log("------- index.js BM present");
     }
   },
 
   onUnload: function () {
+    console.log('%c index - onUnload', 'color: #00aa00');
+
     ProfileManager.profileUpdateHandler = null;
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();

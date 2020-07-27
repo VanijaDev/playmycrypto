@@ -1,4 +1,9 @@
-import {BlockchainManager_ethereum} from "./blockchainManager_ethereum";
+import {
+  BlockchainManager_ethereum
+} from "./blockchainManager_ethereum";
+import {
+  ProfileManager
+} from "../profileManager";
 import Types from "../../types";
 
 const BlockchainManager = {
@@ -8,96 +13,93 @@ const BlockchainManager = {
   },
 
   currentBlockchainType: "",
-  currentBlockchain: null,
-  initted: false,
+  currentBlockchainManager: null,
 
   init: async function () {
-    if (!this.initted) {
-      console.log('%c BlockchainManager - init', 'color: #00aa00');
-
-      this.setCurrentBlockchain(Types.BlockchainType.ethereum);
-      if (await this.currentBlockchain.setup()) {
-        this.initted = true;
-      } else {
-        this.initted = false;
-      }
-    }
+    console.log('%c BlockchainManager - init', 'color: #00aa00');
+    this.setCurrentBlockchainManager(Types.BlockchainType.ethereum);
+    await this.currentBlockchainManager.init();
+    ProfileManager.update();
   },
 
-  setCurrentBlockchain: function (_blockchainType) {
+  isInitted: function () {
+    return (this.currentBlockchainManager && this.currentBlockchainManager.initted);
+  },
+
+  isCurrentNetworkValid: function () {
+    return this.currentBlockchainManager.isNetworkValid();
+  },
+
+  setCurrentBlockchainManager: function (_blockchainType) {
     this.currentBlockchainType = _blockchainType;
 
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
-        // console.log("setCurrentBlockchain - Ethereum");
-        this.currentBlockchain = BlockchainManager_ethereum;
+        // console.log("setCurrentBlockchainManager - Ethereum");
+        this.currentBlockchainManager = BlockchainManager_ethereum;
         break;
 
       case Types.BlockchainType.tron:
-        // console.log("setCurrentBlockchain - Tron");
+        // console.log("setCurrentBlockchainManager - Tron");
         break;
 
       default:
-        throw("setCurrentBlockchain - wrong type" + _blockchainType);
-        break;
+        throw ("setCurrentBlockchainManager - wrong type" + _blockchainType);
     }
   },
 
   accountChanged: async function (_account) {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
-    this.currentBlockchain.accountChanged(_account);
+    this.currentBlockchainManager.accountChanged(_account);
+    ProfileManager.update();
   },
 
-  networkChanged: async function(_accounts) {
-    // console.log('%c BlockchainManager - networkChanged', 'color: #00aa00');
+  chainChanged: async function (_chainId) {
+    console.log('%c BlockchainManager - chainChanged %s', 'color: #00aa00', _chainId);
     if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
-      this.initted = false;
-
-      if (this.currentBlockchain.networkChanged(_accounts)) {
-        if (await this.currentBlockchain.setup()) {
-          this.initted = true;
-        } else {
-          this.initted = false;
-        }
+      if (this.currentBlockchainManager.chainChanged(_chainId)) {
+        await this.currentBlockchainManager.init();
+        return true;
       }
     }
+    return false;
   },
 
   //  API
   totalUsedReferralFees: function () {
-    return this.currentBlockchain.totalUsedReferralFees();
+    return this.currentBlockchainManager.totalUsedReferralFees();
   },
 
   ongoinRafflePrize: function () {
-    return this.currentBlockchain.ongoinRafflePrize();
+    return this.currentBlockchainManager.ongoinRafflePrize();
   },
 
   partnerFeeUsedTotal: function (_gameType) {
-    return this.currentBlockchain.partnerFeeUsedTotal(_gameType);
+    return this.currentBlockchainManager.partnerFeeUsedTotal(_gameType);
   },
 
   rafflePrizesWonTotal: function (_gameType) {
-    return this.currentBlockchain.rafflePrizesWonTotal(_gameType);
+    return this.currentBlockchainManager.rafflePrizesWonTotal(_gameType);
   },
 
   totalUsedInGame: function (_gameType) {
-    return this.currentBlockchain.totalUsedInGame(_gameType);
+    return this.currentBlockchainManager.totalUsedInGame(_gameType);
   },
 
   gamesCreatedAmount: function (_gameType) {
-    return this.currentBlockchain.gamesCreatedAmount(_gameType);
+    return this.currentBlockchainManager.gamesCreatedAmount(_gameType);
   },
 
   gamesCompletedAmount: function (_gameType) {
-    return this.currentBlockchain.gamesCompletedAmount(_gameType);
+    return this.currentBlockchainManager.gamesCompletedAmount(_gameType);
   },
 
   contract_cf: function () {
-    return this.currentBlockchain.contract_inst_cf;
+    return this.currentBlockchainManager.contract_inst_cf;
   },
 
   contract_rps: function () {
-    return this.currentBlockchain.contract_inst_rps;
+    return this.currentBlockchainManager.contract_inst_rps;
   },
 
 
@@ -106,12 +108,12 @@ const BlockchainManager = {
    */
 
   currentAccount: function () {
-    return this.currentBlockchain.currentAccount;
+    return this.currentBlockchainManager.currentAccount;
   },
 
   gameInst: function (_gameType) {
     // console.log("BM gameInst: ", _gameType);
-    return this.currentBlockchain.gameInst(_gameType);
+    return this.currentBlockchainManager.gameInst(_gameType);
   },
 
   blockchainChanged: function (_blockchainType) {
@@ -128,7 +130,7 @@ const BlockchainManager = {
           return;
         }
 
-        console.log('%c selectBlockchain - Ethereum', 'color: #1a3aaa');
+        console.log('%c blockchainChanged - Ethereum', 'color: #1a3aaa');
         document.getElementById("ethereum-select-btn").classList.remove("deactivated");
         document.getElementById("ethereum-select-btn").classList.add("activated");
 
@@ -160,7 +162,7 @@ const BlockchainManager = {
         break;
 
       default:
-        console.error("selectBlockchain - wrong _blockchainId: ", _blockchainId);
+        console.error("selectBlockchain - wrong _blockchainType: ", _blockchainType);
         break;
     }
   },
@@ -174,16 +176,8 @@ const BlockchainManager = {
     }
   },
 
-  /**
-   * HELPERS
-   */
-
-  currentAccount: function () {
-    return this.currentBlockchain.currentAccount;
-  },
-
   getBalance: async function () {
-    return await this.currentBlockchain.getBalance(this.currentAccount);
+    return await this.currentBlockchainManager.getBalance(this.currentAccount);
   },
 
   /**

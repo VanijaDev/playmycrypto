@@ -26,10 +26,9 @@
               v-click-outside="hideInfoTooltip"
             />
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_3") }}</p>
-            <span
-              class="tooltip-info"
-              v-show="visibleInfoTooltip===1"
-            >{{ $t("ADVANTAGES.TOOLTIP_3") }}</span>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 1">{{
+              $t("ADVANTAGES.TOOLTIP_3")
+            }}</span>
           </div>
           <div class="col">
             <b>1%</b>
@@ -54,10 +53,9 @@
               v-click-outside="hideInfoTooltip"
             />
             <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_5") }}</p>
-            <span
-              class="tooltip-info"
-              v-show="visibleInfoTooltip===3"
-            >{{ $t("ADVANTAGES.TOOLTIP_5") }}</span>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 3">{{
+              $t("ADVANTAGES.TOOLTIP_5")
+            }}</span>
           </div>
         </div>
       </div>
@@ -73,26 +71,52 @@
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money" />
                 <span id="totalUsedReferralFees">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money" />
                 <span id="ongoinRafflePrize">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money" />
                 <span id="totalUsedPartnerFees">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
             </div>
           </div>
 
           <div class="pt-4 mt-3">
-            <h1 class="mb-4 available-games-title">{{ $t("AVAILABLE_GAMES") }}</h1>
+            <h1 class="mb-4 available-games-title">
+              {{ $t("AVAILABLE_GAMES") }}
+            </h1>
             <div>
               <div class="one-game">
                 <router-link to="/cf">
@@ -111,7 +135,10 @@
                     {{ $t("NOW_PLAYING") }}
                     <b id="now_playing_rps">0</b>
                   </span>
-                  <img src="/img/icon-rock-paper-scissors.svg" class="game-icon" />
+                  <img
+                    src="/img/icon-rock-paper-scissors.svg"
+                    class="game-icon"
+                  />
                   <span class="title">{{ $t("ROCK_PAPER_SCISSORS") }}</span>
                 </router-link>
               </div>
@@ -143,27 +170,62 @@
             <div class="header">
               {{ $t("TOTAL_WON") }}:
               <b id="rafflePrizesWonTotal">0.00000</b>
-              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+              <img
+                src="/img/icon_amount-eth.svg"
+                class="money-icon"
+                v-show="currency === 'eth'"
+              />
+              <img
+                src="/img/icon_amount-trx.svg"
+                class="money-icon"
+                v-show="currency === 'trx'"
+              />
             </div>
             <div class="content">
               <div class="total-won">
                 <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon" />
                 <span id="rafflePrizesWonTotalGameCoinFlip">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
               <div class="total-won">
-                <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon" />
+                <img
+                  src="/img/icon-rock-paper-scissors-sm.svg"
+                  class="game-sm-icon"
+                />
                 <span id="rafflePrizesWonTotalGameRPS">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
               <div class="total-won">
                 <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon" />
                 <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img
+                  src="/img/icon_amount-eth.svg"
+                  class="money-icon"
+                  v-show="currency === 'eth'"
+                />
+                <img
+                  src="/img/icon_amount-trx.svg"
+                  class="money-icon"
+                  v-show="currency === 'trx'"
+                />
               </div>
             </div>
           </div>
@@ -196,20 +258,19 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
-import CommonManager from "../blockchain/managers/CommonManager";
+// import CommonManager from "../blockchain/managers/CommonManager";
 import Types from "../blockchain/types";
 
 export default {
   data: function() {
     return {
       visibleInfoTooltip: 0,
-      managerInterval: null
     };
   },
   computed: {
     currency() {
       return this.$store.state.currency;
-    }
+    },
   },
   methods: {
     showInfoTooltip(num) {
@@ -217,45 +278,33 @@ export default {
     },
     hideInfoTooltip() {
       this.visibleInfoTooltip = 0;
-    }
+    },
   },
   mounted() {
-    // console.log('Open home page');
+    console.log("----------- Open Home page");
 
     window.CommonManager.setCurrentView(Types.View.index);
-    let manager = window.BlockchainManager;
-    if (manager) {
-      this.managerInterval = setInterval(function() {
-        if (!window.BlockchainManager.initted) {
-          window.BlockchainManager = manager;
-          clearInterval(this.managerInterval);
-        }
-      }, 50);
-    }
 
     let recaptchaScript = document.createElement("script");
     recaptchaScript.setAttribute("src", "/index.js");
     document.head.appendChild(recaptchaScript);
 
-    let loadInterval = setInterval(function() {
+    let loadIndexInterval = setInterval(async function() {
       if (typeof window.Index !== "undefined") {
-        window.Index.pageLoaded = true;
+        clearInterval(loadIndexInterval);
         window.Index.setup();
-        clearInterval(loadInterval);
       }
-    }, 50);
+    }, 100);
   },
-  beforeRouteLeave(to, from, next) {
-    // console.log('Leave home page');
-    window.Index.onUnload();
 
-    if (this.managerInterval) {
-      clearInterval(this.managerInterval);
-    }
+  beforeRouteLeave(to, from, next) {
+    // console.log("----------- Leave home page");
+    window.Index.onUnload();
     next();
   },
+
   directives: {
-    ClickOutside
-  }
+    ClickOutside,
+  },
 };
 </script>

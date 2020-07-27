@@ -1,8 +1,12 @@
 import Web3 from 'web3';
-import {ProfileManager} from "../profileManager";
-import {CoinFlipData, RockPaperScissorsData} from "../../contract/contract";
+import {
+  CoinFlipData,
+  RockPaperScissorsData
+} from "../../contract/contract";
 import Types from "../../types";
-import {PromiseManager} from '../promiseManager';
+import {
+  PromiseManager
+} from '../promiseManager';
 import BigNumber from 'bignumber.js';
 
 const $t = $('#translations').data();
@@ -13,10 +17,36 @@ const BlockchainManager_ethereum = {
     userDenied: 4001
   },
 
-  currentAccount: null,
   initted: false,
+  currentAccount: null,
   contract_inst_cf: null,
   contract_inst_rps: null,
+
+  showAppDisabledView: function (_show) {
+    if (_show) {
+      $("#app-disabled")[0].classList.add("app-disabled");
+      $("#app-disabled")[0].classList.remove("hidden");
+    } else {
+      $("#app-disabled")[0].classList.remove("app-disabled");
+      $("#app-disabled")[0].classList.add("hidden");
+    }
+  },
+
+  init: async function () {
+    if (this.initted) {
+      return;
+    }
+
+    console.log('%c BlockchainManager_ethereum - init', 'color: #00aa00');
+
+    if (!await this.connectToMetaMask()) {
+      return false;
+    }
+
+    this.currentAccount = (await ethereum.enable())[0];
+    this.contract_inst_cf = CoinFlipData.build();
+    this.contract_inst_rps = RockPaperScissorsData.build();
+  },
 
   connectToMetaMask: async function () {
     console.log('%c BlockchainManager_ethereum - connectToMetaMask', 'color: #00aa00');
@@ -30,16 +60,19 @@ const BlockchainManager_ethereum = {
       try {
         await ethereum.enable();
 
-        if (!this.isValidNetwork(ethereum.networkVersion)) {
+        if (!this.isNetworkValid(ethereum.chainId)) {
+          alert($t.err_wrong_network);
           showTopBannerMessage($t.err_wrong_network, null, false);
-          $("#app-disabled")[0].classList.add("app-disabled");
-          $("#app-disabled")[0].classList.remove("hidden");
-          alert($t.err_wrong_network)
+          this.showAppDisabledView(true);
+
           return false;
         }
       } catch (error) {
-        this.initted = false;
+        alert(error.message);
         showTopBannerMessage(error.message, null, true);
+        this.showAppDisabledView(true);
+
+        this.initted = false;
         return false;
       }
     }
@@ -47,35 +80,25 @@ const BlockchainManager_ethereum = {
     else if (window.web3) {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
+      alert($t.err_legacy_browsers);
       showTopBannerMessage($t.err_legacy_browsers, null, false);
+      this.showAppDisabledView(true);
+
       this.initted = false;
       return false;
     }
     // Non-dapp browsers...
     else {
+      alert($t.err_non_eth_browser);
       showTopBannerMessage($t.err_non_eth_browser, null, false);
+      this.showAppDisabledView(true);
+
       this.initted = false;
       return false;
     }
 
     ethereum.autoRefreshOnNetworkChange = false;
     this.initted = true;
-    return true;
-  },
-
-  setup: async function () {
-    console.log('%c BlockchainManager_ethereum - setup', 'color: #00aa00');
-
-    if (!await this.connectToMetaMask()) {
-      return false;
-    }
-
-    this.currentAccount = (await ethereum.enable())[0];
-    this.contract_inst_cf = CoinFlipData.build();
-    this.contract_inst_rps = RockPaperScissorsData.build();
-
-    ProfileManager.update();
-
     return true;
   },
 
@@ -88,34 +111,34 @@ const BlockchainManager_ethereum = {
     }
 
     this.currentAccount = _account;
-    ProfileManager.update();
   },
 
-  networkChanged: async function(_networkVersion) {
-    console.log('%c BlockchainManager_ethereum - networkChanged: %s', 'color: #00aa00', _networkVersion);
+  chainChanged: function (_networkVersion) {
+    console.log('%c BlockchainManager_ethereum - chainChanged: %s', 'color: #00aa00', _networkVersion);
 
-    if (!this.initted) {
-      console.error("BlockchainManager_ethereum - networkChanged, !initted");
-      return;
-    }
-    
-    if (this.isValidNetwork(_networkVersion)) {
+    if (this.isNetworkValid(_networkVersion)) {
       hideTopBannerMessage();
+      this.showAppDisabledView(false);
       return true;
     }
 
+    alert($t.err_wrong_network);
     showTopBannerMessage($t.err_wrong_network, null, false);
+    this.showAppDisabledView(true);
     return false;
   },
 
-  isValidNetwork: function(_networkVersion) {
+  isNetworkValid: function (_networkVersion) {
     /**
-     * Ganache = 5777
-     * Main Net = 1
-     * Ropsten = 3
-     * Kovan = 42
+     * Ganache = 0x1691, (5777)
+     * Main Net = 0x1
+     * Ropsten = 0x3
      */
-    return (_networkVersion == "5777");
+    return (_networkVersion == "0x1691");
+  },
+
+  isCurrentNetworkValid: function () {
+    return this.isNetworkValid(ethereum.chainId);
   },
 
   gameInst: function (_gameType) {
