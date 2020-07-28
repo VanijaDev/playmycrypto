@@ -1,5 +1,4 @@
 import PromiseManager from "../managers/promiseManager";
-import Game from "../game";
 import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import ProfileManager from "../managers/profileManager";
@@ -165,8 +164,8 @@ const CoinFlip = {
   makeTopClicked: async function () {
     // console.log("makeTopClicked");
 
-    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      let str = $t.make_top_cost + Utils.weiToEtherFixed(Game.minBet) + '. ' + $t.not_enough_funds;
+    if (parseInt(await window.BlockchainManager.getBalance()) < window.Game.minBet) {
+      let str = $t.make_top_cost + Utils.weiToEtherFixed(window.Game.minBet) + '. ' + $t.not_enough_funds;
       showTopBannerMessage(str, null, true);
       return;
     }
@@ -176,7 +175,7 @@ const CoinFlip = {
 
     window.BlockchainManager.gameInst(Types.Game.cf).methods.addTopGame(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Game.minBet,
+        value: window.Game.minBet,
         gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {

@@ -1,5 +1,4 @@
 import PromiseManager from "../managers/promiseManager";
-import Game from "../game";
 import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import ProfileManager from "../managers/profileManager";
@@ -591,8 +590,8 @@ const RPS = {
   makeTopClicked: async function () {
     console.log('%c makeTopClicked_RPS:', 'color: #e51dff');
 
-    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      let str = $t.make_top_cost + Utils.weiToEtherFixed(Game.minBet, 2) + '. ' + $t.not_enough_funds;
+    if (parseInt(await window.BlockchainManager.getBalance()) < window.Game.minBet) {
+      let str = $t.make_top_cost + Utils.weiToEtherFixed(window.Game.minBet, 2) + '. ' + $t.not_enough_funds;
       showTopBannerMessage(str, null, true);
       return;
     }
@@ -601,7 +600,7 @@ const RPS = {
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     window.BlockchainManager.gameInst(Types.Game.rps).methods.addTopGame(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Game.minBet,
+        value: window.Game.minBet,
         gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
@@ -711,15 +710,15 @@ const RPS = {
   unpauseGame: async function (_gameId) {
     // console.log('%c unpauseGame_RPS:', 'color: #e51dff');
 
-    if (parseInt(await window.BlockchainManager.getBalance()) < Game.minBet) {
-      let str = $t.err_unpause_game_cost + Utils.weiToEtherFixed(Game.minBet, 2) + '. ' + $t.not_enough_funds;
+    if (parseInt(await window.BlockchainManager.getBalance()) < window.Game.minBet) {
+      let str = $t.err_unpause_game_cost + Utils.weiToEtherFixed(window.Game.minBet, 2) + '. ' + $t.not_enough_funds;
       showTopBannerMessage(str, null, true);
       return;
     }
 
     window.BlockchainManager.gameInst(Types.Game.rps).methods.unpauseGame(_gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Game.minBet,
+        value: window.Game.minBet,
         gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
