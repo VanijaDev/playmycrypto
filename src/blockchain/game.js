@@ -1,4 +1,3 @@
-import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 import PromiseManager from "./managers/promiseManager";
 import CoinFlip from "./gameView/coinFlip";
 import RPS from "./gameView/rps";
@@ -39,10 +38,7 @@ const Game = {
     console.log('%c game - setup', 'color: #00aa00');
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
-      console.log("game - BlockchainManager - NO");
-      window.BlockchainManager = await BlockchainManager.init();
-    } else {
-      console.log("game - BlockchainManager - YES");
+      await window.BlockchainManager.init();
     }
 
     this.gameType = _currentGame;

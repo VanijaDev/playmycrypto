@@ -1,4 +1,3 @@
-import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 import NotificationManager from "./managers/notificationManager";
 import Utils from "./utils";
 import BigNumber from "bignumber.js";
@@ -18,15 +17,15 @@ const Index = {
   },
 
   setup: async function () {
+    console.log('%c index - setup', 'color: #00aa00');
+
     this.testCounter += 1;
     console.log("index - testCounter:", this.testCounter);
 
-    console.log('%c index - setup', 'color: #00aa00');
+    console.log("index - window.BlockchainManager: ", window.BlockchainManager);
+
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
-      console.log("index - BlockchainManager - NO");
-      window.BlockchainManager = await BlockchainManager.init();
-    } else {
-      console.log("index - BlockchainManager - YES");
+      await window.BlockchainManager.init();
     }
     await ProfileManager.update();
 

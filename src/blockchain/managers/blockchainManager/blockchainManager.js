@@ -208,6 +208,7 @@ window.addEventListener("click", function (event) {
     document.getElementById("carttoggle").style.display = "none";
   }
 });
+
 window.BlockchainManager = BlockchainManager;
 
 export default BlockchainManager;

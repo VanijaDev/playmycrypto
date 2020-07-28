@@ -1,4 +1,3 @@
-import BlockchainManager from "../managers/blockchainManager/blockchainManager";
 import PromiseManager from "../managers/promiseManager";
 import Game from "../game";
 import Utils from "../utils";
