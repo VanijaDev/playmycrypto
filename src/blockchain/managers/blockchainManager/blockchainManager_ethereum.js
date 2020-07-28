@@ -4,9 +4,7 @@ import {
   RockPaperScissorsData
 } from "../../contract/contract";
 import Types from "../../types";
-import {
-  PromiseManager
-} from '../promiseManager';
+import PromiseManager from '../promiseManager';
 import BigNumber from 'bignumber.js';
 
 const $t = $('#translations').data();
@@ -33,17 +31,12 @@ const BlockchainManager_ethereum = {
   },
 
   init: async function () {
-    if (this.initted) {
-      return;
-    }
-
     console.log('%c BlockchainManager_ethereum - init', 'color: #00aa00');
 
     if (!await this.connectToMetaMask()) {
       return false;
     }
 
-    this.currentAccount = (await ethereum.enable())[0];
     this.contract_inst_cf = CoinFlipData.build();
     this.contract_inst_rps = RockPaperScissorsData.build();
   },
@@ -58,7 +51,7 @@ const BlockchainManager_ethereum = {
       window.web3 = new Web3(ethereum);
 
       try {
-        await ethereum.enable();
+        this.currentAccount = (await ethereum.send('eth_requestAccounts')).result[0];
 
         if (!this.isNetworkValid(ethereum.chainId)) {
           alert($t.err_wrong_network);
@@ -68,6 +61,8 @@ const BlockchainManager_ethereum = {
           return false;
         }
       } catch (error) {
+        // User denied account access
+
         alert(error.message);
         showTopBannerMessage(error.message, null, true);
         this.showAppDisabledView(true);
@@ -156,7 +151,7 @@ const BlockchainManager_ethereum = {
         break;
 
       default:
-        console.error("bm_e gameInst", _gameType);
+        console.error("BlockchainManager_ethereum gameInst:", _gameType);
         break;
     }
     return gameInst;
@@ -227,6 +222,4 @@ const BlockchainManager_ethereum = {
   },
 }
 
-export {
-  BlockchainManager_ethereum
-};
+export default BlockchainManager_ethereum;

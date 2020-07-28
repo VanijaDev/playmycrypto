@@ -4,16 +4,14 @@ import $ from "../../../public/jquery.min"
 const CommonManager = {
 
   currentView: -1,
-  currentGame: -1,
+
+  testCounter: 0,
 
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;
+    this.testCounter += 1;
+    console.log("CommonManager testCounter: ", this.testCounter);
   },
-
-  setCurrentGame: function (_gameType) {
-    this.currentGame = _gameType;
-  },
-
 
   showSpinner: function (_viewType) {
     let spinnerView = this.spinnerViewForType(_viewType);
@@ -61,7 +59,8 @@ const CommonManager = {
       $('.timer-block').addClass('visible');
     }, 1000);
 
-    var timer = duration, minutes, seconds;
+    var timer = duration,
+      minutes, seconds;
     var backInterval = setInterval(function () {
       minutes = parseInt(timer / 60, 10);
       seconds = parseInt(timer % 60, 10);

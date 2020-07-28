@@ -1,9 +1,5 @@
-import {
-  PromiseManager
-} from "./promiseManager";
-import {
-  Utils
-} from "../utils";
+import PromiseManager from "./promiseManager";
+import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min"
@@ -428,6 +424,4 @@ let ProfileManager = {
 
 window.ProfileManager = ProfileManager;
 
-export {
-  ProfileManager
-};
+export default ProfileManager;

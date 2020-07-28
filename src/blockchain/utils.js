@@ -38,7 +38,7 @@ const Utils = {
     if (!_addr1 || !_addr2) {
       return false;
     }
-    
+
     return _addr1.toLowerCase().localeCompare(_addr2.toLowerCase()) == 0;
   },
 
@@ -48,7 +48,7 @@ const Utils = {
       case Types.Game.cf:
         iconName = Utils.gamesIconsSmall[0];
         break;
-    
+
       case Types.Game.rps:
         iconName = Utils.gamesIconsSmall[1];
       default:
@@ -65,14 +65,14 @@ const Utils = {
   },
 
   getTimeRemaining: function (endtime) {
-    let endTimeValidated = endtime*1000;
+    let endTimeValidated = endtime * 1000;
     // console.log("endTimeValidated:       ", endTimeValidated);
     // console.log("Date.parse(new Date()): ", Date.parse(new Date()));
     var t = endTimeValidated - Date.parse(new Date());
-    var seconds = Math.floor( (t/1000) % 60 );
-    var minutes = Math.floor( (t/1000/60) % 60 );
-    var hours = Math.floor( (t/(1000*60*60)) % 24 );
-    var days = Math.floor( t/(1000*60*60*24) );
+    var seconds = Math.floor((t / 1000) % 60);
+    var minutes = Math.floor((t / 1000 / 60) % 60);
+    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    var days = Math.floor(t / (1000 * 60 * 60 * 24));
     return {
       'total': t,
       'days': days,
@@ -83,6 +83,4 @@ const Utils = {
   }
 };
 
-export {
-  Utils
-};
+export default Utils;

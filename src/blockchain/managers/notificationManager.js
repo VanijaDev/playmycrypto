@@ -367,6 +367,4 @@ const NotificationManager = {
   },
 }
 
-export {
-  NotificationManager
-};
+export default NotificationManager;

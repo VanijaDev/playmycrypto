@@ -1,17 +1,9 @@
 import BlockchainManager from "../managers/blockchainManager/blockchainManager";
-import {
-  PromiseManager
-} from "../managers/promiseManager";
-import {
-  Game
-} from "../game";
-import {
-  Utils
-} from "../utils";
+import PromiseManager from "../managers/promiseManager";
+import Game from "../game";
+import Utils from "../utils";
 import BigNumber from "bignumber.js";
-import {
-  ProfileManager
-} from "../managers/profileManager";
+import ProfileManager from "../managers/profileManager";
 import Types from "../types";
 
 const $t = $('#translations').data();

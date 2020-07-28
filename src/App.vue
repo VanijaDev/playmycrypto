@@ -17,8 +17,7 @@
               href="https://t.me/playmycrypto"
               target="blank"
               class="tele-link"
-              >{{ $t("JOIN_TELE") }}</a
-            >
+            >{{ $t("JOIN_TELE") }}</a>
           </div>
           <div class="row align-self-start">
             <div class="choose-crypto">{{ $t("CHOOSE_CRYPTO") }}:</div>
@@ -46,25 +45,14 @@
                 <div class="flag" v-bind:class="getCurrentFlag()"></div>
 
                 <div class="languages-dropdown" v-show="languagePopupOpened">
-                  <button
-                    class="flag flag-en"
-                    v-show="language !== 'en'"
-                    @click="setLocale('en')"
-                  ></button>
-                  <button
-                    class="flag flag-ua"
-                    v-show="language !== 'ua'"
-                    @click="setLocale('ua')"
-                  ></button>
+                  <button class="flag flag-en" v-show="language !== 'en'" @click="setLocale('en')"></button>
+                  <button class="flag flag-ua" v-show="language !== 'ua'" @click="setLocale('ua')"></button>
                   <!-- <button class="flag flag-jp" v-show="language!=='jp'" @click="setLocale('jp')"></button>
                   <button class="flag flag-kr" v-show="language!=='kr'" @click="setLocale('kr')"></button>-->
                 </div>
               </div>
 
-              <div
-                class="profile-info position-relative"
-                v-click-outside="hideUserPopup"
-              >
+              <div class="profile-info position-relative" v-click-outside="hideUserPopup">
                 <img
                   src="/img/icon-profile.svg"
                   class="float-right pointer"
@@ -76,9 +64,7 @@
                     class="profile-name"
                     id="playerAccount"
                     @click="userPopupOpened = !userPopupOpened"
-                  >
-                    0x000***000
-                  </div>
+                  >0x000***000</div>
                 </div>
 
                 <ul class="user-dropdown" v-show="userPopupOpened">
@@ -118,10 +104,7 @@
                         <em id="coinFlipPlayedTotalAmount">0</em>
                       </div>
                       <div class="col-4 pr-0">
-                        <img
-                          src="/img/icon-rock-paper-scissors-sm.svg"
-                          class="mr-2"
-                        />
+                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2" />
                         <em id="rockPaperScissorsPlayedTotalAmount">0</em>
                       </div>
                       <!-- <div class="col-4 pr-0">
@@ -198,10 +181,7 @@
                         />
                       </div>
                       <div class="col-sm-6 mb-2">
-                        <img
-                          src="/img/icon-rock-paper-scissors-sm.svg"
-                          class="mr-2"
-                        />
+                        <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2" />
                         <em id="ReferralFeesWithdrawnRPS">0</em>
                         <img
                           src="/img/icon_amount-eth.svg"
@@ -228,19 +208,13 @@
                     <h3>{{ $t("WITHDRAW_PENDING") }}:</h3>
                     <!--CartTabs-->
                     <div class="user-tabs">
-                      <div
-                        class="btn-group btn-group-toggle"
-                        data-toggle="buttons"
-                      >
+                      <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <button
                           class="btn btn-outline-primary"
                           v-bind:class="{ active: activeUserTab === 1 }"
                           @click="activeUserTab = 1"
                         >
-                          <div
-                            id="referralPendingPrizeBtn"
-                            class="pending-dot"
-                          ></div>
+                          <div id="referralPendingPrizeBtn" class="pending-dot"></div>
                           {{ $t("REFERRAL") }}
                         </button>
                         <button
@@ -248,10 +222,7 @@
                           v-bind:class="{ active: activeUserTab === 2 }"
                           @click="activeUserTab = 2"
                         >
-                          <div
-                            id="gamePendingPrizeBtn"
-                            class="pending-dot"
-                          ></div>
+                          <div id="gamePendingPrizeBtn" class="pending-dot"></div>
                           {{ $t("GAME_PRIZE") }}
                         </button>
                         <button
@@ -259,10 +230,7 @@
                           v-bind:class="{ active: activeUserTab === 3 }"
                           @click="activeUserTab = 3"
                         >
-                          <div
-                            id="rafflePendingPrizeBtn"
-                            class="pending-dot"
-                          ></div>
+                          <div id="rafflePendingPrizeBtn" class="pending-dot"></div>
                           {{ $t("RAFFLE_PRIZE") }}
                         </button>
                       </div>
@@ -274,10 +242,7 @@
                           </button>-->
                         </div>
 
-                        <div
-                          id="withdrawGamePrize"
-                          v-show="activeUserTab === 2"
-                        >
+                        <div id="withdrawGamePrize" v-show="activeUserTab === 2">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-icon mr-3">
                           </button>
@@ -286,10 +251,7 @@
                           </button>-->
                         </div>
 
-                        <div
-                          id="withdrawRafflePrize"
-                          v-show="activeUserTab === 3"
-                        >
+                        <div id="withdrawRafflePrize" v-show="activeUserTab === 3">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
                           </button>-->
@@ -403,7 +365,7 @@ import Types from "./blockchain/types";
 import CommonManager from "./blockchain/managers/CommonManager";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       userPopupOpened: false,
       languagePopupOpened: false,
@@ -442,26 +404,30 @@ export default {
   async mounted() {
     console.log("----------- App mounted");
 
-    window.ethereum.on("accountsChanged", function(accounts) {
+    window.ethereum.on("accountsChanged", function (accounts) {
       console.log(
         "%c App - accountsChanged: %s",
         "color: #00aa00",
         accounts[0]
       );
 
-      if (window.BlockchainManager) {
-        if (window.BlockchainManager.isCurrentNetworkValid()) {
-          window.BlockchainManager.accountChanged(accounts[0]);
-          if (window.CommonManager.currentView == Types.View.game) {
-            console.log("----------- App mounted - accountsChanged");
-            window.Game.setup();
-          }
+      if (
+        window.BlockchainManager &&
+        window.BlockchainManager.isCurrentNetworkValid()
+      ) {
+        window.BlockchainManager.accountChanged(accounts[0]);
+        if (window.CommonManager.currentView == Types.View.game) {
+          window.Game.update();
         }
       }
     });
 
-    window.ethereum.on("chainChanged", async function(chainId) {
+    window.ethereum.on("chainChanged", async function (chainId) {
       console.log("%c App - chainChanged: %s", "color: #00aa00", chainId);
+
+      if (!window.BlockchainManager) {
+        return;
+      }
 
       if (window.CommonManager.currentView == Types.View.index) {
         window.Index.onUnload();
@@ -473,7 +439,15 @@ export default {
         if (window.CommonManager.currentView == Types.View.index) {
           window.Index.setup();
         } else if (window.CommonManager.currentView == Types.View.game) {
+          console.log(
+            "----------- window.CommonManager.currentView == Types.View.game"
+          );
           window.Game.setup();
+        } else {
+          throw (
+            ("----------- chainChanged: ",
+            window.CommonManager.currentView == Types.View.index)
+          );
         }
       }
     });

@@ -1,22 +1,13 @@
-import {
-  PromiseManager
-} from "./managers/promiseManager";
-import {
-  CoinFlip
-} from "./gameView/coinFlip";
+import BlockchainManager from "./managers/blockchainManager/blockchainManager";
+import PromiseManager from "./managers/promiseManager";
+import CoinFlip from "./gameView/coinFlip";
 import RPS from "./gameView/rps";
-import {
-  Utils
-} from "./utils";
-import {
-  NotificationManager
-} from "./managers/notificationManager";
+import Utils from "./utils";
+import NotificationManager from "./managers/notificationManager";
 import {
   BigNumber
 } from "bignumber.js";
-import {
-  ProfileManager
-} from "./managers/profileManager";
+import ProfileManager from "./managers/profileManager";
 import Types from "./types";
 
 const $t = $('#translations').data();
@@ -41,22 +32,33 @@ const Game = {
   maxGamesToAddCount: 2, // max count of games to be added each "load more"
   raffleParticipants: 0,
 
-  initialSetupDone: false,
-  gameType: 0,
+  gameType: "",
+  testCounter: 0,
 
-  blockchainManagerInitialized: function () {
-    this.setup();
-  },
+  setup: async function (_currentGame) {
+    console.log('%c game - setup', 'color: #00aa00');
 
-  setup: async function () {
-    console.log('%c Game - setup', 'color: #00aa00');
-
-    if (!window.BlockchainManager.isInitted()) {
-      console.log("-------- not initted");
-      await window.BlockchainManager.init();
+    if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
+      console.log("game - BlockchainManager - NO");
+      window.BlockchainManager = await BlockchainManager.init();
+    } else {
+      console.log("game - BlockchainManager - YES");
     }
 
-    this.setupOnce();
+    this.gameType = _currentGame;
+    this.subscribeToEvents(this.gameType);
+
+    console.log("------- ", this.gameType);
+    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
+
+    await this.update();
+  },
+
+  update: async function () {
+    this.testCounter += 1;
+    console.log("game - testCounter:", this.testCounter);
+
+    await ProfileManager.update();
 
     if (this.gameType == Types.Game.cf) {
       document.getElementById("gameName").innerHTML = "CoinFlip";
@@ -69,18 +71,8 @@ const Game = {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
-    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
-  },
-
-  setupOnce: function () {
-    if (!this.initialSetupDone) {
-      this.initialSetupDone = true;
-      this.gameType = window.CommonManager.currentGame;
-
-      this.subscribeToEvents(this.gameType);
-    }
   },
 
   getSelectedgameType: function (_gameType) {
@@ -102,7 +94,8 @@ const Game = {
   },
 
   onUnload: function () {
-    this.initialSetupDone = false;
+    console.log('%c game - onUnload', 'color: #00aa00');
+
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
     window.RPS.onUnload();
@@ -578,12 +571,9 @@ const Game = {
   },
 }
 
-
 window.Game = Game;
 
-export {
-  Game
-};
+export default Game;
 
 //  HELPERS
 

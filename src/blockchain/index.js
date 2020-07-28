@@ -1,23 +1,16 @@
 import BlockchainManager from "./managers/blockchainManager/blockchainManager";
-import {
-  NotificationManager
-} from "./managers/notificationManager";
-import {
-  Utils
-} from "./utils";
+import NotificationManager from "./managers/notificationManager";
+import Utils from "./utils";
 import BigNumber from "bignumber.js";
-import {
-  ProfileManager
-} from "./managers/profileManager";
-import {
-  PromiseManager
-} from "./managers/promiseManager";
+import ProfileManager from "./managers/profileManager";
+import PromiseManager from "./managers/promiseManager";
 import Types from "./types";
 
 const $t = $('#translations').data();
 
 const Index = {
   networkId: 0,
+  testCounter: 0,
 
   //  ProfileManager callback
   profileUpdated: function () {
@@ -25,14 +18,17 @@ const Index = {
   },
 
   setup: async function () {
-    console.log('%c index - setup', 'color: #00aa00');
+    this.testCounter += 1;
+    console.log("index - testCounter:", this.testCounter);
 
-    if (!window.BlockchainManager.isInitted()) {
+    console.log('%c index - setup', 'color: #00aa00');
+    if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       console.log("index - BlockchainManager - NO");
-      await BlockchainManager.init();
+      window.BlockchainManager = await BlockchainManager.init();
     } else {
       console.log("index - BlockchainManager - YES");
     }
+    await ProfileManager.update();
 
     ProfileManager.setProfileUpdateHandler(this);
     await this.refreshData();
@@ -40,20 +36,6 @@ const Index = {
     //  events
     NotificationManager.eventHandler = this;
     NotificationManager.subscribeAll();
-  },
-
-  initBlockchainManager: async function () {
-    if (typeof window.BlockchainManager === "undefined") {
-      let getBlockchainManagerInterval = setInterval(async function () {
-        if (typeof window.BlockchainManager !== "undefined") {
-          clearInterval(getBlockchainManagerInterval);
-          await window.BlockchainManager.init();
-          console.log("------- index.js BM initted");
-        }
-      }, 100);
-    } else {
-      console.log("------- index.js BM present");
-    }
   },
 
   onUnload: function () {

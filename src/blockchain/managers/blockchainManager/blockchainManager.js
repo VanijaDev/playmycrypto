@@ -1,9 +1,5 @@
-import {
-  BlockchainManager_ethereum
-} from "./blockchainManager_ethereum";
-import {
-  ProfileManager
-} from "../profileManager";
+import BlockchainManager_ethereum from "./blockchainManager_ethereum";
+import ProfileManager from "../profileManager";
 import Types from "../../types";
 
 const BlockchainManager = {
@@ -12,14 +8,15 @@ const BlockchainManager = {
     userDenied: 4001
   },
 
+  BlockchainManagerTestCounter: 0,
   currentBlockchainType: "",
   currentBlockchainManager: null,
 
   init: async function () {
     console.log('%c BlockchainManager - init', 'color: #00aa00');
-    this.setCurrentBlockchainManager(Types.BlockchainType.ethereum);
+    await this.setCurrentBlockchainManager(Types.BlockchainType.ethereum);
     await this.currentBlockchainManager.init();
-    ProfileManager.update();
+    return this;
   },
 
   isInitted: function () {
@@ -27,7 +24,7 @@ const BlockchainManager = {
   },
 
   isCurrentNetworkValid: function () {
-    return this.currentBlockchainManager.isNetworkValid();
+    return this.currentBlockchainManager.isCurrentNetworkValid();
   },
 
   setCurrentBlockchainManager: function (_blockchainType) {
@@ -108,6 +105,8 @@ const BlockchainManager = {
    */
 
   currentAccount: function () {
+    this.BlockchainManagerTestCounter += 1;
+    console.log("BlockchainManagerTestCounter: ", this.BlockchainManagerTestCounter);
     return this.currentBlockchainManager.currentAccount;
   },
 
@@ -192,8 +191,6 @@ const BlockchainManager = {
   }
 }
 
-window.BlockchainManager = BlockchainManager;
-
 //  COMMON FOR ALL SCREENS
 window.addEventListener("click", function (event) {
   const profileElement = document.getElementById("carttoggle");
@@ -211,5 +208,6 @@ window.addEventListener("click", function (event) {
     document.getElementById("carttoggle").style.display = "none";
   }
 });
+window.BlockchainManager = BlockchainManager;
 
 export default BlockchainManager;
