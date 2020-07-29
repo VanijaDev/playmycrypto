@@ -1,4 +1,3 @@
-import NotificationManager from "./managers/notificationManager";
 import Utils from "./utils";
 import BigNumber from "bignumber.js";
 import PromiseManager from "./managers/promiseManager";

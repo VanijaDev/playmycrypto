@@ -8,6 +8,7 @@ import {
 import Types from "../types";
 
 const NotificationManager = {
+
   NotificationHashes_CF: {
     gameCreated: "0x2f96aa00c72dd004da6bbd1a2d56762ee5a3504189732da096d9f75b41e2e46f",
     gamePlayed: "0x5e97c336ff3e1ee83f544a7d108dcff188345eecf6664e2f6b1ced90f09e681a",
@@ -60,6 +61,8 @@ const NotificationManager = {
   },
 
   subscribeAll_ethereum: function () {
+    console.log('%c NotificationManager - subscribeAll_ethereum', 'color: #00aa00');
+
     window.web3.eth.subscribe('logs', {
       address: [CoinFlipData.address, RockPaperScissorsData.address]
     }, (error, result) => {
@@ -350,6 +353,7 @@ const NotificationManager = {
   },
 
   clearAll: function () {
+    console.log('%c NotificationManager - clearAll', 'color: #00aa00');
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
@@ -366,5 +370,7 @@ const NotificationManager = {
     }
   },
 }
+
+window.NotificationManager = NotificationManager;
 
 export default NotificationManager;
