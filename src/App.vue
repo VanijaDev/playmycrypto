@@ -355,6 +355,7 @@
       v-bind:data-err_make_move="$t('ERR_MAKE_MOVE')"
       v-bind:data-tx_claim_expired="$t('TX_CLAIM_EXPIRED')"
       v-bind:data-err_claim_expired="$t('ERR_CLAIM_EXPIRED')"
+      v-bind:data-your_game_finished_cf="$t('YOUR_GAME_FINISHED_CF')"
     ></div>
   </div>
 </template>

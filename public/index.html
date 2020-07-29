@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,36 +9,37 @@
   <link rel="shortcut icon" href="/favicon.png" type="image/png">
   <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
 </head>
+
 <body>
-<div id="app"></div>
-<!-- built files will be auto injected -->
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
 
-<script src="./jquery.min.js"></script>
-<script>
-  function showTopBannerMessage(textBefore, hash, autohide) {
-    var topBannerMessage = textBefore;
-    if (hash) {
-      var linkStr = "https://etherscan.io/tx/" + hash;
-      topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
+  <script src="./jquery.min.js"></script>
+  <script>
+    function showTopBannerMessage(textBefore, hash, autohide) {
+      var topBannerMessage = textBefore;
+      if (hash && hash.length > 0) {
+        var linkStr = "https://etherscan.io/tx/" + hash;
+        topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
+      }
+      $('.top-message').html(topBannerMessage).addClass('visible');
+      if (autohide) {
+        setTimeout(function () {
+          $('.top-message').html('').removeClass('visible');
+        }, 3000);
+      }
     }
-    $('.top-message').html(topBannerMessage).addClass('visible');
-    if (autohide) {
-      setTimeout(function () {
-        $('.top-message').html('').removeClass('visible');
-      }, 3000);
+
+    function hideTopBannerMessage() {
+      $('.top-message').html('').removeClass('visible');
     }
-  }
 
-  function hideTopBannerMessage() {
-    $('.top-message').html('').removeClass('visible');
-  }
-
-  function showGameBlock(id) {
-    $('.game-block').addClass('hidden');
-    $('#' + id).removeClass('hidden');
-  }
-
-</script>
+    function showGameBlock(id) {
+      $('.game-block').addClass('hidden');
+      $('#' + id).removeClass('hidden');
+    }
+  </script>
 
 </body>
+
 </html>

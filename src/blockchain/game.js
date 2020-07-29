@@ -568,7 +568,7 @@ const Game = {
       $(".template_available_games").attr('src', srcStr);
       $(".template_top_games").attr('src', srcStr);
       $(".template_raffle").attr('src', srcStr);
-    }, 500);
+    }, 1000);
   }
 }
 

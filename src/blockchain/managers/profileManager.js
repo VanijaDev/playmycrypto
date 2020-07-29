@@ -4,8 +4,6 @@ import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min"
 
-const $t = $('#translations').data();
-
 let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
 
@@ -265,7 +263,7 @@ let ProfileManager = {
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, this.ongoingGameRPS);
       if (Utils.addressesEqual(gameInfo.nextMover, window.BlockchainManager.currentAccount())) {
-        showTopBannerMessage($t.rps_pending_move);
+        showTopBannerMessage($('#translations').data().rps_pending_move);
       }
     }
   },
@@ -288,7 +286,7 @@ let ProfileManager = {
 
         if (_pendingTarget == this.PendingWithdraw.gamePrize) {
           pendingValue = _pendingValues[idx];
-          tooltipSuffix = $t.suffix_games;
+          tooltipSuffix = $('#translations').data().suffix_games;
         }
 
         var btn = document.createElement("BUTTON");
@@ -350,7 +348,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($t.tx_referral_fee, hash);
+            showTopBannerMessage($('#translations').data().tx_referral_fee, hash);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -358,7 +356,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showTopBannerMessage($t.err_referral_fee_withdraw, null, true);
+              showTopBannerMessage($('#translations').data().err_referral_fee_withdraw, null, true);
             }
 
             hideTopBannerMessage();
@@ -377,7 +375,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($t.tx_game_prize, hash);
+            showTopBannerMessage($('#translations').data().tx_game_prize, hash);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -385,7 +383,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showTopBannerMessage($t.err_game_prize_withdraw, null, true);
+              showTopBannerMessage($('#translations').data().err_game_prize_withdraw, null, true);
             }
             hideTopBannerMessage();
           });
@@ -400,7 +398,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($t.tx_raffle_prize, hash);
+            showTopBannerMessage($('#translations').data().tx_raffle_prize, hash);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -408,7 +406,7 @@ let ProfileManager = {
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-              showTopBannerMessage($t.err_raffle_prize_withdraw, null, true);
+              showTopBannerMessage($('#translations').data().err_raffle_prize_withdraw, null, true);
             }
             hideTopBannerMessage();
           });

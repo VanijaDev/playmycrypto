@@ -146,5 +146,6 @@
   "ERR_WRONG_NETWORK": "Неправильна мережа. Перекючися на Ethereum Main Network",
   "ERR_LEGACY_BROWSERS": "Застарілий браузер... Ми працюємо над підтримкою",
   "ERR_NON_ETH_BROWSER": "Ти користуєшся браузером, що не підтримує Ethereum. Використовуй MetaMask!",
-  "ERR_BET_INCREASE_MIN": "Мінімальне збільшення ставки: "
+  "ERR_BET_INCREASE_MIN": "Мінімальне збільшення ставки: ",
+  "YOUR_GAME_FINISHED_CF": "Гра Підкинь Монету, створена тобою була зіграна"
 }

@@ -149,6 +149,7 @@ const Index = {
 
     if (ProfileManager.isGameParticipant(Types.Game.cf, _gameId)) {
       ProfileManager.update();
+      showTopBannerMessage($t.your_game_finished_cf, null, true);
     }
   },
 

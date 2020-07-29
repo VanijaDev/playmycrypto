@@ -81,6 +81,8 @@ const CommonManager = {
       $('.timer-block').removeClass('visible');
     }
   }
+
+
 }
 
 window.CommonManager = CommonManager;
