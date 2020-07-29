@@ -8,7 +8,6 @@ const BlockchainManager = {
     userDenied: 4001
   },
 
-  BlockchainManagerTestCounter: 0,
   currentBlockchainType: "",
   currentBlockchainManager: null,
 
@@ -105,8 +104,6 @@ const BlockchainManager = {
    */
 
   currentAccount: function () {
-    this.BlockchainManagerTestCounter += 1;
-    console.log("BlockchainManagerTestCounter: ", this.BlockchainManagerTestCounter);
     return this.currentBlockchainManager.currentAccount;
   },
 

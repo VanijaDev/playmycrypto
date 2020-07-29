@@ -9,7 +9,6 @@ const $t = $('#translations').data();
 
 const Index = {
   networkId: 0,
-  testCounter: 0,
 
   //  ProfileManager callback
   profileUpdated: function () {
@@ -18,11 +17,6 @@ const Index = {
 
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
-
-    this.testCounter += 1;
-    console.log("index - testCounter:", this.testCounter);
-
-    console.log("index - window.BlockchainManager: ", window.BlockchainManager);
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       await window.BlockchainManager.init();

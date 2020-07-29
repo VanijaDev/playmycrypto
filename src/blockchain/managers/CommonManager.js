@@ -5,12 +5,8 @@ const CommonManager = {
 
   currentView: -1,
 
-  testCounter: 0,
-
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;
-    this.testCounter += 1;
-    console.log("CommonManager testCounter: ", this.testCounter);
   },
 
   showSpinner: function (_viewType) {

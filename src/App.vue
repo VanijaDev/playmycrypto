@@ -414,6 +414,7 @@ export default {
 
       if (
         window.BlockchainManager &&
+        window.BlockchainManager.isInitted() &&
         window.BlockchainManager.isCurrentNetworkValid()
       ) {
         window.BlockchainManager.accountChanged(accounts[0]);
@@ -426,7 +427,7 @@ export default {
     window.ethereum.on("chainChanged", async function (chainId) {
       console.log("%c App - chainChanged: %s", "color: #00aa00", chainId);
 
-      if (!window.BlockchainManager) {
+      if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
         return;
       }
 

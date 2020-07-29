@@ -32,7 +32,6 @@ const Game = {
   raffleParticipants: 0,
 
   gameType: "",
-  testCounter: 0,
 
   setup: async function (_currentGame) {
     console.log('%c game - setup', 'color: #00aa00');
@@ -44,16 +43,12 @@ const Game = {
     this.gameType = _currentGame;
     this.subscribeToEvents(this.gameType);
 
-    console.log("------- ", this.gameType);
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
 
     await this.update();
   },
 
   update: async function () {
-    this.testCounter += 1;
-    console.log("game - testCounter:", this.testCounter);
-
     await ProfileManager.update();
 
     if (this.gameType == Types.Game.cf) {
