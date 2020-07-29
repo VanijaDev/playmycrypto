@@ -356,6 +356,8 @@
       v-bind:data-tx_claim_expired="$t('TX_CLAIM_EXPIRED')"
       v-bind:data-err_claim_expired="$t('ERR_CLAIM_EXPIRED')"
       v-bind:data-your_game_finished_cf="$t('YOUR_GAME_FINISHED_CF')"
+      v-bind:data-coin_flip="$t('COIN_FLIP')"
+      v-bind:data-rock_paper_scossors="$t('ROCK_PAPER_SCISSORS')"
     ></div>
   </div>
 </template>

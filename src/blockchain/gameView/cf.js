@@ -10,12 +10,19 @@ const CF = {
   coinSideChosen: 0,
   minBet: "",
 
+  GameView: {
+    start: "cfstart",
+    waitingForOpponent: "cfmaketop",
+    join: "cfjoin",
+    won: "cfWon",
+    lost: "cfLost"
+  },
+
   updateGameView: async function () {
     console.log('%c CF - updateGameView', 'color: #00aa00');
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
-    console.log("referral 0: ", this.ownerAddress);
     this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
     this.setPlaceholders();
@@ -38,10 +45,10 @@ const CF = {
     // console.log("showGameViewForCurrentAccount id: ", id);
 
     if (id == 0) {
-      this.showGameView(Types.GameView_CF.start, null);
+      this.showGameView(this.GameView.start, null);
     } else {
       let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-      this.showGameView(Types.GameView_CF.waitingForOpponent, gameInfo);
+      this.showGameView(this.GameView.waitingForOpponent, gameInfo);
     }
 
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
@@ -49,12 +56,12 @@ const CF = {
 
   showJoinGame: function (_gameInfo) {
     // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView(Types.GameView_CF.join, _gameInfo);
+    this.showGameView(this.GameView.join, _gameInfo);
   },
 
   showGameView: function (_viewName, _gameInfo) {
     // console.log("showGameView: ", _viewName, _gameInfo);
-    if (_viewName != Types.GameView_CF.won && _viewName != Types.GameView_CF.lost) {
+    if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
 
@@ -68,7 +75,7 @@ const CF = {
     // document.getElementById("cf_update_bet_input").value = "";
 
     switch (_viewName) {
-      case Types.GameView_CF.start:
+      case this.GameView.start:
         $('#gameId_start')[0].value = "0";
         $('#gameCreator_start')[0].value = "0x0";
         $('#gameOpponent_start')[0].value = "0x0";
@@ -77,10 +84,10 @@ const CF = {
         $('#cf_bet_input')[0].value = "0.01";
         break;
 
-      case Types.GameView_CF.waitingForOpponent:
-      case Types.GameView_CF.join:
-      case Types.GameView_CF.won:
-      case Types.GameView_CF.lost:
+      case this.GameView.waitingForOpponent:
+      case this.GameView.join:
+      case this.GameView.won:
+      case this.GameView.lost:
         break;
 
       default:
@@ -115,10 +122,7 @@ const CF = {
     }
   },
 
-
-  //  HANDLE UI ELEMENT ACTIONS
   startGame: async function () {
-    console.log("referral 1: ", window.CF.ownerAddress);
     let referral = document.getElementById("cf_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
@@ -128,7 +132,6 @@ const CF = {
     } else {
       referral = this.ownerAddress;
     }
-    console.log("referral: ", referral);
 
     let bet = document.getElementById("cf_bet_input").value;
 
@@ -236,9 +239,7 @@ const CF = {
       });
   },
 
-  coinflipJoinAndPlay: async function () {
-    // console.log('%c coinflipJoinAndPlay', 'color: #e51dff');
-
+  joinAndPlay: async function () {
     let referral = document.getElementById("cf_game_referral_join").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral)) {
@@ -285,10 +286,10 @@ const CF = {
   showGamePlayed: function (_gameInfo) {
     // console.log("showGamePlayed: ", _gameInfo);
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + Types.GameView_CF.waitingForOpponent)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(Types.GameView_CF.won, null): this.showGameView(Types.GameView_CF.lost, null);
-    } else if (!$("#" + Types.GameView_CF.join)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(Types.GameView_CF.won, null): this.showGameView(Types.GameView_CF.lost, null);
+    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + this.GameView.waitingForOpponent)[0].classList.contains('hidden')) {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
+    } else if (!$("#" + this.GameView.join)[0].classList.contains('hidden')) {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
     }
   },
 
@@ -315,7 +316,5 @@ const CF = {
     }
   }
 };
-
-window.CF = CF;
 
 export default CF;

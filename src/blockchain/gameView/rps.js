@@ -776,7 +776,6 @@ const RPS = {
   },
 
   closeResultView: function () {
-    // console.log('%c closeResultView_RPS:', 'color: #e51dff');
     this.showGameViewForCurrentAccount();
   },
 

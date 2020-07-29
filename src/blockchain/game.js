@@ -30,6 +30,7 @@ const Game = {
   raffleParticipants: 0,
 
   gameType: "",
+  gameInst: null,
 
   setup: async function (_currentGame) {
     console.log('%c game - setup', 'color: #00aa00');
@@ -39,11 +40,23 @@ const Game = {
     }
 
     this.gameType = _currentGame;
+    this.gameInst = this.initGameInst(_currentGame);
     this.subscribeToEvents(this.gameType);
-
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-
     await this.update();
+  },
+
+  initGameInst: function (_gameType) {
+    switch (_gameType) {
+      case Types.Game.cf:
+        return CF;
+
+      case Types.Game.rps:
+        return RPS;
+
+      default:
+        throw ("Game - initGameInst wrong _gameType: ", _gameType);
+    }
   },
 
   update: async function () {
@@ -51,26 +64,17 @@ const Game = {
 
     this.updateMoneyIcons();
     if (this.gameType == Types.Game.cf) {
-      document.getElementById("gameName").innerHTML = "CoinFlip";
-      CF.updateGameView();
+      document.getElementById("gameName").innerHTML = $t.coin_flip;
       await this.updateSuspendedViewForGame(this.gameType);
     } else if (this.gameType == Types.Game.rps) {
-      document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
-      RPS.updateGameView();
+      document.getElementById("gameName").innerHTML = $t.rock_paper_scossors;
     } else {
       document.getElementById("gameName").innerHTML = "TITLE - ERROR";
     }
 
+    this.gameInst.updateGameView();
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
-  },
-
-  getSelectedgameType: function (_gameType) {
-    if (_gameType == Types.Game.cf) {
-      return Types.Game.cf;
-    } else if (_gameType == Types.Game.rps) {
-      return Types.Game.rps;
-    }
   },
 
   subscribeToEvents: function (_gameType) {
@@ -88,7 +92,10 @@ const Game = {
 
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
-    window.RPS.onUnload();
+
+    this.gameType = "";
+    this.gameInst.onUnload();
+
     hideTopBannerMessage();
   },
 
@@ -382,7 +389,7 @@ const Game = {
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
-      RPS.showGameView(RPS.GameView.playMove, gameInfo);
+      this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
@@ -395,12 +402,10 @@ const Game = {
       // console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
-      CF.showGamePlayed(gameInfo);
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
-      CF.showGamePlayed(gameInfo);
+    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
+    this.gameInst.showGamePlayed(gameInfo);
+
+    if (!_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       this.updateSuspendedViewForGame(this.gameType);
     }
 
@@ -449,17 +454,17 @@ const Game = {
       let resultView;
 
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.draw)) == 0) {
-        resultView = RPS.GameView.draw;
+        resultView = this.gameInst.GameView.draw;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.winnerPresent)) == 0) {
-        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? this.gameInst.GameView.won : this.gameInst.GameView.lost;
       } else if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.quitted)) == 0 ||
         (new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.expired)) == 0) {
-        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? RPS.GameView.won : RPS.GameView.lost;
+        resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? this.gameInst.GameView.won : this.gameInst.GameView.lost;
       } else {
         throw ("onGameFinished - ERROR");
       }
 
-      RPS.showGameView(resultView, null);
+      this.gameInst.showGameView(resultView, null);
       ProfileManager.update();
     }
   },
@@ -468,7 +473,7 @@ const Game = {
     // console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      RPS.showGameViewForCurrentAccount();
+      this.gameInst.showGameViewForCurrentAccount();
     }
   },
 
@@ -476,7 +481,7 @@ const Game = {
     // console.log('%c game - onGameOpponentMoved: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      RPS.showGameViewForCurrentAccount();
+      this.gameInst.showGameViewForCurrentAccount();
     }
   },
 
@@ -501,6 +506,26 @@ const Game = {
 
 
   //  UI ACTIONS
+  startGame: function () {
+    this.gameInst.startGame();
+  },
+
+  makeTopClicked: function () {
+    this.gameInst.makeTopClicked();
+  },
+
+  increaseBetClicked: function () {
+    this.gameInst.increaseBetClicked();
+  },
+
+  closeResultView: function () {
+    this.gameInst.closeResultView();
+  },
+
+  rps_moveClicked: function (_value) {
+    this.gameInst.moveClicked(_value);
+  },
+
   loadMoreAvailableGames: async function () {
     // console.log("loadMoreAvailableGames");
     document.getElementById("loadMoreAvailableGamesBtn").disabled = true;
@@ -526,14 +551,13 @@ const Game = {
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 
     if (this.gameType == Types.Game.cf) {
-      CF.showJoinGame(gameInfo);
+      this.gameInst.showJoinGame(gameInfo);
     } else if (this.gameType == Types.Game.rps) {
-      RPS.showGameView(RPS.GameView.join, gameInfo);
+      this.gameInst.showGameView(this.gameInst.GameView.join, gameInfo);
     }
   },
 
   startRaffle: function () {
-    console.log('%c startRaffle', 'color: #e51dff');
     window.CommonManager.showSpinner(Types.SpinnerView.raffle);
     this.raffleStartedByMe = true;
 
@@ -558,6 +582,44 @@ const Game = {
       .then(() => {
         window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
       });
+  },
+
+  //  cf
+  cf_coinSideChanged: function (_side) {
+    this.gameInst.coinSideChanged(_side);
+  },
+
+  cf_joinAndPlay: function () {
+    this.gameInst.joinAndPlay();
+  },
+
+  //  rps
+  rps_quitGameClicked: function () {
+    this.gameInst.quitGameClicked();
+  },
+
+  rps_pauseGameClicked: function () {
+    this.gameInst.pauseGameClicked();
+  },
+
+  rps_joinGameClicked: function () {
+    this.gameInst.joinGameClicked();
+  },
+
+  rps_claimExpiredGameClicked: function () {
+    this.gameInst.claimExpiredGameClicked();
+  },
+
+  rps_playMoveClicked: function () {
+    this.gameInst.playMoveClicked();
+  },
+
+  rps_makeMoveClicked: function () {
+    this.gameInst.makeMoveClicked();
+  },
+
+  rps_quitGameClicked: function () {
+    this.gameInst.quitGameClicked();
   },
 
   updateMoneyIcons: function () {

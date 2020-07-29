@@ -26,10 +26,10 @@
         <h3 class="mt-4 mb-4 f18">{{ $t('START_NEW_GAME') }}</h3>
         <h2 class="f24">{{ $t('CHOOSE_COIN_SIDE') }}:</h2>
 
-        <button id="ethereumFlip" class="btn btn-link" onclick="window.CF.coinSideChanged(0)">
+        <button id="ethereumFlip" class="btn btn-link" onclick="window.Game.cf_coinSideChanged(0)">
           <img src="/img/ethereum-orange.svg" />
         </button>
-        <button class="btn btn-link" id="bitcoinFlip" onclick="window.CF.coinSideChanged(1)">
+        <button id="bitcoinFlip" class="btn btn-link" onclick="window.Game.cf_coinSideChanged(1)">
           <img src="/img/bitcoin-black.svg" />
         </button>
 
@@ -62,12 +62,11 @@
           </div>
         </form>
 
-        <!-- <button id="start_btn_start" class="btn btn-start-game disabled" onclick="window.CF.startGame()"> -->
         <button
           id="start_btn_start"
           class="btn btn-start-game"
           v-bind:class="{'disabled': isStartGameDisabled()}"
-          onclick="window.CF.startGame()"
+          onclick="window.Game.startGame()"
         >
           <img src="/img/icon-btn-start.svg" class="mr-3" />
           {{ $t('START_GAME') }}
@@ -115,7 +114,7 @@
           </div>
         </form>
 
-        <button class="btn btn-start-game" onclick="window.CF.coinflipJoinAndPlay()">
+        <button class="btn btn-start-game" onclick="window.Game.cf_joinAndPlay()">
           <img src="/img/icon-btn-start.svg" class="mr-3" />
           {{ $t('JOIN_GAME') }}
         </button>
@@ -158,7 +157,7 @@
             />
             <button
               class="btn btn-small-orange"
-              onclick="window.CF.increaseBetClicked()"
+              onclick="window.Game.increaseBetClicked()"
             >{{ $t('UPDATE') }}</button>
           </div>
         </div>
@@ -177,7 +176,7 @@
         <h3 class="mt-4 mb-4 f18">{{ $t('WAITING_FOR_OPPONENT') }}</h3>
         <h2 class="f24">{{ $t('COIN_SIDE') }}:</h2>
 
-        <button id="ethereumFlip" class="btn btn-link" onclick="window.CF.coinSideChanged(0)">
+        <button id="ethereumFlip" class="btn btn-link">
           <img id="fromt_coin_makeTop" src="/img/ethereum-orange.svg" />
         </button>
 
@@ -193,7 +192,7 @@
           <button
             id="make_top_btc_makeTop"
             class="btn btn-start-game btn-make-top"
-            onclick="window.CF.makeTopClicked()"
+            onclick="window.Game.makeTopClicked()"
           >
             <img src="/img/icon-btn-start.svg" class="mr-3" />
             {{ $t('MAKE_TOP_GAME') }}
@@ -202,61 +201,13 @@
       </div>
     </div>
 
-    <!-- <div class="row hidden game-block" id="pausedGame">
-      <div class="col-sm-4 f13 info-column inner-column opacity-text position-relative">
-        <p class="mb-1">{{ $t('GAME_ID') }}:</p>
-        <span id="gameId_start">0</span>
-        <p class="mb-1 mt-4">{{ $t('GAME_CREATOR') }}:</p>
-        <span id="gameCreator_start">0x0</span>
-        <p class="mb-1 mt-4">{{ $t('GAME_OPPONENT') }}:</p>
-        <span id="gameOpponent_start">0x0</span>
-
-        <div class="row">
-          <div class="col-6 pr-0">
-            <p class="mb-1 mt-4">{{ $t('GAME_BET') }} <span class="text-uppercase">({{ currency }})</span>:</p>
-            <span class="f16">
-              <b id="gameBetCurrent_start">0.12345</b>
-            </span>
-          </div>
-          <div class="col-6 pr-0">
-            <label class="pt-4">{{ $t('UPDATE_BET') }} (ETH):</label>
-            <input type="number" class="col-5 bet-input"/>
-            <button class="btn btn-small-orange">{{ $t('UPDATE') }}</button>
-          </div>
-        </div>
-
-        <div class="bottom-buttons row">
-          <div class="col-5 offset-1">
-            <button class="btn btn-small-orange">{{ $t('QUIT_GAME') }}</button>
-          </div>
-          <div class="col-5 button-border-left">
-            <button class="btn btn-small-orange">{{ $t('PAUSE_GAME') }}</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-8 border-left text-center inner-column">
-        <h3 class="mt-4 mb-4 f18">{{ $t('WAITING_FOR_OPPONENT') }}</h3>
-        <h2 class="f24">{{ $t('COIN_SIDE') }}:</h2>
-
-        <button id="ethereumFlip" class="btn btn-link" onclick="window.CF.coinSideChanged(0)">
-          <img src="/img/ethereum-orange.svg">
-        </button>
-        <div class="row mt-5 pt-3"></div>
-        <div>
-          <h2 class="paused-game">{{ $t('GAME_PAUSED') }}</h2>
-          <p class="f18 font-weight-bold">{{ $t('UNPAUSE_COST') }} <span id="unpausedCost">0.01</span> ETH</p>
-        </div>
-      </div>
-    </div>-->
-
     <div class="row hidden game-block" id="cfWon">
       <div class="inner-column game-image-padding text-center">
         <img src="/img/icon-big-won.svg" alt />
         <h2 class="mt-4 mb-4">{{ $t('YOU_WON') }}!</h2>
         <button
           class="btn btn-medium-orange"
-          onclick="window.CF.closeResultView()"
+          onclick="window.Game.closeResultView()"
         >{{ $t('CLOSE') }}</button>
       </div>
     </div>
@@ -267,7 +218,7 @@
         <h2 class="mt-4 mb-4">{{ $t('YOU_LOST') }}...</h2>
         <button
           class="btn btn-medium-orange"
-          onclick="window.CF.closeResultView()"
+          onclick="window.Game.closeResultView()"
         >{{ $t('CLOSE') }}</button>
       </div>
     </div>

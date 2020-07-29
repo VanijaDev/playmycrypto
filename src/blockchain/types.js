@@ -27,21 +27,13 @@ const Types = {
     scissors: 2
   },
 
-  GameView_CF: {
-    start: "cfstart",
-    waitingForOpponent: "cfmaketop",
-    join: "cfjoin",
-    won: "cfWon",
-    lost: "cfLost"
-  },
-
   GameState: {
     waitingForOpponent: 0,
     started: 1,
     winnerPresent: 2,
     draw: 3,
     quitted: 4,
-    expired:5
+    expired: 5
   },
 }
 
