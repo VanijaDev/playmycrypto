@@ -237,7 +237,7 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-    console.log("Leave Home page");
+    // console.log("Leave Home page");
     window.Index.onUnload();
     next();
   },

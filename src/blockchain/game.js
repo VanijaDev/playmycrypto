@@ -49,6 +49,7 @@ const Game = {
   update: async function () {
     await ProfileManager.update();
 
+    this.updateMoneyIcons();
     if (this.gameType == Types.Game.cf) {
       document.getElementById("gameName").innerHTML = "CoinFlip";
       CoinFlip.updateGameView();
@@ -558,6 +559,17 @@ const Game = {
         window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
       });
   },
+
+  updateMoneyIcons: function () {
+    let srcStr = "/img/icon_amount-" + (window.BlockchainManager.currentCryptoName().toLowerCase()) + ".svg";
+
+    let loadInterval = setInterval(function () {
+      clearInterval(loadInterval);
+      $(".template_available_games").attr('src', srcStr);
+      $(".template_top_games").attr('src', srcStr);
+      $(".template_raffle").attr('src', srcStr);
+    }, 500);
+  }
 }
 
 window.Game = Game;
@@ -586,7 +598,7 @@ var TableAvailableGamesTemplate = '<li>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
   '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.bet + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
-  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '<img class="money-icon template_available_games">' +
   '</p>' +
   '</div>' +
   '</li>';
@@ -603,7 +615,7 @@ var TopGamesTemplate = '<li>' +
   '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.bet + ':</span>' +
   '<span class="text-primary"><b>{{bet}}</b></span>' +
 
-  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '<img class="money-icon template_top_games">' +
   '</p>' +
   '</div>' +
   '</li>';
@@ -619,7 +631,7 @@ var RaffleGamesTemplate = '<li>' +
   '<img src="/img/game-icon-bet.svg" class="creator">' +
   '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.prize + ':</span>' +
   '<span class="text-primary"><b>{{amount}}</b></span>' +
-  '<img src="/img/icon_amount-' + ((window.BlockchainManager.currentBlockchainType == 0) ? 'eth' : 'trx') + '.svg" class="money-icon">' +
+  '<img class="money-icon template_raffle">' +
   '<span class="float-right text-black-50">{{timeago}}</span>' +
   '</p>' +
   '</div>' +

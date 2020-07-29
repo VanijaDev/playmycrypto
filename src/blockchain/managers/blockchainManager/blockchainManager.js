@@ -27,6 +27,8 @@ const BlockchainManager = {
 
   setCurrentBlockchainManager: function (_blockchainType) {
     this.currentBlockchainType = _blockchainType;
+    console.log('BlockchainManager - _blockchainType', _blockchainType);
+    console.log('BlockchainManager - _blockchainType', this.currentBlockchainType);
 
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
@@ -164,8 +166,7 @@ const BlockchainManager = {
   currentCryptoName: function () {
     if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
       return "ETH";
-    }
-    if (this.currentBlockchainType == Types.BlockchainType.tron) {
+    } else if (this.currentBlockchainType == Types.BlockchainType.tron) {
       return "TRX";
     }
   },
