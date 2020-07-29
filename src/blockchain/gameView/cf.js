@@ -5,16 +5,17 @@ import Types from "../types";
 
 const $t = $('#translations').data();
 
-const CoinFlip = {
+const CF = {
   ownerAddress: "",
   coinSideChosen: 0,
   minBet: "",
 
   updateGameView: async function () {
-    console.log('%c CoinFlip - updateGameView', 'color: #00aa00');
+    console.log('%c CF - updateGameView', 'color: #00aa00');
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
+    console.log("referral 0: ", this.ownerAddress);
     this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
 
     this.setPlaceholders();
@@ -117,6 +118,7 @@ const CoinFlip = {
 
   //  HANDLE UI ELEMENT ACTIONS
   startGame: async function () {
+    console.log("referral 1: ", window.CF.ownerAddress);
     let referral = document.getElementById("cf_game_referral_start").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
@@ -126,6 +128,7 @@ const CoinFlip = {
     } else {
       referral = this.ownerAddress;
     }
+    console.log("referral: ", referral);
 
     let bet = document.getElementById("cf_bet_input").value;
 
@@ -146,7 +149,7 @@ const CoinFlip = {
         showTopBannerMessage($t.tx_create_game, hash);
       })
       .once('receipt', function (receipt) {
-        CoinFlip.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount();
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -182,7 +185,7 @@ const CoinFlip = {
         showTopBannerMessage($t.tx_make_top, hash);
       })
       .once('receipt', function (receipt) {
-        CoinFlip.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount();
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -219,7 +222,7 @@ const CoinFlip = {
         showTopBannerMessage($t.tx_increase_bet, hash);
       })
       .once('receipt', function (receipt) {
-        CoinFlip.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount();
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -267,7 +270,7 @@ const CoinFlip = {
         // console.log('%c JOIN GAME receipt: %s', 'color: #1d34ff', receipt);
         ProfileManager.update();
         hideTopBannerMessage();
-        CoinFlip.showGamePlayed(receipt.events.CF_GamePlayed.returnValues);
+        CF.showGamePlayed(receipt.events.CF_GamePlayed.returnValues);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
@@ -313,6 +316,6 @@ const CoinFlip = {
   }
 };
 
-window.CoinFlip = CoinFlip;
+window.CF = CF;
 
-export default CoinFlip;
+export default CF;

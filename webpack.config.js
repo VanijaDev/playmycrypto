@@ -27,9 +27,9 @@ var gameConfig = Object.assign({}, config, {
 
 var coinFlipConfig = Object.assign({}, config, {
   name: "coinFlip",
-  entry: "./src/blockchain/gameView/coinFlip.js",
+  entry: "./src/blockchain/gameView/cf.js",
   output: {
-    filename: 'coinFlip.js',
+    filename: 'cf.js',
     path: path.resolve(__dirname, 'public'),
   },
 });

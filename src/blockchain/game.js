@@ -1,5 +1,5 @@
 import PromiseManager from "./managers/promiseManager";
-import CoinFlip from "./gameView/coinFlip";
+import CF from "./gameView/cf";
 import RPS from "./gameView/rps";
 import Utils from "./utils";
 import {
@@ -52,7 +52,7 @@ const Game = {
     this.updateMoneyIcons();
     if (this.gameType == Types.Game.cf) {
       document.getElementById("gameName").innerHTML = "CoinFlip";
-      CoinFlip.updateGameView();
+      CF.updateGameView();
       await this.updateSuspendedViewForGame(this.gameType);
     } else if (this.gameType == Types.Game.rps) {
       document.getElementById("gameName").innerHTML = "Rock Paper Scissors";
@@ -397,10 +397,10 @@ const Game = {
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
-      CoinFlip.showGamePlayed(gameInfo);
+      CF.showGamePlayed(gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
-      CoinFlip.showGamePlayed(gameInfo);
+      CF.showGamePlayed(gameInfo);
       this.updateSuspendedViewForGame(this.gameType);
     }
 
@@ -526,7 +526,7 @@ const Game = {
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
 
     if (this.gameType == Types.Game.cf) {
-      CoinFlip.showJoinGame(gameInfo);
+      CF.showJoinGame(gameInfo);
     } else if (this.gameType == Types.Game.rps) {
       RPS.showGameView(RPS.GameView.join, gameInfo);
     }

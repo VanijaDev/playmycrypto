@@ -51,6 +51,8 @@ const CommonManager = {
   },
 
   showBackTimer: function (duration, callback = null) {
+    window.CommonManager.hideBackTimer();
+
     setTimeout(function () {
       $('.timer-block').addClass('visible');
     }, 1000);
