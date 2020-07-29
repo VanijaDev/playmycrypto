@@ -48,6 +48,7 @@ const BlockchainManager_ethereum = {
     if (window.ethereum) {
       console.log("Modern dapp browsers...");
 
+      ethereum.autoRefreshOnNetworkChange;
       window.web3 = new Web3(ethereum);
 
       try {
