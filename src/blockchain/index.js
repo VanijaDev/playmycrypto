@@ -1,7 +1,6 @@
 import NotificationManager from "./managers/notificationManager";
 import Utils from "./utils";
 import BigNumber from "bignumber.js";
-import ProfileManager from "./managers/profileManager";
 import PromiseManager from "./managers/promiseManager";
 import Types from "./types";
 

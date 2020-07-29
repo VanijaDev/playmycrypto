@@ -6,7 +6,6 @@ import NotificationManager from "./managers/notificationManager";
 import {
   BigNumber
 } from "bignumber.js";
-import ProfileManager from "./managers/profileManager";
 import Types from "./types";
 
 const $t = $('#translations').data();

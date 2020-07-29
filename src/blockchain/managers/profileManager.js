@@ -14,7 +14,6 @@ let ProfileManager = {
     gamePrize: "withdrawGamePrize",
     raffle: "withdrawRafflePrize"
   },
-  testCounter: 0,
 
   profileUpdateHandler: null,
 
@@ -28,10 +27,6 @@ let ProfileManager = {
 
   update: async function () {
     console.log('%c ProfileManager - update', 'color: #00aa00');
-
-    this.testCounter += 1;
-    console.log('ProfileManager - testCounter:', this.testCounter);
-
 
     hideTopBannerMessage();
     this.updateCurrentAccountUI();

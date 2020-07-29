@@ -1,5 +1,4 @@
 import BlockchainManager_ethereum from "./blockchainManager_ethereum";
-import ProfileManager from "../profileManager";
 import Types from "../../types";
 
 const BlockchainManager = {
@@ -47,7 +46,6 @@ const BlockchainManager = {
   accountChanged: async function (_account) {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
     this.currentBlockchainManager.accountChanged(_account);
-    ProfileManager.update();
   },
 
   chainChanged: async function (_chainId) {

@@ -364,6 +364,7 @@ import ClickOutside from "vue-click-outside";
 import Types from "./blockchain/types";
 import CommonManager from "./blockchain/managers/CommonManager";
 import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
+import ProfileManager from "./blockchain/managers/profileManager";
 
 export default {
   data: function () {
