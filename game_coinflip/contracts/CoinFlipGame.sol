@@ -4,6 +4,7 @@ pragma solidity ^0.6.0;
 import "./Partnership.sol";
 import "./GameRaffle.sol";
 import "./IGamePausable.sol";
+import "./IExpiryMoveDuration.sol";
 import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
 
 /**
@@ -29,13 +30,14 @@ import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
  *    Participate as creator & opponent
  */
 
-contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
+contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpiryMoveDuration {
   struct Game {
     bool paused;
     uint8 creatorCoinSide;
     uint8 randCoinSide;
     uint256 id;
     uint256 bet;
+    uint256 prevMoveTimestamp;
     bytes32 creatorGuessHash;
     address payable creator;
     address payable opponent;
@@ -73,6 +75,7 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
   event CF_GameCreated(uint256 indexed id, address indexed creator, uint256 indexed bet);
   event CF_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
   event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
+  event CF_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
   event CF_GamePrizesWithdrawn(address indexed player);
   event CF_GameAddedToTop(uint256 indexed id, address indexed creator);
   event CF_GameReferralWithdrawn(address indexed referral);
@@ -198,6 +201,62 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
   }
 
   /**
+   * IExpiryMoveDuration
+   * 
+   */
+
+  /**
+   * @dev Updates game move duration.
+   * @param _duration Game duration.
+   * 
+   */
+  function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
+    require(_duration > 0, "Should be > 0");
+    gameMoveDuration = _duration;    
+  }
+
+  /**
+   * @dev Check if game move expired.
+   * @param _id Game id.
+   * @return Whether game move is expired.
+   * 
+   */
+  function gameMoveExpired(uint256 _id) public view override returns(bool) {
+    if (games[_id].prevMoveTimestamp != 0) {
+      return games[_id].prevMoveTimestamp.add(gameMoveDuration) < now; 
+    }
+  }
+
+  /**
+   * @dev Finish prize for expired game.
+   * @param _id Game id.
+   * 
+   */
+  function finishExpiredGame(uint256 _id) external override {
+    Game storage game = games[_id];
+
+    require(game.creator != address(0), "No game with such id");
+    require(game.opponent ==  msg.sender, "Not opponent");
+    require(gameMoveExpired(_id), "Not yet expired");
+
+    game.winner = msg.sender;
+
+    //  finish game
+    game.winner = msg.sender;
+    gamesWithPendingPrizeWithdrawal[msg.sender].push(_id);
+
+    raffleParticipants.push(msg.sender);
+
+    gamesCompletedAmount = gamesCompletedAmount.add(1);
+
+    delete ongoingGameAsCreator[game.creator];
+    delete ongoingGameAsOpponent[msg.sender];
+
+    emit CF_GameExpiredFinished(_id, game.creator, game.opponent, game.winner);
+  }
+
+
+  /**
     * GAMEPLAY
     */
 
@@ -242,6 +301,7 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     require(game.bet == msg.value, "Wrong bet");
 
     game.opponent = msg.sender;
+    game.prevMoveTimestamp = now;
     (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -326,8 +386,8 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     devFeePending = devFeePending.add(singleFee);
     //  TODO: add to other prize beneficiar
 
-    let transferAmount = betsTotal.mul(2).sub(singleFee.mul(5));
-    msg.sender.transfer(prizeTotal);
+    uint256 transferAmount = betsTotal.mul(2).sub(singleFee.mul(5));
+    msg.sender.transfer(transferAmount);
 
     //  partner transfer
     transferPartnerFee();
@@ -348,13 +408,13 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     referralFeesWithdrawn[msg.sender] = referralFeesWithdrawn[msg.sender].add(fee);
 
     //  4% fees
-    uint256 singleFee = prize.mul(FEE_PERCENT).div(100);
+    uint256 singleFee = fee.mul(FEE_PERCENT).div(100);
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee);
     //  TODO: add to other prize beneficiar
 
-    let transferAmount = fee.sub(singleFee.mul(4));
+    uint256 transferAmount = fee.sub(singleFee.mul(4));
     msg.sender.transfer(transferAmount);
 
     emit CF_GameReferralWithdrawn(msg.sender);
@@ -381,7 +441,7 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     devFeePending = devFeePending.add(singleFee);
     //  TODO: add to other prize beneficiar
 
-    let transferAmount = prize.sub(singleFee.mul(4));
+    uint256 transferAmount = prize.sub(singleFee.mul(4));
     msg.sender.transfer(transferAmount);
 
     //  partner transfer
@@ -487,7 +547,7 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     * 
     */
   function getGamesWithPendingPrizeWithdrawalForAddress(address _address) external view returns (uint256[] memory ids) {
-    ids = gamesWithPendingPrizeWithdrawalForAddress[_address];
+    ids = gamesWithPendingPrizeWithdrawal[_address];
   }
 
   /**
@@ -523,6 +583,6 @@ contract CoinFlipGame is Pausable, IGamePausable, Partnership, GameRaffle {
     */
   function getParticipatedGameIdxsForPlayer(address _address) external view returns (uint256[] memory) {
     require(_address != address(0), "Cannt be 0x0");
-    return participatedGameIdxsForPlayer[_address];
+    return playedGames[_address];
   }
 }
