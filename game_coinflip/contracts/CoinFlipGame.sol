@@ -417,7 +417,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     uint256 transferAmount = fee.sub(singleFee.mul(4));
     msg.sender.transfer(transferAmount);
 
-    emit CF_GameReferralWithdrawn(msg.sender);
+    emit CF_GameReferralWithdrawn(msg.sender);   
   }
 
   /**
