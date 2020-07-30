@@ -35,7 +35,7 @@ contract Partnership is Ownable {
    * TESTED
    */
   function updatePartner(address payable _partnerAddress) public onlyOwner {
-    require(_partnerAddress != address(0), "Cannt be 0x0");
+    require(_partnerAddress != address(0), "Wrong partner");
     partner = _partnerAddress;
   }
 

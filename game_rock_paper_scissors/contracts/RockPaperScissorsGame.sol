@@ -13,6 +13,12 @@ import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
  * @notice CoinFlipGame can be created by creator and run by joined player. Creator is not required to be online or perform any actions for game to be played.
  */
 
+ /**
+  * TODO:
+  * whenNotPaused - to all funcs
+  * 
+  */
+
 contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IGamePausable, GameRaffle {
   
   enum GameState {WaitingForOpponent, Started, WinnerPresent, Draw, Quitted, Expired}
