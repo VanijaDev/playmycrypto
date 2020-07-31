@@ -35,6 +35,14 @@ contract("Create game", (accounts) => {
       from: OWNER,
       value: ether("1", ether)
     });
+
+    // // FIRST GAME SHOULD BE CREATED BY OWNER
+    // const OWNER_COIN_SIDE = 1;
+    // const OWNER_SEED = "Hello World owner";
+    // let ownerHash = web3.utils.soliditySha3(OWNER_COIN_SIDE, web3.utils.soliditySha3(OWNER_SEED));
+    // console.log("Hello World creator:              ", web3.utils.soliditySha3("Hello World creator"));
+    // console.log("0 + hashed(Hello World creator):  ", web3.utils.soliditySha3(0, web3.utils.soliditySha3("Hello World creator")));
+    // console.log("1 + hashed(Hello World creator):  ", web3.utils.soliditySha3(1, web3.utils.soliditySha3("Hello World creator")));    
   });
 
   describe("Create game", () => {
