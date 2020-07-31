@@ -125,7 +125,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
     * @dev Destroy the contract.
-    * 
+    * TESTED
     */
   function kill() external onlyOwner {
     address payable addr = msg.sender;
