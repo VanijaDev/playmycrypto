@@ -36,24 +36,6 @@ contract("Lifecycle", (accounts) => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
 
-    // // FIRST GAME SHOULD BE CREATED BY OWNER
-    // await game.createGame(1, CREATOR_REFERRAL, {
-    //   from: OWNER,
-    //   value: ether("1", ether)
-    // });
-
-    // // 1 - create
-    // await game.createGame(1, CREATOR_REFERRAL, {
-    //   from: CREATOR,
-    //   value: ether("1", ether)
-    // });
-
-    // //  2 - join
-    // await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-    //   from: OPPONENT,
-    //   value: ether("1", ether)
-    // });
-
     await time.increase(1);
   });
 

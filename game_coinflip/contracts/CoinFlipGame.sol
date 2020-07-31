@@ -134,11 +134,11 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
    * Pausable.sol
-   * 
+   * TESTED
    */
   /**
    * @dev Trigger stopped state.
-   * 
+   * TESTED
    */
   function pause() external onlyOwner {
     Pausable._pause();
@@ -146,24 +146,15 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
    * IGamePausable
-   * 
+   * TESTING
    */
-  /**
-   * @dev Check if game is paused.
-   * @param _id Game index.
-   * @return Is game paused.
-   * 
-   */
-  function gameOnPause(uint256 _id) public view override returns(bool) { 
-    return games[_id].paused;
-  }
 
   /**
    * @dev Pauses game.
    * @param _id Game index.
-   * 
+   * TESTED
    */
-  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) external override onlyWaitingForOpponent(_id) {
+  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
     games[_id].paused = true;
 
     if (isTopGame(_id)) {
@@ -172,10 +163,11 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
     emit CF_GamePaused(_id);
   }
+  
   /** 
    * @dev Unpause game.
    * @param _id Game index.
-   * 
+   * TESTED
    */
   function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
     require(msg.value == minBet, "Wrong fee");
@@ -186,6 +178,16 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
     emit CF_GameUnpaused(_id, games[_id].creator);
+  }
+
+  /**
+   * @dev Check if game is paused.
+   * @param _id Game index.
+   * @return Is game paused.
+   * TESTED
+   */
+  function gameOnPause(uint256 _id) public view override returns(bool) { 
+    return games[_id].paused;
   }
 
   /**
