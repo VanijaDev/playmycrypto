@@ -57,7 +57,7 @@ contract("Lifecycle", (accounts) => {
     await time.increase(1);
   });
 
-  describe("Constructor", () => {
+  describe.only("Constructor", () => {
     it("should fail if partner == 0x0", async () => {
       await expectRevert(Game.new("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
     });

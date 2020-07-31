@@ -2,6 +2,7 @@
 pragma solidity ^0.6.0;
 
 import "./Partnership.sol";
+import "./AcquiredFeeBeneficiar.sol";
 import "./GameRaffle.sol";
 import "./IGamePausable.sol";
 import "./IExpiryMoveDuration.sol";
@@ -11,26 +12,17 @@ import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
  * @notice IMPORTANT: owner should create first game.
  * @notice CoinFlipGame can be created by creator and run by joined playr. Creator is not required to be online or perform any actions for game to be played.
  *
- *  Prize distribution:
+ *  Prize distribution will be performed on game prize, referral fee, raffle prize withdrawals with percentages:
  *    95% - winner
  *     1% - winner referral
  *     1% - raffle
  *     1% - partner project
- *     1% - other prize beneficiar - create separate contract
+ *     1% - fee beneficiar
  *     1% - dev
  */
 
 
-/**
- * TODO:
- *    Prize distribution:
- *    playGame - check if side is 0 / 1 only
- *    Pausable games
- *    Expiration games
- *    Participate as creator & opponent
- */
-
-contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpiryMoveDuration {
+contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffle, IGamePausable, IExpiryMoveDuration {
   struct Game {
     bool paused;
     uint8 creatorCoinSide;
@@ -96,11 +88,6 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     _;
   }
 
-  modifier onlyCreator(uint256 _id) {
-    require(games[_id].creator == msg.sender, "Not creator");
-    _;
-  }
-
   modifier onlyCorrectReferral(address _referral) {
     require(_referral != msg.sender, "Wrong referral");
     _;
@@ -129,10 +116,11 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
   /**
     * @dev Contract constructor.
     * @param _partner Address for partner.
-    * 
+    * TESTING
     */
   constructor(address payable _partner) public Partnership(_partner, 1 ether) {
     updatePartner(_partner);
+    feeBeneficiar = msg.sender;
   }
 
   /**
@@ -386,7 +374,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee);
-    //  TODO: add to other prize beneficiar
+    addBeneficiarFee(singleFee);
 
     uint256 transferAmount = betsTotal.mul(2).sub(singleFee.mul(5));
     msg.sender.transfer(transferAmount);
@@ -414,7 +402,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee);
-    //  TODO: add to other prize beneficiar
+    addBeneficiarFee(singleFee);
 
     uint256 transferAmount = fee.sub(singleFee.mul(4));
     msg.sender.transfer(transferAmount);
@@ -441,7 +429,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee);
-    //  TODO: add to other prize beneficiar
+    addBeneficiarFee(singleFee);
 
     uint256 transferAmount = prize.sub(singleFee.mul(4));
     msg.sender.transfer(transferAmount);
@@ -474,7 +462,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     * @param _id Game idx to be added.
     * 
     */
-  function addTopGame(uint256 _id) external payable onlyCreator(_id) onlyWaitingForOpponent(_id) {
+  function addTopGame(uint256 _id) external payable onlyGameCreator(_id) onlyWaitingForOpponent(_id) {
     require(msg.value == minBet, "Wrong fee");
     require(topGames[0] != _id, "Top in TopGames");
 
@@ -557,7 +545,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     * @param _id Game index.
     * 
     */
-  function increaseBetForGameBy(uint256 _id) external payable whenNotPaused onlyCreator(_id) onlyWaitingForOpponent(_id) {
+  function increaseBetForGameBy(uint256 _id) external payable whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) {
     require(msg.value > 0, "increase must be > 0");
 
     addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
