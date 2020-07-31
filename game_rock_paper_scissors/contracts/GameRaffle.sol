@@ -29,7 +29,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Gets raffle participants.
    * @return Participants count.
-   * TESTED
+   * 
    */
   function getRaffleParticipants() external view returns (address[] memory) {
     return raffleParticipants;
@@ -38,7 +38,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Updates raffle minimum participants Count to activate.
    * @param _amount Amount to be set.
-   * TESTED
+   * 
    */
   function updateRaffleActivationParticipantsCount(uint256 _amount) external onlyOwner {
     require(_amount > 0, "Should be > 0");
@@ -48,7 +48,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Gets past raffle results count.
    * @return Results count.
-   * TESTED
+   * 
    */
   function getRaffleResultCount() external view returns (uint256) {
     return raffleResults.length;
@@ -57,7 +57,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Checks if raffle is activated.
    * @return Wether raffle is activated.
-   * TESTED
+   * 
    */
   function raffleActivated() public view returns(bool) {
     return (raffleParticipants.length >= raffleActivationParticipantsAmount && ongoinRafflePrize > 0);
@@ -65,7 +65,7 @@ abstract contract GameRaffle is Ownable {
 
   /**
    * @dev Runs the raffle.
-   * TESTED
+   * 
    */
   function runRaffle() external {
     require(raffleActivated(), "Raffle != activated");
@@ -83,7 +83,7 @@ abstract contract GameRaffle is Ownable {
 
   /**
    * @dev Generates random number
-   * TESTED
+   * 
    */
   function rand() public view returns(uint256) {
     require(raffleParticipants.length > 0, "No participants");

@@ -135,7 +135,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Contract constructor.
    * @param _partner Address for partner.
-   * TESTED
+   * 
    */
   constructor(address payable _partner) Partnership (_partner, 1 ether) public {
     updatePartner(_partner);
@@ -143,7 +143,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * @dev Destroys the contract.
-   * TESTED
+   * 
    */
   function kill() external onlyOwner {
     address payable addr = msg.sender;
@@ -152,13 +152,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * IExpiryMoveDuration
-   * TESTED
+   * 
    */
 
   /**
    * @dev Updates game move duration.
    * @param _duration Game duration.
-   * TESTED
+   * 
    */
   function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
     require(_duration > 0, "Should be > 0");
@@ -169,7 +169,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Checks if game move expired.
    * @param _id Game id.
    * @return Whether game move is expired.
-   * TESTED
+   * 
    */
   function gameMoveExpired(uint256 _id) public view override returns(bool) {
     if(games[_id].prevMoveTimestamp != 0) {
@@ -180,7 +180,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Finishes prize for expired game.
    * @param _id Game id.
-   * TESTED
+   * 
    */
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
@@ -198,11 +198,11 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * Pausable.sol
-   * TESTED
+   * 
    */
   /**
    * @dev Triggers stopped state.
-   * TESTED
+   * 
    */
   function pause() external onlyOwner {
     Pausable._pause();
@@ -210,13 +210,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * IGamePausable
-   * TESTED
+   * 
    */
   /**
    * @dev Checks if game is paused.
    * @param _id Game index.
    * @return Is game paused.
-   * TESTED
+   * 
    */
   function gameOnPause(uint256 _id) public view override returns(bool) { 
     return games[_id].paused;
@@ -225,7 +225,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Pauses game.
    * @param _id Game index.
-   * TESTED
+   * 
    */
   function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
     games[_id].paused = true;
@@ -239,7 +239,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /** 
    * @dev Unpauses game.
    * @param _id Game index.
-   * TESTED
+   * 
    */
   function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
     require(msg.value == minBet, "Wrong fee");
@@ -261,7 +261,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Creates new game.
    * @param _referral Address for referral. 
    * @param _moveHash Move hash (moveId, moveSeed).
-   * TESTED
+   * 
    */
   function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlySingleGamePlaying onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");
@@ -291,7 +291,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game id.
    * @param _referral Address for referral.
    * @param _moveMark Move mark id.
-   * TESTED
+   * 
    */
   function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlySingleGamePlaying onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
@@ -327,7 +327,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _prevMoveMark Move mark used in previous move hash.
    * @param _prevSeedHashFromHash Seed string hash used in previous move hash.
    * @param _nextMoveHash Next move hash.
-   * TESTED
+   * 
    */
   function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
     Game storage game = games[_id];
@@ -363,7 +363,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Opponent makes move.
    * @param _id Game id.
    * @param _moveMark Move mark.
-   * TESTED
+   * 
    */
   function opponentNextMove(uint256 _id, uint8 _moveMark) external onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
@@ -391,7 +391,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Withdraws prize for multiple games where user is winner.
    * @param _maxLoop Max loop.
-   * TESTED
+   * 
    */
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
@@ -450,7 +450,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * @dev Withdraws referral fees.
-   * TESTED
+   * 
    */
   function withdrawReferralFees() external {
     uint256 feeTmp = referralFeesPending[msg.sender];
@@ -465,7 +465,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   /**
    * @dev Withdraws developer fees.
-   * TESTED
+   * 
    */
   function withdrawDevFee() external onlyOwner {
     require(devFeePending > 0, "No dev fee");
@@ -479,7 +479,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * GameRaffle
    * @dev Withdraw prizes for all won raffles.
-   * TESTED
+   * 
    */
    
   function withdrawRafflePrizes() external override {
@@ -512,7 +512,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Quits the game.
    * @param _id Game id.
-   * TESTED
+   * 
    */
   function quitGame(uint256 _id) external {
     Game storage game = games[_id];
@@ -544,7 +544,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Adds game idx to the beginning of topGames.
    * @param _id Game idx to be added.
-   * TESTED
+   * 
    */  
   function addTopGame(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) onlyGameNotPaused(_id) external payable {
     require(msg.value == minBet, "Wrong fee");
@@ -568,7 +568,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Removes game idx from topGames.
    * @param _id Game idx to be removed.
-   * TESTED
+   * 
    */
   function removeTopGame(uint256 _id) public {
     uint256[5] memory tmpArr;
@@ -593,7 +593,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Gets top games.
    * @return Returns list of top games.
-   * TESTED
+   * 
    */
   function getTopGames() external view returns (uint256[5] memory) {
     return topGames;
@@ -603,7 +603,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Checks if game id is in top games.
    * @param _id Game id to check.
    * @return Whether game id is in top games.
-   * TESTED
+   * 
    */
   function isTopGame(uint256 _id) public view returns (bool) {
     for (uint8 i = 0; i < 5; i++) {
@@ -617,7 +617,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Updates bet for game.
    * @param _id Game index.
-   * TESTED
+   * 
    */
   function increaseBetForGameBy(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) external payable {
     require(msg.value > 0, "increase must be > 0");
@@ -632,7 +632,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Updates minimum bet value. Can be 0 if no restrictions.
    * @param _minBet Min bet value.
-   * TESTED
+   * 
    */
   function updateMinBet(uint256 _minBet) external onlyOwner {
     require(_minBet > 0, "Wrong bet");
@@ -644,7 +644,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game index.
    * @param _row Game moves row.
    * @return Game moves.
-   * TESTED
+   * 
    */
   function showRowMoves(uint256 _id, uint8 _row) external view returns (uint8, uint8) {
     return (games[_id].movesCreator[_row], games[_id].movesOpponent[_row]);
@@ -654,7 +654,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Gets creator's hashes for game.
    * @param _id Game id.
    * @return Array of hash values.
-   * TESTED
+   * 
    */
   function getCreatorMoveHashesForGame(uint256 _id) external view returns(bytes32[3] memory) {
     return games[_id].creatorMoveHashes;
@@ -664,7 +664,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Game withdrawal information.
    * @param _id Game index.
    * @return prizeWithdrawn, drawWithdrawnCreator, drawWithdrawnOpponent.
-   * TESTED
+   * 
    */
   function gameWithdrawalInfo(uint256 _id) external view returns (bool, bool, bool) {
     return (games[_id].prizeWithdrawn, games[_id].drawWithdrawn[0], games[_id].drawWithdrawn[1]);
@@ -674,7 +674,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Gets game indexes where player played. Created and joined
    * @param _address Player address.
    * @return List of indexes.
-   * TESTED
+   * 
    */
   function getPlayedGameIdxsForPlayer(address _address) external view returns (uint256[] memory) {
     require(_address != address(0), "Wrong address");
@@ -686,7 +686,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Calculates prize for game for msg.sender.
    * @param _id Game id.
    * @return _prize Prize amount. Fees are included.
-   * TESTED
+   * 
    */
   function prizeForGame(uint256 _id) public view returns (uint256 _prize) {
     if (games[_id].winner == msg.sender) {
@@ -703,7 +703,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Gets gamesWithPendingPrizeWithdrawalForAddress.
    * @param _address Player address.
    * @return ids Game id array.
-   * TESTED
+   * 
    */
   function getGamesWithPendingPrizeWithdrawalForAddress(address _address) external view returns(uint256[] memory ids) {
     ids = gamesWithPendingPrizeWithdrawalForAddress[_address];
@@ -717,7 +717,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @dev Finds player address with more wins.
    * @param _id Game id.
    * @return playerAddr Winner address with more wins.
-   * TESTED
+   * 
    */
   function playerWithMoreWins(uint256 _id) private view returns (address payable playerAddr) {
     //  0 - None
@@ -764,7 +764,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Adds raffle participants & delete all ongoing statuses for players.
    * @param _game Game instance.
-   * TESTED
+   * 
    */
   function finishGame(Game storage _game) private {
     if (_game.state == GameState.Expired || _game.state == GameState.Quitted) {

@@ -131,7 +131,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    /**
     * @dev Contract constructor.
     * @param _partner Address for partner.
-    * TESTED
+    * 
     */
    constructor(address payable _partner) public {
      setPartner(_partner);
@@ -140,7 +140,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Gets contract balance.
    * @return Contract balance.
-   * TESTED
+   * 
    */
   function balance() public view returns(uint256) {
     return address(this).balance;
@@ -148,7 +148,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
   * @dev Destroyes the contract.
-  * TESTED
+  * 
   */
   function kill() public onlyOwner {
     address payable addr = msg.sender;
@@ -157,7 +157,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * IExpiryMoveDuration
-   * TESTED
+   * 
    */
 
    /**
@@ -165,7 +165,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    * @param _duration Game duration.
    * @return Is game expired.
    * @notice Add onlyOwner modifier.
-   * TESTED
+   * 
    */
   function updateGameMoveDuration(uint16 _duration) public onlyOwner {
     require(_duration > 0, "Should be > 0");
@@ -176,7 +176,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   * @dev Checks if game move expired.
   * @param _id Game id.
   * @return Whether game move is expired.
-  * TESTED
+  * 
   */
   function gameMoveExpired(uint256 _id) public view returns(bool) {
     if(games[_id].prevMoveTimestamp != 0) {
@@ -187,7 +187,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
   * @dev Claims prize for game with expired move.
   * @param _id Game id.
-  * TESTED
+  * 
   */
   function claimExpiredGamePrize(uint256 _id) public {
     require(games[_id].creator != address(0), "No game with such id");
@@ -206,14 +206,14 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * IGamePausable
-   * TESTED
+   * 
    */
 
    /**
    * @dev Checks if game is paused.
    * @param _id Game index.
    * @return Is game paused.
-   * TESTED
+   * 
    */
   function gameOnPause(uint256 _id) public view returns(bool) { 
     return games[_id].paused;
@@ -222,7 +222,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Pauses game.
    * @param _id Game index.
-   * TESTED
+   * 
    */
   function pauseGame(uint256 _id) onlyCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) public {
     games[_id].paused = true;
@@ -233,7 +233,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Unpauses game.
    * @param _id Game index.
-   * TESTED
+   * 
    */
   function unpauseGame(uint256 _id) onlyCreator(_id) onlyGamePaused(_id) public {
     games[_id].paused = false;
@@ -244,12 +244,12 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * GAMEPLAY
-   * TESTED
+   * 
    */
   /**
    * @dev Creates new game.
    * @param _referral Address for referral. 
-   * TESTED
+   * 
    */
   function createGame(address _referral) whenNotPaused onlySingleGameParticipating onlyCorrectBet onlyCorrectReferral(_referral) public payable {
     games[gamesCreatedAmount].id = gamesCreatedAmount;
@@ -272,7 +272,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   * @dev Joins game.
   * @param _id Game id.
   * @param _referral Address for referral.
-  * TESTED
+  * 
   */
   function joinGame(uint256 _id, address _referral) public payable onlySingleGameParticipating onlyNotCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) {
     Game storage game = games[_id];
@@ -298,7 +298,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   * @param _id Game id.
   * @param _x Cell x coord.
   * @param _y Cell y coord.
-  * TESTED
+  * 
   */
   function makeMove(uint256 _id, uint8 _x, uint8 _y) public onlyStarted(_id) onlyNotExpiredGame(_id) onlyNextMover(_id) onlyValidCell(_id, _x, _y) {
     Game storage game = games[_id];
@@ -323,13 +323,13 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * WITHDRAW
-   * TESTED
+   * 
    */
 
   /**
    * @dev Withdraws prize for won game.
    * @param _id Game id.
-   * TESTED
+   * 
    */
   function withdrawGamePrize(uint256 _id) public {
     Game memory game = games[_id];
@@ -346,7 +346,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * @dev Withdraws referral fees.
-   * TESTED
+   * 
    */
   function withdrawReferralFees() public {
     require(referralFees[msg.sender] > 0, "No referral fee");
@@ -360,7 +360,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * @dev Withdraws developer fees.
-   * TESTED
+   * 
    */
   function withdrawDevFee() public onlyOwner {
     require(devFee > 0, "No dev fee");
@@ -374,13 +374,13 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * OTHER
-   * TESTED
+   * 
    */
   
   /**
    * @dev Quits the game.
    * @param _id Game id.
-   * TESTED
+   * 
    */
   function quitGame(uint256 _id) public {
     Game storage game = games[_id];
@@ -401,7 +401,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Adds game idx to the beginning of topGames.
    * @param _id Game idx to be added.
-   * TESTED
+   * 
    */
   function addTopGame(uint256 _id) onlyCreator(_id) onlyGameNotPaused(_id) onlyNotExpiredGame(_id) public payable {
     require(msg.value == UPDATE_FEE, "Wrong fee");
@@ -419,7 +419,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Gets top games.
    * @return Returns list of top games.
-   * TESTED
+   * 
    */
   function getTopGames() public view returns (uint256[5] memory) {
     return topGames;
@@ -427,7 +427,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
 
   /**
    * @dev Updates minimum bet value. Can be 0 if no restrictions.
-   * TESTED
+   * 
    */
   function updateMinBet(uint256 _minBet) public onlyOwner {
     require(_minBet > 0, "Wrong bet");
@@ -437,7 +437,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Updates partner's address.
    * @param _partner Address for partner.
-   * TESTED
+   * 
    */
   function updatePartner(address payable _partner) public onlyOwner {
     setPartner(_partner);
@@ -447,7 +447,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    * @dev Updates bet for game.
    * @param _id Game index.
    * @param _bet Bet to be set.
-   * TESTED
+   * 
    */
   function updateBetForGame(uint256 _id, uint256 _bet) onlyCreator(_id) public {
     require(games[_id].opponent == address(0), "Game is joined");
@@ -466,7 +466,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    * column
    * @param _id Game index.
    * @return Game field columns with marks.
-   * TESTED
+   * 
    */
   function showFieldColumns(uint256 _id) public view returns (MoveMark[3] memory, MoveMark[3] memory, MoveMark[3] memory) {
     return (games[_id].field[0], games[_id].field[1], games[_id].field[2]);
@@ -476,7 +476,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    * @dev Gave withdrawal information.
    * @param _id Game index.
    * @return PrizeWithdrawn, drawWithdrawnCreator, drawWithdrawnOpponent.
-   * TESTED
+   * 
    */
    function gameWithdrawalInfo(uint256 _id) public view returns (bool, bool, bool) {
        return (games[_id].prizeWithdrawn, games[_id].drawWithdrawn[0], games[_id].drawWithdrawn[1]);
@@ -486,7 +486,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
    * @dev Gets game indexes where player participated.
    * @param _address Player address.
    * @return List of indexes.
-   * TESTED
+   * 
    */
   function getParticipatedGameIdxsForPlayer(address _address) public view returns (uint256[] memory) {
     require(_address != address(0), "Cannt be 0x0");
@@ -501,7 +501,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Sets partner's address
    * @param _partner Address for partner.
-   * TESTED
+   * 
    */
   function setPartner(address payable _partner) private {
     require(_partner != address(0), "Cannt be 0x0");
@@ -511,7 +511,7 @@ contract TicTacToeGame is Pausable, IExpiryMoveDuration, IGamePausable, GameRaff
   /**
    * @dev Checks if winner is present.
    * @param _id Game id.
-   * TESTED
+   * 
    */
   function checkForWinner(uint256 _id) private {
     Game storage game = games[_id];

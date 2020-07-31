@@ -116,7 +116,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Contract constructor.
     * @param _partner Address for partner.
-    * TESTING
+    * TESTED
     */
   constructor(address payable _partner) public Partnership(_partner, 1 ether) {
     updatePartner(_partner);

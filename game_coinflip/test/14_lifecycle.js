@@ -36,34 +36,34 @@ contract("Lifecycle", (accounts) => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
 
-    // FIRST GAME SHOULD BE CREATED BY OWNER
-    await game.createGame(1, CREATOR_REFERRAL, {
-      from: OWNER,
-      value: ether("1", ether)
-    });
+    // // FIRST GAME SHOULD BE CREATED BY OWNER
+    // await game.createGame(1, CREATOR_REFERRAL, {
+    //   from: OWNER,
+    //   value: ether("1", ether)
+    // });
 
-    // 1 - create
-    await game.createGame(1, CREATOR_REFERRAL, {
-      from: CREATOR,
-      value: ether("1", ether)
-    });
+    // // 1 - create
+    // await game.createGame(1, CREATOR_REFERRAL, {
+    //   from: CREATOR,
+    //   value: ether("1", ether)
+    // });
 
-    //  2 - join
-    await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-      from: OPPONENT,
-      value: ether("1", ether)
-    });
+    // //  2 - join
+    // await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+    //   from: OPPONENT,
+    //   value: ether("1", ether)
+    // });
 
     await time.increase(1);
   });
 
-  describe.only("Constructor", () => {
+  describe("Constructor", () => {
     it("should fail if partner == 0x0", async () => {
-      await expectRevert(Game.new("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
+      await expectRevert(Game.new("0x0000000000000000000000000000000000000000"), "Wrong partner");
     });
 
     it("should set parner", async () => {
-      assert.equal(await game.partner.call(), PARTNER, "wrong partner");
+      assert.equal(await game.partner.call(), PARTNER, "Wrong partner");
     });
   });
 

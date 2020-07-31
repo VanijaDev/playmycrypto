@@ -19,7 +19,7 @@ contract GameRaffle is Ownable {
 
   /**
    * @dev Gets raffle participants
-   * TESTED
+   * 
    */
   function getRaffleParticipants() public view returns (address[] memory) {
     return raffleParticipants;
@@ -28,7 +28,7 @@ contract GameRaffle is Ownable {
   /**
    * @dev Updates raffle minimum participants amount to activate.
    * @param _amount Amount to be set.
-   * TESTED
+   * 
    */
   function updateRaffleActivationParticipantsAmount(uint8 _amount) public onlyOwner {
     require(_amount > 0, "Should be > 0");
@@ -38,7 +38,7 @@ contract GameRaffle is Ownable {
   /**
    * @dev Checks if raffle is activated.
    * @return Wether raffle is activated.
-   * TESTED
+   * 
    */
   function raffleActivated() public view returns(bool) {
     return raffleParticipants.length >= raffleActivationParticipantsAmount;
@@ -46,7 +46,7 @@ contract GameRaffle is Ownable {
 
   /**
    * @dev Runs the raffle.
-   * TESTED
+   * 
    */
   function runRaffle() public {
     require(raffleActivated(), "Raffle != activated");
@@ -63,7 +63,7 @@ contract GameRaffle is Ownable {
 
   /**
    * @dev Generates random number
-   * TESTED
+   * 
    */
   function rand() public view returns(uint256) {
     return uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, ongoinRafflePrize, raffleParticipants.length))) % raffleParticipants.length;
@@ -71,7 +71,7 @@ contract GameRaffle is Ownable {
 
   /**
    * @dev Withdraw raffle prize.
-   * TESTED
+   * 
    */
   function withdrawRafflePrize() public {
     require(rafflePrizeTotalForAddress[msg.sender] > 0, "No prize");
