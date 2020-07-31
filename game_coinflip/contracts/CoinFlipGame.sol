@@ -37,7 +37,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     uint8 randCoinSide;
     uint256 id;
     uint256 bet;
-    uint256 prevMoveTimestamp;
+    uint256 opponentJoinedAt;
     bytes32 creatorGuessHash;
     address payable creator;
     address payable opponent;
@@ -222,8 +222,8 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
    * 
    */
   function gameMoveExpired(uint256 _id) public view override returns(bool) {
-    if (games[_id].prevMoveTimestamp != 0) {
-      return games[_id].prevMoveTimestamp.add(gameMoveDuration) < now; 
+    if (games[_id].opponentJoinedAt != 0) {
+      return games[_id].opponentJoinedAt.add(gameMoveDuration) < now; 
     }
   }
 
@@ -262,7 +262,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
 
   /**
     * @dev Create new game.
-    * @param _guessHash Hash of guess.
+    * @param _guessHash Hash of guess. Coin side should be 0 / 1
     * @param _referral Address for referral.
     * 
     */
@@ -301,7 +301,7 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
     require(game.bet == msg.value, "Wrong bet");
 
     game.opponent = msg.sender;
-    game.prevMoveTimestamp = now;
+    game.opponentJoinedAt = now;
     (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -332,6 +332,8 @@ contract CoinFlipGame is Pausable, Partnership, GameRaffle, IGamePausable, IExpi
 
     uint8 coinSide = uint8(uint256(keccak256(abi.encodePacked(now, totalUsedInGame, _coinSide))) % 2);
     game.winner = (coinSide == _coinSide) ? game.creator : game.opponent;
+    game.creatorCoinSide = _coinSide;
+    game.randCoinSide = coinSide;
     gamesWithPendingPrizeWithdrawal[game.winner].push(_id);
 
     raffleParticipants.push(game.creator);
