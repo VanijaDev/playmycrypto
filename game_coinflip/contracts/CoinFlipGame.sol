@@ -192,7 +192,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
    * IExpiryMoveDuration
-   * 
+   * TESTED
    */
 
   /**
@@ -220,16 +220,15 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
    * @dev Finish prize for expired game.
    * @param _id Game id.
-   * 
+   * TESTED
    */
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
 
     require(game.creator != address(0), "No game with such id");
     require(game.opponent ==  msg.sender, "Not opponent");
+    require(game.winner ==  address(0), "Has winner");
     require(gameMoveExpired(_id), "Not yet expired");
-
-    game.winner = msg.sender;
 
     //  finish game
     game.winner = msg.sender;
