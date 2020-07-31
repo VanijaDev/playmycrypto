@@ -38,7 +38,7 @@ contract("IGamePausable", (accounts) => {
     await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
-    });   
+    });
 
     //  1
     await game.createGame(ownerHash, CREATOR_REFERRAL, {

@@ -198,11 +198,11 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
    * @dev Updates game move duration.
    * @param _duration Game duration.
-   * 
+   * TESTED
    */
   function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
     require(_duration > 0, "Should be > 0");
-    gameMoveDuration = _duration;    
+    gameMoveDuration = _duration;
   }
 
   /**
