@@ -209,7 +209,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
    * @dev Check if game move expired.
    * @param _id Game id.
    * @return Whether game move is expired.
-   * 
+   * TESTED
    */
   function gameMoveExpired(uint256 _id) public view override returns(bool) {
     if (games[_id].opponentJoinedAt != 0) {

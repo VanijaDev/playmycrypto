@@ -76,19 +76,19 @@ contract("IExpiryMoveDuration", (accounts) => {
     });
 
     describe("gameMoveExpired", () => {
-        it("should return false if no prevMoveTimestamp", async () => {
-            assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
-        });
+      it("should return false if no prevMoveTimestamp", async () => {
+          assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
+      });
 
-        it("should return false ifnot yet expired", async () => {
-            await time.increase(time.duration.minutes(1));
-            assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
-        });
+      it("should return false ifnot yet expired", async () => {
+          await time.increase(time.duration.minutes(1));
+          assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
+      });
 
-        it("should return true if move is already expired", async () => {
-            await time.increase(time.duration.minutes(6));
-            assert.isTrue(await game.gameMoveExpired.call(1), "should be true");
-        });
+      it("should return true if move is already expired", async () => {
+          await time.increase(time.duration.hours(13));
+          assert.isTrue(await game.gameMoveExpired.call(1), "should be true");
+      });
     });
 
     describe("finishExpiredGame", () => {
