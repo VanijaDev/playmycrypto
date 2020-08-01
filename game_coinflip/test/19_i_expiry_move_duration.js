@@ -91,7 +91,7 @@ contract("IExpiryMoveDuration", (accounts) => {
     });
   });
 
-  describe.only("finishExpiredGame", () => {
+  describe("finishExpiredGame", () => {
     it("should fail if no game with provided id", async () => {
         await expectRevert(game.finishExpiredGame(22), "No game with such id");
     });

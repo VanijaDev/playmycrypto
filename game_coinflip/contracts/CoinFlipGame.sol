@@ -254,7 +254,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Create new game.
     * @param _guessHash Hash of guess. Coin side should be 0 / 1
     * @param _referral Address for referral.
-    * TESTING
+    * TESTED
     */
   function createGame(bytes32 _guessHash, address _referral) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {
     require(_guessHash[0] != 0, "Empty hash");
@@ -463,7 +463,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
    * @param _id Game id.
    * 
    */
-  function quitGame(uint256 _id) external override {
+  function quitGame(uint256 _id) external {
     Game storage game = games[_id];
 
     require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
@@ -605,7 +605,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @return List of indexes.
     * 
     */
-  function getParticipatedGameIdxsForPlayer(address _address) external view returns (uint256[] memory) {
+  function getPlayedGamesForPlayer(address _address) external view returns (uint256[] memory) {
     require(_address != address(0), "Cannt be 0x0");
     return playedGames[_address];
   }
