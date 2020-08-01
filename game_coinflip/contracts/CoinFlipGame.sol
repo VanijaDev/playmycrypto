@@ -68,6 +68,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   event CF_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
   event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
   event CF_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
+  event CF_GameQuittedFinished(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
   event CF_GamePrizesWithdrawn(address indexed player);
   event CF_GameAddedToTop(uint256 indexed id, address indexed creator);
   event CF_GameReferralWithdrawn(address indexed referral);
@@ -246,18 +247,17 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
 
   /**
-    * GAMEPLAY
-    */
+   * GAMEPLAY
+   */
 
   /**
     * @dev Create new game.
     * @param _guessHash Hash of guess. Coin side should be 0 / 1
     * @param _referral Address for referral.
-    * 
+    * TESTING
     */
   function createGame(bytes32 _guessHash, address _referral) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {
     require(_guessHash[0] != 0, "Empty hash");
-    require(_referral != msg.sender, "Wrong referral");
 
     games[gamesCreatedAmount].id = gamesCreatedAmount;
     games[gamesCreatedAmount].creator = msg.sender;
@@ -457,6 +457,39 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * OTHER
     */
+
+    /**
+   * @dev Quit game.
+   * @param _id Game id.
+   * 
+   */
+  function quitGame(uint256 _id) external override {
+    Game storage game = games[_id];
+
+    require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
+    require(game.winner ==  address(0), "Has winner");
+    require(!gameMoveExpired(_id), "Already expired");
+
+    //  quit game
+    if (game.creator == msg.sender && game.opponent != address(0)) {
+      game.winner = game.opponent;
+      raffleParticipants.push(game.winner);
+    } else if (game.opponent == msg.sender) {
+      game.winner = game.creator;
+      raffleParticipants.push(game.winner);
+    } else {
+      address payable ownerAddr = address(uint160(owner()));
+      game.winner = ownerAddr;
+    }
+
+    gamesWithPendingPrizeWithdrawal[game.winner].push(_id);
+    gamesCompletedAmount = gamesCompletedAmount.add(1);
+
+    delete ongoingGameAsCreator[game.creator];
+    delete ongoingGameAsOpponent[msg.sender];
+
+    emit CF_GameQuittedFinished(_id, game.creator, game.opponent, game.winner);
+  }
 
   /**
     * @dev Add game idx to the beginning of topGames.
