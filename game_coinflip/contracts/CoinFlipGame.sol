@@ -280,12 +280,14 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Join game.
     * @param _id Game id to join.
     * @param _referral Address for referral.
-    * 
+    * TESTED
     */
   function joinGame(uint256 _id, address _referral) external payable whenNotPaused onlyAvailableToJoin onlyCorrectReferral(_referral) onlyGameNotPaused(_id) {
     Game storage game = games[_id];
 
     require(game.creator != address(0), "No game with such id");
+    require(game.creator != msg.sender, "Is creator");
+    require(game.opponent == address(0), "Game has opponent");
     require(game.winner == address(0), "Game has winner");
     require(game.bet == msg.value, "Wrong bet");
 
@@ -486,7 +488,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     gamesCompletedAmount = gamesCompletedAmount.add(1);
 
     delete ongoingGameAsCreator[game.creator];
-    delete ongoingGameAsOpponent[msg.sender];
+    delete ongoingGameAsOpponent[game.opponent];
 
     emit CF_GameQuittedFinished(_id, game.creator, game.opponent, game.winner);
   }
