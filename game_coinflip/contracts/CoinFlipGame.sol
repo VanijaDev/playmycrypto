@@ -312,7 +312,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @param _id Game id.
     * @param _coinSide Coin side in _guessHash.
     * @param _seedHash Seed str hash in _guessHash.
-    * 
+    * TESTED
     */
   function playGame(uint256 _id, uint8 _coinSide, bytes32 _seedHash) external whenNotPaused onlyGameCreator(_id) {
     Game storage game = games[_id];
@@ -321,7 +321,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(game.winner == address(0), "Game has winner");
     require(keccak256(abi.encodePacked(uint256(_coinSide), _seedHash)) == game.creatorGuessHash, "Wrong hash value");
 
-    uint8 coinSide = uint8(uint256(keccak256(abi.encodePacked(now, totalUsedInGame, _coinSide))) % 2);
+    uint8 coinSide = uint8(uint256(keccak256(abi.encodePacked(now))) % 2);
     game.winner = (coinSide == _coinSide) ? game.creator : game.opponent;
     game.creatorCoinSide = _coinSide;
     game.randCoinSide = coinSide;
