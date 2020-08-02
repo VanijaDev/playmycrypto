@@ -346,7 +346,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Withdraw prize for won game.
     * @param _maxLoop max loop.
     * @notice 95% to transfer
-    * 
+    * TESTED
     */
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
@@ -370,7 +370,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsTotal.mul(2));
+    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsTotal);
 
     //  5% fees
     uint256 singleFee = betsTotal.mul(FEE_PERCENT).div(100);
@@ -379,7 +379,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     devFeePending = devFeePending.add(singleFee);
     addBeneficiarFee(singleFee);
 
-    uint256 transferAmount = betsTotal.mul(2).sub(singleFee.mul(5));
+    uint256 transferAmount = betsTotal.sub(singleFee.mul(5));
     msg.sender.transfer(transferAmount);
 
     //  partner transfer

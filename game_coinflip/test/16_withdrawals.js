@@ -26,23 +26,25 @@ contract("Withdrawals", (accounts) => {
   const CREATOR_2_REFERRAL = accounts[11];
   const OPPONENT_2_REFERRAL = accounts[12];
 
+  let game;
+  let ownerHash;
   const CREATOR_COIN_SIDE = 1;
   const CREATOR_SEED = "Hello World";
-
-  let game;
+  const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
+    ownerHash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
 
     // FIRST GAME SHOULD BE CREATED BY OWNER
-    await game.createGame(1, CREATOR_REFERRAL, {
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
     });
 
-    // 1 - create
-    await game.createGame(1, CREATOR_REFERRAL, {
+    //  1
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: CREATOR,
       value: ether("1", ether)
     });
@@ -50,38 +52,47 @@ contract("Withdrawals", (accounts) => {
     await time.increase(1);
   });
 
-  describe("withdrawGamePrizes", () => {
+  describe.only("withdrawGamePrizes", () => {
     let addr_won_2_times;
 
     beforeEach("setup", async() => {
       // play 3 games, so there will be 2 + 1 win for players
       
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
 
       //  2
-      await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await time.increase(1);
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.2", ether)
+      });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  3
-      await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await time.increase(1);
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.3", ether)
       });
-      await game.joinAndPlayGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.3", ether)
+      });
+      await game.playGame(3, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       addr_won_2_times = ((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length > 1) ? CREATOR : OPPONENT;
@@ -95,26 +106,29 @@ contract("Withdrawals", (accounts) => {
       await expectRevert(game.withdrawGamePrizes(10, {from: OTHER}), "no pending");
     });
 
-    it("should fail if wrong _maxLoop", async() => {
+    it("should fail if _maxLoop too big", async() => {
       if ((new BN(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))).cmp(new BN("0")) == 1) {
-        await expectRevert(game.withdrawGamePrizes(10, {from: CREATOR}), "wrong _maxLoop");
+        await expectRevert(game.withdrawGamePrizes(10, {from: CREATOR}), "_maxLoop too big");
       }
 
       if ((new BN(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))).cmp(new BN("0")) == 1) {
-        await expectRevert(game.withdrawGamePrizes(10, {from: OPPONENT}), "wrong _maxLoop");
+        await expectRevert(game.withdrawGamePrizes(10, {from: OPPONENT}), "_maxLoop too big");
       }
     });
 
     it("should calculate correct referralFeesPending", async() => {
       let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      // console.log(won_2_ids);
       let won_2_referral = (addr_won_2_times == CREATOR) ? CREATOR_REFERRAL : OPPONENT_REFERRAL;
+      // console.log(won_2_referral);
 
       let referralTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         // console.log("gameId: ", gameId.toString(), "gamePrize: ", gamePrize.toString());
         referralTotal = referralTotal.add(gamePrize.div(new BN("100")));
+        // console.log("referralTotal        : ", referralTotal.toString());
       }
 
       // won_2_referral
@@ -125,12 +139,13 @@ contract("Withdrawals", (accounts) => {
 
     it("should increase totalUsedReferralFees", async() => {
       let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      // console.log(won_2_ids);
 
       let referralTotal = new BN("0");
       won_2_ids.reverse();
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         let referralAmount = gamePrize.div(new BN("100"));
         // console.log("gameId: ", gameId.toString(), "referralAmount: ", referralAmount.toString());
         referralTotal = referralTotal.add(referralAmount);
@@ -160,11 +175,12 @@ contract("Withdrawals", (accounts) => {
 
     it("should increase addressPrizeTotal with correct amount", async() => {
       let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      // console.log(won_2_ids);
       won_2_ids.reverse();
       let prizeTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         prizeTotal = prizeTotal.add(gamePrize);
         // console.log("prizeTotal:        ", prizeTotal.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
@@ -179,7 +195,7 @@ contract("Withdrawals", (accounts) => {
       let patnerFeeTotalPending = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         patnerFeeTotalPending = patnerFeeTotalPending.add(gamePrize.div(new BN("100")));
         // console.log("patnerFeeTotalPending:        ", patnerFeeTotalPending.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
@@ -197,7 +213,7 @@ contract("Withdrawals", (accounts) => {
       let patnerFeeTotalPending = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         patnerFeeTotalPending = patnerFeeTotalPending.add(gamePrize.div(new BN("100")));
         // console.log("patnerFeeTotalPending:        ", patnerFeeTotalPending.toString());
       }  
@@ -211,7 +227,7 @@ contract("Withdrawals", (accounts) => {
       let ongoinRafflePrizeTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         ongoinRafflePrizeTotal = ongoinRafflePrizeTotal.add(gamePrize.div(new BN("100")));
         // console.log("ongoinRafflePrizeTotal:        ", ongoinRafflePrizeTotal.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
@@ -229,7 +245,7 @@ contract("Withdrawals", (accounts) => {
       let ongoinRafflePrizeTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         ongoinRafflePrizeTotal = ongoinRafflePrizeTotal.add(gamePrize.div(new BN("100")));
         // console.log("ongoinRafflePrizeTotal:        ", ongoinRafflePrizeTotal.toString());
       }  
@@ -244,8 +260,8 @@ contract("Withdrawals", (accounts) => {
       let devFeePendingTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
-        devFeePendingTotal = devFeePendingTotal.add(gamePrize.div(new BN("100")).mul(new BN("2")));
+        let gamePrize = (await game.games.call(gameId)).bet;
+        devFeePendingTotal = devFeePendingTotal.add(gamePrize.div(new BN("100")));
         // console.log("devFeePendingTotal:        ", devFeePendingTotal.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
         // console.log("devFeePending:            ", (await game.devFeePending.call()).toString());
@@ -261,29 +277,60 @@ contract("Withdrawals", (accounts) => {
       let devFeePendingTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
-        devFeePendingTotal = devFeePendingTotal.add(gamePrize.div(new BN("100")).mul(new BN("2")));
+        let gamePrize = (await game.games.call(gameId)).bet;
+        devFeePendingTotal = devFeePendingTotal.add(gamePrize.div(new BN("100")));
       }  
       // console.log("devFeePending:             ", (await game.devFeePending.call()).toString());
       assert.equal(0, (await game.devFeePending.call()).cmp(devFeePendingTotal), "wrong devFeePendingTotal amount after");
     });
 
+    it("should increase BeneficiarFee after single withdrawal", async() => {
+      let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      won_2_ids.reverse();
+      // console.log(won_2_ids);
+      let beneficiarFeePendingTotal = new BN("0");
+      for (let i = 0; i < won_2_ids.length; i ++) {
+        let gameId = new BN(won_2_ids[i]);
+        let gamePrize = (await game.games.call(gameId)).bet;
+        beneficiarFeePendingTotal = beneficiarFeePendingTotal.add(gamePrize.div(new BN("100")));
+        // console.log("beneficiarFeePendingTotal:        ", beneficiarFeePendingTotal.toString());
+        await game.withdrawGamePrizes(1, {from: addr_won_2_times});
+        // console.log("devFeePending:            ", (await game.devFeePending.call()).toString());
+        assert.equal(0, (await game.feeBeneficiarBalances.call(OWNER)).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
+      }
+    });
+
+    it("should increase BeneficiarFee after multiple withdrawal", async() => {
+      let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      // console.log(won_2_ids);
+      await game.withdrawGamePrizes(won_2_ids.length, {from: addr_won_2_times});
+      
+      let beneficiarFeePendingTotal = new BN("0");
+      for (let i = 0; i < won_2_ids.length; i ++) {
+        let gameId = new BN(won_2_ids[i]);
+        let gamePrize = (await game.games.call(gameId)).bet;
+        beneficiarFeePendingTotal = beneficiarFeePendingTotal.add(gamePrize.div(new BN("100")));
+      }  
+      // console.log("beneficiarFeePendingTotal:             ", (await game.beneficiarFeePendingTotal.call()).toString());
+      assert.equal(0, (await game.devFeePending.call()).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
+    });
+
     it("should transfer correct prizeTotal after single withdrawal", async() => {
-        let addr_won_2_times_before = new BN(await web3.eth.getBalance(addr_won_2_times));
-        
-        let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
-        // console.log(won_2_ids);
+      let addr_won_2_times_before = new BN(await web3.eth.getBalance(addr_won_2_times));
+      
+      let won_2_ids = await game.getGamesWithPendingPrizeWithdrawalForAddress.call(addr_won_2_times);
+      // console.log(won_2_ids);
 
-        let gamePrize = (await game.games.call(won_2_ids[won_2_ids.length-1])).bet.mul(new BN("2")).mul(new BN("95")).div(new BN("100"));
+      let gamePrize = (await game.games.call(won_2_ids[won_2_ids.length-1])).bet.mul(new BN("95")).div(new BN("100"));
 
-        let tx = await game.withdrawGamePrizes(1, {from: addr_won_2_times});
-        gasUsed = new BN(tx.receipt.gasUsed);
-        txInfo = await web3.eth.getTransaction(tx.tx);
-        gasPrice = new BN(txInfo.gasPrice);
-        gasSpent = gasUsed.mul(gasPrice);
+      let tx = await game.withdrawGamePrizes(1, {from: addr_won_2_times});
+      gasUsed = new BN(tx.receipt.gasUsed);
+      txInfo = await web3.eth.getTransaction(tx.tx);
+      gasPrice = new BN(txInfo.gasPrice);
+      gasSpent = gasUsed.mul(gasPrice);
 
-        let addr_won_2_times_after = new BN(await web3.eth.getBalance(addr_won_2_times));
-        assert.equal(0, addr_won_2_times_before.add(gamePrize).sub(gasSpent).cmp(addr_won_2_times_after), "wrong addr_won_2_times_after");
+      let addr_won_2_times_after = new BN(await web3.eth.getBalance(addr_won_2_times));
+      assert.equal(0, addr_won_2_times_before.add(gamePrize).sub(gasSpent).cmp(addr_won_2_times_after), "wrong addr_won_2_times_after");
     });
 
     it("should transfer correct prizeTotal after multiple withdrawals", async() => {
@@ -295,7 +342,7 @@ contract("Withdrawals", (accounts) => {
       let gamePrizeTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2")).mul(new BN("95")).div(new BN("100"));
+        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("95")).div(new BN("100"));
         gamePrizeTotal = gamePrizeTotal.add(gamePrize);
       }  
 
@@ -318,7 +365,7 @@ contract("Withdrawals", (accounts) => {
       let partnerTotal = new BN("0");
       for (let i = 0; i < won_2_ids.length; i ++) {
         let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("2"));
+        let gamePrize = (await game.games.call(gameId)).bet;
         partnerTotal = partnerTotal.add(gamePrize.div(new BN("100")));
         // console.log("partnerTotal:        ", partnerTotal.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
@@ -331,20 +378,25 @@ contract("Withdrawals", (accounts) => {
     it("should not transferPartnerFee if > than threshold", async() => {
       let PARTNER_total_before = new BN(await web3.eth.getBalance(PARTNER));
          
-      await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
-        from: CREATOR,
-        value: ether("50.3", ether)
+      await time.increase(time.duration.minutes(1));
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR_2,
+        value: ether("100.2", ether)
       });
-      await game.joinAndPlayGame(4, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("50.3", ether)
+      await game.joinGame(4, OPPONENT_REFERRAL, {
+        from: OPPONENT_2,
+        value: ether("100.2", ether)
+      });
+      await game.playGame(4, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
       });
 
-      await game.withdrawGamePrizes(1, {from: (await game.games.call(4)).winner});
+      await game.withdrawGamePrizes(1, {
+        from: (await game.games.call(4)).winner
+      });
 
       let PARTNER_total_after = new BN(await web3.eth.getBalance(PARTNER));
-      assert.equal(0, PARTNER_total_after.sub(PARTNER_total_before).cmp(ether("1.006")), "wrong PARTNER_total_after");
+      assert.equal(0, PARTNER_total_after.sub(PARTNER_total_before).cmp(ether("1.002")), "wrong PARTNER_total_after");
     });
 
     it("should emit CF_GamePrizesWithdrawn with correct params", async() => {
@@ -365,29 +417,29 @@ contract("Withdrawals", (accounts) => {
       // play 3 games, so there will be 2 + 1 win for players
       
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
 
       //  2
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.2", ether)
       });
 
       //  3
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.3", ether)
       });
-      await game.joinAndPlayGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.3", ether)
       });
@@ -499,7 +551,7 @@ contract("Withdrawals", (accounts) => {
     });
 
     it("should clear devFeePending", async () => {
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -518,7 +570,7 @@ contract("Withdrawals", (accounts) => {
     });
 
     it("should transfer devFeePending", async () => {
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
