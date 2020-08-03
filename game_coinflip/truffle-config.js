@@ -89,7 +89,7 @@ module.exports = {
       port: 8545,
       network_id: 20,
       accounts: 16,
-      defaultEtherBalance: 1000
+      defaultEtherBalance: 10000
     },
   },
 

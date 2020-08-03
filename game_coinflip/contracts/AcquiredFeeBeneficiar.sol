@@ -13,7 +13,7 @@ contract AcquiredFeeBeneficiar is Ownable {
 
   uint256 public ACQUIRED_FEE_BENEFICIARY_MAX_DURATION = 15 days;  //  max duration for single beneficiar
 
-  uint256 public latestPrice;
+  uint256 public latestBeneficiarPrice;
 
   address payable public feeBeneficiar; //  ongoing address to get fees during withdrawals
   uint256 public feeBeneficiarPurchasedAt;  //  timestamp, when purchased
@@ -22,12 +22,12 @@ contract AcquiredFeeBeneficiar is Ownable {
 
   /**
    * @dev Purchase right to become fee beneficiar.
-   * 
+   * TESTED
    */
   function makeFeeBeneficiar() external payable {
-    require(msg.value > latestPrice, "wrong amount");
+    require(msg.value > latestBeneficiarPrice, "Wrong amount");
 
-    latestPrice = msg.value;
+    latestBeneficiarPrice = msg.value;
     feeBeneficiar = msg.sender;
     feeBeneficiarPurchasedAt = now;
   }
@@ -35,7 +35,7 @@ contract AcquiredFeeBeneficiar is Ownable {
   /**
    * @dev Add fee amount to ongoing beneficiar balance.
    * @param _amount Amount of fee to be added.
-   * 
+   * TESTING
    */
   function addBeneficiarFee(uint256 _amount) internal {
     resetFeeBeneficiarIfExceeded();
@@ -70,7 +70,7 @@ contract AcquiredFeeBeneficiar is Ownable {
       address payable ownerAddr = address(uint160(owner()));
       feeBeneficiar = ownerAddr;
       feeBeneficiarPurchasedAt = now;
-      delete latestPrice;
+      delete latestBeneficiarPrice;
     }
   }
 }
