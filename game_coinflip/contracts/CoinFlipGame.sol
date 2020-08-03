@@ -557,7 +557,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Update bet for game.
     * @param _id Game index.
-    * 
+    * TESTED
     */
   function increaseBetForGameBy(uint256 _id) external payable whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) {
     require(msg.value > 0, "increase must be > 0");

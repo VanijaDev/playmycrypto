@@ -25,13 +25,20 @@ contract("Update game params", (accounts) => {
   const OTHER = accounts[9];
 
   let game;
+  let ownerHash;
+  const CREATOR_COIN_SIDE = 1;
+  const CREATOR_SEED = "Hello World";
+  const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
+  const TOP_FEE = ether("0.01");
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
+    
+    ownerHash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
 
     // FIRST GAME SHOULD BE CREATED BY OWNER
-    await game.createGame(1, CREATOR_REFERRAL, {
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
     });
@@ -69,9 +76,9 @@ contract("Update game params", (accounts) => {
     });
   });
 
-  describe("increaseBetForGameBy", () => {
+  describe.only("increaseBetForGameBy", () => {
     beforeEach("create game", async () => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.1", ether)
       });
@@ -86,11 +93,23 @@ contract("Update game params", (accounts) => {
         }), "paused");
     });
 
-    it("should fail if not game creator", async () => {
+    it("should fail if Not creator", async () => {
         await expectRevert(game.increaseBetForGameBy(1, {
             from: OTHER,
             value: ether("0.1")
         }), "Not creator");
+    });
+
+    it("should fail if Has opponent", async () => {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("0.1")
+      });
+
+      await expectRevert(game.increaseBetForGameBy(1, {
+          from: CREATOR,
+          value: ether("0.1")
+      }), "Has opponent");
     });
 
     it("should fail if game bet is 0", async () => {
@@ -147,15 +166,16 @@ contract("Update game params", (accounts) => {
     });
 
     it("should emit CF_GameUpdated with correct args", async () => {
-        let tx = await game.increaseBetForGameBy(1, {
-            from: CREATOR,
-            value: ether("0.2")
-        });
-        assert.equal(1, tx.logs.length, "should be 1 log");
-        let event = tx.logs[0];
-        assert.equal(event.event, "CF_GameUpdated", "should be CF_GameUpdated");
-        assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
-        assert.equal(event.args.creator, CREATOR, "should be CREATOR");
+      const { logs } = await game.increaseBetForGameBy(1, {
+        from: CREATOR,
+        value: ether("0.2")
+      });
+      assert.equal(1, logs.length, "should be 1 event");
+      await expectEvent.inLogs(
+        logs, 'CF_GameUpdated', {
+        id: new BN("1"),
+        creator: CREATOR
+      });
     });
   });
 });
