@@ -390,8 +390,8 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
     * @dev Withdraw referral fees.
-    * @notice 96% to transfer
-    * 
+    * @notice 100% to transfer.
+    * TESTED
     */
   function withdrawReferralFees() external {
     uint256 fee = referralFeesPending[msg.sender];
@@ -399,16 +399,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
     delete referralFeesPending[msg.sender];
     referralFeesWithdrawn[msg.sender] = referralFeesWithdrawn[msg.sender].add(fee);
-
-    //  4% fees
-    uint256 singleFee = fee.mul(FEE_PERCENT).div(100);
-    partnerFeePending = partnerFeePending.add(singleFee);
-    ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
-    devFeePending = devFeePending.add(singleFee);
-    addBeneficiarFee(singleFee);
-
-    uint256 transferAmount = fee.sub(singleFee.mul(4));
-    msg.sender.transfer(transferAmount);
+    msg.sender.transfer(fee);
 
     emit CF_GameReferralWithdrawn(msg.sender);   
   }
@@ -416,7 +407,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * GameRaffle
     * @dev Withdraw reffle prize.
-    * @notice 96% to transfer
+    * @notice 100% to transfer.
     * 
     */
   function withdrawRafflePrizes() external override {
@@ -424,18 +415,8 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(prize > 0, "No raffle prize");
 
     delete rafflePrizePending[msg.sender];
-
     addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
-
-    //  4% fees
-    uint256 singleFee = prize.mul(FEE_PERCENT).div(100);
-    partnerFeePending = partnerFeePending.add(singleFee);
-    ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
-    devFeePending = devFeePending.add(singleFee);
-    addBeneficiarFee(singleFee);
-
-    uint256 transferAmount = prize.sub(singleFee.mul(4));
-    msg.sender.transfer(transferAmount);
+    msg.sender.transfer(prize);
 
     //  partner transfer
     transferPartnerFee();
@@ -445,6 +426,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
     * @dev Withdraw developer fees.
+    * @notice 100% to transfer.
     * 
     */
   function withdrawDevFee() external onlyOwner {
@@ -452,7 +434,6 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(devFeePending > 0, "No dev fee");
 
     delete devFeePending;
-
     msg.sender.transfer(fee);
   }
 

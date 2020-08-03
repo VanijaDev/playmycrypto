@@ -52,7 +52,7 @@ contract("Withdrawals", (accounts) => {
     await time.increase(1);
   });
 
-  describe.only("withdrawGamePrizes", () => {
+  describe("withdrawGamePrizes", () => {
     let addr_won_2_times;
 
     beforeEach("setup", async() => {
@@ -421,9 +421,12 @@ contract("Withdrawals", (accounts) => {
         from: OPPONENT,
         value: ether("1", ether)
       });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
 
       //  2
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.2", ether)
@@ -432,9 +435,12 @@ contract("Withdrawals", (accounts) => {
         from: OPPONENT,
         value: ether("0.2", ether)
       });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
 
       //  3
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("0.3", ether)
@@ -442,6 +448,9 @@ contract("Withdrawals", (accounts) => {
       await game.joinGame(3, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.3", ether)
+      });
+      await game.playGame(3, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       addr_won_2_times = ((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length > 1) ? CREATOR : OPPONENT;
