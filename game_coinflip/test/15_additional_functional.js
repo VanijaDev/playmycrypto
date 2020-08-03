@@ -108,7 +108,7 @@ contract("Additional functional", (accounts) => {
     });
   });
 
-  describe.only("addTopGame", () => {
+  describe("addTopGame", () => {
     it("should fail if not creator - addTopGame", async () => {
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,

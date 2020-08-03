@@ -498,7 +498,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Remove game idx from topGames.
     * @param _id Game idx to be removed.
-    * 
+    * TESTED
     */
   function removeTopGame(uint256 _id) private {
     uint256[5] memory tmpArr;
@@ -523,7 +523,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Get top games.
     * @return Returns list of top games.
-    * 
+    * TESTED
     */
   function getTopGames() external view returns (uint256[5] memory) {
     return topGames;
@@ -533,7 +533,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Check if game id is in top games.
     * @param _id Game id to check.
     * @return Whether game id is in top games.
-    * 
+    * TESTED
     */
   function isTopGame(uint256 _id) public view returns (bool) {
     for (uint8 i = 0; i < 5; i++) {
