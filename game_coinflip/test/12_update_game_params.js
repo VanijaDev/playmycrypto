@@ -76,7 +76,7 @@ contract("Update game params", (accounts) => {
     });
   });
 
-  describe.only("increaseBetForGameBy", () => {
+  describe("increaseBetForGameBy", () => {
     beforeEach("create game", async () => {
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,

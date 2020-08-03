@@ -572,7 +572,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Update minimum bet value. Can be 0 if no restrictions.
     * @param _minBet Min bet value.
-    * 
+    * TESTED
     */
   function updateMinBet(uint256 _minBet) external onlyOwner {
     require(_minBet > 0, "Wrong bet");
