@@ -43,7 +43,7 @@ contract Partnership is Ownable {
    * @dev Updates partner fee transfer threshold limit, when fee should be transferred to address.
    * @notice In wei.
    * @param _transferThreshold Fee amount, that should trigger transfer.
-   * 
+   * TESTED
    */
   function updatePartnerTransferThreshold(uint256 _transferThreshold) public onlyOwner {
     require(_transferThreshold > 0, "threshold must be > 0");
@@ -52,7 +52,7 @@ contract Partnership is Ownable {
 
   /**
    * @dev Transfers partner fee to partner address if threshold was reached.
-   * 
+   * TESTED
    */
   function transferPartnerFee() internal {
     if (partnerFeePending >= partnerFeeTransferThreshold) {

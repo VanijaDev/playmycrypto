@@ -43,12 +43,6 @@ contract("Partnership", (accounts) => {
       value: ether("1", ether)
     });
 
-    //  1
-    await game.createGame(ownerHash, CREATOR_REFERRAL, {
-      from: CREATOR,
-      value: ether("1", ether)
-    });
-
     await time.increase(1);
   });
 
@@ -99,14 +93,33 @@ contract("Partnership", (accounts) => {
     it("should delete partnerFeePending after transfer to partner", async() => {
       assert.equal(0, (await game.partnerFeePending.call()).cmp(ether("0")), "should be 0 before");
 
-      await game.createGame(0, CREATOR_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("60", ether)
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("1.3", ether)
+      });
+      await game.joinGame(1, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("1.3", ether)
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.withdrawGamePrizes(1, {
+        from: (await game.games.call(1)).winner
+      });
+      assert.equal(0, (await game.partnerFeePending.call()).cmp(ether("0.013")), "should be 0.0013 before");
+
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR_2,
+        value: ether("100.3", ether)
+      });
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("60", ether)
+        value: ether("100.3", ether)
+      });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
       });
 
       await game.withdrawGamePrizes(1, {
@@ -121,87 +134,110 @@ contract("Partnership", (accounts) => {
       assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("0")), "fee should be 0 before");
 
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      });
-      await time.increase(time.duration.minutes(61));
-
-      //  2
-      await game.createGame(0, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
-        value: ether("60", ether)
+        value: ether("100.3", ether)
       });
-
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
-        value: ether("60", ether)
+        value: ether("100.3", ether)
       });
-      await time.increase(time.duration.minutes(62));
-
-      //  3
-      await game.createGame(0, CREATOR_REFERRAL, {
-        from: CREATOR,
-        value: ether("50", ether)
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
-
-      await game.joinAndPlayGame(3, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("50", ether)
-      });
-
-      let addr_won_2_times = ((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length > 1) ? CREATOR : OPPONENT;
-
+      await time.increase(1);
+      
       //  withdraw 1
       await game.withdrawGamePrizes(1, {
-        from: addr_won_2_times
+        from: (await game.games.call(1)).winner
       });
       await time.increase(1);
 
       // console.log("0: ", (await game.partnerFeeTotalUsed.call()).toString());
-      assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("1")), "fee should be 1");
+      assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("1.003")), "fee should be 1.003");
 
+      //  2
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("100.6", ether)
+      });
+      await game.joinGame(2, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("100.6", ether)
+      });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
+      await time.increase(1);
+      
       //  withdraw 2
       await game.withdrawGamePrizes(1, {
-        from: addr_won_2_times
+        from: (await game.games.call(2)).winner
       });
       await time.increase(1);
 
+      // console.log("0: ", (await game.partnerFeeTotalUsed.call()).toString());
+      assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("2.009")), "fee should be 2.009");
+
+      //  3
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("100.5", ether)
+      });
+      await game.joinGame(3, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("100.5", ether)
+      });
+      await game.playGame(3, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
+
+      //  withdraw 3
+      await game.withdrawGamePrizes(1, {
+        from: (await game.games.call(3)).winner
+      });
+
       // console.log("1: ", (await game.partnerFeeTotalUsed.call()).toString());
-      assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("2.2")), "fee should be 2.2");
+      assert.equal(0, (await game.partnerFeeTotalUsed.call()).cmp(ether("3.014")), "fee should be 3.014");
     });
 
     it("should transfer correct value", async() => {
       let partnerBalanceBefore = new BN(await web3.eth.getBalance(PARTNER));
 
-      await game.createGame(0, CREATOR_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("55")
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("100.55")
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("55")
+      await game.joinGame(1, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("100.55")
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
+        from: (await game.games.call(1)).winner
       });
 
       let partnerBalanceAfter = new BN(await web3.eth.getBalance(PARTNER));
-      assert.equal(0, partnerBalanceBefore.add(ether("1.1")).cmp(partnerBalanceAfter), "wrong PARTNER balance after single prize withdraw");
+      assert.equal(0, partnerBalanceBefore.add(ether("1.0055")).cmp(partnerBalanceAfter), "wrong PARTNER balance after single prize withdraw");
     });
 
     it("should emit CF_PartnerFeeTransferred", async() => {
-      await game.createGame(0, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
-        value: ether("50.1")
+        value: ether("100.1")
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("50.1")
+        value: ether("100.1")
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
       });
 
-      let winner = (await game.games.call(2)).winner;
+      let winner = (await game.games.call(1)).winner;
       const { logs } = await game.withdrawGamePrizes(1, {
         from: winner
       });
@@ -211,7 +247,7 @@ contract("Partnership", (accounts) => {
         logs, 'CF_PartnerFeeTransferred', {
         from: game.address,
         to: PARTNER,
-        amount: ether("1.002")
+        amount: ether("1.001")
       });
     });
   });
