@@ -52,7 +52,7 @@ contract("Additional functional", (accounts) => {
         value: ether("1", ether)
       });
 
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -89,7 +89,7 @@ contract("Additional functional", (accounts) => {
         value: ether("1", ether)
       });
 
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -101,7 +101,7 @@ contract("Additional functional", (accounts) => {
       });
 
       await time.increase(time.duration.hours(2));
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -356,9 +356,12 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
       
       if ((await game.games.call(1)).winner == CREATOR) {
@@ -380,14 +383,17 @@ contract("Additional functional", (accounts) => {
       }
 
       //  2
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       if ((await game.games.call(2)).winner == CREATOR) {
@@ -409,14 +415,17 @@ contract("Additional functional", (accounts) => {
       }
 
       //  3
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(3, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       if ((await game.games.call(3)).winner == CREATOR) {
@@ -447,9 +456,12 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
       
       if ((await game.games.call(1)).winner == CREATOR) {
@@ -471,14 +483,17 @@ contract("Additional functional", (accounts) => {
       }
 
       //  2
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       if ((await game.games.call(2)).winner == CREATOR) {
@@ -500,14 +515,17 @@ contract("Additional functional", (accounts) => {
       }
 
       //  3
-      await time.increase(time.duration.hours(2));
+      await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinAndPlayGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(3, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       if ((await game.games.call(3)).winner == CREATOR) {

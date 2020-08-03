@@ -548,7 +548,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Return game ids with pending withdrawal for address.
     * @param _address Player address.
     * @return ids Game ids.
-    * 
+    * TESTED
     */
   function getGamesWithPendingPrizeWithdrawal(address _address) external view returns (uint256[] memory ids) {
     ids = gamesWithPendingPrizeWithdrawal[_address];
