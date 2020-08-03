@@ -26,23 +26,25 @@ contract("Partnership", (accounts) => {
   const CREATOR_2_REFERRAL = accounts[11];
   const OPPONENT_2_REFERRAL = accounts[12];
 
+  let game;
+  let ownerHash;
   const CREATOR_COIN_SIDE = 1;
   const CREATOR_SEED = "Hello World";
-
-  let game;
+  const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
+    ownerHash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
 
     // FIRST GAME SHOULD BE CREATED BY OWNER
-    await game.createGame(1, CREATOR_REFERRAL, {
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
     });
 
-    // 1 - create
-    await game.createGame(1, CREATOR_REFERRAL, {
+    //  1
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: CREATOR,
       value: ether("1", ether)
     });
@@ -65,7 +67,7 @@ contract("Partnership", (accounts) => {
     });
 
     it("should fail if provided partner == 0x0", async() => {
-      await expectRevert(game.updatePartner("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
+      await expectRevert(game.updatePartner("0x0000000000000000000000000000000000000000"), "Wrong partner");
     });
 
     it("should update partner", async() => {

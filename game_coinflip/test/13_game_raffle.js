@@ -202,7 +202,7 @@ contract("Game Raffle", (accounts) => {
     });
   });
 
-  describe.only("runRaffle", () => {
+  describe("runRaffle", () => {
     it("should fail if Raffle != activated", async () => {
       //  withdraw
       await game.withdrawGamePrizes(1, {
@@ -489,8 +489,8 @@ contract("Game Raffle", (accounts) => {
     });
   });
 
-  describe.only("withdrawRafflePrizes", () => {
-    it.only("should fail if no raffle prize for sender", async() => {
+  describe("withdrawRafflePrizes", () => {
+    it("should fail if no raffle prize for sender", async() => {
       await expectRevert(game.withdrawRafflePrizes({
         from: OTHER
       }), "No raffle prize");
