@@ -26,13 +26,20 @@ contract("Additional functional", (accounts) => {
   const OTHER = accounts[9];
 
   let game;
+  let ownerHash;
+  const CREATOR_COIN_SIDE = 1;
+  const CREATOR_SEED = "Hello World";
+  const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
+  const TOP_FEE = ether("0.01");
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
+    
+    ownerHash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
 
     // FIRST GAME SHOULD BE CREATED BY OWNER
-    await game.createGame(1, CREATOR_REFERRAL, {
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
     });
@@ -40,7 +47,7 @@ contract("Additional functional", (accounts) => {
 
   describe("allowedToPlay", () => {
     it("should not allow if less than 1 hour since previous joined game", async () => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -51,7 +58,7 @@ contract("Additional functional", (accounts) => {
       });
 
       //  2
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
@@ -77,7 +84,7 @@ contract("Additional functional", (accounts) => {
     });
 
     it("should allow if more than 1 hour since previous joined game", async () => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -88,7 +95,7 @@ contract("Additional functional", (accounts) => {
       });
 
       //  2
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
@@ -101,21 +108,37 @@ contract("Additional functional", (accounts) => {
     });
   });
 
-  describe("addTopGame", () => {
+  describe.only("addTopGame", () => {
     it("should fail if not creator - addTopGame", async () => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
 
       await expectRevert(game.addTopGame(1, {
         from: OTHER,
-        value: ether("0.01")
+        value: TOP_FEE
       }), "Not creator");
     });
 
-    it("should fail if wrong fee", async () => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+    it("should fail if Has opponent", async () => {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("1", ether)
+      });
+      await game.joinGame(1, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("1", ether)
+      });
+
+      await expectRevert(game.addTopGame(1, {
+        from: CREATOR,
+        value: TOP_FEE
+      }), "Has opponent");
+    });
+
+    it("should fail if Wrong fee", async () => {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -126,39 +149,56 @@ contract("Additional functional", (accounts) => {
       }), "Wrong fee");
     });
 
-    it("should add game idx to the beginning", async () => {
-      //  create new games
-      await game.createGame(1, CREATOR_REFERRAL, {
+    it("should fail if Top in TopGames", async () => {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.addTopGame(1, {
+        from: CREATOR,
+        value: TOP_FEE
+      });
+
+      await expectRevert(game.addTopGame(1, {
+        from: CREATOR,
+        value: TOP_FEE
+      }), "Top in TopGames");
+    });
+
+    it("should add game idx to the beginning", async () => {
+      //  create new games
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("1", ether)
+      });
+
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, OPPONENT_REFERRAL, {
+      await game.createGame(ownerHash, OPPONENT_REFERRAL, {
         from: CREATOR_REFERRAL,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: OPPONENT_REFERRAL,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: PARTNER,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
 
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: OTHER,
         value: ether("1", ether)
       });
@@ -167,104 +207,132 @@ contract("Additional functional", (accounts) => {
       //  1
       await game.addTopGame(1, {
         from: CREATOR,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("1"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong array in 1");
 
       //  2
       await game.addTopGame(2, {
         from: OPPONENT,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("2"), new BN("1"), new BN("0"), new BN("0"), new BN("0")], "wrong array in 2");
 
       //  3
       await game.addTopGame(4, {
         from: OPPONENT_REFERRAL,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("4"), new BN("2"), new BN("1"), new BN("0"), new BN("0")], "wrong array in 3");
 
       //  4
       await game.addTopGame(3, {
         from: CREATOR_REFERRAL,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("3"), new BN("4"), new BN("2"), new BN("1"), new BN("0")], "wrong array in 4");
 
       //  5
       await game.addTopGame(5, {
         from: PARTNER,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("5"), new BN("3"), new BN("4"), new BN("2"), new BN("1")], "wrong array in 5");
 
       //  6
       await game.addTopGame(6, {
         from: CREATOR_2,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("6"), new BN("5"), new BN("3"), new BN("4"), new BN("2")], "wrong array in 6");
 
       //  7
       await game.addTopGame(7, {
         from: OTHER,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.deepEqual(await game.getTopGames.call(), [new BN("7"), new BN("6"), new BN("5"), new BN("3"), new BN("4")], "wrong array in 7");
     });
 
     it("should increase devFeePending after each addition", async () => {
       //  1
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
 
       await game.addTopGame(1, {
         from: CREATOR,
-        value: ether("0.01")
+        value: TOP_FEE
       });
 
       assert.equal(0, (await game.devFeePending.call()).cmp(ether("0.01")), "wrong devFeePending after add to top #1");
 
       //  2
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
 
       await game.addTopGame(2, {
         from: CREATOR_2,
-        value: ether("0.01")
+        value: TOP_FEE
       });
 
       assert.equal(0, (await game.devFeePending.call()).cmp(ether("0.02")), "wrong devFeePending after add to top #2");
     });
 
-    it("should emit CF_GameAddedToTop event", async () => {
-      // event GameAddedToTop(uint256 _id);
-
-      await game.createGame(1, CREATOR_REFERRAL, {
+    it("Should update totalUsedInGame", async() => {
+      //  1
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
 
-      let tx = await game.addTopGame(1, {
+      await game.addTopGame(1, {
         from: CREATOR,
-        value: ether("0.01")
+        value: TOP_FEE
       });
 
-      assert.equal(tx.logs.length, 1, "should be 1 event");
-      let event = tx.logs[0];
-      assert.equal(event.event, "CF_GameAddedToTop", "wrong name");
-      assert.equal(0, event.args.id.cmp(new BN(1)), "wrong id")
+      assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("2.01")), "wrong totalUsedInGame after add to top #1");
+
+      //  2
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR_2,
+        value: ether("1", ether)
+      });
+
+      await game.addTopGame(2, {
+        from: CREATOR_2,
+        value: TOP_FEE
+      });
+
+      assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("3.02")), "wrong totalUsedInGame after add to top #2");
+    });
+
+    it("should emit CF_GameAddedToTop event", async () => {
+      // event GameAddedToTop(uint256 _id);
+
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("1", ether)
+      });
+
+      const { logs } = await game.addTopGame(1, {
+        from: CREATOR,
+        value: TOP_FEE
+      });
+      assert.equal(1, logs.length, "should be 1 event");
+      await expectEvent.inLogs(
+        logs, 'CF_GameAddedToTop', {
+        id: new BN("1")
+      });
     });
   });
 
   describe("isTopGame", () => {
     it("should return true if game is top -  isTopGame", async() => {
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -272,7 +340,7 @@ contract("Additional functional", (accounts) => {
       assert.equal(await game.isTopGame.call(1), false, "should be false before");
       await game.addTopGame(1, {
         from: CREATOR,
-        value: ether("0.01")
+        value: TOP_FEE
       });
       assert.equal(await game.isTopGame.call(1), true, "should be true after");
     });
@@ -284,7 +352,7 @@ contract("Additional functional", (accounts) => {
       let opponentGames = [];
 
       //  1
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -313,7 +381,7 @@ contract("Additional functional", (accounts) => {
 
       //  2
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -342,7 +410,7 @@ contract("Additional functional", (accounts) => {
 
       //  3
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -375,7 +443,7 @@ contract("Additional functional", (accounts) => {
       let opponentGames = [];
 
       //  1
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -404,7 +472,7 @@ contract("Additional functional", (accounts) => {
 
       //  2
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -433,7 +501,7 @@ contract("Additional functional", (accounts) => {
 
       //  3
       await time.increase(time.duration.hours(2));
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -487,7 +555,7 @@ contract("Additional functional", (accounts) => {
 
     it("should return correct game id", async() => {
       //  1
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       });
@@ -495,7 +563,7 @@ contract("Additional functional", (accounts) => {
       assert.equal(0, ((await game.getParticipatedGameIdxsForPlayer.call(CREATOR))[0]).cmp(new BN(1)), "should be 1 CREATOR");
 
       //  2
-      await game.createGame(1, CREATOR_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });

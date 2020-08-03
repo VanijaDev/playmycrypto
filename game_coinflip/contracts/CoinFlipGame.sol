@@ -474,7 +474,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Add game idx to the beginning of topGames.
     * @param _id Game idx to be added.
-    * 
+    * TESTED
     */
   function addTopGame(uint256 _id) external payable onlyGameCreator(_id) onlyWaitingForOpponent(_id) {
     require(msg.value == minBet, "Wrong fee");
