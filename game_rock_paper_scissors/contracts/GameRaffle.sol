@@ -13,7 +13,7 @@ abstract contract GameRaffle is Ownable {
     uint256 time;
   }
   
-  mapping(address => uint256) public rafflePrizePendingForAddress;
+  mapping(address => uint256) public rafflePrizePending;
   uint256 public ongoinRafflePrize;
   uint256 public rafflePrizesWonTotal;
 
@@ -71,7 +71,7 @@ abstract contract GameRaffle is Ownable {
     require(raffleActivated(), "Raffle != activated");
 
     uint256 winnerIdx = rand();
-    rafflePrizePendingForAddress[raffleParticipants[winnerIdx]] = rafflePrizePendingForAddress[raffleParticipants[winnerIdx]].add(ongoinRafflePrize);
+    rafflePrizePending[raffleParticipants[winnerIdx]] = rafflePrizePending[raffleParticipants[winnerIdx]].add(ongoinRafflePrize);
     rafflePrizesWonTotal = rafflePrizesWonTotal.add(ongoinRafflePrize);
     raffleResults.push(RaffleResult(raffleParticipants[winnerIdx], ongoinRafflePrize, now));
 

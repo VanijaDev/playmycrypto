@@ -408,7 +408,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * GameRaffle
     * @dev Withdraw reffle prize.
     * @notice 100% to transfer.
-    * 
+    * TESTED
     */
   function withdrawRafflePrizes() external override {
     uint256 prize = rafflePrizePending[msg.sender];
@@ -417,9 +417,6 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     delete rafflePrizePending[msg.sender];
     addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
     msg.sender.transfer(prize);
-
-    //  partner transfer
-    transferPartnerFee();
 
     emit CF_RafflePrizeWithdrawn(msg.sender);
   }
@@ -444,14 +441,14 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     /**
    * @dev Quit game.
    * @param _id Game id.
-   * 
+   * TESTED
    */
   function quitGame(uint256 _id) external {
     Game storage game = games[_id];
 
     require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
     require(game.winner ==  address(0), "Has winner");
-    require(!gameMoveExpired(_id), "Already expired");
+    require(!gameMoveExpired(_id), "Expired");
 
     //  quit game
     if (game.creator == msg.sender && game.opponent != address(0)) {
@@ -553,7 +550,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @return ids Game ids.
     * 
     */
-  function getGamesWithPendingPrizeWithdrawalForAddress(address _address) external view returns (uint256[] memory ids) {
+  function getGamesWithPendingPrizeWithdrawal(address _address) external view returns (uint256[] memory ids) {
     ids = gamesWithPendingPrizeWithdrawal[_address];
   }
 

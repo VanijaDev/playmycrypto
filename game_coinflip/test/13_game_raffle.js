@@ -27,29 +27,34 @@ contract("Game Raffle", (accounts) => {
   const CREATOR_2_REFERRAL = accounts[11];
   const OPPONENT_2_REFERRAL = accounts[12];
 
+  let game;
+  let ownerHash;
   const CREATOR_COIN_SIDE = 1;
   const CREATOR_SEED = "Hello World";
-
-  let game;
+  const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
     game = await Game.new(PARTNER);
+    ownerHash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
 
     // FIRST GAME SHOULD BE CREATED BY OWNER
-
-    await game.createGame(1, CREATOR_REFERRAL, {
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
-      value: ether("1")
+      value: ether("1", ether)
     });
 
-    // 1 - create
-    await game.createGame(1, CREATOR_REFERRAL, {
+    //  1
+    await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: CREATOR,
-      value: ether("1")
+      value: ether("1", ether)
+    });
+    await game.joinGame(1, OPPONENT_REFERRAL, {
+      from: OPPONENT,
+      value: ether("1", ether)
     });
 
-    await time.increase(10);
+    await time.increase(1);
   });
 
   describe("GameRaffle", () => {
@@ -221,7 +226,7 @@ contract("Game Raffle", (accounts) => {
       await expectRevert(game.runRaffle(), "Raffle != activated");
     });
 
-    it("should update rafflePrizePendingForAddress", async() => {
+    it("should update rafflePrizePending", async() => {
       await game.updateRaffleActivationParticipantsCount(2);
 
       //  1
@@ -235,13 +240,13 @@ contract("Game Raffle", (accounts) => {
       });
 
       let raffleWinner_1 = (await game.getRaffleParticipants.call())[await game.rand.call()];
-      assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner_1)).cmp(ether("0")), "should be 0 before");
+      assert.equal(0, (await game.rafflePrizePending.call(raffleWinner_1)).cmp(ether("0")), "should be 0 before");
 
       await game.runRaffle({
         from: OTHER
       });
 
-      assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner_1)).cmp(ether("0.02")), "should be 0.02 after");
+      assert.equal(0, (await game.rafflePrizePending.call(raffleWinner_1)).cmp(ether("0.02")), "should be 0.02 after");
     });
 
     it("should update rafflePrizesWonTotal", async () => {
@@ -526,32 +531,32 @@ contract("Game Raffle", (accounts) => {
       }), "No raffle prize");
     });
 
-    it("should delete rafflePrizePendingForAddress[msg.sender]", async () => {
+    it("should delete rafflePrizePending[msg.sender]", async () => {
       await game.updateRaffleActivationParticipantsCount(4);
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
         from: (await game.games.call(1)).winner
       });
-
-      await time.increase(2);
+      await time.increase(1);
 
       //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_2_REFERRAL, {
         from: CREATOR_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
+      await game.joinGame(2, OPPONENT_2_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-
-      await time.increase(2);
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
+      });
+      await time.increase(1);
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
@@ -562,45 +567,44 @@ contract("Game Raffle", (accounts) => {
       let randNum = await game.rand.call(); //  is the same as will be in raffle
       let randWinner = await game.raffleParticipants.call(randNum);
       await game.runRaffle();
-      await time.increase(2);
+      await time.increase(1);
 
-      assert.equal(1, (await game.rafflePrizePendingForAddress.call(randWinner)).cmp(new BN("0")), "rafflePrizePendingForAddress[msg.sender] should be > 0");
+      assert.equal(0, (await game.rafflePrizePending.call(randWinner)).cmp(ether("0.03")), "rafflePrizePending[msg.sender] should be > 0.03 eth");
 
       await time.increase(2);
       await game.withdrawRafflePrizes({
         from: randWinner
       });
-      await time.increase(2);
 
-      assert.equal(0, (await game.rafflePrizePendingForAddress.call(randWinner)).cmp(new BN("0")), "should delete rafflePrizePendingForAddress[msg.sender]");
+      assert.equal(0, (await game.rafflePrizePending.call(randWinner)).cmp(new BN("0")), "should delete rafflePrizePending[msg.sender]");
     });
 
     it("should increse addressPrizeTotal for winner", async() => {
       await game.updateRaffleActivationParticipantsCount(4);
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
         from: (await game.games.call(1)).winner
       });
-
-      await time.increase(2);
+      await time.increase(1);
 
       //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_2_REFERRAL, {
         from: CREATOR_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
+      await game.joinGame(2, OPPONENT_2_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-
-      await time.increase(2);
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
+      });
+      await time.increase(1);
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
@@ -624,194 +628,37 @@ contract("Game Raffle", (accounts) => {
       assert.equal(0, addressPrizeTotalAfter.sub(addressPrizeTotalBefore).cmp(ongoinRafflePrize), "wrong addressPrizeTotal after raffle");
     });
 
-    it("should update partnerFeePending if < 1 ether", async() => {
-      await game.updateRaffleActivationParticipantsCount(4);
-      //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(1)).winner
-      });
-
-      await time.increase(2);
-
-      //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("2")
-      });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("2")
-      });
-
-      await time.increase(2);
-
-      //  withdraw
-      // console.log("update: ", (await game.ongoinRafflePrize.call()).toString());
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
-      });
-
-      //  3
-      await time.increase(1);
-      let randNum = await game.rand.call(); //  is the same as will be in raffletest
-      let randWinner = await game.raffleParticipants.call(randNum);
-      await game.runRaffle();
-      await time.increase(2);
-
-      let feeBefore = await game.partnerFeePending.call();
-
-      await game.withdrawRafflePrizes({
-        from: randWinner
-      });
-
-      assert.equal(0, (await game.partnerFeePending.call()).sub(feeBefore).cmp(ether("0.0006")), "partnerFeePending should be == 0.0006 eth");
-    });
-
-    it("should delete partnerFeePending, transfer to partner if > 1 ether", async() => {
-      await game.updateRaffleActivationParticipantsCount(4);
-      //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(1)).winner
-      });
-
-      await time.increase(2);
-
-      //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("48.9")
-      });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("48.9")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
-      });
-
-      //  3
-      let randNum = await game.rand.call(); //  is the same as will be in raffle
-      let randWinner = await game.raffleParticipants.call(randNum);
-      await game.runRaffle();
-      await time.increase(2);
-
-      // console.log((await game.partnerFeePending.call()).toString());
-      // console.log(randWinner);
-      // console.log((await game.rafflePrizePendingForAddress.call(randWinner)).toString());
-
-      assert.equal(0, (await game.partnerFeePending.call()).cmp(ether("0.998")), "partnerFeePending should be == 0.998");
-      let partnerBalanceBefore = new BN(await web3.eth.getBalance(PARTNER));
-
-      await game.withdrawRafflePrizes({
-        from: randWinner
-      });
-
-      //  partnerFeePending
-      assert.equal(0, (await game.partnerFeePending.call()).cmp(ether("0")), "partnerFeePending should be == 0");
-
-      //  transfer to partner
-      let partnerBalanceAfter = new BN(await web3.eth.getBalance(PARTNER));
-      assert.equal(0, partnerBalanceBefore.add(ether("1.00798")).cmp(partnerBalanceAfter), "wrong PARTNER balance after multiple prize withdraw");
-    });
-
-    it("should update devFeePending", async() => {
-      await game.updateRaffleActivationParticipantsCount(4);
-      //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(1)).winner
-      });
-
-      await time.increase(2);
-
-      //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("2")
-      });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("2")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
-      });
-
-      //  3
-      let randNum = await game.rand.call(); //  is the same as will be in raffle
-      let randWinner = await game.raffleParticipants.call(randNum);
-      await game.runRaffle();
-      await time.increase(2);
-
-      let devFeePendingBefore = await game.devFeePending.call();
-      assert.equal(0, devFeePendingBefore.cmp(ether("0.12")), "wrong devFeePending before");
-
-      await game.withdrawRafflePrizes({
-        from: randWinner
-      });
-      await time.increase(2);
-
-      let devFeePendingAfter = await game.devFeePending.call();
-      assert.equal(0, devFeePendingAfter.cmp(ether("0.1212")), "wrong devFeePending after");
-    });
-
     it("should transfer correct prize to raffle winner", async () => {
       await game.updateRaffleActivationParticipantsCount(4);
-
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
         from: (await game.games.call(1)).winner
       });
-
-      await time.increase(2);
+      await time.increase(1);
 
       //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_2_REFERRAL, {
         from: CREATOR_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
+      await game.joinGame(2, OPPONENT_2_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-
-      await time.increase(2);
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
+      });
+      await time.increase(1);
 
       //  withdraw
-      // console.log("transfer: ", (await game.ongoinRafflePrize.call()).toString());
       await game.withdrawGamePrizes(1, {
         from: (await game.games.call(2)).winner
       });
-
-      //  3
-      await time.increase(2);
 
       let randNum = await game.rand.call(); //  is the same as will be in raffle
       let randWinner = await game.raffleParticipants.call(randNum);
@@ -828,140 +675,34 @@ contract("Game Raffle", (accounts) => {
       let gasPrice = new BN(txInfo.gasPrice);
       let gasSpent = gasUsed.mul(gasPrice);
       let randWinnerBalanceAfter = new BN(await web3.eth.getBalance(randWinner));
-
-      //  0.06(prize) - 0.0018(fees) = 0.0582
-      assert.equal(0, randWinnerBalanceBefore.sub(gasSpent).add(ether("0.0582")).cmp(randWinnerBalanceAfter), "wrong prize transferred");
-    });
-
-    it("should not transferPartnerFee if < than threshold", async() => {
-      await game.updateRaffleActivationParticipantsCount(4);
-
-      //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(1)).winner
-      });
-
-      await time.increase(2);
-
-      //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("2")
-      });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("2")
-      });
-
-      await time.increase(2);
-
-      //  withdraw
-      // console.log("transfer: ", (await game.ongoinRafflePrize.call()).toString());
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
-      });
-
-      //  3
-      await time.increase(2);
-
-      let randNum = await game.rand.call(); //  is the same as will be in raffle
-      let randWinner = await game.raffleParticipants.call(randNum);
-      await game.runRaffle();
-
-      await time.increase(2);
-      let PARTNER_total_before = new BN(await web3.eth.getBalance(PARTNER));
-
-      await game.withdrawRafflePrizes({
-        from: randWinner
-      });
-
-      let PARTNER_total_after = new BN(await web3.eth.getBalance(PARTNER));
-      assert.equal(0, PARTNER_total_before.cmp(PARTNER_total_after), "wrong PARTNER_total_after");
-    });
-
-    it("should not transferPartnerFee if > than threshold", async() => {
-      await game.updateRaffleActivationParticipantsCount(4);
-
-      //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
-      });
-
-      //  withdraw
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(1)).winner
-      });
-
-      await time.increase(2);
-
-      //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("48.9")
-      });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
-        from: OPPONENT_2,
-        value: ether("48.9")
-      });
-
-      await time.increase(2);
-
-      //  withdraw
-      // console.log("transfer: ", (await game.ongoinRafflePrize.call()).toString());
-      await game.withdrawGamePrizes(1, {
-        from: (await game.games.call(2)).winner
-      });
-
-      //  3
-      await time.increase(2);
-
-      let randNum = await game.rand.call(); //  is the same as will be in raffle
-      let randWinner = await game.raffleParticipants.call(randNum);
-      await game.runRaffle();
-
-      await time.increase(2);
-      let PARTNER_total_before = new BN(await web3.eth.getBalance(PARTNER));
-
-      await game.withdrawRafflePrizes({
-        from: randWinner
-      });
-
-      let PARTNER_total_after = new BN(await web3.eth.getBalance(PARTNER));
-      assert.equal(1, PARTNER_total_after.cmp(PARTNER_total_before), "wrong PARTNER_total_after");
+      assert.equal(0, randWinnerBalanceBefore.sub(gasSpent).add(ether("0.03")).cmp(randWinnerBalanceAfter), "wrong prize transferred");
     });
 
     it("should emit CF_RafflePrizeWithdrawn event", async() => {
       await game.updateRaffleActivationParticipantsCount(4);
       //  1
-      await game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1")
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  withdraw
       await game.withdrawGamePrizes(1, {
         from: (await game.games.call(1)).winner
       });
-
       await time.increase(2);
 
       //  2
-      await game.createGame(1, CREATOR_2_REFERRAL, {
+      await game.createGame(ownerHash, CREATOR_2_REFERRAL, {
         from: CREATOR_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-      await game.joinAndPlayGame(2, OPPONENT_2_REFERRAL, {
+      await game.joinGame(2, OPPONENT_2_REFERRAL, {
         from: OPPONENT_2,
-        value: ether("2")
+        value: ether("2", ether)
       });
-
+      await game.playGame(2, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR_2
+      });
       await time.increase(2);
 
       //  withdraw
@@ -970,8 +711,6 @@ contract("Game Raffle", (accounts) => {
       });
 
       await time.increase(2);
-
-      //  3
 
       let randNum = await game.rand.call(); //  is the same as will be in raffle
       let randWinner = await game.raffleParticipants.call(randNum);
@@ -985,8 +724,7 @@ contract("Game Raffle", (accounts) => {
       assert.equal(1, logs.length, "should be 1 event");
       await expectEvent.inLogs(
         logs, 'CF_RafflePrizeWithdrawn', {
-        winner: randWinner,
-        prize: ether("0.0582"),
+        winner: randWinner
       });
     });
   });

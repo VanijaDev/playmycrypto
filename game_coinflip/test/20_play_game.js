@@ -131,9 +131,9 @@ contract("Play game", (accounts) => {
       let isCreatorWinner = false;
       if (CREATOR == (await game.games.call(1)).winner) {
         isCreatorWinner = true;
-        assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)), [new BN("1")], "should be [1] for CREATOR");
+        assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)), [new BN("1")], "should be [1] for CREATOR");
       } else {
-        assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)), [new BN("1")], "should be [1] for OPPONENT");
+        assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)), [new BN("1")], "should be [1] for OPPONENT");
       }
 
       //  2
@@ -151,15 +151,15 @@ contract("Play game", (accounts) => {
 
       if (CREATOR == (await game.games.call(2)).winner) {
         if (isCreatorWinner == true) {
-          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)), [new BN("1"), new BN("2")], "should be [1, 2] for CREATOR _ 2");
+          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)), [new BN("1"), new BN("2")], "should be [1, 2] for CREATOR _ 2");
         } else {
-          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)), [new BN("2")], "should be [2] for CREATOR _ 2");
+          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)), [new BN("2")], "should be [2] for CREATOR _ 2");
         }
       } else {
         if (isCreatorWinner == true) {
-          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)), [new BN("2")], "should be [2] for OPPONENT _ 2");
+          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)), [new BN("2")], "should be [2] for OPPONENT _ 2");
         } else {
-          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)), [new BN("1"), new BN("2")], "should be [1, 2] for OPPONENT _ 2");
+          assert.deepEqual((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)), [new BN("1"), new BN("2")], "should be [1, 2] for OPPONENT _ 2");
         }
       }
     });

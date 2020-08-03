@@ -429,16 +429,16 @@ contract("finishGame", (accounts) => {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty before");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty before");
             
             await time.increase(time.duration.minutes(6));
             await game.finishExpiredGame(1, {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be 1 after");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty after");
         });
 
         it("should push OPPONENT to gamesWithPendingPrizeWithdrawalForAddress if GameState.Quitted", async() => {
@@ -446,13 +446,13 @@ contract("finishGame", (accounts) => {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty before");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty before");
             await game.quitGame(1, {
                 from: CREATOR
             });
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty after");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1")], "should be 1 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 after");
         });
 
         it("should push OPPONENT to gamesWithPendingPrizeWithdrawalForAddress if GameState.WinnerPresent", async() => {    
@@ -472,16 +472,16 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty before");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty before");
 
             //  3
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty after");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1")], "should be 1 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 after");
         });
 
         it("should push both players to gamesWithPendingPrizeWithdrawalForAddress if GameState.Draw", async() => {    
@@ -501,16 +501,16 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "should be empty before");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty before");
 
             //  3
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be empty after");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1")], "should be 1 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be empty after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 after");
 
             //  next DRAW
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -537,16 +537,16 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be 1 before");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1")], "should be 1 before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1 before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 before");
 
             //  3
             await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1"), new BN("2")], "should be 1, 2 after");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2")], "should be 1, 2 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1"), new BN("2")], "should be 1, 2 after");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2")], "should be 1, 2 after");
 
         });
 

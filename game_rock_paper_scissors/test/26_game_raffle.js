@@ -278,7 +278,7 @@ contract("GameRaffle", (accounts) => {
         }), "Raffle != activated");
       });
 
-      it("should update rafflePrizePendingForAddress", async() => {
+      it("should update rafflePrizePending", async() => {
         await game.updateRaffleActivationParticipantsCount(2, {
           from: OWNER
         });
@@ -312,11 +312,11 @@ contract("GameRaffle", (accounts) => {
 
         let randNum = await game.rand.call(); //  is the same as will be in raffle
         let randWinner_1 = await game.raffleParticipants.call(randNum);
-        assert.equal(0, (await game.rafflePrizePendingForAddress.call(randWinner_1)).cmp(ether("0")), "should be 0 before");
+        assert.equal(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0")), "should be 0 before");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizePendingForAddress.call(randWinner_1)).cmp(ether("0.02")), "should be 0.02 after");
+        assert.equal(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0.02")), "should be 0.02 after");
 
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
@@ -351,11 +351,11 @@ contract("GameRaffle", (accounts) => {
 
         let randNum_2 = await game.rand.call(); //  is the same as will be in raffle
         let randWinner_2 = await game.raffleParticipants.call(randNum_2);
-        assert.equal(0, (await game.rafflePrizePendingForAddress.call(randWinner_2)).cmp(ether("0")), "should be 0 before 1");
+        assert.equal(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0")), "should be 0 before 1");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizePendingForAddress.call(randWinner_2)).cmp(ether("0.002")), "should be 0.002 after 1");
+        assert.equal(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0.002")), "should be 0.002 after 1");
       });
 
       it("should update rafflePrizesWonTotal", async() => {

@@ -136,14 +136,14 @@ contract("IExpiryMoveDuration", (accounts) => {
     });
 
     it("should add gameId to gamesWithPendingPrizeWithdrawal", async () => {
-      assert.equal((await game.getGamesWithPendingPrizeWithdrawalForAddress(OPPONENT)).length, 0, "should be 0 length before");
+      assert.equal((await game.getGamesWithPendingPrizeWithdrawal(OPPONENT)).length, 0, "should be 0 length before");
 
       await time.increase(time.duration.hours(13));
       await game.finishExpiredGame(1, {
           from: OPPONENT
       });
 
-      assert.equal((await game.getGamesWithPendingPrizeWithdrawalForAddress(OPPONENT)).length, 1, "should be 1 length after");
+      assert.equal((await game.getGamesWithPendingPrizeWithdrawal(OPPONENT)).length, 1, "should be 1 length after");
 
       //  2
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
@@ -161,7 +161,7 @@ contract("IExpiryMoveDuration", (accounts) => {
           from: OPPONENT
       });
 
-      assert.equal((await game.getGamesWithPendingPrizeWithdrawalForAddress(OPPONENT)).length, 2, "should be 2 length after");
+      assert.equal((await game.getGamesWithPendingPrizeWithdrawal(OPPONENT)).length, 2, "should be 2 length after");
     });
 
     it("should add only OPPONENT to raffleParticipants", async () => {

@@ -195,10 +195,10 @@ contract("Withdraw", (accounts) => {
         });
 
         it("should fail if wrong _maxLoop", async() => {
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("4"), new BN("5")]);
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("4"), new BN("5")]);
             await expectRevert(game.withdrawGamePrizes(10, {from: CREATOR}), "wrong _maxLoop");
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")]);
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")]);
             await expectRevert(game.withdrawGamePrizes(10, {from: OPPONENT}), "wrong _maxLoop");
         });
 
@@ -351,15 +351,15 @@ contract("Withdraw", (accounts) => {
         });
 
         it("should pop last game from gamesWithPendingPrizeWithdrawalForAddress", async() => {
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("4"), new BN("5")], ", should be 4, 5 before - CREATOR");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("4"), new BN("5")], ", should be 4, 5 before - CREATOR");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
 
             await game.withdrawGamePrizes(1, {from: CREATOR});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("4")], ", should be 4 after - CREATOR");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("4")], ", should be 4 after - CREATOR");
 
 
             await game.withdrawGamePrizes(1, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4")], ", should be 1, 2, 3, 4 after - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4")], ", should be 1, 2, 3, 4 after - OPPONENT");
         });
 
         it("should pop 3 last games from gamesWithPendingPrizeWithdrawalForAddress", async() => {
@@ -390,21 +390,21 @@ contract("Withdraw", (accounts) => {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("4"), new BN("5"), new BN("6")], ", should be 4, 5, 6 before - CREATOR");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("4"), new BN("5"), new BN("6")], ", should be 4, 5, 6 before - CREATOR");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
 
             await game.withdrawGamePrizes(3, {from: CREATOR});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], ", should be empty after - CREATOR");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], ", should be empty after - CREATOR");
 
             await game.withdrawGamePrizes(3, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2")], ", should be 1, 2 after - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2")], ", should be 1, 2 after - OPPONENT");
         });
 
         it("should pop 5 last games from gamesWithPendingPrizeWithdrawalForAddress", async() => {
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1"), new BN("2"), new BN("3"), new BN("4"), new BN("5")], ", should be 1, 2, 3, 4, 5 before - OPPONENT");
 
             await game.withdrawGamePrizes(5, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], ", should be empty after - OPPONENT");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], ", should be empty after - OPPONENT");
         });
 
         it("should increase addressPrizeTotal with correct amount", async() => {
@@ -910,15 +910,15 @@ contract("Withdraw", (accounts) => {
             await expectRevert(game.withdrawRafflePrizes({from: OTHER}), "No raffle prize");
         });
 
-        it("should delete rafflePrizePendingForAddress[msg.sender]", async() => {
+        it("should delete rafflePrizePending[msg.sender]", async() => {
             //  1
             await game.withdrawGamePrizes(1, {from: OPPONENT});
             await game.runRaffle();
             let raffleWinner = (await game.raffleResults.call(0)).winner;
 
-            await assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner)).cmp(ether("0.003")), "wrong rafflePrizePendingForAddress before");
+            await assert.equal(0, (await game.rafflePrizePending.call(raffleWinner)).cmp(ether("0.003")), "wrong rafflePrizePending before");
             await game.withdrawRafflePrizes({from: raffleWinner});
-            await assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner)).cmp(ether("0")), "wrong rafflePrizePendingForAddress after");
+            await assert.equal(0, (await game.rafflePrizePending.call(raffleWinner)).cmp(ether("0")), "wrong rafflePrizePending after");
         
             //  2
             //  Draw
@@ -956,9 +956,9 @@ contract("Withdraw", (accounts) => {
             await game.runRaffle();
             raffleWinner = (await game.raffleResults.call(1)).winner;
 
-            await assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner)).cmp(ether("0.01042")), "wrong rafflePrizePendingForAddress before 2");
+            await assert.equal(0, (await game.rafflePrizePending.call(raffleWinner)).cmp(ether("0.01042")), "wrong rafflePrizePending before 2");
             await game.withdrawRafflePrizes({from: raffleWinner});
-            await assert.equal(0, (await game.rafflePrizePendingForAddress.call(raffleWinner)).cmp(ether("0")), "wrong rafflePrizePendingForAddress after 2");
+            await assert.equal(0, (await game.rafflePrizePending.call(raffleWinner)).cmp(ether("0")), "wrong rafflePrizePending after 2");
         });
 
         it("should increase addressPrizeTotal[msg.sender]", async() => {

@@ -148,7 +148,7 @@ contract("Partnership", (accounts) => {
         value: ether("50", ether)
       });
 
-      let addr_won_2_times = ((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length > 1) ? CREATOR : OPPONENT;
+      let addr_won_2_times = ((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length > 1) ? CREATOR : OPPONENT;
 
       //  withdraw 1
       await game.withdrawGamePrizes(1, {

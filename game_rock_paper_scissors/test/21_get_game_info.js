@@ -54,14 +54,14 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-    describe("getGamesWithPendingPrizeWithdrawalForAddress", () => {
+    describe("getGamesWithPendingPrizeWithdrawal", () => {
         it("should add game on multiple finish", async() => {
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "wrong amount before");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "wrong amount before");
 
             //  Quitted
             await game.quitGame(1, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "should be empty");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty");
 
             //  Expired
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -75,8 +75,8 @@ contract("Get Game Info", (accounts) => {
 
             await time.increase(time.duration.minutes(6));
             await game.finishExpiredGame(2, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("2")], "should be 2");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2")], "should be 2");
 
             //  WinnerPresent
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -108,8 +108,8 @@ contract("Get Game Info", (accounts) => {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("2"), new BN("3")], "should be 2, 3");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3")], "should be 2, 3");
 
             //  Draw
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -141,8 +141,8 @@ contract("Get Game Info", (accounts) => {
                 from: CREATOR
             });
 
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [new BN("1"), new BN("4")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [new BN("2"), new BN("3"), new BN("4")], "should be 2, 3, 4");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1"), new BN("4")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3"), new BN("4")], "should be 2, 3, 4");
         });
     });
 

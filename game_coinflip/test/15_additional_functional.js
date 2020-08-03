@@ -278,7 +278,7 @@ contract("Additional functional", (accounts) => {
     });
   });
 
-  describe("getGamesWithPendingPrizeWithdrawalForAddress", () => {
+  describe("getGamesWithPendingPrizeWithdrawal", () => {
     it("should return correct games with pending prizes", async() => {
       let creatorGames = [];
       let opponentGames = [];
@@ -294,21 +294,21 @@ contract("Additional functional", (accounts) => {
       });
       
       if ((await game.games.call(1)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length-1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length-1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 1");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 1");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 1");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 1");
       }
 
       //  2
@@ -323,21 +323,21 @@ contract("Additional functional", (accounts) => {
       });
 
       if ((await game.games.call(2)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length - 1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 2");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 2");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 2");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 2");
       }
 
       //  3
@@ -352,21 +352,21 @@ contract("Additional functional", (accounts) => {
       });
 
       if ((await game.games.call(3)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length - 1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 3");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 3");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 3");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 3");
       }
     });
 
@@ -385,21 +385,21 @@ contract("Additional functional", (accounts) => {
       });
       
       if ((await game.games.call(1)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length-1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length-1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 1");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 1");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 1");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 1");
       }
 
       //  2
@@ -414,21 +414,21 @@ contract("Additional functional", (accounts) => {
       });
 
       if ((await game.games.call(2)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length - 1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 2");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 2");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 2");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 2");
       }
 
       //  3
@@ -443,40 +443,40 @@ contract("Additional functional", (accounts) => {
       });
 
       if ((await game.games.call(3)).winner == CREATOR) {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).length;
-        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).length;
+        creatorGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR))[length - 1]);
         // console.log("\n");
         // console.log("CREATOR");
         // console.log("creatorGames: ", creatorGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), creatorGames, "wrong array for CREATOR 3");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), creatorGames, "wrong array for CREATOR 3");
       } else {
-        let length = (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).length;
-        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT))[length - 1]);
+        let length = (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).length;
+        opponentGames.push((await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT))[length - 1]);
         // console.log("\n");
         // console.log("OPPONENT");
         // console.log("opponentGames: ", opponentGames.toString());
-        // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), opponentGames, "wrong array for OPPONENT 3");
+        // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), opponentGames, "wrong array for OPPONENT 3");
       }
 
-      // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-      // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
+      // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+      // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
       if (creatorGames.length > opponentGames.length) {
         // console.log("CREATOR withdraw");
         await game.withdrawGamePrizes(creatorGames.length, {
           from: CREATOR
         });
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR), [], "CREATOR array should be deleted");
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "CREATOR array should be deleted");
       } else {
         // console.log("OPPONENT withdraw");
         await game.withdrawGamePrizes(opponentGames.length, {
           from: OPPONENT
         });
-        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT), [], "OPPONENT array should be deleted");
+        assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "OPPONENT array should be deleted");
       }
-      // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(CREATOR)).toString());
-      // console.log("getGamesWithPendingPrizeWithdrawalForAddress: ", (await game.getGamesWithPendingPrizeWithdrawalForAddress.call(OPPONENT)).toString());
+      // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR)).toString());
+      // console.log("getGamesWithPendingPrizeWithdrawal: ", (await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT)).toString());
     });
   });
 

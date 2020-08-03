@@ -483,10 +483,10 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    */
    
   function withdrawRafflePrizes() external override {
-    require(rafflePrizePendingForAddress[msg.sender] > 0, "No raffle prize");
+    require(rafflePrizePending[msg.sender] > 0, "No raffle prize");
 
-    uint256 prize = rafflePrizePendingForAddress[msg.sender];
-    delete rafflePrizePendingForAddress[msg.sender];
+    uint256 prize = rafflePrizePending[msg.sender];
+    delete rafflePrizePending[msg.sender];
     
     addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
 
@@ -705,7 +705,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @return ids Game id array.
    * 
    */
-  function getGamesWithPendingPrizeWithdrawalForAddress(address _address) external view returns(uint256[] memory ids) {
+  function getGamesWithPendingPrizeWithdrawal(address _address) external view returns(uint256[] memory ids) {
     ids = gamesWithPendingPrizeWithdrawalForAddress[_address];
   }
 
