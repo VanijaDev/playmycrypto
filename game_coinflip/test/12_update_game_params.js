@@ -62,20 +62,6 @@ contract("Update game params", (accounts) => {
     });
   });
 
-  describe("updateSuspendedTimeDuration", async () => {
-    it("should fail if not owner ", async () => {
-      await expectRevert(game.updateSuspendedTimeDuration(time.duration.hours(2), {
-        from: CREATOR
-      }), "Ownable: caller is not the owner");
-    });
-
-    it("should update time", async () => {
-      assert.equal(0, (await game.suspendedTimeDuration.call()).cmp(time.duration.hours(1)), "wrong time before");
-      await game.updateSuspendedTimeDuration(time.duration.hours(2));
-      assert.equal(0, (await game.suspendedTimeDuration.call()).cmp(time.duration.hours(2)), "wrong time after");
-    });
-  });
-
   describe("increaseBetForGameBy", () => {
     beforeEach("create game", async () => {
       await game.createGame(ownerHash, CREATOR_REFERRAL, {

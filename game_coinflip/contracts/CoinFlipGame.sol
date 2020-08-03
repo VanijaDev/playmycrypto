@@ -583,7 +583,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @dev Get game indexes where player participated. Created and joined
     * @param _address Player address.
     * @return List of indexes.
-    * 
+    * TESTED
     */
   function getPlayedGamesForPlayer(address _address) external view returns (uint256[] memory) {
     require(_address != address(0), "Cannt be 0x0");
