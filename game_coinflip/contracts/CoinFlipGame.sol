@@ -427,7 +427,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Withdraw developer fees.
     * @notice 100% to transfer.
-    * 
+    * TESTED
     */
   function withdrawDevFee() external onlyOwner {
     uint256 fee = devFeePending;

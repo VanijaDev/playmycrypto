@@ -564,6 +564,9 @@ contract("Withdrawals", (accounts) => {
         from: OPPONENT,
         value: ether("1", ether)
       });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      });
 
       let winner = (await game.games.call(1)).winner;
       await game.withdrawGamePrizes(1, {
@@ -571,7 +574,7 @@ contract("Withdrawals", (accounts) => {
       });
 
       //  withdraw dev fee
-      assert.equal(0, (await game.devFeePending.call()).cmp(ether("0.04")), "dev fee should be == 0.04 ether before");
+      assert.equal(0, (await game.devFeePending.call()).cmp(ether("0.01")), "dev fee should be == 0.01 ether before");
       await game.withdrawDevFee({
         from: OWNER
       });
@@ -582,6 +585,9 @@ contract("Withdrawals", (accounts) => {
       await game.joinGame(1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
+      });
+      await game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
       });
 
       //  withdraw
