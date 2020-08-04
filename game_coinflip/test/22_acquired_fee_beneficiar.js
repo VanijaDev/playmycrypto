@@ -29,6 +29,7 @@ contract("AcquiredFeeBeneficiar", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
@@ -57,71 +58,8 @@ contract("AcquiredFeeBeneficiar", (accounts) => {
   });
 
   describe("makeFeeBeneficiar", () => {
-    it("should fail if sent 0 on the very first time", async() => {
-      await expectRevert(game.makeFeeBeneficiar({
-        from: OTHER
-      }), "Wrong amount");
-    });
+    it("should ", async() => {
 
-    it("should fail if amount sent is less, than latestPrice", async() => {
-      await game.makeFeeBeneficiar({
-        from: OTHER,
-        value: ether("1")
-      });
-
-      await expectRevert(game.makeFeeBeneficiar({
-        from: OTHER,
-        value: ether("0.1")
-      }), "Wrong amount");
-    });
-    
-    it("should set latestBeneficiarPrice = msg.value", async() => {
-      assert.equal(0, (await game.latestBeneficiarPrice.call()).cmp(ether("0")), "should be 0 before");
-      await game.makeFeeBeneficiar({
-        from: OTHER,
-        value: ether("1")
-      });
-      assert.equal(0, (await game.latestBeneficiarPrice.call()).cmp(ether("1")), "should be 1 after");
-
-      //  2
-      await game.makeFeeBeneficiar({
-        from: OPPONENT,
-        value: ether("1.1")
-      });
-      assert.equal(0, (await game.latestBeneficiarPrice.call()).cmp(ether("1.1")), "should be 1.1 after");
-    });
-    
-    it("should set feeBeneficiar = msg.sender", async() => {
-      assert.equal(await game.feeBeneficiar.call(), OWNER, "should be OWNER before");
-      await game.makeFeeBeneficiar({
-        from: OTHER,
-        value: ether("1")
-      });
-      assert.equal(await game.feeBeneficiar.call(), OTHER, "should be OTHER after");
-
-      //  2
-      await game.makeFeeBeneficiar({
-        from: OPPONENT,
-        value: ether("1.2")
-      });
-      assert.equal(await game.feeBeneficiar.call(), OPPONENT, "should be OPPONENT after");
-    });
-    
-    it("should set feeBeneficiarPurchasedAt to now", async() => {
-      assert.equal(0, (await game.latestBeneficiarPrice.call()).cmp(new BN("0")), "should be 0 before");
-      await game.makeFeeBeneficiar({
-        from: OTHER,
-        value: ether("1")
-      });
-      assert.equal(0, (await game.feeBeneficiarPurchasedAt.call()).cmp(await time.latest()), "should be 1 after");
-
-      //  2
-      await time.increase(3);
-      await game.makeFeeBeneficiar({
-        from: OPPONENT,
-        value: ether("1.1")
-      });
-      assert.equal(0, (await game.feeBeneficiarPurchasedAt.call()).cmp(await time.latest()), "should be 1.1 after");
     });
   });
 });

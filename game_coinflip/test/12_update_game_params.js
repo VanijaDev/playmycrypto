@@ -27,6 +27,7 @@ contract("Update game params", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
   const TOP_FEE = ether("0.01");
@@ -87,7 +88,7 @@ contract("Update game params", (accounts) => {
     });
 
     it("should fail if Has opponent", async () => {
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.1")
       });

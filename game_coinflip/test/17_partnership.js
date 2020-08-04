@@ -29,6 +29,7 @@ contract("Partnership", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 1;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
@@ -97,7 +98,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR,
         value: ether("1.3", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1.3", ether)
       });
@@ -114,7 +115,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR_2,
         value: ether("100.3", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2,  0, OPPONENT_REFERRAL, {
         from: OPPONENT_2,
         value: ether("100.3", ether)
       });
@@ -138,7 +139,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR,
         value: ether("100.3", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("100.3", ether)
       });
@@ -161,7 +162,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR,
         value: ether("100.6", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2,  0, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("100.6", ether)
       });
@@ -184,7 +185,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR,
         value: ether("100.5", ether)
       });
-      await game.joinGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3,  OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("100.5", ether)
       });
@@ -208,7 +209,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR,
         value: ether("100.55")
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("100.55")
       });
@@ -229,7 +230,7 @@ contract("Partnership", (accounts) => {
         from: CREATOR_2,
         value: ether("100.1")
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT_2,
         value: ether("100.1")
       });

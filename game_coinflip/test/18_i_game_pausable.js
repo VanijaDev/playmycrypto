@@ -25,6 +25,7 @@ contract("IGamePausable", (accounts) => {
   const OTHER = accounts[9];
 
   let game;
+  const OPPONENT_COIN_SIDE = 0;
 
   beforeEach("setup", async () => {
     await time.advanceBlock();
@@ -90,7 +91,7 @@ contract("IGamePausable", (accounts) => {
     });
 
     it("should fail if game is joined", async () => {
-        await game.joinGame(1, OPPONENT_REFERRAL, {
+        await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
             from: OPPONENT,
             value: ether("1")
         });

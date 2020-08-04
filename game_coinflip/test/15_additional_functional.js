@@ -28,6 +28,7 @@ contract("Additional functional", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
   const TOP_FEE = ether("0.01");
@@ -42,69 +43,6 @@ contract("Additional functional", (accounts) => {
     await game.createGame(ownerHash, CREATOR_REFERRAL, {
       from: OWNER,
       value: ether("1", ether)
-    });
-  });
-
-  describe("allowedToPlay", () => {
-    it("should not allow if less than 1 hour since previous joined game", async () => {
-      await game.createGame(ownerHash, CREATOR_REFERRAL, {
-        from: CREATOR,
-        value: ether("1", ether)
-      });
-
-      await game.joinGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      });
-
-      //  2
-      await game.createGame(ownerHash, CREATOR_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("1", ether)
-      });
-
-      await expectRevert(game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      }), "Suspended to play");
-
-      //  2.1
-      await time.increase(time.duration.minutes(10));
-      await expectRevert(game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      }), "Suspended to play");
-
-      //  2.2
-      await time.increase(time.duration.minutes(30));
-      await expectRevert(game.joinAndPlayGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      }), "Suspended to play");
-    });
-
-    it("should allow if more than 1 hour since previous joined game", async () => {
-      await game.createGame(ownerHash, CREATOR_REFERRAL, {
-        from: CREATOR,
-        value: ether("1", ether)
-      });
-
-      await game.joinGame(1, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      });
-
-      //  2
-      await game.createGame(ownerHash, CREATOR_REFERRAL, {
-        from: CREATOR_2,
-        value: ether("1", ether)
-      });
-
-      await time.increase(time.duration.hours(2));
-      await game.joinGame(2, OPPONENT_REFERRAL, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      });
     });
   });
 
@@ -126,7 +64,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -356,7 +294,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -388,7 +326,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -420,7 +358,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, CREATOR_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -456,7 +394,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -488,7 +426,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE,OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -520,7 +458,7 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, CREATOR_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -566,9 +504,9 @@ contract("Additional functional", (accounts) => {
     });
   });
 
-  describe("getParticipatedGameIdxsForPlayer", () => {
+  describe("getPlayedGamesForPlayer", () => {
     it("should fail if address 0x0", async() => {
-      await expectRevert(game.getParticipatedGameIdxsForPlayer.call("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
+      await expectRevert(game.getPlayedGamesForPlayer.call("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
     });
 
     it("should return correct game id", async() => {
@@ -577,16 +515,16 @@ contract("Additional functional", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      assert.equal((await game.getParticipatedGameIdxsForPlayer.call(CREATOR)).length, 1, "whong length after 1 CREATOR");
-      assert.equal(0, ((await game.getParticipatedGameIdxsForPlayer.call(CREATOR))[0]).cmp(new BN(1)), "should be 1 CREATOR");
+      assert.equal((await game.getPlayedGamesForPlayer.call(CREATOR)).length, 1, "whong length after 1 CREATOR");
+      assert.equal(0, ((await game.getPlayedGamesForPlayer.call(CREATOR))[0]).cmp(new BN(1)), "should be 1 CREATOR");
 
       //  2
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
-      assert.equal((await game.getParticipatedGameIdxsForPlayer.call(CREATOR_2)).length, 1, "whong length after 1 CREATOR_2");
-      assert.equal(0, ((await game.getParticipatedGameIdxsForPlayer.call(CREATOR_2))[0]).cmp(new BN(2)), "should be 2 CREATOR_2");
+      assert.equal((await game.getPlayedGamesForPlayer.call(CREATOR_2)).length, 1, "whong length after 1 CREATOR_2");
+      assert.equal(0, ((await game.getPlayedGamesForPlayer.call(CREATOR_2))[0]).cmp(new BN(2)), "should be 2 CREATOR_2");
     });
   });
 });

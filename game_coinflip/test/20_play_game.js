@@ -28,6 +28,7 @@ contract("Play game", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
@@ -49,7 +50,7 @@ contract("Play game", (accounts) => {
       value: ether("1", ether)
     });
 
-    await game.joinGame(1, OPPONENT_REFERRAL, {
+    await game.joinGame(1,  OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
       from: OPPONENT,
       value: ether("1", ether)
     });
@@ -141,7 +142,7 @@ contract("Play game", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2,  OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -187,7 +188,7 @@ contract("Play game", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2,  OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });

@@ -28,6 +28,7 @@ contract("Join game", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
 
   beforeEach("setup", async () => {
@@ -56,7 +57,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       }), "Pausable: paused");
@@ -69,13 +70,13 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "No more opponenting");
@@ -89,7 +90,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "Wrong referral");
@@ -107,7 +108,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "Game is paused");
@@ -121,7 +122,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(21, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(21, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "No game with such id");
@@ -135,7 +136,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: CREATOR,
         value: ether("1", ether)
       }), "Is creator");
@@ -148,12 +149,12 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      game.joinGame(1, OPPONENT_REFERRAL, {
+      game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
 
-      await expectRevert(game.joinGame(1, OPPONENT, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT, {
         from: OTHER,
         value: ether("1", ether)
       }), "Game has opponent");
@@ -171,7 +172,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "Game has winner");
@@ -184,7 +185,7 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      game.joinGame(1, OPPONENT_REFERRAL, {
+      game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -194,7 +195,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       }), "Game has opponent");
@@ -207,7 +208,7 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
       //  2 - join
-      await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, {
+      await expectRevert(game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("11", ether)
       }), "Wrong bet");
@@ -221,7 +222,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -237,7 +238,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -251,7 +252,7 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      await game.joinGame(1, "0x0000000000000000000000000000000000000000", {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, "0x0000000000000000000000000000000000000000", {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -266,7 +267,7 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -281,7 +282,7 @@ contract("Join game", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -294,7 +295,7 @@ contract("Join game", (accounts) => {
         from: CREATOR_2,
         value: ether("1", ether)
       });
-      await game.joinGame(2, OPPONENT, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT, {
         from: OPPONENT_REFERRAL,
         value: ether("1", ether)
       });
@@ -309,7 +310,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -328,7 +329,7 @@ contract("Join game", (accounts) => {
         value: ether("0.5")
       });
 
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.5", ether)
       });
@@ -343,7 +344,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -356,7 +357,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(2, OPPONENT, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT, {
         from: OPPONENT_REFERRAL,
         value: ether("1", ether)
       });
@@ -371,7 +372,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -388,7 +389,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -405,7 +406,7 @@ contract("Join game", (accounts) => {
 
 
 
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -422,7 +423,7 @@ contract("Join game", (accounts) => {
         value: ether("1")
       });
 
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -461,7 +462,7 @@ contract("Join game", (accounts) => {
       assert.equal(0, new BN("0").cmp((await game.getTopGames.call())[4]), "4 wrong topGames array before");
 
       //  join
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -480,7 +481,7 @@ contract("Join game", (accounts) => {
       });
 
       //  2 - join
-      let tx = await game.joinGame(1, OPPONENT_REFERRAL, {
+      let tx = await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });

@@ -29,6 +29,7 @@ contract("Withdrawals", (accounts) => {
   let game;
   let ownerHash;
   const CREATOR_COIN_SIDE = 1;
+  const OPPONENT_COIN_SIDE = 0;
   const CREATOR_SEED = "Hello World";
   const CREATOR_SEED_HASHED = web3.utils.soliditySha3(CREATOR_SEED);
 
@@ -59,7 +60,7 @@ contract("Withdrawals", (accounts) => {
       // play 3 games, so there will be 2 + 1 win for players
       
       //  1
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -73,7 +74,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR,
         value: ether("0.2", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.2", ether)
       });
@@ -87,7 +88,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR,
         value: ether("0.3", ether)
       });
-      await game.joinGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, 1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.3", ether)
       });
@@ -383,7 +384,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR_2,
         value: ether("100.2", ether)
       });
-      await game.joinGame(4, OPPONENT_REFERRAL, {
+      await game.joinGame(4, 1, OPPONENT_REFERRAL, {
         from: OPPONENT_2,
         value: ether("100.2", ether)
       });
@@ -417,7 +418,7 @@ contract("Withdrawals", (accounts) => {
       // play 3 games, so there will be 2 + 1 win for players
       
       //  1
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -431,7 +432,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR,
         value: ether("0.2", ether)
       });
-      await game.joinGame(2, OPPONENT_REFERRAL, {
+      await game.joinGame(2, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.2", ether)
       });
@@ -445,7 +446,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR,
         value: ether("0.3", ether)
       });
-      await game.joinGame(3, OPPONENT_REFERRAL, {
+      await game.joinGame(3, 1, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("0.3", ether)
       });
@@ -560,7 +561,7 @@ contract("Withdrawals", (accounts) => {
     });
 
     it("should clear devFeePending", async () => {
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
@@ -582,7 +583,7 @@ contract("Withdrawals", (accounts) => {
     });
 
     it("should transfer devFeePending", async () => {
-      await game.joinGame(1, OPPONENT_REFERRAL, {
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
       });
