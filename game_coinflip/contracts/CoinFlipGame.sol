@@ -226,9 +226,8 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
 
-    require(game.creator != address(0), "No game with such id");
-    require(game.opponent ==  msg.sender, "Not opponent");
-    require(game.winner ==  address(0), "Has winner");
+    require(game.opponent == msg.sender, "Not opponent");
+    require(game.winner == address(0), "Has winner");
     require(gameMoveExpired(_id), "Not yet expired");
 
     //  finish game
@@ -252,7 +251,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
   /**
     * @dev Create new game.
-    * @param _guessHash Hash of guess. Coin side should be 0 / 1
+    * @param _guessHash Hash of guess, coinSide + seedHash. Coin side should be 0 / 1.
     * @param _referral Address for referral.
     * TESTED
     */
@@ -279,12 +278,14 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Join game.
     * @param _id Game id to join.
+    * @param _coinSide Coin side for randomness.
     * @param _referral Address for referral.
-    * TESTED
+    * 
     */
-  function joinGame(uint256 _id, address _referral) external payable whenNotPaused onlyAvailableToJoin onlyCorrectReferral(_referral) onlyGameNotPaused(_id) {
+  function joinGame(uint256 _id, uint8 _coinSide, address _referral) external payable whenNotPaused onlyAvailableToJoin onlyCorrectReferral(_referral) onlyGameNotPaused(_id) {
     Game storage game = games[_id];
 
+    require(_coinSide < 2, "Wrong coin side");
     require(game.creator != address(0), "No game with such id");
     require(game.creator != msg.sender, "Is creator");
     require(game.opponent == address(0), "Game has opponent");
@@ -304,6 +305,9 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
       removeTopGame(_id);
     }
 
+    uint8 randNum = uint8(uint256(keccak256(abi.encodePacked(game.creatorGuessHash, _coinSide))) % 2);
+    game.randCoinSide = randNum;
+
     emit CF_GameJoined(_id, game.creator, msg.sender);
   }
 
@@ -312,7 +316,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @param _id Game id.
     * @param _coinSide Coin side in _guessHash.
     * @param _seedHash Seed str hash in _guessHash.
-    * TESTED
+    * 
     */
   function playGame(uint256 _id, uint8 _coinSide, bytes32 _seedHash) external whenNotPaused onlyGameCreator(_id) {
     Game storage game = games[_id];
@@ -321,10 +325,8 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(game.winner == address(0), "Game has winner");
     require(keccak256(abi.encodePacked(uint256(_coinSide), _seedHash)) == game.creatorGuessHash, "Wrong hash value");
 
-    uint8 coinSide = uint8(uint256(keccak256(abi.encodePacked(now))) % 2);
-    game.winner = (coinSide == _coinSide) ? game.creator : game.opponent;
+    game.winner = (game.randCoinSide == _coinSide) ? game.creator : game.opponent;
     game.creatorCoinSide = _coinSide;
-    game.randCoinSide = coinSide;
     gamesWithPendingPrizeWithdrawal[game.winner].push(_id);
 
     raffleParticipants.push(game.creator);
