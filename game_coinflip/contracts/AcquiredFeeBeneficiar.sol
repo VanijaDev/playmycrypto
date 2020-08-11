@@ -35,7 +35,7 @@ contract AcquiredFeeBeneficiar is Ownable {
   /**
    * @dev Add fee amount to ongoing beneficiar balance.
    * @param _amount Amount of fee to be added.
-   * TESTING
+   * TESTED
    */
   function addBeneficiarFee(uint256 _amount) internal {
     resetFeeBeneficiarIfExceeded();
@@ -45,7 +45,7 @@ contract AcquiredFeeBeneficiar is Ownable {
 
   /**
    * @dev Withdraws beneficiary fee.
-   * 
+   * TESTED
    */
   function withdrawBeneficiaryFee() external {
     uint256 fee = feeBeneficiarBalances[msg.sender];
@@ -59,7 +59,7 @@ contract AcquiredFeeBeneficiar is Ownable {
 
   /**
    * @dev Resets fee beneficiar to owner if max duration exceeded.
-   * 
+   * TESTED
    */
   function resetFeeBeneficiarIfExceeded() private {
     if (feeBeneficiar == owner()) {
@@ -69,7 +69,7 @@ contract AcquiredFeeBeneficiar is Ownable {
     if (now.sub(feeBeneficiarPurchasedAt) > ACQUIRED_FEE_BENEFICIARY_MAX_DURATION) {
       address payable ownerAddr = address(uint160(owner()));
       feeBeneficiar = ownerAddr;
-      feeBeneficiarPurchasedAt = now;
+      delete feeBeneficiarPurchasedAt;
       delete latestBeneficiarPrice;
     }
   }
