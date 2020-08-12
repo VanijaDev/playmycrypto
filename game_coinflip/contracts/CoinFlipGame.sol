@@ -305,7 +305,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
       removeTopGame(_id);
     }
 
-    uint8 randNum = uint8(uint256(keccak256(abi.encodePacked(game.creatorGuessHash, _coinSide))) % 2);
+    uint8 randNum = uint8(uint256(keccak256(abi.encodePacked(game.creatorGuessHash, _coinSide, now))) % 2);
     game.randCoinSide = randNum;
 
     emit CF_GameJoined(_id, game.creator, msg.sender);
