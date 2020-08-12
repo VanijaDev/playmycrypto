@@ -50,7 +50,7 @@ contract("Play game", (accounts) => {
       value: ether("1", ether)
     });
 
-    await game.joinGame(1,  OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
+    await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
       from: OPPONENT,
       value: ether("1", ether)
     });

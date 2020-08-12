@@ -10,9 +10,8 @@ import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
 
 /**
  * @notice IMPORTANT: owner should create first game.
- * @notice CoinFlipGame can be created by creator and run by joined playr. Creator is not required to be online or perform any actions for game to be played.
  *
- *  Prize distribution will be performed on game prize, referral fee, raffle prize withdrawals with percentages:
+ *  Prize distribution will be performed on game prize withdrawal only with percentages:
  *    95% - winner
  *     1% - winner referral
  *     1% - raffle
@@ -38,7 +37,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     address opponentReferral;
   }
 
-  uint256 private constant FEE_PERCENT = 1; //  from single bet, prize is opponent's bet
+  uint256 private constant FEE_PERCENT = 1; //  from single bet, because prize is opponent's bet
 
   uint256 public minBet = 10 finney;
 
@@ -278,9 +277,9 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Join game.
     * @param _id Game id to join.
-    * @param _coinSide Coin side for randomness.
+    * @param _coinSide Coin side for randomness. Coin side should be 0 / 1.
     * @param _referral Address for referral.
-    * 
+    * TESTED
     */
   function joinGame(uint256 _id, uint8 _coinSide, address _referral) external payable whenNotPaused onlyAvailableToJoin onlyCorrectReferral(_referral) onlyGameNotPaused(_id) {
     Game storage game = games[_id];
@@ -316,7 +315,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     * @param _id Game id.
     * @param _coinSide Coin side in _guessHash.
     * @param _seedHash Seed str hash in _guessHash.
-    * 
+    * TESTED
     */
   function playGame(uint256 _id, uint8 _coinSide, bytes32 _seedHash) external whenNotPaused onlyGameCreator(_id) {
     Game storage game = games[_id];
@@ -437,10 +436,10 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   }
 
   /**
-    * OTHER
-    */
+   * OTHER
+   */
 
-    /**
+  /**
    * @dev Quit game.
    * @param _id Game id.
    * TESTED
@@ -449,7 +448,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     Game storage game = games[_id];
 
     require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
-    require(game.winner ==  address(0), "Has winner");
+    require(game.winner == address(0), "Has winner");
     require(!gameMoveExpired(_id), "Expired");
 
     //  quit game
@@ -486,7 +485,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     bool isIdPresent;
     for (uint8 i = 0; i < 4; i++) {
       if (topGames[i] == _id && !isIdPresent) {
-          isIdPresent = true;
+        isIdPresent = true;
       }
       topGamesTmp[i + 1] = (isIdPresent) ? topGames[i + 1] : topGames[i];
     }
