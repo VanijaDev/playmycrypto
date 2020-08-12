@@ -11,7 +11,7 @@ import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract AcquiredFeeBeneficiar is Ownable {
   using SafeMath for uint256;
 
-  uint256 public ACQUIRED_FEE_BENEFICIARY_MAX_DURATION = 15 days;  //  max duration for single beneficiar
+  uint256 public constant ACQUIRED_FEE_BENEFICIARY_MAX_DURATION = 15 days;  //  max duration for single beneficiar
 
   uint256 public latestBeneficiarPrice;
 
