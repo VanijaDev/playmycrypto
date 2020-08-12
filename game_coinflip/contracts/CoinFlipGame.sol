@@ -218,7 +218,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   }
 
   /**
-   * @dev Finish prize for expired game.
+   * @dev Finish expired game.
    * @param _id Game id.
    * TESTED
    */
@@ -322,6 +322,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     
     require(game.opponent != address(0), "No opponent");
     require(game.winner == address(0), "Game has winner");
+    require(!gameMoveExpired(_id), "Expired");
     require(keccak256(abi.encodePacked(uint256(_coinSide), _seedHash)) == game.creatorGuessHash, "Wrong hash value");
 
     game.winner = (game.randCoinSide == _coinSide) ? game.creator : game.opponent;

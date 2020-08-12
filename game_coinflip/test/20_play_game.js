@@ -94,6 +94,14 @@ contract("Play game", (accounts) => {
       }), "Game has winner");
     });
 
+    it("should fail if Expired", async () => {
+      await time.increase(time.duration.hours(13));
+
+      await expectRevert(game.playGame(1, CREATOR_COIN_SIDE, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      }), "Expired");
+    });
+
     it("should fail if Wrong hash value", async () => {
       await expectRevert(game.playGame(1, CREATOR_COIN_SIDE, web3.utils.soliditySha3("CREATOR_SEED"), {
         from: CREATOR
