@@ -35,9 +35,9 @@ let PromiseManager = {
     });
   },
 
-  participatedGameIdxsForPlayerPromise: function (_gameType, _account) {
+  playedGamesForPlayerPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.getParticipatedGameIdxsForPlayer(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getPlayedGamesForPlayer(_account).call()
         .then(result => {
           resolve(result);
         })

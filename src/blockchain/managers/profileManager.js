@@ -32,7 +32,7 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    // await this.updatePlayedGamesTotalAmounts();
+    await this.updatePlayedGamesTotalAmounts();
     // await this.updatePlayerGameplayProfit();
     // await this.updateReferralFeesWithdrawn();
     // await this.updatePlayerTotalProfit();
@@ -95,7 +95,7 @@ let ProfileManager = {
   },
 
   updatePlayedGamesTotalAmounts: async function () {
-    let cfResult = await PromiseManager.participatedGameIdxsForPlayerPromise(Types.Game.cf, window.BlockchainManager.currentAccount());
+    let cfResult = await PromiseManager.playedGamesForPlayerPromise(Types.Game.cf, window.BlockchainManager.currentAccount());
     document.getElementById("coinFlipPlayedTotalAmount").innerText = cfResult.length;
 
     let rpsResult = await PromiseManager.playedGameIdxsForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount());
