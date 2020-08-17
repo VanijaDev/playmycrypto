@@ -605,6 +605,13 @@ input:focus {
   }
 }
 
+.transfer-block {
+  input {
+    width: 100px;
+    border: 1px solid #E0E0E0;
+  }
+}
+
 .btn-animated {
   box-shadow: 0 6px #999;
   padding: 0;

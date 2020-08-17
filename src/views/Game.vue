@@ -122,7 +122,7 @@
                 <div class="f13">{{ $t("BENEFICIARY_AMOUNT") }}:</div>
 
                 <div class="raffle-amount">
-                  <b id="cryptoForRaffle">0.00000</b>
+                  <b id="beneficiaryAmount">0.00000</b>
                   <img
                     src="/img/icon_amount-eth.svg"
                     class="money-icon"
@@ -136,13 +136,13 @@
                 </div>
               </div>
               <div class="content">
-                <b class="f18">Current beneficiary:</b>
+                <b class="f18">{{ $t("BENEFICIARY_CURRENT") }}:</b>
                 <div class="ml-5">
-                  <small>0xF0CEe1E2C47744ad880547306a45332aDdAb8D54</small>
+                  <small id="beneficiaryUser">0xF0CEe1E2C47744ad880547306a45332aDdAb8D54</small>
                 </div>
                 <div class="ml-5">
-                  tranferred:
-                  <b>0.12345</b>
+                  {{ $t("BENEFICIARY_TRANSFERRED") }}:
+                  <b id="beneficiaryTransferred">0.00000</b>
                   <img
                     src="/img/icon_amount-eth.svg"
                     class="money-icon"
@@ -155,10 +155,10 @@
                   />
                 </div>
 
-                <div class="mt-4">
-                  <b class="f18">Your current profit:</b>
+                <div class="mt-4 hidden" id="beneficiaryProfit">
+                  <b class="f18">{{ $t("BENEFICIARY_PROFIT") }}:</b>
                   <h3 class="text-center current-profit-block">
-                    <span class="text-primary current-profit">0.04256</span>
+                    <span class="text-primary current-profit" id="beneficiaryProfit">0.00000</span>
                     <img
                       src="/img/icon_amount-eth.svg"
                       class="money-icon"
@@ -171,8 +171,30 @@
                     />
                   </h3>
 
-                  <div class="text-center mb-1">
-                    <button class="btn withdraw-btn">Withdraw</button>
+                  <div class="text-center mt-1">
+                    <button class="btn withdraw-btn">{{ $t("WITHDRAW") }}</button>
+                  </div>
+                </div>
+
+                <div class="mt-4" id="makeBeneficiary">
+                  <h3 class="text-center text-primary mb-3">{{ $t("BENEFICIARY_NEXT") }}</h3>
+                  <div class="text-center transfer-block">
+                    {{ $t("BENEFICIARY_TRANSFER") }}:
+                    <input type="number" class="ml-2 mr-1" step="0.01" min="0.01" id="beneficiaryTransferAmount" />
+                    <img
+                      src="/img/icon_amount-eth.svg"
+                      class="money-icon"
+                      v-show="currency === 'eth'"
+                    />
+                    <img
+                      src="/img/icon_amount-trx.svg"
+                      class="money-icon"
+                      v-show="currency === 'trx'"
+                    />
+                  </div>
+
+                  <div class="text-center mt-1">
+                    <button class="btn withdraw-btn">{{ $t("MAKE_ME_BENEFICIARY") }}</button>
                   </div>
                 </div>
               </div>
