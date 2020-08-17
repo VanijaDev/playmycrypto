@@ -6,9 +6,11 @@ import i18n from "./locales";
 import CoinflipGameComponent from './components/CoinflipGameComponent';
 import RPSGameComponent from './components/RPSGameComponent';
 import TTTGameComponent from './components/TTTGameComponent';
+import VModal from 'vue-js-modal'
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);
+Vue.use(VModal)
 
 let currency = localStorage.getItem('currency');
 let language = localStorage.getItem('language');

@@ -30,7 +30,48 @@
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsopponentmove')">Opponent Move</button>
           </div>-->
 
-          <div class="mt-5">
+          <div class="mt-4">
+            <h3 class="info-title mr-5 ml-5" @click="$modal.show('how-to-play-popup')">How to play?</h3>
+            <h3 class="info-title" @click="$modal.show('faq-popup')">FAQ</h3>
+
+            <modal name="how-to-play-popup" :height="600" :width="600">
+              <h2 slot class="text-primary text-center pt-3">
+                How to Play
+              </h2>
+              <div
+                id="BlockHowToPlayCF"
+                class="cards-pills-list scrollbar-popup-inner p20"
+                v-if="currentGame === 'cf'"
+                v-html="$t('HOW_TO_PLAY_CF')"
+              ></div>
+              <div
+                id="BlockHowToPlayRPS"
+                class="cards-pills-list scrollbar-popup-inner p20"
+                v-if="currentGame === 'rps'"
+                v-html="$t('HOW_TO_PLAY_RPS')"
+              ></div>
+            </modal>
+
+            <modal name="faq-popup" :height="600" :width="600">
+              <h2 slot class="text-primary text-center pt-3">
+                FAQ
+              </h2>
+              <div
+                id="BlockFAQCF"
+                class="cards-pills-list scrollbar-popup-inner p20"
+                v-if="currentGame === 'cf'"
+                v-html="$t('FAQ_CF')"
+              ></div>
+              <div
+                id="BlockFAQRPS"
+                class="cards-pills-list scrollbar-popup-inner p20"
+                v-if="currentGame === 'rps'"
+                v-html="$t('FAQ_RPS')"
+              ></div>
+            </modal>
+          </div>
+
+          <div class="mt-3">
             <div class="raffle shadow-block" id="raffleBlock">
               <div class="header position-relative">
                 <div>{{ $t("RAFFLE") }}</div>
@@ -64,7 +105,8 @@
                     onclick="window.Game.startRaffle()"
                     class="btn long-btn btn-primary rounded-button float-right"
                     disabled
-                  >{{ $t("START") }}</button>
+                  >{{ $t("START") }}
+                  </button>
                 </div>
                 <div class="participants pt-3">
                   <img src="/img/game-icon-quality.svg" class="mr-2" />
@@ -73,22 +115,67 @@
                 <div class="scrollbar-inner list-no-style" id="BlockRaffle"></div>
               </div>
             </div>
+
             <div class="how-to-play shadow-block">
               <div class="header position-relative">
-                <h2 class="text-uppercase f22 text-center pt-2">{{ $t("HOW_TO_PLAY") }}</h2>
+                <div>{{ $t("BENEFICIARY_FEE") }}</div>
+                <div class="f13">{{ $t("BENEFICIARY_AMOUNT") }}:</div>
+
+                <div class="raffle-amount">
+                  <b id="cryptoForRaffle">0.00000</b>
+                  <img
+                    src="/img/icon_amount-eth.svg"
+                    class="money-icon"
+                    v-show="currency === 'eth'"
+                  />
+                  <img
+                    src="/img/icon_amount-trx.svg"
+                    class="money-icon"
+                    v-show="currency === 'trx'"
+                  />
+                </div>
               </div>
-              <div
-                id="BlockHowToPlayCF"
-                class="cards-pills-list scrollbar-inner p20"
-                v-if="currentGame === 'cf'"
-                v-html="$t('HOW_TO_PLAY_CF')"
-              ></div>
-              <div
-                id="BlockHowToPlayRPS"
-                class="cards-pills-list scrollbar-inner p20"
-                v-if="currentGame === 'rps'"
-                v-html="$t('HOW_TO_PLAY_RPS')"
-              ></div>
+              <div class="content">
+                <b class="f18">Current beneficiary:</b>
+                <div class="ml-5">
+                  <small>0xF0CEe1E2C47744ad880547306a45332aDdAb8D54</small>
+                </div>
+                <div class="ml-5">
+                  tranferred:
+                  <b>0.12345</b>
+                  <img
+                    src="/img/icon_amount-eth.svg"
+                    class="money-icon"
+                    v-show="currency === 'eth'"
+                  />
+                  <img
+                    src="/img/icon_amount-trx.svg"
+                    class="money-icon"
+                    v-show="currency === 'trx'"
+                  />
+                </div>
+
+                <div class="mt-4">
+                  <b class="f18">Your current profit:</b>
+                  <h3 class="text-center current-profit-block">
+                    <span class="text-primary current-profit">0.04256</span>
+                    <img
+                      src="/img/icon_amount-eth.svg"
+                      class="money-icon"
+                      v-show="currency === 'eth'"
+                    />
+                    <img
+                      src="/img/icon_amount-trx.svg"
+                      class="money-icon"
+                      v-show="currency === 'trx'"
+                    />
+                  </h3>
+
+                  <div class="text-center mb-1">
+                    <button class="btn withdraw-btn">Withdraw</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -122,7 +209,8 @@
                 class="btn long-btn btn-primary rounded-button full-width mt-2"
                 id="loadMoreAvailableGamesBtn"
                 onclick="window.Game.loadMoreAvailableGames()"
-              >{{ $t("LOAD_MORE") }}</button>
+              >{{ $t("LOAD_MORE") }}
+              </button>
             </div>
           </div>
         </div>
@@ -132,44 +220,44 @@
 </template>
 
 <script>
-import Types from "../blockchain/types";
+  import Types from "../blockchain/types";
 
-export default {
-  data: function () {
-    return {
-      currentGame: "",
-    };
-  },
-  computed: {
-    currency() {
-      return this.$store.state.currency;
+  export default {
+    data: function () {
+      return {
+        currentGame: "",
+      };
     },
-  },
-  mounted() {
-    this.currentGame = window.location.pathname.replace("/", "");
-    console.log("----------- Open Game page for:", this.currentGame);
+    computed: {
+      currency() {
+        return this.$store.state.currency;
+      },
+    },
+    mounted() {
+      this.currentGame = window.location.pathname.replace("/", "");
+      console.log("----------- Open Game page for:", this.currentGame);
 
-    window.CommonManager.setCurrentView(Types.View.game);
+      window.CommonManager.setCurrentView(Types.View.game);
 
-    let recaptchaScript = document.createElement("script");
-    recaptchaScript.setAttribute("src", "/game.js");
-    document.head.appendChild(recaptchaScript);
+      let recaptchaScript = document.createElement("script");
+      recaptchaScript.setAttribute("src", "/game.js");
+      document.head.appendChild(recaptchaScript);
 
-    let currentGameTmp = this.currentGame;
-    let loadInterval = setInterval(function () {
-      if (typeof window.Game !== "undefined") {
-        clearInterval(loadInterval);
-        window.Game.setup(currentGameTmp);
-      }
-    }, 100);
-  },
-  beforeRouteLeave(to, from, next) {
-    console.log("Leave Game page");
-    window.Game.gameType = -1;
-    window.Game.onUnload();
-    document.getElementById("gameName").innerHTML = "";
+      let currentGameTmp = this.currentGame;
+      let loadInterval = setInterval(function () {
+        if (typeof window.Game !== "undefined") {
+          clearInterval(loadInterval);
+          window.Game.setup(currentGameTmp);
+        }
+      }, 100);
+    },
+    beforeRouteLeave(to, from, next) {
+      console.log("Leave Game page");
+      window.Game.gameType = -1;
+      window.Game.onUnload();
+      document.getElementById("gameName").innerHTML = "";
 
-    next();
-  },
-};
+      next();
+    },
+  };
 </script>

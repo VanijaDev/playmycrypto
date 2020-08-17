@@ -550,10 +550,44 @@ input:focus {
     padding: 12px;
 
     b {
-      font-size: 22px;
+      font-size: 26px;
       line-height: 26px;
       margin-left: 7px;
+      margin-right: 4px;
     }
+  }
+}
+
+.withdraw-btn {
+  color: #FFF;
+  background: #F2994A;
+  width: 100%;
+  max-width: 310px;
+  height: 70px;
+  border-radius: 35px;
+  padding: 0 10px 0;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 1px 10px rgba(242, 153, 74, 0.25);
+  margin-top: 20px;
+  white-space: nowrap;
+  transition: all ease .4s;
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+
+.current-profit-block {
+  .current-profit {
+    font-size: 34px;
+  }
+
+  .money-icon {
+    width: 40px;
+    margin-left: 10px;
+    vertical-align: bottom;
   }
 }
 
@@ -564,6 +598,8 @@ input:focus {
 }
 
 .how-to-play {
+  height: 522px;
+
   .scrollbar-inner {
     height: 455px;
   }
@@ -722,6 +758,12 @@ input:focus {
 
 .scrollbar-inner {
   height: 400px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.scrollbar-popup-inner {
+  height: 520px;
   overflow-y: auto;
   position: relative;
 }
@@ -1019,6 +1061,22 @@ input:focus {
   position: absolute;
   top: -17px;
   right: -17px;
+}
+
+.info-title {
+  display: inline-block;
+  color: #F2994A;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
 }
 
 .red {
