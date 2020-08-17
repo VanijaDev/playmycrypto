@@ -450,7 +450,9 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
     require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
     require(game.winner == address(0), "Has winner");
-    require(!gameMoveExpired(_id), "Expired");
+    if (msg.sender == game.opponent) {
+      require(!gameMoveExpired(_id), "Expired");
+    }
 
     //  quit game
     if (game.creator == msg.sender && game.opponent != address(0)) {
