@@ -33,12 +33,11 @@ let ProfileManager = {
 
     await this.updateCurrentlyPlayingGames();
     await this.updatePlayedGamesTotalAmounts();
-    // await this.updatePlayerGameplayProfit();
-    // await this.updateReferralFeesWithdrawn();
-    // await this.updatePlayerTotalProfit();
-    // await this.updatePending();
-
-    // this.profileUpdated();
+    await this.updatePlayerGameplayProfit();
+    await this.updateReferralFeesWithdrawn();
+    await this.updatePlayerTotalProfit();
+    await this.updatePending();
+    await this.checkIfPending();
   },
 
   updateAfterWithdrawal: async function () {
@@ -52,13 +51,14 @@ let ProfileManager = {
     await this.updatePending();
   },
 
-  profileUpdated: function () {
-    if (this.profileUpdateHandler) {
-      if (typeof (this.profileUpdateHandler.profileUpdated) == "function") {
-        this.profileUpdateHandler.profileUpdated();
-      }
-    }
-  },
+  //  TODO: remove if not used
+  // profileUpdated: function () {
+  //   if (this.profileUpdateHandler) {
+  //     if (typeof (this.profileUpdateHandler.profileUpdated) == "function") {
+  //       this.profileUpdateHandler.profileUpdated();
+  //     }
+  //   }
+  // },
 
   updateCurrentAccountUI: async function () {
     let account = window.BlockchainManager.currentAccount();
@@ -210,7 +210,7 @@ let ProfileManager = {
       pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
     }
-
+    
     let rpsResult = new BigNumber(await PromiseManager.referralFeesPendingPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (rpsResult.comparedTo(new BigNumber("0")) > 0) {
       pendingGames.push(Types.Game.rps);
@@ -230,11 +230,11 @@ let ProfileManager = {
       pendingValues.push(cfResultGames.length);
     }
 
-    let rpsResultGames = await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(Types.Game.rps, window.BlockchainManager.currentAccount());
-    if (new BigNumber(rpsResultGames.length.toString()).comparedTo(new BigNumber("0"))) {
-      pendingGames.push(Types.Game.rps);
-      pendingValues.push(rpsResultGames.length);
-    }
+    // let rpsResultGames = await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(Types.Game.rps, window.BlockchainManager.currentAccount());
+    // if (new BigNumber(rpsResultGames.length.toString()).comparedTo(new BigNumber("0"))) {
+    //   pendingGames.push(Types.Game.rps);
+    //   pendingValues.push(rpsResultGames.length);
+    // }
 
     this.updatePendingPictures(this.PendingWithdraw.gamePrize, pendingGames, pendingValues);
   },
@@ -249,13 +249,25 @@ let ProfileManager = {
       pendingValues.push(cfResult);
     }
 
-    let rpsResult = new BigNumber(await PromiseManager.rafflePrizePendingForAddressPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    if (rpsResult.comparedTo(new BigNumber("0")) > 0) {
-      pendingGames.push(Types.Game.rps);
-      pendingValues.push(rpsResult);
-    }
+    // let rpsResult = new BigNumber(await PromiseManager.rafflePrizePendingForAddressPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    // if (rpsResult.comparedTo(new BigNumber("0")) > 0) {
+    //   pendingGames.push(Types.Game.rps);
+    //   pendingValues.push(rpsResult);
+    // }
 
     this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
+  },
+
+  checkIfPending: async function () {
+    //  cf
+    if (this.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
+      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, this.ongoingGameCF_Creator);
+      if (!Utils.addressesEqual(gameInfo.opponent, Utils.zeroAddress_eth)) {
+        console.log('%c CF - pending move', 'color: #ff1d1d');
+      }
+    }
+
+    //  rps - TODO
   },
 
   isGameParticipant: function (_gameType, _id) {

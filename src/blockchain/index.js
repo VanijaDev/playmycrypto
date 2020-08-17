@@ -8,11 +8,6 @@ const $t = $('#translations').data();
 const Index = {
   networkId: 0,
 
-  //  ProfileManager callback
-  profileUpdated: function () {
-    ProfileManager.checkIfNextMover();
-  },
-
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 

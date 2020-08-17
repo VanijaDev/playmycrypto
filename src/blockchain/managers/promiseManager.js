@@ -133,7 +133,7 @@ let PromiseManager = {
 
   gamesWithPendingPrizeWithdrawalForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawalForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawal(_account).call()
         .then(result => {
           resolve(result);
         })
@@ -145,7 +145,7 @@ let PromiseManager = {
 
   rafflePrizePendingForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePendingForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePending(_account).call()
         .then(result => {
           resolve(result);
         })
