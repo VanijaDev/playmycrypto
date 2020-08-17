@@ -39,6 +39,8 @@ const BlockchainManager_ethereum = {
 
     this.contract_inst_cf = CoinFlipData.build();
     this.contract_inst_rps = RockPaperScissorsData.build();
+
+    return true;
   },
 
   connectToMetaMask: async function () {

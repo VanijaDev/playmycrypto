@@ -8,34 +8,31 @@ const $t = $('#translations').data();
 const Index = {
   networkId: 0,
 
-  //  ProfileManager callback
-  profileUpdated: function () {
-    ProfileManager.checkIfNextMover();
-  },
-
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
-      await window.BlockchainManager.init();
+      if (!await window.BlockchainManager.init()) {
+        throw("BlockchainManager.init() failed");
+      }
     }
     await ProfileManager.update();
 
-    ProfileManager.setProfileUpdateHandler(this);
-    await this.refreshData();
+    // ProfileManager.setProfileUpdateHandler(this);
+    // await this.refreshData();
 
-    //  events
-    NotificationManager.eventHandler = this;
-    NotificationManager.subscribeAll();
+    // //  events
+    // NotificationManager.eventHandler = this;
+    // NotificationManager.subscribeAll();
   },
 
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    ProfileManager.profileUpdateHandler = null;
-    NotificationManager.eventHandler = null;
-    NotificationManager.clearAll();
-    hideTopBannerMessage();
+    // ProfileManager.profileUpdateHandler = null;
+    // NotificationManager.eventHandler = null;
+    // NotificationManager.clearAll();
+    // hideTopBannerMessage();
   },
 
   refreshData: function () {

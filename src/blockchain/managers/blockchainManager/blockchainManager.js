@@ -13,8 +13,8 @@ const BlockchainManager = {
   init: async function () {
     console.log('%c BlockchainManager - init', 'color: #00aa00');
     await this.setCurrentBlockchainManager(Types.BlockchainType.ethereum);
-    await this.currentBlockchainManager.init();
-    return this;
+    return await this.currentBlockchainManager.init();
+    // return this;
   },
 
   isInitted: function () {
@@ -28,16 +28,15 @@ const BlockchainManager = {
   setCurrentBlockchainManager: function (_blockchainType) {
     this.currentBlockchainType = _blockchainType;
     console.log('BlockchainManager - _blockchainType', _blockchainType);
-    console.log('BlockchainManager - _blockchainType', this.currentBlockchainType);
 
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
-        // console.log("setCurrentBlockchainManager - Ethereum");
+        console.log("setCurrentBlockchainManager - Ethereum");
         this.currentBlockchainManager = BlockchainManager_ethereum;
         break;
 
       case Types.BlockchainType.tron:
-        // console.log("setCurrentBlockchainManager - Tron");
+        console.log("setCurrentBlockchainManager - Tron");
         break;
 
       default:

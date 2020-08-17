@@ -1,7 +1,19 @@
 let PromiseManager = {
-  ongoingGameIdxForCreatorPromise: function (_gameType, _account) {
+  ongoingGameAsCreatorPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameAsCreator(_account).call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
+  ongoingGameAsOpponentPromise: function (_gameType, _account) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameAsOpponent(_account).call()
         .then(result => {
           resolve(result);
         })
@@ -23,9 +35,9 @@ let PromiseManager = {
     });
   },
 
-  participatedGameIdxsForPlayerPromise: function (_gameType, _account) {
+  playedGamesForPlayerPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.getParticipatedGameIdxsForPlayer(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getPlayedGamesForPlayer(_account).call()
         .then(result => {
           resolve(result);
         })
@@ -121,7 +133,7 @@ let PromiseManager = {
 
   gamesWithPendingPrizeWithdrawalForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawalForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawal(_account).call()
         .then(result => {
           resolve(result);
         })
@@ -133,7 +145,7 @@ let PromiseManager = {
 
   rafflePrizePendingForAddressPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePendingForAddress(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePending(_account).call()
         .then(result => {
           resolve(result);
         })

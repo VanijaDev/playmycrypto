@@ -103,8 +103,6 @@
       <div class="row">
         <div class="col-sm-9 pr-0">
           <div class="row">
-            <h1 class="col-sm-2 pt-1 total-amount-title">{{ $t("TOTAL") }}:</h1>
-
             <div class="col-sm-10 text-right total-amounts">
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>

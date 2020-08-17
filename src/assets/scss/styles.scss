@@ -1202,16 +1202,15 @@ input:focus {
   flex: 0 0 55%;
 }
 
-.contacts {
+.social {
   margin-right: auto;
   margin-left: auto;
 }
 
-.tele-link {
-  font-size: 30px;
-  color: #dc3545;
-  font-weight: bolder;
-  text-decoration: underline;
+.social a {
+  margin-right: 10px;
+  margin-left: 10px;
+  border: none;
 }
 
 #gameBlock {
