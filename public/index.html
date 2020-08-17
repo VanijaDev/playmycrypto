@@ -39,6 +39,11 @@
     $('#' + id).removeClass('hidden');
   }
 
+  function switchBeneficiary(blockId) {
+    $('.beneficiary-block').addClass('hidden');
+    $('#' + blockId).removeClass('hidden');
+  }
+
   function showActionRequired(gameButtonId) {
     $('#profileNotification').removeClass('hidden');
     $('#' + gameButtonId).append('<img src="/img/notification.svg" class="notification-icon">');

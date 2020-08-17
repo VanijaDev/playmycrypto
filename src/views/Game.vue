@@ -155,10 +155,10 @@
                   />
                 </div>
 
-                <div class="mt-4 hidden" id="beneficiaryProfit">
+                <div class="mt-4 hidden beneficiary-block" id="beneficiaryProfit">
                   <b class="f18">{{ $t("BENEFICIARY_PROFIT") }}:</b>
                   <h3 class="text-center current-profit-block">
-                    <span class="text-primary current-profit" id="beneficiaryProfit">0.00000</span>
+                    <span class="text-primary current-profit" id="beneficiaryCurrentAmount">0.00000</span>
                     <img
                       src="/img/icon_amount-eth.svg"
                       class="money-icon"
@@ -176,7 +176,7 @@
                   </div>
                 </div>
 
-                <div class="mt-4" id="makeBeneficiary">
+                <div class="mt-4 beneficiary-block" id="makeBeneficiary">
                   <h3 class="text-center text-primary mb-3">{{ $t("BENEFICIARY_NEXT") }}</h3>
                   <div class="text-center transfer-block">
                     {{ $t("BENEFICIARY_TRANSFER") }}:
