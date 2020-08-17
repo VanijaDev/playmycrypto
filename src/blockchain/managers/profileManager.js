@@ -15,7 +15,8 @@ let ProfileManager = {
 
   profileUpdateHandler: null,
 
-  ongoingGameCF: new BigNumber("0"),
+  ongoingGameCF_Creator: new BigNumber("0"),
+  ongoingGameCF_Opponent: new BigNumber("0"),
   ongoingGameRPS: new BigNumber("0"),
 
   setProfileUpdateHandler: function (_handler) {
@@ -31,13 +32,13 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerGameplayProfit();
-    await this.updateReferralFeesWithdrawn();
-    await this.updatePlayerTotalProfit();
-    await this.updatePending();
+    // await this.updatePlayedGamesTotalAmounts();
+    // await this.updatePlayerGameplayProfit();
+    // await this.updateReferralFeesWithdrawn();
+    // await this.updatePlayerTotalProfit();
+    // await this.updatePending();
 
-    this.profileUpdated();
+    // this.profileUpdated();
   },
 
   updateAfterWithdrawal: async function () {
@@ -72,12 +73,20 @@ let ProfileManager = {
   updateCurrentlyPlayingGames: async function () {
     Utils.clearElementIcons($('#listCurrentlyPlayingGames'));
 
-    this.ongoingGameCF = new BigNumber(await PromiseManager.ongoingGameIdxForCreatorPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // console.log("this.ongoingGameCF: ", this.ongoingGameCF.toString());
-    if (this.ongoingGameCF.comparedTo(new BigNumber("0")) == 1) {
+    //  cf
+    this.ongoingGameCF_Creator = new BigNumber(await PromiseManager.ongoingGameAsCreatorPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
+    if (this.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
       Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
     }
 
+    this.ongoingGameCF_Opponent = new BigNumber(await PromiseManager.ongoingGameAsOpponentPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
+    if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
+      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
+    }
+
+    //  rps
     this.ongoingGameRPS = new BigNumber(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameRPS: ", this.ongoingGameRPS.toString());
     if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {

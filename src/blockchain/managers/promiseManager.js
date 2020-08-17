@@ -1,7 +1,19 @@
 let PromiseManager = {
-  ongoingGameIdxForCreatorPromise: function (_gameType, _account) {
+  ongoingGameAsCreatorPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameIdxForCreator(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameAsCreator(_account).call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
+  ongoingGameAsOpponentPromise: function (_gameType, _account) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.ongoingGameAsOpponent(_account).call()
         .then(result => {
           resolve(result);
         })
