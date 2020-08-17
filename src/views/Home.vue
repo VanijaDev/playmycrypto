@@ -7,26 +7,44 @@
         <div class="row our-advantages-list">
           <div class="col">
             <b>95%</b>
-            <p>{{ $t("ADVANTAGES.TEXT_1") }}</p>
-          </div>
-          <div class="col">
-            <b>1%</b>
-            <p>{{ $t("ADVANTAGES.TEXT_6") }}</p>
-          </div>
-          <div class="col">
-            <b>1%</b>
-            <p class="pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_2") }}</p>
+            <img
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(1)"
+                @mouseleave="hideInfoTooltip"
+            />
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_1") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 1">
+              {{
+              $t("ADVANTAGES.TOOLTIP_1")
+              }}
+            </span>
           </div>
           <div class="col">
             <b>1%</b>
             <img
-              class="info_icon"
-              src="/img/icon_info.svg"
-              @click.stop="showInfoTooltip(1)"
-              v-click-outside="hideInfoTooltip"
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(2)"
+                @mouseleave="hideInfoTooltip"
             />
-            <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_3") }}</p>
-            <span class="tooltip-info" v-show="visibleInfoTooltip === 1">
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_2") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 2">
+              {{
+              $t("ADVANTAGES.TOOLTIP_2")
+              }}
+            </span>
+          </div>
+          <div class="col">
+            <b>1%</b>
+            <img
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(3)"
+                @mouseleave="hideInfoTooltip"
+            />
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_3") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 3">
               {{
               $t("ADVANTAGES.TOOLTIP_3")
               }}
@@ -35,29 +53,45 @@
           <div class="col">
             <b>1%</b>
             <img
-              class="info_icon"
-              src="/img/icon_info.svg"
-              @click.stop="showInfoTooltip(2)"
-              v-click-outside="hideInfoTooltip"
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(4)"
+                @mouseleave="hideInfoTooltip"
             />
-            <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_4") }}</p>
-            <!-- <span class="tooltip-info" v-show="visibleInfoTooltip===2">
-              <a href="https://onigiribank.com" target="blank">OnigiriBank</a>
-              {{ $t("ADVANTAGES.TOOLTIP_4") }}
-            </span>-->
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_4") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 4">
+              {{
+              $t("ADVANTAGES.TOOLTIP_4")
+              }}
+            </span>
+          </div>
+          <div class="col">
+            <b>1%</b>
+            <img
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(5)"
+                @mouseleave="hideInfoTooltip"
+            />
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_5") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 5">
+              {{
+              $t("ADVANTAGES.TOOLTIP_5")
+              }}
+            </span>
           </div>
           <div class="col">
             <b>100%</b>
             <img
-              class="info_icon"
-              src="/img/icon_info.svg"
-              @click.stop="showInfoTooltip(3)"
-              v-click-outside="hideInfoTooltip"
+                class="info_icon"
+                src="/img/icon_info.svg"
+                @mouseover="showInfoTooltip(6)"
+                @mouseleave="hideInfoTooltip"
             />
-            <p class="show-tooltip pl-4 pr-4">{{ $t("ADVANTAGES.TEXT_5") }}</p>
-            <span class="tooltip-info" v-show="visibleInfoTooltip === 3">
+            <p class="show-tooltip pl-2 pr-2">{{ $t("ADVANTAGES.TEXT_6") }}</p>
+            <span class="tooltip-info" v-show="visibleInfoTooltip === 6">
               {{
-              $t("ADVANTAGES.TOOLTIP_5")
+              $t("ADVANTAGES.TOOLTIP_6")
               }}
             </span>
           </div>
@@ -73,22 +107,22 @@
 
             <div class="col-sm-10 text-right total-amounts">
               <div class="total-item d-inline-block">
-                <img src="/img/bg-hand-money.svg" class="hand-money" />
+                <img src="/img/bg-hand-money.svg" class="hand-money"/>
                 <span id="totalUsedReferralFees">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
-                <img src="/img/bg-hand-money.svg" class="hand-money" />
+                <img src="/img/bg-hand-money.svg" class="hand-money"/>
                 <span id="ongoinRafflePrize">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
-                <img src="/img/bg-hand-money.svg" class="hand-money" />
+                <img src="/img/bg-hand-money.svg" class="hand-money"/>
                 <span id="totalUsedPartnerFees">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
             </div>
           </div>
@@ -102,7 +136,7 @@
                     {{ $t("NOW_PLAYING") }}
                     <b id="now_playing_coinflip">0</b>
                   </span>
-                  <img src="/img/icon-coinflip.svg" class="game-icon" />
+                  <img src="/img/icon-coinflip.svg" class="game-icon"/>
                   <span class="title">{{ $t("COIN_FLIP") }}</span>
                 </router-link>
               </div>
@@ -113,7 +147,7 @@
                     {{ $t("NOW_PLAYING") }}
                     <b id="now_playing_rps">0</b>
                   </span>
-                  <img src="/img/icon-rock-paper-scissors.svg" class="game-icon" />
+                  <img src="/img/icon-rock-paper-scissors.svg" class="game-icon"/>
                   <span class="title">{{ $t("ROCK_PAPER_SCISSORS") }}</span>
                 </router-link>
               </div>
@@ -130,7 +164,7 @@
               </div>-->
 
               <div class="one-game new-game">
-                <img src="/img/icon-coming-soon.svg" class="game-icon" />
+                <img src="/img/icon-coming-soon.svg" class="game-icon"/>
                 <span class="new-game-title">{{ $t("NEW_GAME") }}</span>
                 <span class="title">{{ $t("COMING_SOON") }}...</span>
               </div>
@@ -145,48 +179,48 @@
             <div class="header">
               {{ $t("TOTAL_WON") }}:
               <b id="rafflePrizesWonTotal">0.00000</b>
-              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+              <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+              <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
             </div>
             <div class="content">
               <div class="total-won">
-                <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon" />
+                <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon"/>
                 <span id="rafflePrizesWonTotalGameCoinFlip">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-won">
-                <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon" />
+                <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon"/>
                 <span id="rafflePrizesWonTotalGameRPS">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-won">
-                <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon" />
+                <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon"/>
                 <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
-                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'" />
-                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'" />
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
             </div>
           </div>
 
           <div class="text-center mb-4 more-play">
-            <img src="/img/icon-motivation.svg" />
+            <img src="/img/icon-motivation.svg"/>
           </div>
 
           <div class="border-block">
             <div class="header f13">{{ $t("TOTAL_CRYPT_AMOUNT") }}</div>
             <table id="cryptoAmountPlayedOnSiteTotal">
               <tbody>
-                <tr></tr>
-                <tr>
-                  <td class="total-column total-column-1">ETH</td>
-                  <td class="total-column total-column-2">0.00000</td>
-                </tr>
-                <tr>
-                  <td class="total-column total-column-1">TRX</td>
-                  <td class="total-column total-column-2">0.00000</td>
-                </tr>
+              <tr></tr>
+              <tr>
+                <td class="total-column total-column-1">ETH</td>
+                <td class="total-column total-column-2">0.00000</td>
+              </tr>
+              <tr>
+                <td class="total-column total-column-1">TRX</td>
+                <td class="total-column total-column-2">0.00000</td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -197,53 +231,53 @@
 </template>
 
 <script>
-import ClickOutside from "vue-click-outside";
-import Types from "../blockchain/types";
+  import ClickOutside from "vue-click-outside";
+  import Types from "../blockchain/types";
 
-export default {
-  data: function () {
-    return {
-      visibleInfoTooltip: 0,
-    };
-  },
-  computed: {
-    currency() {
-      return this.$store.state.currency;
+  export default {
+    data: function () {
+      return {
+        visibleInfoTooltip: 0,
+      };
     },
-  },
-  methods: {
-    showInfoTooltip(num) {
-      this.visibleInfoTooltip = num;
+    computed: {
+      currency() {
+        return this.$store.state.currency;
+      },
     },
-    hideInfoTooltip() {
-      this.visibleInfoTooltip = 0;
+    methods: {
+      showInfoTooltip(num) {
+        this.visibleInfoTooltip = num;
+      },
+      hideInfoTooltip() {
+        this.visibleInfoTooltip = 0;
+      },
     },
-  },
-  mounted() {
-    console.log("----------- Open Home page");
+    mounted() {
+      console.log("----------- Open Home page");
 
-    window.CommonManager.setCurrentView(Types.View.index);
+      window.CommonManager.setCurrentView(Types.View.index);
 
-    let recaptchaScript = document.createElement("script");
-    recaptchaScript.setAttribute("src", "/index.js");
-    document.head.appendChild(recaptchaScript);
+      let recaptchaScript = document.createElement("script");
+      recaptchaScript.setAttribute("src", "/index.js");
+      document.head.appendChild(recaptchaScript);
 
-    let loadInterval = setInterval(async function () {
-      if (typeof window.Index !== "undefined") {
-        clearInterval(loadInterval);
-        window.Index.setup();
-      }
-    }, 100);
-  },
+      let loadInterval = setInterval(async function () {
+        if (typeof window.Index !== "undefined") {
+          clearInterval(loadInterval);
+          window.Index.setup();
+        }
+      }, 100);
+    },
 
-  beforeRouteLeave(to, from, next) {
-    // console.log("Leave Home page");
-    window.Index.onUnload();
-    next();
-  },
+    beforeRouteLeave(to, from, next) {
+      // console.log("Leave Home page");
+      window.Index.onUnload();
+      next();
+    },
 
-  directives: {
-    ClickOutside,
-  },
-};
+    directives: {
+      ClickOutside,
+    },
+  };
 </script>

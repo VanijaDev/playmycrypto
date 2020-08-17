@@ -11,34 +11,46 @@
 </head>
 
 <body>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
+<div id="app"></div>
+<!-- built files will be auto injected -->
 
-  <script src="./jquery.min.js"></script>
-  <script>
-    function showTopBannerMessage(textBefore, hash, autohide) {
-      var topBannerMessage = textBefore;
-      if (hash && hash.length > 0) {
-        var linkStr = "https://etherscan.io/tx/" + hash;
-        topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
-      }
-      $('.top-message').html(topBannerMessage).addClass('visible');
-      if (autohide) {
-        setTimeout(function () {
-          $('.top-message').html('').removeClass('visible');
-        }, 3000);
-      }
+<script src="./jquery.min.js"></script>
+<script>
+  function showTopBannerMessage(textBefore, hash, autohide) {
+    var topBannerMessage = textBefore;
+    if (hash && hash.length > 0) {
+      var linkStr = "https://etherscan.io/tx/" + hash;
+      topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
     }
+    $('.top-message').html(topBannerMessage).addClass('visible');
+    if (autohide) {
+      setTimeout(function () {
+        $('.top-message').html('').removeClass('visible');
+      }, 3000);
+    }
+  }
 
-    function hideTopBannerMessage() {
-      $('.top-message').html('').removeClass('visible');
-    }
+  function hideTopBannerMessage() {
+    $('.top-message').html('').removeClass('visible');
+  }
 
-    function showGameBlock(id) {
-      $('.game-block').addClass('hidden');
-      $('#' + id).removeClass('hidden');
+  function showGameBlock(id) {
+    $('.game-block').addClass('hidden');
+    $('#' + id).removeClass('hidden');
+  }
+
+  function showActionRequired(gameButtonId) {
+    $('#profileNotification').removeClass('hidden');
+    $('#' + gameButtonId).append('<img src="/img/notification.svg" class="notification-icon">');
+  }
+
+  function hideActionRequired(gameButtonId) {
+    $('#' + gameButtonId).find('.notification-icon').remove();
+    if (!$('.notification-icon').length) {
+      $('#profileNotification').addClass('hidden');
     }
-  </script>
+  }
+</script>
 
 </body>
 

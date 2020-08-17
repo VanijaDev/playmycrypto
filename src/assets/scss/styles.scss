@@ -277,6 +277,8 @@ input:focus {
     width: 12px;
     vertical-align: super;
     margin-left: 2px;
+    position: absolute;
+    right: 15px;
   }
 
   .one-game {
@@ -458,7 +460,7 @@ input:focus {
     border-width: 11px;
   }
 
-  >li {
+  > li {
     padding: 16px 0;
 
     &:not(:last-child) {
@@ -1000,7 +1002,23 @@ input:focus {
 }
 
 #listCurrentlyPlayingGames img {
-  margin-right: 10px;
+  margin-right: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.notification {
+  position: absolute;
+  right: -7px;
+  top: -7px;
+}
+
+.notification-icon {
+  position: absolute;
+  top: -17px;
+  right: -17px;
 }
 
 .red {
@@ -1074,7 +1092,7 @@ input:focus {
   .user-dropdown {
     width: 330px;
 
-    >li {
+    > li {
       padding: 6px 0;
     }
 
