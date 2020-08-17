@@ -12,12 +12,20 @@
             </router-link>
           </div>
           <div id="gameName" class="mr-game-name"></div>
-          <div class="contacts">
-            <a
-              href="https://t.me/playmycrypto"
-              target="blank"
-              class="tele-link"
-            >{{ $t("JOIN_TELE") }}</a>
+          <div class="social">
+            <a href="https://www.reddit.com" target="blank">
+              <img alt="PlayMyCrypto reddit" src="/img/icon_reddit.svg">
+            </a>
+            <a href="https://www.twitter.com" target="blank">
+              <img alt="PlayMyCrypto twitter" src="/img/icon_twitter.svg">
+            </a>
+            <a href="https://t.me/playmycrypto" target="blank">
+              <img alt="PlayMyCrypto telegram" src="/img/icon_tele.svg">
+            </a>
+            <a href="https://www.bitcointalk.org" target="blank">
+              <img alt="PlayMyCrypto bitcointalk" src="/img/icon_btn_talk.svg">
+            </a>
+
           </div>
           <div class="row align-self-start">
             <div class="choose-crypto">{{ $t("CHOOSE_CRYPTO") }}:</div>
