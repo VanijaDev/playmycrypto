@@ -28,7 +28,6 @@
 
           </div>
           <div class="row align-self-start">
-            <div class="choose-crypto">{{ $t("CHOOSE_CRYPTO") }}:</div>
             <button
               class="currency-select"
               v-bind:class="{ 'is-active': currency === 'eth' }"
