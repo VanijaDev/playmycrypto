@@ -24,12 +24,6 @@ const Utils = {
     return web3.utils.toWei(validatedValue, "ether");
   },
 
-  addGameIconsToElement: (element, gameTypes) => {
-    gameTypes.forEach((type) => {
-      element.append('<img src="/img/' + Utils.gameIconSmallForGame(type) + '.svg">');
-    })
-  },
-
   clearElementIcons: (element) => {
     element.empty();
   },

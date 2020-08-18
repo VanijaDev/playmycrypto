@@ -45,11 +45,15 @@
   }
 
   function showActionRequired(gameButtonId) {
+    //  playingCFCreator, playingCFOpponent
+    //  playingRPSCreator, playingRPSOpponent
     $('#profileNotification').removeClass('hidden');
     $('#' + gameButtonId).append('<img src="/img/notification.svg" class="notification-icon">');
   }
 
   function hideActionRequired(gameButtonId) {
+    //  playingCFCreator, playingCFOpponent
+    //  playingRPSCreator, playingRPSOpponent
     $('#' + gameButtonId).find('.notification-icon').remove();
     if (!$('.notification-icon').length) {
       $('#profileNotification').addClass('hidden');

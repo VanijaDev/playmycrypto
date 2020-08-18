@@ -36,8 +36,7 @@ let ProfileManager = {
     await this.updatePlayerGameplayProfit();
     await this.updateReferralFeesWithdrawn();
     await this.updatePlayerTotalProfit();
-    await this.updatePending();
-    await this.checkIfPending();
+    await this.updatePendingWithdrawals();
   },
 
   updateAfterWithdrawal: async function () {
@@ -77,21 +76,43 @@ let ProfileManager = {
     this.ongoingGameCF_Creator = new BigNumber(await PromiseManager.ongoingGameAsCreatorPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
     if (this.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
-      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
+      $('#listCurrentlyPlayingGames').append('<button id="ongoingGameCF_Creator" class="btn btn-animated" onclick="ProfileManager.currentlyPlayingGameClicked(\'' + Types.Game.cf + '\',' + this.ongoingGameCF_Creator + ');"><img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3"></button>');
+      if (this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
+        showActionRequired("ongoingGameCF_Creator");
+      }
     }
 
     this.ongoingGameCF_Opponent = new BigNumber(await PromiseManager.ongoingGameAsOpponentPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
     if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
-      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.cf]);
+      $('#listCurrentlyPlayingGames').append('<button class="btn btn-animated" onclick="ProfileManager.currentlyPlayingGameClicked(\'' + Types.Game.cf + '\',' + this.ongoingGameCF_Opponent + ');"><img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3"></button>');
     }
 
-    //  rps
-    this.ongoingGameRPS = new BigNumber(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    // console.log("this.ongoingGameRPS: ", this.ongoingGameRPS.toString());
-    if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
-      Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.rps]);
+    // //  rps
+    // this.ongoingGameRPS = new BigNumber(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    // // console.log("this.ongoingGameRPS: ", this.ongoingGameRPS.toString());
+    // if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
+    //   Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.rps]);
+    // }
+  },
+
+  checkIfPendingMove: async function (_gameType, _gameId) {
+    switch (_gameType) {
+      case Types.Game.cf:
+        let gameInfo = await PromiseManager.gameInfoPromise(_gameType, _gameId);
+        return (!Utils.addressesEqual(gameInfo.opponent, Utils.zeroAddress_eth));
+
+      case Types.Game.rps:
+    
+        break;
+
+      default:
+        throw("Wrong _gameType: ", _gameType);
     }
+  },
+
+  currentlyPlayingGameClicked(_gameType, _gameId) {
+    window.location.href = "/" + _gameType + "?id=" + _gameId;
   },
 
   updatePlayedGamesTotalAmounts: async function () {
@@ -195,7 +216,7 @@ let ProfileManager = {
     }
   },
 
-  updatePending: async function () {
+  updatePendingWithdrawals: async function () {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
     this.updatePendingRafflePrize();
@@ -256,18 +277,6 @@ let ProfileManager = {
     // }
 
     this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
-  },
-
-  checkIfPending: async function () {
-    //  cf
-    if (this.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, this.ongoingGameCF_Creator);
-      if (!Utils.addressesEqual(gameInfo.opponent, Utils.zeroAddress_eth)) {
-        console.log('%c CF - pending move', 'color: #ff1d1d');
-      }
-    }
-
-    //  rps - TODO
   },
 
   isGameParticipant: function (_gameType, _id) {

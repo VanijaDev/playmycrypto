@@ -101,12 +101,28 @@
                   <li>
                     <h3>{{ $t("CURRENTLY_PLAYING") }}:</h3>
                     <div id="listCurrentlyPlayingGames">
-                      <router-link to="/cf" id="playingCF" class="hidden position-relative">
+                      <!-- <button class="btn btn-animated" @click="currentlyPlayingClicked(1)">
+                        <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
+                      </button>
+                      <button class="btn btn-animated" @click="currentlyPlayingClicked(1)">
+                        <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
+                      </button>
+                      <button class="btn btn-animated" @click="currentlyPlayingClicked(1)">
+                        <img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3">
+                      </button>
+
+                      <router-link to="/cf" id="playingCFCreator" class="hidden position-relative btn-animated">
                         <img src="/img/icon-coinflip-sm.svg">
                       </router-link>
-                      <router-link to="/rps" class="hidden position-relative" id="playingRPS">
+                      <router-link to="/cf" id="playingCFOpponent" class="hidden position-relative btn-animated">
+                        <img src="/img/icon-coinflip-sm.svg">
+                      </router-link>
+                      <router-link to="/rps" id="playingRPSCreator" class="hidden position-relative btn-animated">
                         <img src="/img/icon-rock-paper-scissors-sm.svg">
                       </router-link>
+                      <router-link to="/rps" id="playingRPSOpponent" class="hidden position-relative btn-animated">
+                        <img src="/img/icon-rock-paper-scissors-sm.svg">
+                      </router-link> -->
                     </div>
                   </li>
 
@@ -379,10 +395,10 @@
 <script>
 import ClickOutside from "vue-click-outside";
 import Types from "./blockchain/types";
-// import CommonManager from "./blockchain/managers/CommonManager";
-// import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
-// import ProfileManager from "./blockchain/managers/profileManager";
-// import NotificationManager from "./blockchain/managers/notificationManager";
+import CommonManager from "./blockchain/managers/CommonManager";
+import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
+import ProfileManager from "./blockchain/managers/profileManager";
+import NotificationManager from "./blockchain/managers/notificationManager";
 
 export default {
   data: function () {

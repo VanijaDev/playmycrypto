@@ -224,7 +224,7 @@ input:focus {
     background: #F7F7F7;
     position: relative;
     margin-top: 36px;
-    margin-left: 30px;
+    margin-left: 24px;
     font-size: 22px;
     line-height: 26px;
     font-weight: 700;
@@ -274,11 +274,11 @@ input:focus {
   }
 
   .info_icon {
-    width: 12px;
+    width: 16px;
     vertical-align: super;
     margin-left: 2px;
     position: absolute;
-    right: 15px;
+    right: 52px;
   }
 
   .one-game {
@@ -619,7 +619,7 @@ input:focus {
   width: 50px;
   border-radius: 10px;
   transition: transform linear .2s, box-shadow linear .2s;
-  margin-right: 10px;
+  margin-right: 20px;
 
   img {
     border-radius: 10px;
@@ -1050,10 +1050,6 @@ input:focus {
   border-radius: 0 0 10px 10px;
 }
 
-#listCurrentlyPlayingGames img {
-  margin-right: 20px;
-}
-
 .hidden {
   display: none;
 }
@@ -1065,9 +1061,9 @@ input:focus {
 }
 
 .notification-icon {
-  position: absolute;
-  top: -17px;
-  right: -17px;
+  position: relative;
+  right: 24px;
+  top: -20px;
 }
 
 .info-title {

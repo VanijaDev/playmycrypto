@@ -82,9 +82,7 @@ const CommonManager = {
     if ($('.timer-block')[0].classList.contains('visible')) {
       $('.timer-block').removeClass('visible');
     }
-  }
-
-
+  },
 }
 
 window.CommonManager = CommonManager;

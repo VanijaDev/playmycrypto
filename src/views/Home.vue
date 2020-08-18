@@ -112,13 +112,19 @@
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
-                <span id="ongoinRafflePrize">0.00000</span>
+                <span id="totalUsedRaffleFees">0.00000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
                 <span id="totalUsedPartnerFees">0.00000</span>
+                <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
+                <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
+              </div>
+              <div class="total-item d-inline-block">
+                <img src="/img/bg-hand-money.svg" class="hand-money"/>
+                <span id="totalUsedFeeBeneficiary">0.00000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
