@@ -65,8 +65,8 @@ const BlockchainManager = {
     return this.currentBlockchainManager.totalUsedReferralFees();
   },
 
-  ongoinRafflePrize: function () {
-    return this.currentBlockchainManager.ongoinRafflePrize();
+  ongoinRafflePrize: function (_gameType) {
+    return this.currentBlockchainManager.ongoinRafflePrize(_gameType);
   },
 
   partnerFeeUsedTotal: function (_gameType) {

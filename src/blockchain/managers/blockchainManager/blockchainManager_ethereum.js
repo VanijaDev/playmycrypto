@@ -171,13 +171,15 @@ const BlockchainManager_ethereum = {
     return new BigNumber(referralFees_cf).plus(referralFees_rps);
   },
 
-  ongoinRafflePrize: async function () {
-    let ongoinRafflePrize_cf = await PromiseManager.ongoinRafflePrizePromise(Types.Game.cf);
-    // console.log("ongoinRafflePrize_cf: ", ongoinRafflePrize_cf.toString());
-    let ongoinRafflePrize_rps = await PromiseManager.ongoinRafflePrizePromise(Types.Game.rps);
-    // console.log("ongoinRafflePrize_rps: ", ongoinRafflePrize_rps.toString());
+  ongoinRafflePrize: async function (_gameType) {
+    return new BigNumber(await PromiseManager.ongoinRafflePrizePromise(_gameType));
+  },
 
-    return new BigNumber(ongoinRafflePrize_cf).plus(ongoinRafflePrize_rps);
+  rafflePrizesWonTotal: async function (_gameType) {
+    let rafflePrizesWonTotal = await PromiseManager.rafflePrizesWonTotalPromise(_gameType);
+    // console.log("rafflePrizesWonTotal: ", _gameType, rafflePrizesWonTotal.toString());
+
+    return new BigNumber(rafflePrizesWonTotal);
   },
 
   partnerFeeUsedTotal: async function (_gameType) {
@@ -185,13 +187,6 @@ const BlockchainManager_ethereum = {
     // console.log("partnerFeeTotalUsed: ", _gameType, partnerFeeTotalUsed.toString());
 
     return partnerFeeTotalUsed;
-  },
-
-  rafflePrizesWonTotal: async function (_gameType) {
-    let rafflePrizesWonTotal = await PromiseManager.rafflePrizesWonTotalPromise(_gameType);
-    // console.log("rafflePrizesWonTotal: ", _gameType, rafflePrizesWonTotal.toString());
-
-    return rafflePrizesWonTotal;
   },
 
   totalUsedInGame: async function (_gameType) {

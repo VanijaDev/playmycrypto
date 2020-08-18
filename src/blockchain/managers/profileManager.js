@@ -50,15 +50,6 @@ let ProfileManager = {
     await this.updatePending();
   },
 
-  //  TODO: remove if not used
-  // profileUpdated: function () {
-  //   if (this.profileUpdateHandler) {
-  //     if (typeof (this.profileUpdateHandler.profileUpdated) == "function") {
-  //       this.profileUpdateHandler.profileUpdated();
-  //     }
-  //   }
-  // },
-
   updateCurrentAccountUI: async function () {
     let account = window.BlockchainManager.currentAccount();
     document.getElementById("playerAccount").innerText = account.replace(/(0x[a-zA-Z0-9]{3})[a-zA-Z0-9]{34}/, "$1***");
@@ -94,6 +85,11 @@ let ProfileManager = {
     // if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
     //   Utils.addGameIconsToElement($('#listCurrentlyPlayingGames'), [Types.Game.rps]);
     // }
+
+    // let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, this.ongoingGameRPS);
+    //   if (Utils.addressesEqual(gameInfo.nextMover, window.BlockchainManager.currentAccount())) {
+    //     showTopBannerMessage($('#translations').data().rps_pending_move);
+    //   }
   },
 
   checkIfPendingMove: async function (_gameType, _gameId) {
@@ -286,15 +282,6 @@ let ProfileManager = {
       return this.ongoingGameRPS.comparedTo(new BigNumber(_id)) == 0;
     } else {
       throw ("ERROR: " + _gameType + _id);
-    }
-  },
-
-  checkIfNextMover: async function () {
-    if (this.ongoingGameRPS.comparedTo(new BigNumber("0")) == 1) {
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, this.ongoingGameRPS);
-      if (Utils.addressesEqual(gameInfo.nextMover, window.BlockchainManager.currentAccount())) {
-        showTopBannerMessage($('#translations').data().rps_pending_move);
-      }
     }
   },
 

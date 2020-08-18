@@ -181,21 +181,21 @@
 
           <div class="border-block">
             <div class="header">
-              {{ $t("TOTAL_WON") }}:
-              <b id="rafflePrizesWonTotal">0.00000</b>
+              {{ $t("JACKPOT") }}:
+              <b id="currentRafflePrizesTotal">0.00000</b>
               <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
               <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
             </div>
             <div class="content">
               <div class="total-won">
                 <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon"/>
-                <span id="rafflePrizesWonTotalGameCoinFlip">0.00000</span>
+                <span id="currentRafflePrizesCoinFlip">0.00000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-won">
                 <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon"/>
-                <span id="rafflePrizesWonTotalGameRPS">0.00000</span>
+                <span id="currentRafflePrizesRPS">0.00000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>

@@ -18,8 +18,8 @@ const Index = {
     }
     await ProfileManager.update();
 
-    // ProfileManager.setProfileUpdateHandler(this);
-    // await this.refreshData();
+    // ProfileManager.setProfileUpdateHandler(this);  //  remove if not used
+    await this.refreshData();
 
     // //  events
     // NotificationManager.eventHandler = this;
@@ -29,7 +29,7 @@ const Index = {
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    // ProfileManager.profileUpdateHandler = null;
+    // ProfileManager.setProfileUpdateHandler(null);
     // NotificationManager.eventHandler = null;
     // NotificationManager.clearAll();
     // hideTopBannerMessage();
@@ -38,28 +38,41 @@ const Index = {
   refreshData: function () {
     // console.log('%c index - refreshData', 'color: #1d34ff');
 
-    // Advantages
+    // Why PlayMyCrypto
     Index.updateReferralFeesForAllGamesTotal();
-    Index.updateOngoinRafflePrize();
+    Index.updateRafflePrizesWonForAllGamesTotal();
     Index.updatePartnerFeesForAllGamesTotal();
 
-    // // Raffle
-    Index.updateRafflePrizesWonTotal();
+    // Raffle
+    Index.updateCurrentRafflePrize();
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
-    Index.updateRunningGameAmounts();
+    // Index.updateCryptoAmountPlayedOnSiteTotal();
+    // Index.updateRunningGameAmounts();
   },
 
   updateReferralFeesForAllGamesTotal: async function () {
     let totalUsedReferralFees = await window.BlockchainManager.totalUsedReferralFees();
     // console.log("totalUsedReferralFees: ", totalUsedReferralFees.toString());
     document.getElementById("totalUsedReferralFees").textContent = Utils.weiToEtherFixed(totalUsedReferralFees.toString());
+    document.getElementById("totalUsedFeeBeneficiary").textContent = Utils.weiToEtherFixed(totalUsedReferralFees.toString());
   },
 
-  updateOngoinRafflePrize: async function () {
-    let ongoinRafflePrize = await window.BlockchainManager.ongoinRafflePrize();
+  updateRafflePrizesWonForAllGamesTotal: async function () {
+    let raffleTotalCF = await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.cf);
+    let raffleTotalRPS = await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.rps);
+    document.getElementById("totalUsedRaffleFees").innerText = Utils.weiToEtherFixed(raffleTotalCF.plus(raffleTotalRPS)).toString();
+  },
+
+  updateCurrentRafflePrize: async function () {
+    let ongoinRafflePrizeCF = await window.BlockchainManager.ongoinRafflePrize(Types.Game.cf);
     // console.log("ongoinRafflePrize: ", ongoinRafflePrize.toString());
-    document.getElementById("ongoinRafflePrize").textContent = Utils.weiToEtherFixed(ongoinRafflePrize.toString());
+    document.getElementById("currentRafflePrizesCoinFlip").textContent = Utils.weiToEtherFixed(ongoinRafflePrizeCF.toString());
+    
+    let ongoinRafflePrizeRPS = new BigNumber(await window.BlockchainManager.ongoinRafflePrize(Types.Game.rps));
+    // console.log("ongoinRafflePrizeRPS: ", ongoinRafflePrizeRPS.toString());
+    document.getElementById("currentRafflePrizesRPS").innerText = Utils.weiToEtherFixed(ongoinRafflePrizeRPS.toString());
+
+    document.getElementById("currentRafflePrizesTotal").innerText = Utils.weiToEtherFixed(ongoinRafflePrizeCF.plus(ongoinRafflePrizeRPS)).toString();
   },
 
   updatePartnerFeesForAllGamesTotal: async function () {
@@ -70,18 +83,6 @@ const Index = {
     // console.log("partnerFeeUsedTotal_rps: ", partnerFeeUsedTotal_rps.toString());
 
     document.getElementById("totalUsedPartnerFees").textContent = Utils.weiToEtherFixed((partnerFeeUsedTotal_cf.plus(partnerFeeUsedTotal_rps)).toString());
-  },
-
-  updateRafflePrizesWonTotal: async function () {
-    let raffled_cf = new BigNumber(await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.cf));
-    // console.log("raffled_cf: ", raffled_cf.toString());
-    document.getElementById("rafflePrizesWonTotalGameCoinFlip").innerText = Utils.weiToEtherFixed(raffled_cf.toString());
-
-    let raffled_rps = new BigNumber(await window.BlockchainManager.rafflePrizesWonTotal(Types.Game.rps));
-    // console.log("raffled_rps: ", raffled_rps.toString());
-    document.getElementById("rafflePrizesWonTotalGameRPS").innerText = Utils.weiToEtherFixed(raffled_rps.toString());
-
-    document.getElementById("rafflePrizesWonTotal").innerText = Utils.weiToEtherFixed(raffled_cf.plus(raffled_rps)).toString();
   },
 
   updateCryptoAmountPlayedOnSiteTotal: async function () {
@@ -182,7 +183,7 @@ const Index = {
     }
 
     Index.updateReferralFeesForAllGamesTotal();
-    Index.updateOngoinRafflePrize();
+    Index.updateCurrentRafflePrize();
     Index.updatePartnerFeesForAllGamesTotal();
   },
 
@@ -193,8 +194,8 @@ const Index = {
       // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
-    Index.updateRafflePrizesWonTotal();
-    Index.updateOngoinRafflePrize();
+    Index.updateRafflePrizesWonForAllGamesTotal();
+    Index.updateCurrentRafflePrize();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
@@ -226,7 +227,7 @@ const Index = {
 
     Index.updateReferralFeesForAllGamesTotal();
     Index.updatePartnerFeesForAllGamesTotal();
-    Index.updateOngoinRafflePrize();
+    Index.updateCurrentRafflePrize();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
