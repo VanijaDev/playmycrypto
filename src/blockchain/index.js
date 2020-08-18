@@ -46,8 +46,8 @@ const Index = {
     // Raffle
     Index.updateCurrentRafflePrize();
 
-    // Index.updateCryptoAmountPlayedOnSiteTotal();
-    // Index.updateRunningGameAmounts();
+    Index.updateCryptoAmountPlayedOnSiteTotal();
+    Index.updateRunningGameAmounts();
   },
 
   updateReferralFeesForAllGamesTotal: async function () {
