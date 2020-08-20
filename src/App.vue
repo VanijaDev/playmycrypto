@@ -334,6 +334,9 @@
       v-bind:data-rps_game_joined_pending_move="
         $t('RPS_GAME_JOINED_PENDING_MOVE')
       "
+      v-bind:data-cf_game_joined_pending_move="
+        $t('CF_GAME_JOINED_PENDING_MOVE')
+      "
       v-bind:data-won_ongoing_game="$t('WON_ONGOING_GAME')"
       v-bind:data-won_ongoing_game_opponent_quitted="
         $t('WON_ONGOING_GAME_OPPONENT_QUITTED')

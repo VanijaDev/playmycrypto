@@ -121,6 +121,7 @@
   "SUFFIX_GAMES": " games",
   "RPS_PENDING_MOVE": "Rock Paper Scissors: you have pending move",
   "RPS_GAME_JOINED_PENDING_MOVE": "Rock Paper Scissors: game was joined, you have pending move",
+  "CF_GAME_JOINED_PENDING_MOVE": "Coin Flip: game was joined, you have pending move",
   "WON_ONGOING_GAME": "Congrats! You WON ongoing game",
   "WON_ONGOING_GAME_OPPONENT_QUITTED": "Congrats! You WON ongoing game, opponent quitted",
   "WON_ONGOING_GAME_OPPONENT_EXPIRED": "Congrats! You WON ongoing game, opponent's move expired",

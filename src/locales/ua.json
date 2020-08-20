@@ -121,6 +121,7 @@
   "SUFFIX_GAMES": " ігор",
   "RPS_PENDING_MOVE": "Камінь Ножиці Папір: зроби наступний хід",
   "RPS_GAME_JOINED_PENDING_MOVE": "Камінь Ножиці Папір: до гри долучилися, зроби наступний хід",
+  "CF_GAME_JOINED_PENDING_MOVE": "Підкинь Монету: до гри долучилися, зроби наступний хід",
   "WON_ONGOING_GAME": "Вітання! Ти ПЕРЕМІГ у грі",
   "WON_ONGOING_GAME_OPPONENT_QUITTED": "Вітання! Ти ПЕРЕМІГ у грі, опонент вийшов",
   "WON_ONGOING_GAME_OPPONENT_EXPIRED": "Вітання! Ти ПЕРЕМІГ у грі, час ходу опонента вийшов",

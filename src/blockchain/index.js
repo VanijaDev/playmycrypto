@@ -18,20 +18,20 @@ const Index = {
     }
     await ProfileManager.update();
 
-    // ProfileManager.setProfileUpdateHandler(this);  //  remove if not used
+    // ProfileManager.setProfileUpdateHandler(this);  // TODO  remove if not used
     await this.refreshData();
 
     // //  events
-    // NotificationManager.eventHandler = this;
-    // NotificationManager.subscribeAll();
+    NotificationManager.eventHandler = this;
+    NotificationManager.subscribeIndex();
   },
 
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    // ProfileManager.setProfileUpdateHandler(null);
-    // NotificationManager.eventHandler = null;
-    // NotificationManager.clearAll();
+    // ProfileManager.setProfileUpdateHandler(null);  // TODO  remove if not used
+    NotificationManager.eventHandler = null;
+    NotificationManager.clearAll();
     // hideTopBannerMessage();
   },
 
@@ -139,6 +139,28 @@ const Index = {
     }
   },
 
+  onGameJoined: function (_gameType, _creator, _opponent) {
+    console.log("onGameJoined - _gameType: ", _gameType, " _creator: ", _creator);
+
+    Index.updateCryptoAmountPlayedOnSiteTotal();
+
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      ProfileManager.update(); // 1
+
+      let message = "";
+      if (_gameType == Types.Game.cf) {
+        // console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
+        message = $t.cf_game_joined_pending_move;
+      } else if (_gameType == Types.Game.rps) {
+        // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
+        message = $t.rps_game_joined_pending_move;
+      }
+      showTopBannerMessage(message);
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      ProfileManager.update();
+    }
+  },
+
   onGamePlayed: function (_gameId) {
     // console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
 
@@ -242,22 +264,6 @@ const Index = {
     }
 
     if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
-    }
-  },
-
-  onGameJoined: function (_gameType, _creator, _opponent) {
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
-    }
-
-    Index.updateCryptoAmountPlayedOnSiteTotal();
-
-    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage($t.rps_game_joined_pending_move);
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
     }
   },

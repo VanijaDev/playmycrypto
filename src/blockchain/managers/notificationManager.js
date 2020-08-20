@@ -11,13 +11,16 @@ const NotificationManager = {
 
   NotificationHashes_CF: {
     gameCreated: "0x2f96aa00c72dd004da6bbd1a2d56762ee5a3504189732da096d9f75b41e2e46f",
-    gamePlayed: "0x5e97c336ff3e1ee83f544a7d108dcff188345eecf6664e2f6b1ced90f09e681a",
+    gameJoined: "0xcf247107fd467ee49df2d0a3f04db0dde0cf701e3d4611d03cc7d0ac96f90490",
+    gamePlayed: "0x3e3f32c9ed40ee6dd4ba80907e69c64b4b877cd4f201f588d416fb1e1a4bc29c",
     gamePrizesWithdrawn: "0xf66e3f979648b506dd345b50ca1b3efbdc116887cd67c37de409d3bd8e4995b0",
     gameAddedToTop: "0x27850eb52960ae0f343455f87b489c819bb4fdaea63d6968aa19dba5adf2991e",
     gameReferralWithdrawn: "0xd20500ebc366bc59a5ec7044b7c82d3fed0d725dba0429ae6c20a56ee15cea92",
     gameUpdated: "0x040c8e41157c3ece3442654816da3e471438e15288a88faa65a51271a10238f9",
+    gameExpiredFinished: "0x6e530d1f81c10976edecfd724ddf372347424ed7e3066073547a6438a09670fe",
+    gameQuittedFinished: "0xb2d5361fc25bf5f72935b7dada9ef5aa3220aa1a8d72e922475140798153ae10",
     rafflePlayed: "0x3fcb6936a4c5aa28446d2519ebc71d8ce9f21cd4ecd4a6b362cdc9d403108ec2",
-    rafflePrizeWithdrawn: "0xb7432e040447e053f23875d2b691919428902dfdee0f5613241fd5c8ab3b9912",
+    rafflePrizeWithdrawn: "0x41f36e3513afe9499e34441f572f2e84284a9ae1416882252929b6b7c72a3089",
     partnerFeeTransferred: "0xeea88262d89f946cfd575393481b34aedd68aabbe9cb764357a15b1e0226e861"
   },
 
@@ -40,19 +43,20 @@ const NotificationManager = {
 
   eventHandler: null,
 
-  subscribeAll: function () {
-    console.log('%c NotificationManager - subscribeAll', 'color: #00aa00');
+  //  notifications for Index view
+  subscribeIndex: function () {
+    console.log('%c NotificationManager - subscribeIndex', 'color: #00aa00');
 
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
-        console.log("subscribeAll - Ethereum");
-        this.subscribeAll_ethereum();
+        console.log("subscribeIndex - Ethereum");
+        this.subscribeIndex_ethereum();
 
         break;
 
 
       case Types.currentBlockchainType.ethereum:
-        console.log("subscribeAll - Tron");
+        console.log("subscribeIndex - Tron");
         break;
 
       default:
@@ -60,8 +64,8 @@ const NotificationManager = {
     }
   },
 
-  subscribeAll_ethereum: function () {
-    console.log('%c NotificationManager - subscribeAll_ethereum', 'color: #00aa00');
+  subscribeIndex_ethereum: function () {
+    console.log('%c NotificationManager - subscribeIndex_ethereum', 'color: #00aa00');
 
     window.web3.eth.subscribe('logs', {
       address: [CoinFlipData.address, RockPaperScissorsData.address]
@@ -80,117 +84,122 @@ const NotificationManager = {
           this.eventHandler.onGameCreated(Types.Game.cf, result.topics[2]);
           break;
 
-        case this.NotificationHashes_CF.gamePlayed:
-          console.log("NotificationHashes_CF.gamePlayed");
-          this.eventHandler.onGamePlayed(new BigNumber(result.topics[1]).toString());
+        case this.NotificationHashes_CF.gameJoined:
+          console.log("NotificationHashes_CF.gameJoined");
+          this.eventHandler.onGameJoined(Types.Game.cf, result.topics[2], result.topics[3]);
           break;
 
-        case this.NotificationHashes_CF.gamePrizesWithdrawn:
-          console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
-          break;
+        // case this.NotificationHashes_CF.gamePlayed:
+        //   console.log("NotificationHashes_CF.gamePlayed");
+        //   this.eventHandler.onGamePlayed(new BigNumber(result.topics[1]).toString());
+        //   break;
 
-        case this.NotificationHashes_CF.gameAddedToTop:
-          console.log("NotificationHashes_CF.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Types.Game.cf);
-          break;
+        // case this.NotificationHashes_CF.gamePrizesWithdrawn:
+        //   console.log("NotificationHashes_CF.gamePrizesWithdrawn");
+        //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
+        //   break;
 
-        case this.NotificationHashes_CF.gameReferralWithdrawn:
-          console.log("NotificationHashes_CF.gameReferralWithdrawn");
-          this.eventHandler.onGameReferralWithdrawn(Types.Game.cf, result.topics[1]);
-          break;
+        // case this.NotificationHashes_CF.gameAddedToTop:
+        //   console.log("NotificationHashes_CF.gameAddedToTop");
+        //   this.eventHandler.onGameAddedToTop(Types.Game.cf);
+        //   break;
 
-        case this.NotificationHashes_CF.gameUpdated:
-          console.log("NotificationHashes_CF.gameUpdated");
-          this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
-          break;
+        // case this.NotificationHashes_CF.gameReferralWithdrawn:
+        //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
+        //   this.eventHandler.onGameReferralWithdrawn(Types.Game.cf, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_CF.rafflePlayed:
-          console.log("NotificationHashes_CF.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
-          break;
+        // case this.NotificationHashes_CF.gameUpdated:
+        //   console.log("NotificationHashes_CF.gameUpdated");
+        //   this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
+        //   break;
 
-        case this.NotificationHashes_CF.rafflePrizeWithdrawn:
-          console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
-          this.eventHandler.onRafflePrizeWithdrawn(Types.Game.cf, result.topics[1]);
-          break;
+        // case this.NotificationHashes_CF.rafflePlayed:
+        //   console.log("NotificationHashes_CF.rafflePlayed");
+        //   this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_CF.partnerFeeTransferred:
-          console.log("NotificationHashes_CF.partnerFeeTransferred");
-          break;
+        // case this.NotificationHashes_CF.rafflePrizeWithdrawn:
+        //   console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
+        //   this.eventHandler.onRafflePrizeWithdrawn(Types.Game.cf, result.topics[1]);
+        //   break;
 
-          //  RPS
-        case this.NotificationHashes_RPS.gameCreated:
-          console.log("NotificationHashes_RPS.gameCreated");
-          this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1]);
-          break;
+        // case this.NotificationHashes_CF.partnerFeeTransferred:
+        //   console.log("NotificationHashes_CF.partnerFeeTransferred");
+        //   break;
 
-        case this.NotificationHashes_RPS.gameJoined:
-          console.log("NotificationHashes_RPS.gameJoined");
-          this.eventHandler.onGameJoined(Types.Game.rps, result.topics[2], result.topics[3]);
-          break;
+        //   //  RPS
+        // case this.NotificationHashes_RPS.gameCreated:
+        //   console.log("NotificationHashes_RPS.gameCreated");
+        //   this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gameMovePlayed:
-          console.log("NotificationHashes_RPS.gameMovePlayed");
-          this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
-          break;
+        // case this.NotificationHashes_RPS.gameJoined:
+        //   console.log("NotificationHashes_RPS.gameJoined");
+        //   this.eventHandler.onGameJoined(Types.Game.rps, result.topics[2], result.topics[3]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gameOpponentMoved:
-          console.log("NotificationHashes_RPS.gameOpponentMoved");
-          this.eventHandler.onGameOpponentMoved(new BigNumber(result.topics[1]).toString(), result.topics[2]);
-          break;
+        // case this.NotificationHashes_RPS.gameMovePlayed:
+        //   console.log("NotificationHashes_RPS.gameMovePlayed");
+        //   this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gameFinished:
-          console.log("NotificationHashes_RPS.gameFinished");
-          this.eventHandler.onGameFinished(new BigNumber(result.topics[1]).toString());
-          break;
+        // case this.NotificationHashes_RPS.gameOpponentMoved:
+        //   console.log("NotificationHashes_RPS.gameOpponentMoved");
+        //   this.eventHandler.onGameOpponentMoved(new BigNumber(result.topics[1]).toString(), result.topics[2]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gamePrizesWithdrawn:
-          console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Types.Game.rps);
-          break;
+        // case this.NotificationHashes_RPS.gameFinished:
+        //   console.log("NotificationHashes_RPS.gameFinished");
+        //   this.eventHandler.onGameFinished(new BigNumber(result.topics[1]).toString());
+        //   break;
 
-        case this.NotificationHashes_RPS.gameQuitted:
-          console.log("NotificationHashes_RPS.gameQuitted");
-          break;
+        // case this.NotificationHashes_RPS.gamePrizesWithdrawn:
+        //   console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
+        //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.rps);
+        //   break;
 
-        case this.NotificationHashes_RPS.gameUpdated:
-          console.log("NotificationHashes_RPS.gameUpdated");
-          this.eventHandler.onGameUpdated(Types.Game.rps, result.topics[2]);
+        // case this.NotificationHashes_RPS.gameQuitted:
+        //   console.log("NotificationHashes_RPS.gameQuitted");
+        //   break;
 
-          break;
+        // case this.NotificationHashes_RPS.gameUpdated:
+        //   console.log("NotificationHashes_RPS.gameUpdated");
+        //   this.eventHandler.onGameUpdated(Types.Game.rps, result.topics[2]);
 
-        case this.NotificationHashes_RPS.gameAddedToTop:
-          console.log("NotificationHashes_RPS.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Types.Game.rps);
-          break;
+        //   break;
 
-        case this.NotificationHashes_RPS.gameReferralWithdrawn:
-          console.log("NotificationHashes_RPS.gameReferralWithdrawn");
-          this.eventHandler.onGameReferralWithdrawn(Types.Game.rps, result.topics[1]);
-          break;
+        // case this.NotificationHashes_RPS.gameAddedToTop:
+        //   console.log("NotificationHashes_RPS.gameAddedToTop");
+        //   this.eventHandler.onGameAddedToTop(Types.Game.rps);
+        //   break;
 
-        case this.NotificationHashes_RPS.rafflePlayed:
-          console.log("NotificationHashes_RPS.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Types.Game.rps, result.topics[1]);
-          break;
+        // case this.NotificationHashes_RPS.gameReferralWithdrawn:
+        //   console.log("NotificationHashes_RPS.gameReferralWithdrawn");
+        //   this.eventHandler.onGameReferralWithdrawn(Types.Game.rps, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_RPS.rafflePrizeWithdrawn:
-          console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
-          this.eventHandler.onRafflePrizeWithdrawn(Types.Game.rps, result.topics[1]);
-          break;
+        // case this.NotificationHashes_RPS.rafflePlayed:
+        //   console.log("NotificationHashes_RPS.rafflePlayed");
+        //   this.eventHandler.onGameRafflePlayed(Types.Game.rps, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gamePaused:
-          // ("NotificationHashes_RPS.gamePaused");
-          break;
+        // case this.NotificationHashes_RPS.rafflePrizeWithdrawn:
+        //   console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
+        //   this.eventHandler.onRafflePrizeWithdrawn(Types.Game.rps, result.topics[1]);
+        //   break;
 
-        case this.NotificationHashes_RPS.gameUnpaused:
-          console.log("NotificationHashes_RPS.gameUnpaused");
-          break;
+        // case this.NotificationHashes_RPS.gamePaused:
+        //   // ("NotificationHashes_RPS.gamePaused");
+        //   break;
 
-        case this.NotificationHashes_RPS.partnerFeeTransferred:
-          console.log("NotificationHashes_RPS.partnerFeeTransferred");
-          break;
+        // case this.NotificationHashes_RPS.gameUnpaused:
+        //   console.log("NotificationHashes_RPS.gameUnpaused");
+        //   break;
+
+        // case this.NotificationHashes_RPS.partnerFeeTransferred:
+        //   console.log("NotificationHashes_RPS.partnerFeeTransferred");
+        //   break;
 
         default:
           break;

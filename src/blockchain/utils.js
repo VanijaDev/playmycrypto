@@ -36,6 +36,14 @@ const Utils = {
     return _addr1.toLowerCase().localeCompare(_addr2.toLowerCase()) == 0;
   },
 
+  zeroAddress: (_addr1) => {
+    if (!_addr1) {
+      return false;
+    }
+
+    return _addr1.toLowerCase().localeCompare(Utils.zeroAddress_eth) == 0;
+  },
+
   gameIconSmallForGame: (_game) => {
     let iconName;
     switch (_game) {

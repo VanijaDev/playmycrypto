@@ -68,7 +68,7 @@ let ProfileManager = {
     // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
     if (this.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
       $('#listCurrentlyPlayingGames').append('<button id="ongoingGameCF_Creator" class="btn btn-animated" onclick="ProfileManager.currentlyPlayingGameClicked(\'' + Types.Game.cf + '\',' + this.ongoingGameCF_Creator + ');"><img src="/img/icon-coinflip-sm.svg" class="game-icon mr-3"></button>');
-      if (this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
+      if (await this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
         showActionRequired("ongoingGameCF_Creator");
       }
     }
@@ -96,7 +96,7 @@ let ProfileManager = {
     switch (_gameType) {
       case Types.Game.cf:
         let gameInfo = await PromiseManager.gameInfoPromise(_gameType, _gameId);
-        return (!Utils.addressesEqual(gameInfo.opponent, Utils.zeroAddress_eth));
+        return !Utils.zeroAddress(gameInfo.opponent);
 
       case Types.Game.rps:
     
