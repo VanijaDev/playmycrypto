@@ -186,7 +186,7 @@ const Index = {
   },
 
   onGamePlayed: function (_gameType, _gameId, _creator, _opponent) {
-    console.log('%c index - onGamePlayed_CF %s %s %s %s', 'color: #1d34ff', _gameId, _gameType, _creator, _opponent);
+    // console.log('%c index - onGamePlayed_CF %s %s %s %s', 'color: #1d34ff', _gameId, _gameType, _creator, _opponent);
 
     Index.updateRunningGameAmounts();
 
@@ -213,17 +213,17 @@ const Index = {
   },
 
   onGameQuittedFinished: function (_gameType, _gameId, _creator, _opponent) {
-    console.log('%c index - onGameQuittedFinished %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
+    // console.log('%c index - onGameQuittedFinished %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
     this.onGamePlayed(_gameType, _gameId, _creator, _opponent);
   },
 
   onGameExpiredFinished: function (_gameType, _gameId, _creator, _opponent) {
-    console.log('%c index - onGameExpiredFinished %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
+    // console.log('%c index - onGameExpiredFinished %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
     this.onGamePlayed(_gameType, _gameId, _creator, _opponent);
   },
 
   onGamePrizesWithdrawn: function (_gameType, _address) {
-    console.log('%c index - onGamePrizesWithdrawn %s %s', 'color: #1d34ff', _gameType, _address);
+    // console.log('%c index - onGamePrizesWithdrawn %s %s', 'color: #1d34ff', _gameType, _address);
 
     if (_gameType == Types.Game.cf) {
       // console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
@@ -232,8 +232,8 @@ const Index = {
     }
 
     Index.updateCurrentRaffleJackpot();
-    // Index.updateReferralFeesForAllGamesTotal();
-    // Index.updatePartnerFeesForAllGamesTotal();
+    Index.updateReferralFeesForAllGamesTotal();
+    Index.updatePartnerFeesForAllGamesTotal();
 
     if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
