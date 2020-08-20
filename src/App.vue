@@ -456,6 +456,8 @@ export default {
         window.BlockchainManager.isCurrentNetworkValid()
       ) {
         window.BlockchainManager.accountChanged(accounts[0]);
+        window.ProfileManager.update();
+
         if (window.CommonManager.currentView == Types.View.game) {
           window.Game.update();
         }
