@@ -100,8 +100,13 @@ const NotificationManager = {
           break;
 
         case this.NotificationHashes_CF.gameUpdated:
-        console.log("NotificationHashes_CF.gameUpdated");
-        this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
+          console.log("NotificationHashes_CF.gameUpdated");
+          this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
+          break;
+
+        case this.NotificationHashes_CF.gameQuittedFinished:
+          console.log("NotificationHashes_CF.gameQuittedFinished");
+          this.eventHandler.onGameQuittedFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
         // case this.NotificationHashes_CF.gamePrizesWithdrawn:
