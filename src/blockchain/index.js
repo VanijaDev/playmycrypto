@@ -170,7 +170,7 @@ const Index = {
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
   },
-  
+
   onGameUpdated: function (_gameType, _creator) {
     if (_gameType == Types.Game.cf) {
       // console.log('%c index - onGameUpdated_CF', 'color: #1d34ff');
@@ -185,23 +185,40 @@ const Index = {
     }
   },
 
+  onGamePlayed: function (_gameType, _creator, _opponent) {
+    // console.log('%c index - onGamePlayed_CF %s %s %s', 'color: #1d34ff', _gameType, _creator, _opponent);
 
-
-
-
-
-
-  onGamePlayed: function (_gameId) {
-    // console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
-
-    Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
 
-    if (ProfileManager.isGameParticipant(Types.Game.cf, _gameId)) {
+    let isParticipant = false;
+    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      isParticipant = true;
+    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      isParticipant = true;
+    }
+
+    if (isParticipant) {
       ProfileManager.update();
-      showTopBannerMessage($t.your_game_finished_cf, null, true);
+      
+      let message = "";
+      if (_gameType == Types.Game.cf) {
+        // console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
+        message = $t.your_game_finished_cf;
+      } else if (_gameType == Types.Game.rps) {
+        // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
+        message = $t.your_game_finished_rps;
+      }
+      showTopBannerMessage(message, null, true);
     }
   },
+
+
+
+
+
+
+
+
 
   onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Types.Game.cf) {

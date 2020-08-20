@@ -161,5 +161,6 @@
   "ERR_LEGACY_BROWSERS": "Legacy dapp browsers... Working on compatibility",
   "ERR_NON_ETH_BROWSER": "Non-Ethereum browser detected. You should consider trying MetaMask!",
   "ERR_BET_INCREASE_MIN": "Min bet increase: ",
-  "YOUR_GAME_FINISHED_CF": "Coin Flip game created by you was just finished"
+  "YOUR_GAME_FINISHED_CF": "Coin Flip game where you participates was just finished",
+  "YOUR_GAME_FINISHED_RPS": "Rock Paper Scissors game where you participates was just finished"
 }
