@@ -171,7 +171,7 @@ const BlockchainManager_ethereum = {
     return new BigNumber(referralFees_cf).plus(referralFees_rps);
   },
 
-  ongoinRafflePrize: async function (_gameType) {
+  currentRaffleJackpot: async function (_gameType) {
     return new BigNumber(await PromiseManager.ongoinRafflePrizePromise(_gameType));
   },
 

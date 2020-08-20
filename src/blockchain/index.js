@@ -44,7 +44,7 @@ const Index = {
     Index.updatePartnerFeesForAllGamesTotal();
 
     // Raffle
-    Index.updateCurrentRafflePrize();
+    Index.updateCurrentRaffleJackpot();
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
     Index.updateRunningGameAmounts();
@@ -63,16 +63,16 @@ const Index = {
     document.getElementById("totalUsedRaffleFees").innerText = Utils.weiToEtherFixed(raffleTotalCF.plus(raffleTotalRPS)).toString();
   },
 
-  updateCurrentRafflePrize: async function () {
-    let ongoinRafflePrizeCF = await window.BlockchainManager.ongoinRafflePrize(Types.Game.cf);
-    // console.log("ongoinRafflePrize: ", ongoinRafflePrize.toString());
-    document.getElementById("currentRafflePrizesCoinFlip").textContent = Utils.weiToEtherFixed(ongoinRafflePrizeCF.toString());
+  updateCurrentRaffleJackpot: async function () {
+    let currentRaffleJackpotCF = await window.BlockchainManager.currentRaffleJackpot(Types.Game.cf);
+    // console.log("currentRaffleJackpot: ", currentRaffleJackpot.toString());
+    document.getElementById("currentRaffleJackpotCoinFlip").textContent = Utils.weiToEtherFixed(currentRaffleJackpotCF.toString());
     
-    let ongoinRafflePrizeRPS = new BigNumber(await window.BlockchainManager.ongoinRafflePrize(Types.Game.rps));
-    // console.log("ongoinRafflePrizeRPS: ", ongoinRafflePrizeRPS.toString());
-    document.getElementById("currentRafflePrizesRPS").innerText = Utils.weiToEtherFixed(ongoinRafflePrizeRPS.toString());
+    let currentRaffleJackpotRPS = new BigNumber(await window.BlockchainManager.currentRaffleJackpot(Types.Game.rps));
+    // console.log("currentRaffleJackpotRPS: ", currentRaffleJackpotRPS.toString());
+    document.getElementById("currentRaffleJackpotRPS").innerText = Utils.weiToEtherFixed(currentRaffleJackpotRPS.toString());
 
-    document.getElementById("currentRafflePrizesTotal").innerText = Utils.weiToEtherFixed(ongoinRafflePrizeCF.plus(ongoinRafflePrizeRPS)).toString();
+    document.getElementById("currentRaffleJackpotTotal").innerText = Utils.weiToEtherFixed(currentRaffleJackpotCF.plus(currentRaffleJackpotRPS)).toString();
   },
 
   updatePartnerFeesForAllGamesTotal: async function () {
@@ -222,25 +222,30 @@ const Index = {
     this.onGamePlayed(_gameType, _gameId, _creator, _opponent);
   },
 
+  onGamePrizesWithdrawn: function (_gameType, _address) {
+    console.log('%c index - onGamePrizesWithdrawn %s %s', 'color: #1d34ff', _gameType, _address);
 
-
-
-
-
-
-
-
-  onGamePrizesWithdrawn: function (_gameType) {
     if (_gameType == Types.Game.cf) {
       // console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
     } else if (_gameType == Types.Game.rps) {
       // console.log('%c index - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
     }
 
-    Index.updateReferralFeesForAllGamesTotal();
-    Index.updateCurrentRafflePrize();
-    Index.updatePartnerFeesForAllGamesTotal();
+    Index.updateCurrentRaffleJackpot();
+    // Index.updateReferralFeesForAllGamesTotal();
+    // Index.updatePartnerFeesForAllGamesTotal();
+
+    if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+      ProfileManager.update();
+    }
   },
+
+
+
+
+
+
+
 
   onGameRafflePlayed: function (_gameType, _winner) {
     if (_gameType == Types.Game.cf) {
@@ -250,7 +255,7 @@ const Index = {
     }
 
     Index.updateRafflePrizesWonForAllGamesTotal();
-    Index.updateCurrentRafflePrize();
+    Index.updateCurrentRaffleJackpot();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
@@ -282,7 +287,7 @@ const Index = {
 
     Index.updateReferralFeesForAllGamesTotal();
     Index.updatePartnerFeesForAllGamesTotal();
-    Index.updateCurrentRafflePrize();
+    Index.updateCurrentRaffleJackpot();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
