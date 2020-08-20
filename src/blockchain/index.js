@@ -161,18 +161,16 @@ const Index = {
     }
   },
 
-  onGamePlayed: function (_gameId) {
-    // console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
+  onGameAddedToTop: function (_gameType) {
+    if (_gameType == Types.Game.cf) {
+      // console.log('%c index - onGameAddedToTop_CF', 'color: #1d34ff');
+    } else if (_gameType == Types.Game.rps) {
+      // console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
+    }
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
-    Index.updateRunningGameAmounts();
-
-    if (ProfileManager.isGameParticipant(Types.Game.cf, _gameId)) {
-      ProfileManager.update();
-      showTopBannerMessage($t.your_game_finished_cf, null, true);
-    }
   },
-
+  
   onGameUpdated: function (_gameType, _creator) {
     if (_gameType == Types.Game.cf) {
       // console.log('%c index - onGameUpdated_CF', 'color: #1d34ff');
@@ -187,14 +185,22 @@ const Index = {
     }
   },
 
-  onGameAddedToTop: function (_gameType) {
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c index - onGameAddedToTop_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
-    }
+
+
+
+
+
+
+  onGamePlayed: function (_gameId) {
+    // console.log('%c index - onGamePlayed_CF %s', 'color: #1d34ff', _gameId);
 
     Index.updateCryptoAmountPlayedOnSiteTotal();
+    Index.updateRunningGameAmounts();
+
+    if (ProfileManager.isGameParticipant(Types.Game.cf, _gameId)) {
+      ProfileManager.update();
+      showTopBannerMessage($t.your_game_finished_cf, null, true);
+    }
   },
 
   onGamePrizesWithdrawn: function (_gameType) {
