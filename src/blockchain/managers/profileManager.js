@@ -19,13 +19,10 @@ let ProfileManager = {
   ongoingGameCF_Opponent: new BigNumber("0"),
   ongoingGameRPS: new BigNumber("0"),
 
-  setProfileUpdateHandler: function (_handler) {
-    this.profileUpdateHandler = _handler;
-    this.checkIfNextMover();
-  },
-
-  update: async function () {
+  update: async function (_handler) {
     console.log('%c ProfileManager - update', 'color: #00aa00');
+
+    this.profileUpdateHandler = _handler;
 
     hideTopBannerMessage();
     showAppDisabledView(false);
@@ -42,7 +39,7 @@ let ProfileManager = {
   },
 
   updateAfterWithdrawal: async function () {
-    // console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
+    console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
 
     this.updateCurrentAccountBalanceUI();
 
@@ -378,6 +375,7 @@ let ProfileManager = {
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
             ProfileManager.updateAfterWithdrawal();
+            ProfileManager.profileUpdateHandler.pendingReferralWithdrawn();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -411,6 +409,7 @@ let ProfileManager = {
               showTopBannerMessage($('#translations').data().err_game_prize_withdraw, null, true);
             }
             hideTopBannerMessage();
+            ProfileManager.profileUpdateHandler.pendingPrizeWithdrawn();
           });
         break;
 

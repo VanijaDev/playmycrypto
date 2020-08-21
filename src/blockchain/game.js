@@ -32,8 +32,14 @@ const Game = {
   gameType: "",
   gameInst: null,
 
+
+
+
+
+
+
   setup: async function (_currentGame) {
-    console.log('%c game - setup', 'color: #00aa00');
+    console.log('%c game - setup $s', 'color: #00aa00', _currentGame);
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       await window.BlockchainManager.init();
@@ -43,7 +49,7 @@ const Game = {
     this.gameInst = this.initGameInst(_currentGame);
     this.subscribeToEvents(this.gameType);
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    await this.update();
+    // await this.update();
   },
 
   initGameInst: function (_gameType) {
@@ -59,8 +65,16 @@ const Game = {
     }
   },
 
+
+
+
+
+
+
   update: async function () {
-    await ProfileManager.update();
+    console.log('%c game - update', 'color: #00aa00');
+    return;
+    await ProfileManager.update(this);
 
     this.updateMoneyIcons();
     if (this.gameType == Types.Game.cf) {
@@ -94,7 +108,7 @@ const Game = {
     NotificationManager.clearAll();
 
     this.gameType = "";
-    this.gameInst.onUnload();
+    // this.gameInst.onUnload();
 
     hideTopBannerMessage();
   },

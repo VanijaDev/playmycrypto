@@ -8,6 +8,20 @@ const $t = $('#translations').data();
 const Index = {
   networkId: 0,
 
+  // ProfileManager handler methods
+  pendingReferralWithdrawn: async function () {
+    Index.updateReferralFeesForAllGamesTotal();
+  },
+
+  pendingPrizeWithdrawn: async function () {
+    // Why PlayMyCrypto
+    Index.updateReferralFeesForAllGamesTotal();
+    Index.updatePartnerFeesForAllGamesTotal();
+
+    // Raffle
+    Index.updateCurrentRaffleJackpot();
+  },
+
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
@@ -17,9 +31,7 @@ const Index = {
         return;
       }
     }
-    await ProfileManager.update();
-
-    // ProfileManager.setProfileUpdateHandler(this);  // TODO  remove if not used
+    await ProfileManager.update(this);
     await this.refreshData();
 
     // //  events
@@ -30,7 +42,7 @@ const Index = {
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    // ProfileManager.setProfileUpdateHandler(null);  // TODO  remove if not used
+    ProfileManager.setProfileUpdateHandler(null);
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
     hideTopBannerMessage();
