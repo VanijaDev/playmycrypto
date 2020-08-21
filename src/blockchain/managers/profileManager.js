@@ -28,6 +28,8 @@ let ProfileManager = {
     console.log('%c ProfileManager - update', 'color: #00aa00');
 
     hideTopBannerMessage();
+    showAppDisabledView(false);
+
     this.updateCurrentAccountUI();
     this.updateCurrentAccountBalanceUI();
 
@@ -52,6 +54,12 @@ let ProfileManager = {
 
   updateCurrentAccountUI: async function () {
     let account = window.BlockchainManager.currentAccount();
+    if (!account) {
+      alert("Not logged in to MetaMask.");
+      showTopBannerMessage("Not logged in to MetaMask.", null, false);
+      showAppDisabledView(true);
+      throw("Not logged in to MetaMask.");
+    }
     document.getElementById("playerAccount").innerText = account.replace(/(0x[a-zA-Z0-9]{3})[a-zA-Z0-9]{34}/, "$1***");
   },
 
