@@ -16,6 +16,16 @@
 
 <script src="./jquery.min.js"></script>
 <script>
+  function showAppDisabledView(_show) {
+    if (_show) {
+      $("#app-disabled")[0].classList.add("app-disabled");
+      $("#app-disabled")[0].classList.remove("hidden");
+    } else {
+      $("#app-disabled")[0].classList.remove("app-disabled");
+      $("#app-disabled")[0].classList.add("hidden");
+    }
+  }
+
   function showTopBannerMessage(textBefore, hash, autohide) {
     var topBannerMessage = textBefore;
     if (hash && hash.length > 0) {

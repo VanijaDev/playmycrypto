@@ -403,6 +403,8 @@ import BlockchainManager from "./blockchain/managers/blockchainManager/blockchai
 import ProfileManager from "./blockchain/managers/profileManager";
 import NotificationManager from "./blockchain/managers/notificationManager";
 
+const $t = $('#translations').data();
+
 export default {
   data: function () {
     return {
@@ -444,11 +446,7 @@ export default {
     console.log("----------- App mounted");
 
     window.ethereum.on("accountsChanged", function (accounts) {
-      console.log(
-        "%c App - accountsChanged: %s",
-        "color: #00aa00",
-        accounts[0]
-      );
+      console.log("%c App - accountsChanged: %s", "color: #00aa00", accounts[0]);
 
       if (
         window.BlockchainManager &&
@@ -467,7 +465,7 @@ export default {
     window.ethereum.on("chainChanged", async function (chainId) {
       console.log("%c App - chainChanged: %s", "color: #00aa00", chainId);
 
-      if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
+      if (!window.BlockchainManager) {
         return;
       }
 
@@ -478,19 +476,22 @@ export default {
       }
 
       if (await window.BlockchainManager.chainChanged(chainId)) {
+        hideTopBannerMessage();
+        showAppDisabledView(false);
+
         if (window.CommonManager.currentView == Types.View.index) {
           window.Index.setup();
         } else if (window.CommonManager.currentView == Types.View.game) {
-          console.log(
-            "----------- window.CommonManager.currentView == Types.View.game"
-          );
           window.Game.setup();
         } else {
-          throw (
-            ("----------- chainChanged: ",
-            window.CommonManager.currentView == Types.View.index)
-          );
+          throw ("chainChanged: wrong currentView");
         }
+      } else {
+        alert("Wrong network, switch to Ethereum Main Network");
+        showTopBannerMessage("Wrong network, switch to Ethereum Main Network", null, false);
+        showAppDisabledView(true);
+
+        throw ("chainChanged: wrong network");
       }
     });
   },

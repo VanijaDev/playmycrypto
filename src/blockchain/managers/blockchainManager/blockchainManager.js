@@ -27,7 +27,7 @@ const BlockchainManager = {
 
   setCurrentBlockchainManager: function (_blockchainType) {
     this.currentBlockchainType = _blockchainType;
-    console.log('BlockchainManager - _blockchainType', _blockchainType);
+    console.log('BlockchainManager - _blockchainType:', _blockchainType);
 
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:

@@ -20,16 +20,6 @@ const BlockchainManager_ethereum = {
   contract_inst_cf: null,
   contract_inst_rps: null,
 
-  showAppDisabledView: function (_show) {
-    if (_show) {
-      $("#app-disabled")[0].classList.add("app-disabled");
-      $("#app-disabled")[0].classList.remove("hidden");
-    } else {
-      $("#app-disabled")[0].classList.remove("app-disabled");
-      $("#app-disabled")[0].classList.add("hidden");
-    }
-  },
-
   init: async function () {
     console.log('%c BlockchainManager_ethereum - init', 'color: #00aa00');
 
@@ -57,9 +47,11 @@ const BlockchainManager_ethereum = {
         this.currentAccount = (await ethereum.send('eth_requestAccounts')).result[0];
 
         if (!this.isNetworkValid(ethereum.chainId)) {
-          alert($t.err_wrong_network);
-          showTopBannerMessage($t.err_wrong_network, null, false);
-          this.showAppDisabledView(true);
+          // alert($t.err_wrong_network);
+          // showTopBannerMessage($t.err_wrong_network, null, false);
+          alert("Wrong network, switch to Ethereum Main Network");
+          showTopBannerMessage("Wrong network, switch to Ethereum Main Network", null, false);
+          showAppDisabledView(true);
 
           return false;
         }
@@ -68,7 +60,7 @@ const BlockchainManager_ethereum = {
 
         alert(error.message);
         showTopBannerMessage(error.message, null, true);
-        this.showAppDisabledView(true);
+        showAppDisabledView(true);
 
         this.initted = false;
         return false;
@@ -78,18 +70,18 @@ const BlockchainManager_ethereum = {
     else if (window.web3) {
       console.log("Legacy dapp browsers...");
       // window.web3 = new Web3(web3.currentProvider);
-      alert($t.err_legacy_browsers);
-      showTopBannerMessage($t.err_legacy_browsers, null, false);
-      this.showAppDisabledView(true);
+      alert("Legacy dapp browsers... Working on compatibility");
+      showTopBannerMessage("Legacy dapp browsers... Working on compatibility", null, false);
+      showAppDisabledView(true);
 
       this.initted = false;
       return false;
     }
     // Non-dapp browsers...
     else {
-      alert($t.err_non_eth_browser);
-      showTopBannerMessage($t.err_non_eth_browser, null, false);
-      this.showAppDisabledView(true);
+      alert("Non-Ethereum browser detected. You should consider trying MetaMask!");
+      showTopBannerMessage("Non-Ethereum browser detected. You should consider trying MetaMask!", null, false);
+      showAppDisabledView(true);
 
       this.initted = false;
       return false;
@@ -114,16 +106,7 @@ const BlockchainManager_ethereum = {
   chainChanged: function (_networkVersion) {
     console.log('%c BlockchainManager_ethereum - chainChanged: %s', 'color: #00aa00', _networkVersion);
 
-    if (this.isNetworkValid(_networkVersion)) {
-      hideTopBannerMessage();
-      this.showAppDisabledView(false);
-      return true;
-    }
-
-    alert($t.err_wrong_network);
-    showTopBannerMessage($t.err_wrong_network, null, false);
-    this.showAppDisabledView(true);
-    return false;
+    return (this.isNetworkValid(_networkVersion));
   },
 
   isNetworkValid: function (_networkVersion) {

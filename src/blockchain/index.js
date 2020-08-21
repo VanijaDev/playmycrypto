@@ -13,7 +13,8 @@ const Index = {
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       if (!await window.BlockchainManager.init()) {
-        throw("BlockchainManager.init() failed");
+        console.error("BlockchainManager.init() failed.");
+        return;
       }
     }
     await ProfileManager.update();
@@ -32,7 +33,7 @@ const Index = {
     // ProfileManager.setProfileUpdateHandler(null);  // TODO  remove if not used
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
-    // hideTopBannerMessage();
+    hideTopBannerMessage();
   },
 
   refreshData: function () {
