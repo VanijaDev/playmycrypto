@@ -199,12 +199,12 @@
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
-              <div class="total-won">
+              <!-- <div class="total-won">
                 <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon"/>
                 <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
-              </div>
+              </div> -->
             </div>
           </div>
 
