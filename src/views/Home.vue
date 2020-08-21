@@ -218,11 +218,11 @@
               <tbody>
               <tr></tr>
               <tr>
-                <td class="total-column total-column-1">ETH</td>
+                <td class="total-column total-column-1"><img src="/img/icon_amount-eth.svg" class="money-icon"></td>
                 <td class="total-column total-column-2">0.00000</td>
               </tr>
               <tr>
-                <td class="total-column total-column-1">TRX</td>
+                <td class="total-column total-column-1"><img src="/img/icon_amount-trx.svg" class="money-icon"></td>
                 <td class="total-column total-column-2">0.00000</td>
               </tr>
               </tbody>
