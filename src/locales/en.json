@@ -19,12 +19,12 @@
     "TEXT_4": "of prize goes to our partner project",
     "TEXT_5": "of prize goes to fee beneficiary balance",
     "TEXT_6": "of fair P2P (player to player) gaming",
-    "TOOLTIP_1": "Tooltip 1",
-    "TOOLTIP_2": "Tooltip 2",
-    "TOOLTIP_3": "Tooltip 3",
-    "TOOLTIP_4": "Tooltip 4",
-    "TOOLTIP_5": "Tooltip 5",
-    "TOOLTIP_6": "Tooltip 6"
+    "TOOLTIP_1": "Winner receives 95% of prize.",
+    "TOOLTIP_2": "Player may provide referral address, that will get 1% of prize if player wins.",
+    "TOOLTIP_3": "1% of prize goes to raffle.",
+    "TOOLTIP_4": "... is our partner project.",
+    "TOOLTIP_5": "Anyone can purchase right to get 1% of all prizes.",
+    "TOOLTIP_6": "Player to Player gaming through the Smart Contract, no intermediaries."
   },
   "TOTAL": "Total",
   "AVAILABLE_GAMES": "Available games",
