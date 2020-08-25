@@ -555,8 +555,8 @@ const RPS = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.createGame(referral, seedHash).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Utils.etherToWei(bet),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: Utils.etherToWei(bet)
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c CREATE GAME transactionHash: %s', 'color: #1d34ff', hash);
@@ -599,8 +599,8 @@ const RPS = {
     let gameId = document.getElementById("rpswfopponent_game_id").innerHTML;
     window.BlockchainManager.gameInst(Types.Game.rps).methods.addTopGame(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: window.Game.minBet,
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: window.Game.minBet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
@@ -639,8 +639,8 @@ const RPS = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.increaseBetForGameBy(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Utils.etherToWei(bet).toString(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: Utils.etherToWei(bet).toString()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -681,8 +681,8 @@ const RPS = {
     // console.log('%c pauseGame_RPS: %s', 'color: #e51dff', _gameId);
 
     window.BlockchainManager.gameInst(Types.Game.rps).methods.pauseGame(_gameId).send({
-        from: window.BlockchainManager.currentAccount(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
@@ -717,8 +717,8 @@ const RPS = {
 
     window.BlockchainManager.gameInst(Types.Game.rps).methods.unpauseGame(_gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: window.Game.minBet,
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: window.Game.minBet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -750,8 +750,8 @@ const RPS = {
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
-        from: window.BlockchainManager.currentAccount(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -816,8 +816,8 @@ const RPS = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.joinGame(gameId, referral, this.selectedMove).send({
         from: window.BlockchainManager.currentAccount(),
-        value: bet,
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: bet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
@@ -882,8 +882,8 @@ const RPS = {
     // console.log("seedHash:    ", seedHash);
 
     window.BlockchainManager.gameInst(Types.Game.rps).methods.playMove(gameId, this.selectedPrevMove, prevSeedHash, seedHash).send({
-        from: window.BlockchainManager.currentAccount(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
@@ -926,8 +926,8 @@ const RPS = {
     let gameId = document.getElementById(this.GameView.opponentMove + "_game_id").innerHTML;
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.opponentNextMove(gameId, this.selectedMove).send({
-        from: window.BlockchainManager.currentAccount(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
@@ -958,8 +958,8 @@ const RPS = {
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.rps).methods.finishExpiredGame(gameId).send({
-        from: window.BlockchainManager.currentAccount(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);

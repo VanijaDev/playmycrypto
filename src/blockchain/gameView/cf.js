@@ -144,8 +144,8 @@ const CF = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.createGame(this.coinSideChosen, referral).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Utils.etherToWei(bet),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: Utils.etherToWei(bet)
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c CREATE GAME transactionHash: %s', 'color: #1d34ff', hash);
@@ -180,8 +180,8 @@ const CF = {
 
     window.BlockchainManager.gameInst(Types.Game.cf).methods.addTopGame(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: window.Game.minBet,
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: window.Game.minBet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log("MAKE TOP: transactionHash");
@@ -217,8 +217,8 @@ const CF = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.increaseBetForGameBy(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Utils.etherToWei(bet).toString(),
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: Utils.etherToWei(bet).toString()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c INCREASE BET transactionHash: %s', 'color: #1d34ff', hash);
@@ -260,8 +260,8 @@ const CF = {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.joinAndPlayGame(document.getElementById("cf_game_id_join").innerHTML, referral).send({
         from: window.BlockchainManager.currentAccount(),
-        value: bet,
-        gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+        value: bet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
         // console.log('%c JOIN GAME transactionHash: %s', 'color: #1d34ff', hash);

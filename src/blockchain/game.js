@@ -7,11 +7,11 @@ import {
 } from "bignumber.js";
 import Types from "./types";
 import ProfileManager from "./managers/profileManager";
+import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 
 const $t = $('#translations').data();
 
 const Game = {
-
   CF_Notifications: {
     gameAddedToTop: 0,
     gameCreated: 1,
@@ -32,6 +32,7 @@ const Game = {
 
   gameType: "",
   gameInst: null,
+  MIN_BET: 0.01,
 
   setup: async function (_currentGame) {
     console.log('%c game - setup $s', 'color: #00aa00', _currentGame);
@@ -95,6 +96,7 @@ const Game = {
     // this.gameInst.updateGameView();
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
+    await this.updateBeneficiary(this.gameType);
   },
 
   onUnload: function () {
@@ -326,6 +328,112 @@ const Game = {
       'timeago': new Date(result.time * 1000).toISOString().slice(0, 10)
     }));
   },
+
+  //  Beneficiary vvv
+  updateBeneficiary: async function (_gameType) {
+    window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
+
+    let currentBeneficiary = await PromiseManager.feeBeneficiarPromise(_gameType);
+    $('#beneficiaryUser')[0].textContent = currentBeneficiary;
+
+    let latestBeneficiarPrice = await PromiseManager.latestBeneficiarPricePromise(_gameType);
+    $('#beneficiaryTransferred')[0].textContent = Utils.weiToEtherFixed(latestBeneficiarPrice);
+
+    let profit = await PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
+    (Utils.addressesEqual(window.BlockchainManager.currentAccount(), currentBeneficiary)) ? await this.beneficiaryShowCurrent(profit) : await this.beneficiaryShowBecome(profit);
+
+    window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+  },
+
+  beneficiaryShowCurrent: async function (_profit) {
+    $('#beneficiaryProfit')[0].classList.remove("hidden");
+    $('#makeBeneficiary')[0].classList.add("hidden");
+    (parseFloat(_profit) > 0) ? $('#current_withdrawBeneficiaryProfitBtn')[0].classList.remove("disabled") : $('#current_withdrawBeneficiaryProfitBtn')[0].classList.add("disabled");
+
+    $('#beneficiaryCurrentAmount')[0].textContent = Utils.weiToEtherFixed(_profit);
+  },
+
+  beneficiaryShowBecome: async function (_profit) {
+    $('#beneficiaryProfit')[0].classList.add("hidden");
+    $('#makeBeneficiary')[0].classList.remove("hidden");
+    (parseFloat(_profit) > 0) ? $('#makeBeneficiary_withdrawBeneficiaryProfitBtn')[0].classList.remove("hidden") : $('#makeBeneficiary_withdrawBeneficiaryProfitBtn')[0].classList.add("hidden");
+
+    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(BigNumber(this.MIN_BET)).toString();
+  },
+
+  makeBeneficiaryClicked: async function () {
+    console.log('%c makeBeneficiaryClicked', 'color: #e51dff');
+
+    let value = BigNumber($('#beneficiaryTransferAmount')[0].value);
+    let lastPayed = BigNumber($('#beneficiaryTransferred')[0].textContent);
+
+    if (value.isLessThanOrEqualTo(lastPayed)) {
+      showTopBannerMessage($t.wrong_beneficiary_amount, null, true);
+      return;
+    } else if ((BigNumber(await BlockchainManager.getBalance()).isLessThan(BigNumber(Utils.etherToWei(value)).toString()))) {
+      showTopBannerMessage($t.not_enough_funds, null, true);
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
+    window.BlockchainManager.gameInst(this.gameType).methods.makeFeeBeneficiar().send({
+      from: window.BlockchainManager.currentAccount(),
+      value: Utils.etherToWei(value)
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage($t.tx_make_beneficiary_run, hash);
+    })
+    .once('receipt', function (receipt) {
+      ProfileManager.update();
+      
+      window.Game.updateBeneficiary(window.Game.gameType);
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      showTopBannerMessage($t.err_make_beneficiary_run, null, true)
+
+      throw new Error(error, receipt);
+    })
+    .then(() => {
+      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+    });
+  },
+
+  withdrawBeneficiaryProfitClicked: async function () {
+    console.log('%c withdrawBeneficiaryProfitClicked', 'color: #e51dff');
+
+    let profit = await PromiseManager.feeBeneficiarBalancePromise(this.gameType, window.BlockchainManager.currentAccount());
+    if (parseFloat(profit) <= 0) {
+      showTopBannerMessage($t.no_profit_to_withdraw, null, true);
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
+    window.BlockchainManager.gameInst(this.gameType).methods.withdrawBeneficiaryFee().send({
+      from: window.BlockchainManager.currentAccount()
+    })
+    .on('transactionHash', function (hash) {
+      // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
+      showTopBannerMessage($t.withdraw_beneficiary, hash);
+    })
+    .once('receipt', function (receipt) {
+      ProfileManager.update();
+      
+      window.Game.updateBeneficiary(window.Game.gameType);
+      hideTopBannerMessage();
+    })
+    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      showTopBannerMessage($t.err_withdraw_beneficiary, null, true)
+
+      throw new Error(error, receipt);
+    })
+    .then(() => {
+      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+    });
+  },
+
+  //  Beneficiary ^^^
 
 
   //  NOTIFICATION HELPERS

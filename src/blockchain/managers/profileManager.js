@@ -367,8 +367,8 @@ let ProfileManager = {
         // console.log('%c pendingClicked - withdrawReferral', 'color: #000baa');
 
         gameContract.methods.withdrawReferralFees().send({
-            from: window.BlockchainManager.currentAccount(),
-            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+            from: window.BlockchainManager.currentAccount()
+            // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
             // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
@@ -395,8 +395,8 @@ let ProfileManager = {
         let loopAmount = Math.min(pendingGames.length, 10);
 
         gameContract.methods.withdrawGamePrizes(loopAmount).send({
-            from: window.BlockchainManager.currentAccount(),
-            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+            from: window.BlockchainManager.currentAccount()
+            // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
             // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
@@ -419,8 +419,8 @@ let ProfileManager = {
         // console.log('%c pendingClicked - withdrawRafflePrize', 'color: #000baa');
 
         gameContract.methods.withdrawRafflePrizes().send({
-            from: window.BlockchainManager.currentAccount(),
-            gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+            from: window.BlockchainManager.currentAccount()
+            // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
             // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);

@@ -321,11 +321,13 @@
       v-bind:data-err_referral_fee_withdraw="$t('ERR_REFERRAL_FEE_WITHDRAW')"
       v-bind:data-err_game_prize_withdraw="$t('ERR_GAME_PRIZE_WITHDRAW')"
       v-bind:data-err_run_raffle="$t('ERR_RUN_RAFFLE')"
+      v-bind:data-err_make_beneficiary_run="$t('ERR_MAKE_BENEFICIARY')"
       v-bind:data-err_raffle_prize_withdraw="$t('ERR_RAFFLE_PRIZE_WITHDRAW')"
       v-bind:data-tx_referral_fee="$t('TX_REFERRAL_FEE')"
       v-bind:data-tx_game_prize="$t('TX_GAME_PRIZE')"
       v-bind:data-tx_raffle_prize="$t('TX_RAFFLE_PRIZE')"
       v-bind:data-tx_raffle_run="$t('TX_RAFFLE_RUN')"
+      v-bind:data-tx_make_beneficiary_run="$t('TX_MAKE_BENEFICIARY_RUN')"
       v-bind:data-rps_pending_move="$t('RPS_PENDING_MOVE')"
       v-bind:data-rps_game_joined_pending_move="
         $t('RPS_GAME_JOINED_PENDING_MOVE')
@@ -355,6 +357,7 @@
       v-bind:data-not_enough_funds="$t('NO_ENOUGH_FUNDS')"
       v-bind:data-enter_seed_phrase="$t('ENTER_SEED_PHRASE')"
       v-bind:data-wrong_referral="$t('WRONG_REFERRAL')"
+      v-bind:data-wrong_beneficiary_amount="$t('WRONG_BENEFICIARY_AMOUNT')"
       v-bind:data-tx_create_game="$t('TX_CREATE_GAME')"
       v-bind:data-err_create_game="$t('ERR_CREATE_GAME')"
       v-bind:data-make_top_cost="$t('MAKE_TOP_COST')"
@@ -387,6 +390,9 @@
       v-bind:data-your_game_finished_rps="$t('YOUR_GAME_FINISHED_RPS')"
       v-bind:data-coin_flip="$t('COIN_FLIP')"
       v-bind:data-rock_paper_scossors="$t('ROCK_PAPER_SCISSORS')"
+      v-bind:data-no_profit_to_withdraw="$t('ERR_NO_PROFIT_TO_WITHDRAW')"
+      v-bind:data-withdraw_beneficiary="$t('TX_WITHDRAW_BENEFICIARY_RUN')"
+      v-bind:data-err_withdraw_beneficiary="$t('ERR_WITHDRAW_BENEFICIAR')"
     ></div>
   </div>
 </template>

@@ -108,6 +108,7 @@
   "SELECT_NEXT_MOVE": "Please select next move",
   "ENTER_NEXT_SEED_PHRASE": "Please enter next move seed phrase",
   "WRONG_REFERRAL": "Wrong referral address",
+  "WRONG_BENEFICIARY_AMOUNT": "Wrong amount. You should transfer more, than previous beneficiary",
   "MAKE_TOP_COST": "Make Top Game costs ",
   "UNPAUSE_GAME_COST": "Unpause Game costs ",
   "ONLY_SINGLE_GAME": "Single game participation allowed. You are already playing game with id ",
@@ -143,6 +144,8 @@
   "TX_GAME_PRIZE": "GAME PRIZE withdraw transaction: ",
   "TX_RAFFLE_PRIZE": "RAFFLE PRIZE withdraw transaction: ",
   "TX_RAFFLE_RUN": "RUN RAFFLE transaction: ",
+  "TX_MAKE_BENEFICIARY_RUN": "MAKE BENEFICIARY transaction: ",
+  "TX_WITHDRAW_BENEFICIARY_RUN": "WITHDRAW BENEFICIARY FEE transaction: ",
   "ERR_CREATE_GAME": "CREATE GAME error...",
   "ERR_MAKE_TOP": "MAKE TOP GAME error...",
   "ERR_INCREASE_BET": "INCREASE BET error...",
@@ -156,11 +159,14 @@
   "ERR_REFERRAL_FEE_WITHDRAW": "Error on REFERRAL FEE withdraw transaction",
   "ERR_GAME_PRIZE_WITHDRAW": "Error on GAME PRIZE withdraw transaction",
   "ERR_RUN_RAFFLE": "Error on RUN RAFFLE transaction",
+  "ERR_MAKE_BENEFICIARY": "Error on MAKE BENEFICIARY transaction",
+  "ERR_WITHDRAW_BENEFICIAR": "Error on WITHDRAW BENEFICIARY FEE transaction",
   "ERR_RAFFLE_PRIZE_WITHDRAW": "Error on RAFFLE PRIZE withdraw transaction",
   "ERR_WRONG_NETWORK": "Wrong Network. Please use Ethereum Main Network",
   "ERR_LEGACY_BROWSERS": "Legacy dapp browsers... Working on compatibility",
   "ERR_NON_ETH_BROWSER": "Non-Ethereum browser detected. You should consider trying MetaMask!",
   "ERR_BET_INCREASE_MIN": "Min bet increase: ",
   "YOUR_GAME_FINISHED_CF": "Coin Flip game where you participates was just finished",
-  "YOUR_GAME_FINISHED_RPS": "Rock Paper Scissors game where you participates was just finished"
+  "YOUR_GAME_FINISHED_RPS": "Rock Paper Scissors game where you participates was just finished",
+  "ERR_NO_PROFIT_TO_WITHDRAW": "No profit to withdraw"
 }

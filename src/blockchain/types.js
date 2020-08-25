@@ -14,6 +14,7 @@ const Types = {
     availableGames: "availableGames",
     topGames: "TopGames",
     raffle: "raffle",
+    beneficiary: "beneficiaryBlock"
   },
 
   BlockchainType: {

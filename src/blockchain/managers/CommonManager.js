@@ -43,8 +43,12 @@ const CommonManager = {
         view = "raffleBlock";
         break;
 
-      default:
+      case Types.SpinnerView.beneficiary:
+        view = "beneficiaryBlock";
         break;
+
+      default:
+        throw("Error in spinnerViewForType");
     }
 
     return view;

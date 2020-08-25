@@ -215,6 +215,42 @@ let PromiseManager = {
     });
   },
 
+  feeBeneficiarPromise: function (_gameType) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.feeBeneficiar().call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
+  feeBeneficiarBalancePromise: function (_gameType, _account) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.feeBeneficiarBalances(_account).call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
+  latestBeneficiarPricePromise: function (_gameType) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.latestBeneficiarPrice().call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
   gamesCreatedAmountPromise: function (_gameType) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.gamesCreatedAmount().call()

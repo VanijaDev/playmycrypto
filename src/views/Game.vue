@@ -116,7 +116,7 @@
               </div>
             </div>
 
-            <div class="how-to-play shadow-block">
+            <div id="beneficiaryBlock" class="how-to-play shadow-block">
               <div class="header position-relative">
                 <div>{{ $t("BENEFICIARY_FEE") }}</div>
                 <div class="f13">{{ $t("BENEFICIARY_AMOUNT") }}:</div>
@@ -138,7 +138,7 @@
               <div class="content">
                 <b class="f18">{{ $t("BENEFICIARY_CURRENT") }}:</b>
                 <div class="ml-5">
-                  <small id="beneficiaryUser">0xF0CEe1E2C47744ad880547306a45332aDdAb8D54</small>
+                  <small id="beneficiaryUser">0x0</small>
                 </div>
                 <div class="ml-5">
                   {{ $t("BENEFICIARY_TRANSFERRED") }}:
@@ -172,7 +172,7 @@
                   </h3>
 
                   <div class="text-center mt-1">
-                    <button class="btn withdraw-btn">{{ $t("WITHDRAW") }}</button>
+                    <button id="current_withdrawBeneficiaryProfitBtn" class="btn withdraw-btn disabled" onclick="Game.withdrawBeneficiaryProfitClicked()">{{ $t("WITHDRAW") }}</button>
                   </div>
                 </div>
 
@@ -194,7 +194,10 @@
                   </div>
 
                   <div class="text-center mt-1">
-                    <button class="btn withdraw-btn">{{ $t("MAKE_ME_BENEFICIARY") }}</button>
+                    <button class="btn withdraw-btn" onclick="Game.makeBeneficiaryClicked()"> {{ $t("MAKE_ME_BENEFICIARY") }}</button>
+                  </div>
+                  <div class="text-center mt-5">
+                    <button id="makeBeneficiary_withdrawBeneficiaryProfitBtn" class="btn withdraw-btn hidden" onclick="Game.withdrawBeneficiaryProfitClicked()"> {{ $t("WITHDRAW_PENDING") }}</button>
                   </div>
                 </div>
               </div>
