@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="app-disabled" class="hidden"></div>
+    <div class="top-message"></div>
 
     <header>
       <div class="container">
@@ -290,8 +291,6 @@
           </div>
         </div>
       </div>
-
-      <div class="top-message"></div>
     </header>
 
     <!-- Begin page content -->
