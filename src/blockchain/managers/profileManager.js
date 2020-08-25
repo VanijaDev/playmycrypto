@@ -19,10 +19,12 @@ let ProfileManager = {
   ongoingGameCF_Opponent: new BigNumber("0"),
   ongoingGameRPS: new BigNumber("0"),
 
+  setUpdateHandler: function (_handler) {
+    this.profileUpdateHandler = _handler;
+  },
+
   update: async function (_handler) {
     console.log('%c ProfileManager - update', 'color: #00aa00');
-
-    this.profileUpdateHandler = _handler;
 
     hideTopBannerMessage();
     showAppDisabledView(false);

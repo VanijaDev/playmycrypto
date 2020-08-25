@@ -34,8 +34,3 @@ window.CommonManager.showSpinner(_spinnerViewType)
 ```
 window.CommonManager.hideSpinner(_spinnerViewType)
 ```
-
-#### Show back timer (seconds, callback):
-window.CommonManager.showBackTimer(10, function(){
-   console.log('Inner callback function')
-})

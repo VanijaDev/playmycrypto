@@ -6,6 +6,7 @@ import {
   BigNumber
 } from "bignumber.js";
 import Types from "./types";
+import ProfileManager from "./managers/profileManager";
 
 const $t = $('#translations').data();
 
@@ -32,12 +33,6 @@ const Game = {
   gameType: "",
   gameInst: null,
 
-
-
-
-
-
-
   setup: async function (_currentGame) {
     console.log('%c game - setup $s', 'color: #00aa00', _currentGame);
 
@@ -49,7 +44,17 @@ const Game = {
     this.gameInst = this.initGameInst(_currentGame);
     this.subscribeToEvents(this.gameType);
     this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    // await this.update();
+    await this.update();
+  },
+
+  subscribeToEvents: function (_gameType) {
+    NotificationManager.eventHandler = this;
+
+    if (_gameType == Types.Game.cf) {
+      NotificationManager.subscribe_CF();
+    } else if (_gameType == Types.Game.rps) {
+      NotificationManager.subscribe_RPS();
+    }
   },
 
   initGameInst: function (_gameType) {
@@ -65,40 +70,31 @@ const Game = {
     }
   },
 
-
-
-
-
-
-
   update: async function () {
     console.log('%c game - update', 'color: #00aa00');
-    return;
-    await ProfileManager.update(this);
+
+    ProfileManager.setUpdateHandler(this);
+    await ProfileManager.update();
 
     this.updateMoneyIcons();
-    if (this.gameType == Types.Game.cf) {
-      document.getElementById("gameName").innerHTML = $t.coin_flip;
-      await this.updateSuspendedViewForGame(this.gameType);
-    } else if (this.gameType == Types.Game.rps) {
-      document.getElementById("gameName").innerHTML = $t.rock_paper_scossors;
-    } else {
-      document.getElementById("gameName").innerHTML = "TITLE - ERROR";
-    }
 
-    this.gameInst.updateGameView();
+    let title = "TITLE - ERROR";
+    switch (this.gameType) {
+      case Types.Game.cf:
+        title = $t.coin_flip;
+        break;
+      case Types.Game.rps:
+        title = $t.rock_paper_scossors;
+        break;
+    
+      default:
+        break;
+    }
+    document.getElementById("gameName").innerHTML = title;
+
+    // this.gameInst.updateGameView();
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
-  },
-
-  subscribeToEvents: function (_gameType) {
-    NotificationManager.eventHandler = this;
-
-    if (_gameType == Types.Game.cf) {
-      NotificationManager.subscribe_CF();
-    } else if (_gameType == Types.Game.rps) {
-      NotificationManager.subscribe_RPS();
-    }
   },
 
   onUnload: function () {
@@ -106,24 +102,12 @@ const Game = {
 
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
+    ProfileManager.setUpdateHandler(null);
 
     this.gameType = "";
     // this.gameInst.onUnload();
 
     hideTopBannerMessage();
-  },
-
-  updateSuspendedViewForGame: async function (_gameType) {
-    if (await PromiseManager.allowedToPlayPromise(_gameType, window.BlockchainManager.currentAccount())) {
-      window.CommonManager.hideBackTimer();
-    } else {
-      let suspendedTimeDuration = new BigNumber(await PromiseManager.suspendedTimeDurationPromise(_gameType));
-      let lastPlayTimestamp = new BigNumber(await PromiseManager.lastPlayTimestampPromise(_gameType, window.BlockchainManager.currentAccount()));
-      let availableTimestamp = lastPlayTimestamp.plus(suspendedTimeDuration).multipliedBy(new BigNumber(1000));
-      let diff = availableTimestamp.minus(new BigNumber(Date.now())).dividedBy(new BigNumber(1000)).toNumber();
-      // var availableTime = new Date(availableTimestamp).toLocaleTimeString("en-US");
-      window.CommonManager.showBackTimer(diff);
-    }
   },
 
   //  LOAD GAMES
@@ -146,7 +130,7 @@ const Game = {
 
     if (_gameType == Types.Game.cf) {
       // console.log("loadTopGamesForGame - CF");
-      ownGame = await PromiseManager.ongoingGameIdxForCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
+      ownGame = await PromiseManager.ongoingGameAsCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
     } else if (_gameType == Types.Game.rps) {
       // console.log("loadTopGamesForGame - RPS");
       ownGame = await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
@@ -418,10 +402,6 @@ const Game = {
 
     let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
     this.gameInst.showGamePlayed(gameInfo);
-
-    if (!_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      this.updateSuspendedViewForGame(this.gameType);
-    }
 
     if (this.isGamePresentInAnyList(_gameId)) {
       this.removeGameWithId(_gameId);

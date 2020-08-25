@@ -48,41 +48,7 @@ const CommonManager = {
     }
 
     return view;
-  },
-
-  showBackTimer: function (duration, callback = null) {
-    window.CommonManager.hideBackTimer();
-
-    setTimeout(function () {
-      $('.timer-block').addClass('visible');
-    }, 1000);
-
-    var timer = duration,
-      minutes, seconds;
-    var backInterval = setInterval(function () {
-      minutes = parseInt(timer / 60, 10);
-      seconds = parseInt(timer % 60, 10);
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-
-      $('#timerBack').text(minutes + " min " + seconds + " sec");
-      if (--timer < 0) {
-        clearInterval(backInterval);
-        $('.timer-block').removeClass('visible');
-        // console.log('Timer end');
-
-        if (callback) {
-          callback();
-        }
-      }
-    }, 1000);
-  },
-
-  hideBackTimer: function () {
-    if ($('.timer-block')[0].classList.contains('visible')) {
-      $('.timer-block').removeClass('visible');
-    }
-  },
+  }
 }
 
 window.CommonManager = CommonManager;

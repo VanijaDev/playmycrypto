@@ -299,44 +299,6 @@ let PromiseManager = {
     });
   },
 
-  allowedToPlayPromise: function (_gameType, _account) {
-    return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.allowedToPlay().call({
-          from: _account
-        })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => {
-          throw new Error(err);
-        });
-    });
-  },
-
-  suspendedTimeDurationPromise: function (_gameType) {
-    return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.suspendedTimeDuration().call()
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => {
-          throw new Error(err);
-        });
-    });
-  },
-
-  lastPlayTimestampPromise: function (_gameType, _account) {
-    return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.lastPlayTimestamp(_account).call()
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => {
-          throw new Error(err);
-        });
-    });
-  },
-
   topGamesPromise: function (_gameType) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.getTopGames().call()

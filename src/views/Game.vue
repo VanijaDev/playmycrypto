@@ -204,12 +204,6 @@
 
         <div class="col-sm-4">
           <div class="shadow-block">
-            <div class="timer-block text-primary">
-              <p class="mb-0">{{ $t("JOIN_NEXT_GAME_IN") }}</p>
-              <p id="timerBack">00:00</p>
-              <small>{{ $t("SUSPENDED_DECRIPTION") }}</small>
-            </div>
-
             <div class="position-relative">
               <h2 class="text-primary p20 mb-0 pb-0">{{ $t("TOP_GAMES") }}</h2>
               <div class="inner-padding scrollbar-inner list-no-style" id="TopGames"></div>
@@ -223,7 +217,7 @@
             <div class="position-relative" id="availableGamesBlock">
               <h2 class="text-primary p20 mb-0 pb-0">{{ $t("AVAILABLE_GAMES") }}</h2>
 
-              <div class="inner-padding scrollbar-inner list-no-style" id="AvailableGames"></div>
+              <div id="AvailableGames" class="inner-padding scrollbar-inner list-no-style"></div>
             </div>
 
             <div class="inner-padding">

@@ -31,7 +31,9 @@ const Index = {
         return;
       }
     }
-    await ProfileManager.update(this);
+
+    ProfileManager.setUpdateHandler(this);
+    await ProfileManager.update();
     await this.refreshData();
 
     // //  events
@@ -42,9 +44,9 @@ const Index = {
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    ProfileManager.setProfileUpdateHandler(null);
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
+    ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
   },
 
