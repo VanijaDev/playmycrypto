@@ -1,10 +1,3 @@
-
-// File: localhost/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol
-
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
-
 // File: localhost/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol
 
 // SPDX-License-Identifier: MIT
@@ -101,6 +94,12 @@ contract Ownable is Context {
         _owner = newOwner;
     }
 }
+
+// File: localhost/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
 
 
 /**
@@ -371,7 +370,7 @@ contract AcquiredFeeBeneficiar is Ownable {
    * @dev Purchase right to become fee beneficiar.
    * TESTED
    */
-  function makeFeeBeneficiar() external payable {
+  function makeFeeBeneficiar() virtual public payable {
     require(msg.value > latestBeneficiarPrice, "Wrong amount");
 
     latestBeneficiarPrice = msg.value;
@@ -582,7 +581,6 @@ library SafeMath {
         return a % b;
     }
 }
-
 
 // File: localhost/contracts/Partnership.sol
 
@@ -874,7 +872,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   }
 
   /**
-   * @dev Finish prize for expired game.
+   * @dev Finish expired game.
    * @param _id Game id.
    * TESTED
    */
@@ -897,6 +895,11 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     delete ongoingGameAsOpponent[msg.sender];
 
     emit CF_GameExpiredFinished(_id, game.creator, game.opponent, game.winner);
+  }
+  
+  function makeFeeBeneficiar() public payable override {
+     totalUsedInGame = totalUsedInGame.add(msg.value);
+     AcquiredFeeBeneficiar.makeFeeBeneficiar();
   }
 
 
@@ -933,7 +936,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   /**
     * @dev Join game.
     * @param _id Game id to join.
-    * @param _coinSide Coin side for randomness.
+    * @param _coinSide Coin side for randomness. Coin side should be 0 / 1.
     * @param _referral Address for referral.
     * TESTED
     */
