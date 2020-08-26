@@ -69,7 +69,7 @@ let ProfileManager = {
   },
 
   updateCurrentlyPlayingGames: async function () {
-    Utils.clearElementIcons($('#listCurrentlyPlayingGames'));
+    $('#listCurrentlyPlayingGames').empty();
     $('#profileNotification').addClass('hidden');
 
     //  cf
