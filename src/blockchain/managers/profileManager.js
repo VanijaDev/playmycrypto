@@ -70,6 +70,7 @@ let ProfileManager = {
 
   updateCurrentlyPlayingGames: async function () {
     Utils.clearElementIcons($('#listCurrentlyPlayingGames'));
+    $('#profileNotification').addClass('hidden');
 
     //  cf
     this.ongoingGameCF_Creator = new BigNumber(await PromiseManager.ongoingGameAsCreatorPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
