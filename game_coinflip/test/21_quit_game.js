@@ -78,7 +78,7 @@ contract("Quit game", (accounts) => {
     it("should fail if Expired", async() => {
       await time.increase(time.duration.hours("13"));
       await expectRevert(game.quitGame(1, {
-        from: CREATOR
+        from: OPPONENT
       }), "Expired");
     });
 

@@ -242,6 +242,11 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
 
     emit CF_GameExpiredFinished(_id, game.creator, game.opponent, game.winner);
   }
+  
+  function makeFeeBeneficiar() public payable override {
+     totalUsedInGame = totalUsedInGame.add(msg.value);
+     AcquiredFeeBeneficiar.makeFeeBeneficiar();
+  }
 
 
   /**

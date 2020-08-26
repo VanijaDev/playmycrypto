@@ -79,6 +79,23 @@ contract("AcquiredFeeBeneficiar", (accounts) => {
         value: ether("0.1")
       }), "Wrong amount");
     });
+
+    it("should increase totalUsedInGame", async () => {
+      //  1
+      assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("3")), "totalUsedInGame should be 3 ether");
+      await game.makeFeeBeneficiar({
+        from: OTHER,
+        value: ether("0.11")
+      });
+      assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("3.11")), "totalUsedInGame should be 3.11 ether");
+
+      //  2
+      await game.makeFeeBeneficiar({
+        from: OTHER,
+        value: ether("0.21")
+      });
+      assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("3.32")), "totalUsedInGame should be 3.32 ether");
+    });
     
     it("should set latestBeneficiarPrice = msg.value", async() => {
       assert.equal(0, (await game.latestBeneficiarPrice.call()).cmp(ether("0")), "should be 0 before");

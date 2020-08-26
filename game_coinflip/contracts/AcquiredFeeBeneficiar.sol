@@ -24,7 +24,7 @@ contract AcquiredFeeBeneficiar is Ownable {
    * @dev Purchase right to become fee beneficiar.
    * TESTED
    */
-  function makeFeeBeneficiar() external payable {
+  function makeFeeBeneficiar() virtual public payable {
     require(msg.value > latestBeneficiarPrice, "Wrong amount");
 
     latestBeneficiarPrice = msg.value;
