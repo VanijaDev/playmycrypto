@@ -170,10 +170,6 @@
                       v-show="currency === 'trx'"
                     />
                   </h3>
-
-                  <div class="text-center mt-1">
-                    <button id="current_withdrawBeneficiaryProfitBtn" class="btn withdraw-btn disabled" onclick="Game.withdrawBeneficiaryProfitClicked()">{{ $t("WITHDRAW") }}</button>
-                  </div>
                 </div>
 
                 <div class="mt-4 beneficiary-block" id="makeBeneficiary">
@@ -195,9 +191,6 @@
 
                   <div class="text-center mt-1">
                     <button class="btn withdraw-btn" onclick="Game.makeBeneficiaryClicked()"> {{ $t("MAKE_ME_BENEFICIARY") }}</button>
-                  </div>
-                  <div class="text-center mt-5">
-                    <button id="makeBeneficiary_withdrawBeneficiaryProfitBtn" class="btn withdraw-btn hidden" onclick="Game.withdrawBeneficiaryProfitClicked()"> {{ $t("WITHDRAW_PENDING") }}</button>
                   </div>
                 </div>
               </div>

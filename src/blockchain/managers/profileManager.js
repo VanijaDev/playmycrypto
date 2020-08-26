@@ -10,7 +10,8 @@ let ProfileManager = {
   PendingWithdraw: {
     referral: "withdrawReferral",
     gamePrize: "withdrawGamePrize",
-    raffle: "withdrawRafflePrize"
+    raffle: "withdrawRafflePrize",
+    beneficiary: "withdrawBeneficiaryPrize"
   },
 
   profileUpdateHandler: null,
@@ -48,7 +49,7 @@ let ProfileManager = {
     await this.updatePlayerGameplayProfit();
     await this.updatePlayerTotalProfit();
     await this.updateReferralFeesWithdrawn();
-    await this.updatePending();
+    await this.updatePendingWithdrawals();
   },
 
   updateCurrentAccountUI: async function () {
@@ -223,6 +224,7 @@ let ProfileManager = {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
     this.updatePendingRafflePrize();
+    this.updatePendingBeneficiaryPrize();
   },
 
   updatePendingReferral: async function () {
@@ -281,6 +283,19 @@ let ProfileManager = {
 
     this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
   },
+
+  updatePendingBeneficiaryPrize: async function () {
+    let pendingGames = [];
+    let pendingValues = [];
+
+    let cfResult = new BigNumber(await PromiseManager.feeBeneficiarBalancePromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    if (cfResult.comparedTo(new BigNumber("0")) > 0) {
+      pendingGames.push(Types.Game.cf);
+      pendingValues.push(cfResult);
+    }
+
+    this.updatePendingPictures(this.PendingWithdraw.beneficiary, pendingGames, pendingValues);
+  }, 
 
   isGameParticipant: function (_gameType, _id) {
     if (_gameType == Types.Game.cf) {
@@ -348,9 +363,12 @@ let ProfileManager = {
       case this.PendingWithdraw.raffle:
         _isShow ? $('#rafflePendingPrizeBtn').addClass('visible') : $('#rafflePendingPrizeBtn').removeClass('visible');
         break;
+      case this.PendingWithdraw.beneficiary:
+        _isShow ? $('#beneficiaryPendingPrizeBtn').addClass('visible') : $('#beneficiaryPendingPrizeBtn').removeClass('visible');
+        break;
 
       default:
-        break;
+        throw("ERROR: wrong _pendingTarget in showPendingDot");
     }
   },
 
@@ -371,7 +389,7 @@ let ProfileManager = {
             // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
-            // console.log('%c ReferralPicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            // console.log('%c withdrawReferralFees on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($('#translations').data().tx_referral_fee, hash);
           })
           .once('receipt', function (receipt) {
@@ -384,6 +402,7 @@ let ProfileManager = {
               showTopBannerMessage($('#translations').data().err_referral_fee_withdraw, null, true);
             }
 
+            _btn.classList.remove('disabled');
             hideTopBannerMessage();
           });
         break;
@@ -399,7 +418,7 @@ let ProfileManager = {
             // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
-            // console.log('%c GamePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            // console.log('%c withdrawGamePrizes on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($('#translations').data().tx_game_prize, hash);
           })
           .once('receipt', function (receipt) {
@@ -410,6 +429,8 @@ let ProfileManager = {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
               showTopBannerMessage($('#translations').data().err_game_prize_withdraw, null, true);
             }
+
+            _btn.classList.remove('disabled');
             hideTopBannerMessage();
             ProfileManager.profileUpdateHandler.pendingPrizeWithdrawn();
           });
@@ -423,24 +444,51 @@ let ProfileManager = {
             // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
           })
           .on('transactionHash', function (hash) {
-            // console.log('%c RafflePrizePicList on transactionHash event: %s', 'color: #1d34ff', hash);
+            // console.log('%c withdrawRafflePrizes on transactionHash event: %s', 'color: #1d34ff', hash);
             showTopBannerMessage($('#translations').data().tx_raffle_prize, hash);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            ProfileManager.updateAfterWithdrawal;
+            ProfileManager.updateAfterWithdrawal();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
               showTopBannerMessage($('#translations').data().err_raffle_prize_withdraw, null, true);
             }
+
+            _btn.classList.remove('disabled');
             hideTopBannerMessage();
           });
         break;
 
+        case this.PendingWithdraw.beneficiary:
+          // console.log('%c pendingClicked - withdrawBeneficiary', 'color: #000baa');
+
+          gameContract.methods.withdrawBeneficiaryFee().send({
+              from: window.BlockchainManager.currentAccount()
+              // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+            })
+            .on('transactionHash', function (hash) {
+              // console.log('%c withdrawBeneficiaryFee on transactionHash event: %s', 'color: #1d34ff', hash);
+              showTopBannerMessage($('#translations').data().tx_withdraw_beneficiary, hash);
+            })
+            .once('receipt', function (receipt) {
+              hideTopBannerMessage();
+              ProfileManager.updateAfterWithdrawal();
+              window.Game.updateBeneficiary(_gameType);
+            })
+            .once('error', function (error, receipt) {
+              if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+                showTopBannerMessage($('#translations').data().err_withdraw_beneficiary, null, true);
+              }
+
+              _btn.classList.remove('disabled');
+              hideTopBannerMessage();
+            });
+          break;
+
       default:
         throw ("pendingClicked - wrong _pendingTarget: ", _pendingTarget);
-        break;
     }
   },
 

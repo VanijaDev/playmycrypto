@@ -259,6 +259,14 @@
                           <div id="rafflePendingPrizeBtn" class="pending-dot"></div>
                           {{ $t("RAFFLE_PRIZE") }}
                         </button>
+                        <button
+                          class="btn btn-outline-primary"
+                          v-bind:class="{ active: activeUserTab === 4 }"
+                          @click="activeUserTab = 4"
+                        >
+                          <div id="beneficiaryPendingPrizeBtn" class="pending-dot"></div>
+                          {{ $t("BENEFICIARY_PRIZE") }}
+                        </button>
                       </div>
 
                       <div class="pt-3">
@@ -278,6 +286,12 @@
                         </div>
 
                         <div id="withdrawRafflePrize" v-show="activeUserTab === 3">
+                          <!-- <button class="btn btn-animated">
+                            <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
+                          </button>-->
+                        </div>
+
+                        <div id="withdrawBeneficiaryPrize" v-show="activeUserTab === 4">
                           <!-- <button class="btn btn-animated">
                             <img src="/img/icon-tic-tac-toe-sm.svg" class="game-icon mr-3">
                           </button>-->
@@ -390,7 +404,7 @@
       v-bind:data-coin_flip="$t('COIN_FLIP')"
       v-bind:data-rock_paper_scossors="$t('ROCK_PAPER_SCISSORS')"
       v-bind:data-no_profit_to_withdraw="$t('ERR_NO_PROFIT_TO_WITHDRAW')"
-      v-bind:data-withdraw_beneficiary="$t('TX_WITHDRAW_BENEFICIARY_RUN')"
+      v-bind:data-tx_withdraw_beneficiary="$t('TX_WITHDRAW_BENEFICIARY_RUN')"
       v-bind:data-err_withdraw_beneficiary="$t('ERR_WITHDRAW_BENEFICIAR')"
     ></div>
   </div>

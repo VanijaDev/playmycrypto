@@ -339,24 +339,22 @@ const Game = {
     let latestBeneficiarPrice = await PromiseManager.latestBeneficiarPricePromise(_gameType);
     $('#beneficiaryTransferred')[0].textContent = Utils.weiToEtherFixed(latestBeneficiarPrice);
 
-    let profit = await PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
-    (Utils.addressesEqual(window.BlockchainManager.currentAccount(), currentBeneficiary)) ? await this.beneficiaryShowCurrent(profit) : await this.beneficiaryShowBecome(profit);
+    (Utils.addressesEqual(window.BlockchainManager.currentAccount(), currentBeneficiary)) ? await this.beneficiaryShowCurrent(_gameType) : await this.beneficiaryShowBecome();
 
     window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
   },
 
-  beneficiaryShowCurrent: async function (_profit) {
+  beneficiaryShowCurrent: async function (_gameType) {
     $('#beneficiaryProfit')[0].classList.remove("hidden");
     $('#makeBeneficiary')[0].classList.add("hidden");
-    (parseFloat(_profit) > 0) ? $('#current_withdrawBeneficiaryProfitBtn')[0].classList.remove("disabled") : $('#current_withdrawBeneficiaryProfitBtn')[0].classList.add("disabled");
 
-    $('#beneficiaryCurrentAmount')[0].textContent = Utils.weiToEtherFixed(_profit);
+    let profit = await PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
+    $('#beneficiaryCurrentAmount')[0].textContent = Utils.weiToEtherFixed(profit);
   },
 
-  beneficiaryShowBecome: async function (_profit) {
+  beneficiaryShowBecome: async function () {
     $('#beneficiaryProfit')[0].classList.add("hidden");
     $('#makeBeneficiary')[0].classList.remove("hidden");
-    (parseFloat(_profit) > 0) ? $('#makeBeneficiary_withdrawBeneficiaryProfitBtn')[0].classList.remove("hidden") : $('#makeBeneficiary_withdrawBeneficiaryProfitBtn')[0].classList.add("hidden");
 
     $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(BigNumber(this.MIN_BET)).toString();
   },
@@ -391,7 +389,8 @@ const Game = {
       hideTopBannerMessage();
     })
     .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      showTopBannerMessage($t.err_make_beneficiary_run, null, true)
+      showTopBannerMessage($t.err_make_beneficiary_run, null, true);
+      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
 
       throw new Error(error, receipt);
     })
@@ -399,40 +398,6 @@ const Game = {
       window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
     });
   },
-
-  withdrawBeneficiaryProfitClicked: async function () {
-    console.log('%c withdrawBeneficiaryProfitClicked', 'color: #e51dff');
-
-    let profit = await PromiseManager.feeBeneficiarBalancePromise(this.gameType, window.BlockchainManager.currentAccount());
-    if (parseFloat(profit) <= 0) {
-      showTopBannerMessage($t.no_profit_to_withdraw, null, true);
-      return;
-    }
-
-    window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
-    window.BlockchainManager.gameInst(this.gameType).methods.withdrawBeneficiaryFee().send({
-      from: window.BlockchainManager.currentAccount()
-    })
-    .on('transactionHash', function (hash) {
-      // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage($t.withdraw_beneficiary, hash);
-    })
-    .once('receipt', function (receipt) {
-      ProfileManager.update();
-      
-      window.Game.updateBeneficiary(window.Game.gameType);
-      hideTopBannerMessage();
-    })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      showTopBannerMessage($t.err_withdraw_beneficiary, null, true)
-
-      throw new Error(error, receipt);
-    })
-    .then(() => {
-      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
-    });
-  },
-
   //  Beneficiary ^^^
 
 
@@ -677,7 +642,8 @@ const Game = {
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        showTopBannerMessage($t.err_run_raffle, null, true)
+        showTopBannerMessage($t.err_run_raffle, null, true);
+        window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
 
         throw new Error(error, receipt);
       })
