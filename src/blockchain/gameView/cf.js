@@ -15,6 +15,7 @@ const CF = {
     waitingForOpponent: "cfwfopponent",
     join: "cfjoingame",
     finish: "cffinishgame",
+    waitCreator: "cfwaitcreator",
     won: "cfWon",
     lost: "cfLost"
   },
