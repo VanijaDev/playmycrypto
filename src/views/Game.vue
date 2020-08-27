@@ -60,13 +60,13 @@
                 id="BlockFAQCF"
                 class="cards-pills-list scrollbar-popup-inner p20"
                 v-if="currentGame === 'cf'"
-                v-html="$t('FAQ_CF')"
+                v-html="$t('FAQ')"
               ></div>
               <div
                 id="BlockFAQRPS"
                 class="cards-pills-list scrollbar-popup-inner p20"
                 v-if="currentGame === 'rps'"
-                v-html="$t('FAQ_RPS')"
+                v-html="$t('FAQ')"
               ></div>
             </modal>
           </div>
