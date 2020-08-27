@@ -116,6 +116,10 @@ input:focus {
   font-size: 18px;
 }
 
+.f20 {
+  font-size: 20px;
+}
+
 .f22 {
   font-size: 22px;
 }
@@ -605,9 +609,9 @@ input:focus {
 }
 
 #availableGamesBlock
-  .scrollbar-inner {
-    height: 454px !important;
-  }
+.scrollbar-inner {
+  height: 454px !important;
+}
 
 .transfer-block {
   input {
@@ -969,6 +973,166 @@ input:focus {
 
   .btn-make-top {
     margin-top: 14px !important;
+  }
+
+  .no-value {
+    width: 162px;
+    height: 162px;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 162px;
+    margin: auto;
+  }
+
+  .selected-value {
+    width: 162px;
+    height: 162px;
+    line-height: 162px;
+    margin: auto;
+    text-align: center;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .small-selected-value {
+    width: 84px;
+    height: 84px;
+    margin: auto;
+    text-align: center;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .coin-side-selected {
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+  }
+
+  .coin-side {
+    width: 84px;
+    height: 84px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .game-move-item {
+    width: 66px;
+    height: 66px;
+    padding: 0;
+    border-radius: 50%;
+    background: #fff;
+    text-align: center;
+    line-height: 66px;
+    box-shadow: 0 0 0 9px rgba(255, 255, 255, 0.5);
+    transition: all ease 0.3s;
+
+    &.active {
+      background: #f2994a;
+      box-shadow: 0 0 0 9px rgba(242, 153, 74, 0.5);
+    }
+
+    &.game-move-small {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.5);
+    }
+
+    &.game-move-middle {
+      width: 47px;
+      height: 47px;
+      line-height: 47px;
+      box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.5);
+    }
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    img {
+      width: 65%;
+      height: 65%;
+      object-fit: contain;
+      margin-right: 3px;
+      margin-bottom: 3px;
+    }
+  }
+
+  .bet-input {
+    width: 70px !important;
+  }
+
+  .align-button-bottom {
+    margin-top: 180px;
+  }
+
+  .info-column .btn-start-game {
+    height: 54px;
+    position: absolute;
+    bottom: 50px;
+    left: 35px;
+    right: 35px;
+    width: 220px;
+    box-shadow: 0 0 1px 6px rgba(255, 255, 255, 0.25);
+
+    &.desktop-move {
+      bottom: 60px;
+    }
+  }
+
+  .inner-column {
+    &.second-inner-column {
+      padding: 0.8rem 1rem 0.8rem 1rem !important;
+    }
+  }
+
+  .chosen-side {
+    margin-top: 150px;
+  }
+
+  .mobile-move {
+    display: none;
+  }
+
+  @media all and (max-width: 480px) {
+    .game-area {
+      .inner-column {
+        padding: 0.8rem 2rem 0.8rem 2rem !important;
+      }
+
+      .btn-start-game {
+        position: relative;
+        margin: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+      }
+    }
+
+    .mobile-move {
+      display: block;
+    }
+    .desktop-move {
+      display: none;
+    }
+
+    .game-area .bottom-buttons {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      margin-top: 10px;
+    }
+    .game-area .btn-small-orange {
+      float: none;
+    }
   }
 }
 

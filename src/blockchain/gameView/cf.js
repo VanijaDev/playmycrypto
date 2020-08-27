@@ -12,8 +12,10 @@ const CF = {
 
   GameView: {
     start: "cfstart",
-    waitingForOpponent: "cfmaketop",
-    join: "cfjoin",
+    waitingForOpponent: "cfwfopponent",
+    join: "cfjoingame",
+    finish: "cffinishgame",
+    waitCreator: "cfwaitcreator",
     won: "cfWon",
     lost: "cfLost"
   },

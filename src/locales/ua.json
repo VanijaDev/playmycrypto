@@ -170,5 +170,8 @@
   "ERR_BET_INCREASE_MIN": "Мінімальне збільшення ставки: ",
   "YOUR_GAME_FINISHED_CF": "Гра Підкинь Монету, де ти граєш була зіграна",
   "YOUR_GAME_FINISHED_RPS": "Гра Камінь Ножиці Папір, де ти граєш була зіграна",
-  "ERR_NO_PROFIT_TO_WITHDRAW": "Нема прибутку для зняття"
+  "ERR_NO_PROFIT_TO_WITHDRAW": "Нема прибутку для зняття",
+  "COIN_SIDE_CREATION": "Chosen values during game creation",
+  "CLAIM_PRIZE": "you can claim prize for expired move",
+  "CREATOR_FINISH_WAIT": "WAITING FOR CREATOR TO FINISH GAME"
 }
