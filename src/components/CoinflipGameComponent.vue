@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row game-block hidden" id="cfstart">
+    <div class="row game-block" id="cfstart">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <div class="mt-1 pt-2 text-left">
           <div>
@@ -279,7 +279,7 @@
       </div>
     </div>
 
-    <div class="row game-block" id="cfwaitcreator">
+    <div class="row game-block hidden" id="cfwaitcreator">
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <div class="mt-0 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
