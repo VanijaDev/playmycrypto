@@ -119,7 +119,7 @@
             <div id="beneficiaryBlock" class="how-to-play shadow-block">
               <div class="header position-relative">
                 <div>{{ $t("BENEFICIARY_FEE") }}</div>
-                <div class="f13">{{ $t("BENEFICIARY_AMOUNT") }}:</div>
+                <div class="f13">{{ $t("BENEFICIARY_PROFIT") }}:</div>
 
                 <div class="raffle-amount">
                   <b id="beneficiaryAmount">0.00000</b>

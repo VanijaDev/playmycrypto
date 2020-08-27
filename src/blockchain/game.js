@@ -349,6 +349,7 @@ const Game = {
     $('#makeBeneficiary')[0].classList.add("hidden");
 
     let profit = await PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
+    $('#beneficiaryAmount')[0].textContent = Utils.weiToEtherFixed(profit);
     $('#beneficiaryCurrentAmount')[0].textContent = Utils.weiToEtherFixed(profit);
   },
 
@@ -366,7 +367,7 @@ const Game = {
     let lastPayed = BigNumber($('#beneficiaryTransferred')[0].textContent);
 
     if (value.isLessThanOrEqualTo(lastPayed)) {
-      showTopBannerMessage($t.wrong_beneficiary_amount, null, true);
+      showTopBannerMessage($t.wrong_beneficiary_profit, null, true);
       return;
     } else if ((BigNumber(await BlockchainManager.getBalance()).isLessThan(BigNumber(Utils.etherToWei(value)).toString()))) {
       showTopBannerMessage($t.not_enough_funds, null, true);
