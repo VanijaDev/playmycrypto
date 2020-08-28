@@ -42,7 +42,7 @@ const Game = {
     this.gameInst = this.initGameInst(_currentGame);
     this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
     this.subscribeToEvents(this.gameType);
-    await this.update();
+    await this.update(false);
   },
 
   initGameInst: function (_gameType) {
@@ -75,8 +75,14 @@ const Game = {
     }
   },
 
-  update: async function () {
+  update: async function (_onAccountChanged) {
     console.log('%c game - update', 'color: #00aa00');
+
+    if (_onAccountChanged) {
+      const queryStringNew = window.location.origin + window.location.pathname;
+      window.location.replace(queryStringNew);
+    }
+    console.log("this.gameId: ", this.gameId);
 
     ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();

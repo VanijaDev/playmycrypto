@@ -478,7 +478,7 @@ export default {
         window.BlockchainManager.accountChanged(accounts[0]);
 
         if (window.CommonManager.currentView == Types.View.game) {
-          window.Game.update();
+          window.Game.update(true);
         } else {
           window.ProfileManager.update();
         }

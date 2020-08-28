@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-8">
-          <div class="shadow-block inner-padding game-block">
+          <div class="shadow-block inner-padding">
             <div class="game-area" id="gameBlock">
               <cf-game v-if="currentGame === 'cf'" ref="cfGame"></cf-game>
               <rps-game v-if="currentGame === 'rps'" ref="rpsGame"></rps-game>

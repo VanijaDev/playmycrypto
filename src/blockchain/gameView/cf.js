@@ -22,9 +22,9 @@ const CF = {
 
   updateGameView: async function (_gameId) {
     console.log('%c CF - updateGameView, $s', 'color: #00aa00', _gameId);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     this.gameId = _gameId;
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
@@ -42,28 +42,35 @@ const CF = {
 
   //  game view
   showGameViewForCurrentAccount: async function () {
-    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    // let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // // console.log("showGameViewForCurrentAccount id: ", id);
+    let id = null;
+    if (this.gameId != null) {
+      id = this.gameId;
+    } else {
+      let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
+      if (createdId > 0) {
+        id = createdId;
+      } else {
+        let joinedId = parseInt(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+        if (createdId > 0) {
+          id = joinedId;
+        }
+      }
+    }
 
-    // if (id == 0) {
-    //   this.showGameView(this.GameView.start, null);
-    // } else {
-    //   let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-    //   this.showGameView(this.GameView.waitingForOpponent, gameInfo);
-    // }
+    if (id != null && id > 0) {
+      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, id);
+      this.showGameView(this.GameView.waitingForOpponent, gameInfo);
+    } else {
+      this.showGameView(this.GameView.start, null);
+    }
 
-    // window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-  },
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView(this.GameView.join, _gameInfo);
+    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
   showGameView: function (_viewName, _gameInfo) {
-    // console.log("showGameView: ", _viewName, _gameInfo);
+    console.log("showGameView: ", _viewName, _gameInfo);
     if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
@@ -71,36 +78,9 @@ const CF = {
     this.clearGameView(_viewName);
     window.showGameBlock(_viewName)
   },
-
-  clearGameView: function (_viewName) {
-    // document.getElementById("cf_game_referral_start").value = "";
-    // document.getElementById("cf_game_referral_join").value = "";
-    // document.getElementById("cf_update_bet_input").value = "";
-
-    switch (_viewName) {
-      case this.GameView.start:
-        $('#gameId_start')[0].value = "0";
-        $('#gameCreator_start')[0].value = "0x0";
-        $('#gameOpponent_start')[0].value = "0x0";
-        $('#gameBetCurrent_start')[0].value = "0";
-        $('#cf_game_referral_start')[0].value = "";
-        $('#cf_bet_input')[0].value = "0.01";
-        break;
-
-      case this.GameView.waitingForOpponent:
-      case this.GameView.join:
-      case this.GameView.won:
-      case this.GameView.lost:
-        break;
-
-      default:
-        throw ("clearGameView - wrong _viewName:", _viewName)
-        break;
-    }
-  },
-
+  
   populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    // console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
 
     switch (_viewName) {
       case "cfmaketop":
@@ -123,6 +103,38 @@ const CF = {
       default:
         break;
     }
+  },
+
+  clearGameView: function (_viewName) {
+    switch (_viewName) {
+      case this.GameView.start:
+        selectMoveValue(null);
+
+        $('#cfstart_game_referral')[0].value = "";
+        $('#cfstart_seed')[0].value = "";
+        $('#cfstart_bet')[0].value = "0x0";
+        break;
+
+      default:
+        break;
+    }
+  },
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  showJoinGame: function (_gameInfo) {
+    // console.log("showJoinGame: ", _gameInfo);
+    this.showGameView(this.GameView.join, _gameInfo);
   },
 
   startGame: async function () {
