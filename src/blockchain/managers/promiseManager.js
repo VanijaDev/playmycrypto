@@ -275,7 +275,7 @@ let PromiseManager = {
     });
   },
 
-  ownerPromise: function (_gameType) {
+  gameOwnerPromise: function (_gameType) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.owner().call()
         .then(result => {

@@ -1,4 +1,3 @@
-import PromiseManager from "../managers/promiseManager";
 import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";

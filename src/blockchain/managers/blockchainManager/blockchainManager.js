@@ -115,6 +115,10 @@ const BlockchainManager = {
     return this.currentBlockchainManager.minBetForGame(_gameType);
   },
 
+  gameOwner: function (_gameType) {
+    return this.currentBlockchainManager.gameOwner(_gameType);
+  },
+
   ongoingGameAsCreator: function (_gameType, _currentAccount) {
     return this.currentBlockchainManager.ongoingGameAsCreator(_gameType, _currentAccount);
   },

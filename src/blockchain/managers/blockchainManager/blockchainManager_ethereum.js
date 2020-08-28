@@ -232,6 +232,10 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.minBetForGamePromise(_gameType);
   },
 
+  gameOwner: async function (_gameType) {
+    return await PromiseManager.gameOwnerPromise(_gameType);
+  },
+
   raffleParticipants: async function (_gameType) {
     return await PromiseManager.raffleParticipantsPromise(_gameType);
   },

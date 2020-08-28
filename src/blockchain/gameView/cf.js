@@ -1,4 +1,3 @@
-import PromiseManager from "../managers/promiseManager";
 import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
@@ -6,6 +5,7 @@ import Types from "../types";
 const $t = $('#translations').data();
 
 const CF = {
+  gameId: null,
   ownerAddress: "",
   coinSideChosen: 0,
   minBet: "",
@@ -20,40 +20,41 @@ const CF = {
     lost: "cfLost"
   },
 
-  updateGameView: async function () {
-    console.log('%c CF - updateGameView', 'color: #00aa00');
+  updateGameView: async function (_gameId) {
+    console.log('%c CF - updateGameView, $s', 'color: #00aa00', _gameId);
 
+    this.gameId = _gameId;
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    this.ownerAddress = await PromiseManager.ownerPromise(Types.Game.cf);
-    this.minBet = new BigNumber((await PromiseManager.minBetForGamePromise(Types.Game.cf)).toString());
+    this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
+    this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
     this.setPlaceholders();
     this.showGameViewForCurrentAccount();
   },
 
   setPlaceholders: function () {
-    $('#cf_game_referral_start')[0].placeholder = this.ownerAddress;
-    $('#cf_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
+    $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
+    $('#cfstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
 
-    $('#cf_game_referral_join')[0].placeholder = this.ownerAddress;
-    $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    // $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
   showGameViewForCurrentAccount: async function () {
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // console.log("showGameViewForCurrentAccount id: ", id);
+    // let id = parseInt(await PromiseManager.createdGameIdForAccountPromise(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // // console.log("showGameViewForCurrentAccount id: ", id);
 
-    if (id == 0) {
-      this.showGameView(this.GameView.start, null);
-    } else {
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
-      this.showGameView(this.GameView.waitingForOpponent, gameInfo);
-    }
+    // if (id == 0) {
+    //   this.showGameView(this.GameView.start, null);
+    // } else {
+    //   let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, id);
+    //   this.showGameView(this.GameView.waitingForOpponent, gameInfo);
+    // }
 
-    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    // window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
   },
 
   showJoinGame: function (_gameInfo) {

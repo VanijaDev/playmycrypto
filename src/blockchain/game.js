@@ -71,7 +71,7 @@ const Game = {
         break;
     
       default:
-        throw("ERROR: gaem - subscribeToEvents");
+        throw("ERROR: game - subscribeToEvents");
     }
   },
 
@@ -97,7 +97,7 @@ const Game = {
     }
     document.getElementById("gameName").innerHTML = title;
 
-    // this.gameInst.updateGameView();
+    this.gameInst.updateGameView(this.gameId);
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
     await this.updateBeneficiary(this.gameType);
