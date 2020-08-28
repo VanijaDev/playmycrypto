@@ -44,28 +44,27 @@ const NotificationManager = {
   eventHandler: null,
 
   //  notifications for Index view
-  subscribeIndex: function () {
-    console.log('%c NotificationManager - subscribeIndex', 'color: #00aa00');
+  subscribe_index: function () {
+    console.log('%c NotificationManager - subscribe_index', 'color: #00aa00');
 
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
-        console.log("subscribeIndex - Ethereum");
-        this.subscribeIndex_ethereum();
+        console.log("subscribe_index - Ethereum");
+        this.subscribe_index_ethereum();
 
         break;
 
-
       case Types.currentBlockchainType.ethereum:
-        console.log("subscribeIndex - Tron");
+        console.log("subscribe_index - Tron");
         break;
 
       default:
-        break;
+        throw("ERROR: subscribe_index");
     }
   },
 
-  subscribeIndex_ethereum: function () {
-    console.log('%c NotificationManager - subscribeIndex_ethereum', 'color: #00aa00');
+  subscribe_index_ethereum: function () {
+    console.log('%c NotificationManager - subscribe_index_ethereum', 'color: #00aa00');
 
     window.web3.eth.subscribe('logs', {
       address: [CoinFlipData.address, RockPaperScissorsData.address]
@@ -217,8 +216,27 @@ const NotificationManager = {
     })
   },
 
-  subscribe_CF: function () {
-    console.log('%c NotificationManager - subscribe_CF', 'color: #00aa00');
+  subscribe_cf: function () {
+    console.log('%c NotificationManager - subscribe_cf', 'color: #00aa00');
+
+    switch (window.BlockchainManager.currentBlockchainType) {
+      case Types.BlockchainType.ethereum:
+        console.log("subscribe_index - Ethereum");
+        this.subscribe_cf_ethereum();
+
+        break;
+
+      case Types.currentBlockchainType.ethereum:
+        console.log("subscribe_index - Tron");
+        break;
+
+      default:
+        throw("ERROR: subscribe_index");
+    }
+  },
+
+  subscribe_cf_ethereum: function () {
+    console.log('%c NotificationManager - subscribe_cf_ethereum', 'color: #00aa00');
 
     window.web3.eth.subscribe('logs', {
       address: CoinFlipData.address
@@ -228,44 +246,44 @@ const NotificationManager = {
         return;
       }
 
-      console.log("subscribe_CF event: ", result);
+      console.log("subscribe_cf_ethereum event: ", result);
 
       switch (result.topics[0]) {
-        case this.NotificationHashes_CF.gameCreated:
-          console.log("NotificationHashes_CF.gameCreated");
-          this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
-          break;
+        // case this.NotificationHashes_CF.gameCreated:
+        //   console.log("NotificationHashes_CF.gameCreated");
+        //   this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
+        //   break;
 
-        case this.NotificationHashes_CF.gamePlayed:
-          console.log("NotificationHashes_CF.gamePlayed");
-          // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner, uint256 bet);
-          this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
-          break;
+        // case this.NotificationHashes_CF.gamePlayed:
+        //   console.log("NotificationHashes_CF.gamePlayed");
+        //   // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner, uint256 bet);
+        //   this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
+        //   break;
 
-        case this.NotificationHashes_CF.gamePrizesWithdrawn:
-          console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
-          break;
+        // case this.NotificationHashes_CF.gamePrizesWithdrawn:
+        //   console.log("NotificationHashes_CF.gamePrizesWithdrawn");
+        //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
+        //   break;
 
-        case this.NotificationHashes_CF.gameAddedToTop:
-          console.log("NotificationHashes_CF.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
-          break;
+        // case this.NotificationHashes_CF.gameAddedToTop:
+        //   console.log("NotificationHashes_CF.gameAddedToTop");
+        //   this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+        //   break;
 
           // case this.NotificationHashes_CF.gameReferralWithdrawn:
           //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
 
           //   break;
 
-        case this.NotificationHashes_CF.gameUpdated:
-          console.log("NotificationHashes_CF.gameUpdated");
-          this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
-          break;
+        // case this.NotificationHashes_CF.gameUpdated:
+        //   console.log("NotificationHashes_CF.gameUpdated");
+        //   this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
+        //   break;
 
-        case this.NotificationHashes_CF.rafflePlayed:
-          console.log("NotificationHashes_CF.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
-          break;
+        // case this.NotificationHashes_CF.rafflePlayed:
+        //   console.log("NotificationHashes_CF.rafflePlayed");
+        //   this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
+        //   break;
 
           // case this.NotificationHashes_CF.rafflePrizeWithdrawn:
           //   console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
@@ -283,8 +301,8 @@ const NotificationManager = {
     })
   },
 
-  subscribe_RPS: function () {
-    console.log('%c NotificationManager - subscribe_RPS', 'color: #00aa00');
+  subscribe_rps: function () {
+    console.log('%c NotificationManager - subscribe_rps', 'color: #00aa00');
 
     window.web3.eth.subscribe('logs', {
       address: RockPaperScissorsData.address

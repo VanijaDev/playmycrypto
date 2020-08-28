@@ -193,6 +193,20 @@ const BlockchainManager_ethereum = {
     return gamesCompletedAmount;
   },
 
+  gameInfo: async function (_gameType, _idx) {
+    let gameInfo = await PromiseManager.gameInfoPromise(_gameType, _idx);
+    // console.log("gameInfo: ", _gameType, _idx,  gameInfo);
+
+    return gameInfo;
+  },
+
+  minBetForGame: async function (_gameType) {
+    let minBet = await PromiseManager.minBetForGamePromise(_gameType);
+    // console.log("minBet: ", _gameType, minBet);
+
+    return minBet;
+  },
+
 
   /**
    * HELPERS

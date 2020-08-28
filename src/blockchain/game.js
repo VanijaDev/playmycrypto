@@ -1,4 +1,3 @@
-import PromiseManager from "./managers/promiseManager";
 import CF from "./gameView/cf";
 import RPS from "./gameView/rps";
 import Utils from "./utils";
@@ -6,8 +5,6 @@ import {
   BigNumber
 } from "bignumber.js";
 import Types from "./types";
-import ProfileManager from "./managers/profileManager";
-import BlockchainManager from "./managers/blockchainManager/blockchainManager";
 
 const $t = $('#translations').data();
 
@@ -32,30 +29,20 @@ const Game = {
 
   gameType: "",
   gameInst: null,
-  MIN_BET: 0.01,
+  gameId: null,
 
   setup: async function (_currentGame) {
-    console.log('%c game - setup $s', 'color: #00aa00', _currentGame);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    this.gameId = urlParams.get('id');
 
-    if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
-      await window.BlockchainManager.init();
-    }
+    console.log('%c game - setup %s, %s', 'color: #00aa00', _currentGame, this.gameId);
 
     this.gameType = _currentGame;
     this.gameInst = this.initGameInst(_currentGame);
+    this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
     this.subscribeToEvents(this.gameType);
-    this.minBet = new BigNumber(await PromiseManager.minBetForGamePromise(this.gameType));
-    await this.update();
-  },
-
-  subscribeToEvents: function (_gameType) {
-    NotificationManager.eventHandler = this;
-
-    if (_gameType == Types.Game.cf) {
-      NotificationManager.subscribe_CF();
-    } else if (_gameType == Types.Game.rps) {
-      NotificationManager.subscribe_RPS();
-    }
+    // await this.update();
   },
 
   initGameInst: function (_gameType) {
@@ -68,6 +55,23 @@ const Game = {
 
       default:
         throw ("Game - initGameInst wrong _gameType: ", _gameType);
+    }
+  },
+
+  subscribeToEvents: function (_gameType) {
+    NotificationManager.eventHandler = this;
+
+    switch (_gameType) {
+      case Types.Game.cf:
+        NotificationManager.subscribe_cf();
+        break;
+
+      case Types.Game.rps:
+        NotificationManager.subscribe_rps();
+        break;
+    
+      default:
+        throw("ERROR: gaem - subscribeToEvents");
     }
   },
 
@@ -105,11 +109,8 @@ const Game = {
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
     ProfileManager.setUpdateHandler(null);
-
-    this.gameType = "";
-    // this.gameInst.onUnload();
-
     hideTopBannerMessage();
+
   },
 
   //  LOAD GAMES
@@ -132,15 +133,15 @@ const Game = {
 
     if (_gameType == Types.Game.cf) {
       // console.log("loadTopGamesForGame - CF");
-      ownGame = await PromiseManager.ongoingGameAsCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
+      ownGame = await window.PromiseManager.ongoingGameAsCreatorPromise(_gameType, window.BlockchainManager.currentAccount());
     } else if (_gameType == Types.Game.rps) {
       // console.log("loadTopGamesForGame - RPS");
-      ownGame = await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
+      ownGame = await window.PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, window.BlockchainManager.currentAccount());
     } else {
       throw ('loadTopGamesForGame - wrong _gameType');
     }
 
-    let topGameIds_tmp = await PromiseManager.topGamesPromise(_gameType);
+    let topGameIds_tmp = await window.PromiseManager.topGamesPromise(_gameType);
     this.topGameIds = this.topGameIds.concat(topGameIds_tmp);
 
     let ownGameTopGamesIdx = this.topGameIds.indexOf(ownGame);
@@ -154,7 +155,7 @@ const Game = {
     for (let i = 0; i < this.topGameIds.length; i++) {
       let id = parseInt(this.topGameIds[i]);
       if (id > 0) {
-        let gameInfo = await PromiseManager.gameInfoPromise(_gameType, id);
+        let gameInfo = await window.PromiseManager.gameInfoPromise(_gameType, id);
         // console.log("Top game: ", id, " ", gameInfo);
         this.addGameWithInfo(gameInfo, true, false);
       }
@@ -177,13 +178,13 @@ const Game = {
     window.CommonManager.showSpinner(Types.SpinnerView.availableGames);
 
     if (this.availableGamesFetchStartIndex == -1) {
-      this.availableGamesFetchStartIndex = (await PromiseManager.gamesCreatedAmountPromise(_gameType)) - 1;
+      this.availableGamesFetchStartIndex = (await window.PromiseManager.gamesCreatedAmountPromise(_gameType)) - 1;
     }
     // console.log("this.availableGamesFetchStartIndex: ", this.availableGamesFetchStartIndex);
     let addedCount = 0;
 
     while (addedCount < this.maxGamesToAddCount && this.availableGamesFetchStartIndex > 0) {
-      let gameInfo = await PromiseManager.gameInfoPromise(_gameType, this.availableGamesFetchStartIndex);
+      let gameInfo = await window.PromiseManager.gameInfoPromise(_gameType, this.availableGamesFetchStartIndex);
       // console.log(gameInfo);
       this.availableGamesFetchStartIndex -= 1;
 
@@ -281,7 +282,7 @@ const Game = {
   },
 
   updateRafflePlayersPresentForGame: async function (_gameType) {
-    let participants = await PromiseManager.raffleParticipantsPromise(_gameType);
+    let participants = await window.PromiseManager.raffleParticipantsPromise(_gameType);
 
     this.updateProfileOnRaffle(participants.length);
     this.raffleParticipants = participants.length;
@@ -296,18 +297,18 @@ const Game = {
   },
 
   updateRafflePlayersToActivateForGame: async function (_gameType) {
-    let participants = await PromiseManager.raffleActivationParticipantsAmountPromise(_gameType);
+    let participants = await window.PromiseManager.raffleActivationParticipantsAmountPromise(_gameType);
     // console.log("raffleActivationParticipantsAmount: ", result.toString());
     $("#raffleActivationAmount")[0].innerText = participants.toString();
   },
 
   updateRaffleStartButtonForGame: async function (_gameType) {
-    let isActivated = await PromiseManager.isRaffleActivatedPromise(_gameType);
+    let isActivated = await window.PromiseManager.isRaffleActivatedPromise(_gameType);
     $("#raffleStartBtn")[0].disabled = !isActivated;
   },
 
   updateRaffleOngoingPrizeForGame: async function (_gameType) {
-    let ongoingPrize = await PromiseManager.ongoinRafflePrizePromise(_gameType);
+    let ongoingPrize = await window.PromiseManager.ongoinRafflePrizePromise(_gameType);
     // console.log("ongoinRafflePrize: ", result.toString());
     $("#cryptoForRaffle")[0].innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
   },
@@ -315,13 +316,13 @@ const Game = {
   updateRaffleHistoryForGame: async function (_gameType) {
     $('#BlockRaffle').empty();
 
-    let raffleResults = await PromiseManager.raffleResultCountPromise(_gameType);
+    let raffleResults = await window.PromiseManager.raffleResultCountPromise(_gameType);
     // console.log("raffleResults: ", raffleResults);
     if (raffleResults == 0) {
       return;
     }
 
-    let result = await PromiseManager.raffleResultInfoPromise(_gameType, raffleResults - 1);
+    let result = await window.PromiseManager.raffleResultInfoPromise(_gameType, raffleResults - 1);
     $('#BlockRaffle').append(RaffleGamesTemplate.composetmp({
       'address': result.winner,
       'amount': Utils.weiToEtherFixed(result.prize.toString()),
@@ -333,10 +334,10 @@ const Game = {
   updateBeneficiary: async function (_gameType) {
     window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
 
-    let currentBeneficiary = await PromiseManager.feeBeneficiarPromise(_gameType);
+    let currentBeneficiary = await window.PromiseManager.feeBeneficiarPromise(_gameType);
     $('#beneficiaryUser')[0].textContent = currentBeneficiary;
 
-    let latestBeneficiarPrice = await PromiseManager.latestBeneficiarPricePromise(_gameType);
+    let latestBeneficiarPrice = await window.PromiseManager.latestBeneficiarPricePromise(_gameType);
     $('#beneficiaryTransferred')[0].textContent = Utils.weiToEtherFixed(latestBeneficiarPrice);
 
     (Utils.addressesEqual(window.BlockchainManager.currentAccount(), currentBeneficiary)) ? await this.beneficiaryShowCurrent(_gameType) : await this.beneficiaryShowBecome();
@@ -348,7 +349,7 @@ const Game = {
     $('#beneficiaryProfit')[0].classList.remove("hidden");
     $('#makeBeneficiary')[0].classList.add("hidden");
 
-    let profit = await PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
+    let profit = await window.PromiseManager.feeBeneficiarBalancePromise(_gameType, window.BlockchainManager.currentAccount());
     $('#beneficiaryAmount')[0].textContent = Utils.weiToEtherFixed(profit);
     $('#beneficiaryCurrentAmount')[0].textContent = Utils.weiToEtherFixed(profit);
   },
@@ -357,7 +358,7 @@ const Game = {
     $('#beneficiaryProfit')[0].classList.add("hidden");
     $('#makeBeneficiary')[0].classList.remove("hidden");
 
-    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(BigNumber(this.MIN_BET)).toString();
+    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(BigNumber(this.minBet)).toString();
   },
 
   makeBeneficiaryClicked: async function () {
@@ -406,7 +407,7 @@ const Game = {
   onGameUpdated: async function (_gameId) {
     // console.log('%c game - onGameUpdated %s', 'color: #1d34ff', _gameId);
 
-    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, _gameId);
+    let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, _gameId);
     if (gameInfo.paused) {
       // console.log('skip');
       return;
@@ -447,7 +448,7 @@ const Game = {
     }
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
   },
@@ -460,7 +461,7 @@ const Game = {
     }
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       ProfileManager.update();
@@ -474,7 +475,7 @@ const Game = {
       // console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
+    let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
     this.gameInst.showGamePlayed(gameInfo);
 
     if (this.isGamePresentInAnyList(_gameId)) {
@@ -504,7 +505,7 @@ const Game = {
     // console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
+      let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, parseInt(_gameId));
       this.addGameWithInfo(gameInfo, false, true);
     }
   },
@@ -518,7 +519,7 @@ const Game = {
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
 
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
+      let gameInfo = await window.PromiseManager.gameInfoPromise(Types.Game.rps, _id);
       let resultView;
 
       if ((new BigNumber(gameInfo.state)).comparedTo(new BigNumber(Types.GameState.draw)) == 0) {
@@ -616,7 +617,7 @@ const Game = {
   joinGame: async function (_gameIdx, _isTopGame) {
     // console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
-    let gameInfo = await PromiseManager.gameInfoPromise(this.gameType, gameId);
+    let gameInfo = await window.PromiseManager.gameInfoPromise(this.gameType, gameId);
 
     if (this.gameType == Types.Game.cf) {
       this.gameInst.showJoinGame(gameInfo);

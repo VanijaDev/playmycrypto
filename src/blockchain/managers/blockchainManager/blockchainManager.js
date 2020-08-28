@@ -89,6 +89,14 @@ const BlockchainManager = {
     return this.currentBlockchainManager.gamesCompletedAmount(_gameType);
   },
 
+  gameInfo: function (_gameType) {
+    return this.currentBlockchainManager.gameInfo(_gameType, _idx);
+  },
+
+  minBetForGame: function (_gameType) {
+    return this.currentBlockchainManager.minBetForGame(_gameType);
+  },
+
   contract_cf: function () {
     return this.currentBlockchainManager.contract_inst_cf;
   },

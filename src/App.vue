@@ -413,9 +413,10 @@
 <script>
 import ClickOutside from "vue-click-outside";
 import Types from "./blockchain/types";
-import CommonManager from "./blockchain/managers/CommonManager";
+import CommonManager from "./blockchain/managers/commonManager";
 import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
 import ProfileManager from "./blockchain/managers/profileManager";
+import PromiseManager from "./blockchain/managers/promiseManager";
 import NotificationManager from "./blockchain/managers/notificationManager";
 
 const $t = $('#translations').data();
@@ -459,6 +460,13 @@ export default {
 
   async mounted() {
     console.log("----------- App mounted");
+
+    if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
+      if (!await window.BlockchainManager.init()) {
+        console.error("BlockchainManager.init() failed.");
+        return;
+      }
+    }
 
     window.ethereum.on("accountsChanged", function (accounts) {
       console.log("%c App - accountsChanged: %s", "color: #00aa00", accounts[0]);

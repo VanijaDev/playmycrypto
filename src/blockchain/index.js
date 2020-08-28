@@ -1,13 +1,10 @@
 import Utils from "./utils";
 import BigNumber from "bignumber.js";
-import PromiseManager from "./managers/promiseManager";
 import Types from "./types";
 
 const $t = $('#translations').data();
 
 const Index = {
-  networkId: 0,
-
   // ProfileManager handler methods
   pendingReferralWithdrawn: async function () {
     Index.updateReferralFeesForAllGamesTotal();
@@ -25,20 +22,13 @@ const Index = {
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
-    if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
-      if (!await window.BlockchainManager.init()) {
-        console.error("BlockchainManager.init() failed.");
-        return;
-      }
-    }
-
     ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
     await this.refreshData();
 
     // //  events
     NotificationManager.eventHandler = this;
-    NotificationManager.subscribeIndex();
+    NotificationManager.subscribe_index();
   },
 
   onUnload: function () {
@@ -328,7 +318,7 @@ const Index = {
 
     if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       // console.log("YES participant");
-      let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, _id);
+      let gameInfo = await window.BlockchainManager.gameInfoPromise(Types.Game.rps, _id);
 
       let infoStr = "";
       switch (parseInt(gameInfo.state)) {
