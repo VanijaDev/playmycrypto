@@ -116,7 +116,9 @@ let ProfileManager = {
   },
 
   currentlyPlayingGameClicked(_gameType, _gameId) {
-    window.location.href = "/" + _gameType + "?id=" + _gameId;
+    console.log("ProfileManager - _gameId: ", _gameId);
+    window.CommonManager.setCurrentGameId(_gameId);
+    // window.location.href = "/" + _gameType;
   },
 
   updatePlayedGamesTotalAmounts: async function () {

@@ -29,17 +29,15 @@ const Game = {
 
   gameType: "",
   gameInst: null,
-  gameId: null,
 
-  setup: async function (_currentGame) {
+  setup: async function (_currentGameType) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    this.gameId = urlParams.get('id');
 
-    console.log('%c game - setup %s, %s', 'color: #00aa00', _currentGame, this.gameId);
+    console.log('%c game - setup %s', 'color: #00aa00', _currentGameType);
 
-    this.gameType = _currentGame;
-    this.gameInst = this.initGameInst(_currentGame);
+    this.gameType = _currentGameType;
+    this.gameInst = this.initGameInst(_currentGameType);
     this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
     this.subscribeToEvents(this.gameType);
     await this.update(false);
@@ -75,14 +73,8 @@ const Game = {
     }
   },
 
-  update: async function (_onAccountChanged) {
+  update: async function () {
     console.log('%c game - update', 'color: #00aa00');
-
-    if (_onAccountChanged) {
-      const queryStringNew = window.location.origin + window.location.pathname;
-      window.location.replace(queryStringNew);
-    }
-    console.log("this.gameId: ", this.gameId);
 
     ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
@@ -103,7 +95,7 @@ const Game = {
     }
     document.getElementById("gameName").innerHTML = title;
 
-    this.gameInst.updateGameView(this.gameId);
+    this.gameInst.updateGameView();
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
     await this.updateBeneficiary(this.gameType);

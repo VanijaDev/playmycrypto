@@ -460,6 +460,8 @@ export default {
   async mounted() {
     console.log("----------- App mounted");
 
+    window.CommonManager.setCurrentGameId(0);
+
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       if (!await window.BlockchainManager.init()) {
         console.error("BlockchainManager.init() failed.");
@@ -478,7 +480,7 @@ export default {
         window.BlockchainManager.accountChanged(accounts[0]);
 
         if (window.CommonManager.currentView == Types.View.game) {
-          window.Game.update(true);
+          window.Game.update();
         } else {
           window.ProfileManager.update();
         }

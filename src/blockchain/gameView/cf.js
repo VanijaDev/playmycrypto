@@ -5,7 +5,7 @@ import Types from "../types";
 const $t = $('#translations').data();
 
 const CF = {
-  gameId: null,
+  gameId: 0,
   ownerAddress: "",
   coinSideChosen: 0,
   minBet: "",
@@ -21,10 +21,13 @@ const CF = {
   },
 
   updateGameView: async function (_gameId) {
-    console.log('%c CF - updateGameView, $s', 'color: #00aa00', _gameId);
+    console.log('%c CF - updateGameView, %s', 'color: #00aa00', _gameId);
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    this.gameId = _gameId;
+    console.log("cf - updateGameView gameId:", window.CommonManager.currentGameId);
+    this.gameId = window.CommonManager.currentGameId;
+    window.CommonManager.setCurrentGameId(111);
+
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
@@ -44,8 +47,8 @@ const CF = {
   showGameViewForCurrentAccount: async function () {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    let id = null;
-    if (this.gameId != null) {
+    let id = 0;
+    if (this.gameId != 0) {
       id = this.gameId;
     } else {
       let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
@@ -58,8 +61,8 @@ const CF = {
         }
       }
     }
-
-    if (id != null && id > 0) {
+    console.log("cf - gameId: ", id);
+    if (id > 0) {
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, id);
       this.showGameView(this.GameView.waitingForOpponent, gameInfo);
     } else {
