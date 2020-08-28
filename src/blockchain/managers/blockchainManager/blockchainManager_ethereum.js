@@ -3,9 +3,9 @@ import {
   CoinFlipData,
   RockPaperScissorsData
 } from "../../contract/contract";
-import Types from "../../types";
-import PromiseManager from '../promiseManager';
 import BigNumber from 'bignumber.js';
+import PromiseManager from "../promiseManager";
+import Types from "../../types";
 
 const $t = $('#translations').data();
 
@@ -154,6 +154,18 @@ const BlockchainManager_ethereum = {
     return new BigNumber(referralFees_cf).plus(referralFees_rps);
   },
 
+  referralFeesWithdrawn: async function (_gameType, _currentAccount) {
+    return await PromiseManager.referralFeesWithdrawnPromise(_gameType, _currentAccount);
+  },
+
+  referralFeesPending: async function (_gameType, _currentAccount) {
+    return await PromiseManager.referralFeesPendingPromise(_gameType, _currentAccount);
+  },
+
+  gamesWithPendingPrizeWithdrawalForAddress: async function (_gameType, _currentAccount) {
+    return await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(_gameType, _currentAccount);
+  },
+
   currentRaffleJackpot: async function (_gameType) {
     return new BigNumber(await PromiseManager.ongoinRafflePrizePromise(_gameType));
   },
@@ -200,11 +212,80 @@ const BlockchainManager_ethereum = {
     return gameInfo;
   },
 
-  minBetForGame: async function (_gameType) {
-    let minBet = await PromiseManager.minBetForGamePromise(_gameType);
-    // console.log("minBet: ", _gameType, minBet);
+  ongoingGameAsCreator: async function (_gameType, _currentAccount) {
+    return await PromiseManager.ongoingGameAsCreatorPromise(_gameType, _currentAccount);
+  },
 
-    return minBet;
+  ongoingGameAsOpponent: async function (_gameType, _currentAccount) {
+    return await PromiseManager.ongoingGameAsOpponentPromise(_gameType, _currentAccount);
+  },
+
+  ongoingGameIdxForPlayer: async function (_gameType, _currentAccount) {
+    return await PromiseManager.ongoingGameIdxForPlayerPromise(_gameType, _currentAccount);
+  },
+
+  topGames: async function (_gameType) {
+    return await PromiseManager.topGamesPromise(_gameType);
+  },
+
+  minBetForGame: async function (_gameType) {
+    return await PromiseManager.minBetForGamePromise(_gameType);
+  },
+
+  raffleParticipants: async function (_gameType) {
+    return await PromiseManager.raffleParticipantsPromise(_gameType);
+  },
+
+  raffleActivationParticipantsAmount: async function (_gameType) {
+    return await PromiseManager.raffleActivationParticipantsAmountPromise(_gameType);
+  },
+
+  isRaffleActivated: async function (_gameType) {
+    return await PromiseManager.isRaffleActivatedPromise(_gameType);
+  },
+
+  ongoinRafflePrize: async function (_gameType) {
+    return await PromiseManager.ongoinRafflePrizePromise(_gameType);
+  },
+
+  rafflePrizePendingForAddress: async function (_gameType, _currentAccount) {
+    return await PromiseManager.rafflePrizePendingForAddressPromise(_gameType, _currentAccount);
+  },
+
+  addressPrizeTotal: async function (_gameType, _currentAccount) {
+    return await PromiseManager.addressPrizeTotalPromise(_gameType, _currentAccount);
+  },
+
+  raffleResultCount: async function (_gameType) {
+    return await PromiseManager.raffleResultCountPromise(_gameType);
+  },
+
+  raffleResultInfo: async function (_gameType, _resultId) {
+    return await PromiseManager.raffleResultInfoPromise(_gameType, _resultId);
+  },
+
+  feeBeneficiar: async function (_gameType) {
+    return await PromiseManager.feeBeneficiarPromise(_gameType);
+  },
+
+  latestBeneficiarPrice: async function (_gameType) {
+    return await PromiseManager.latestBeneficiarPricePromise(_gameType);
+  },
+  
+  feeBeneficiarBalance: async function (_gameType, _account) {
+    return await PromiseManager.feeBeneficiarBalancePromise(_gameType, _account);
+  },
+
+  addressBetTotal: async function (_gameType, _currentAccount) {
+    return await PromiseManager.addressBetTotalPromise(_gameType, _currentAccount);
+  },
+
+  playedGameIdxsForPlayer: async function (_gameType, _currentAccount) {
+    return await PromiseManager.playedGameIdxsForPlayerPromise(_gameType, _currentAccount);
+  },
+
+  playedGamesForPlayer: async function (_gameType, _currentAccount) {
+    return await PromiseManager.playedGamesForPlayerPromise(_gameType, _currentAccount);
   },
 
 

@@ -416,7 +416,6 @@ import Types from "./blockchain/types";
 import CommonManager from "./blockchain/managers/commonManager";
 import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
 import ProfileManager from "./blockchain/managers/profileManager";
-import PromiseManager from "./blockchain/managers/promiseManager";
 import NotificationManager from "./blockchain/managers/notificationManager";
 
 const $t = $('#translations').data();
