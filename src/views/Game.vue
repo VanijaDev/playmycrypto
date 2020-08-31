@@ -258,8 +258,10 @@
       let currentGameTmp = this.currentGame;
       let loadInterval = setInterval(function () {
         if (typeof window.Game !== "undefined") {
-          clearInterval(loadInterval);
-          window.Game.setup(currentGameTmp);
+          if (window.BlockchainManager.isInitted()) {
+            clearInterval(loadInterval);
+            window.Game.setup(currentGameTmp);
+          }
         }
       }, 100);
     },

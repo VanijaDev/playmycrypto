@@ -249,6 +249,11 @@ const NotificationManager = {
       console.log("subscribe_cf_ethereum event: ", result);
 
       switch (result.topics[0]) {
+        case this.NotificationHashes_CF.gameUpdated:
+          console.log("NotificationHashes_CF.gameUpdated");
+          this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
+          break;
+
         // case this.NotificationHashes_CF.gameCreated:
         //   console.log("NotificationHashes_CF.gameCreated");
         //   this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
@@ -274,11 +279,6 @@ const NotificationManager = {
           //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
 
           //   break;
-
-        // case this.NotificationHashes_CF.gameUpdated:
-        //   console.log("NotificationHashes_CF.gameUpdated");
-        //   this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
-        //   break;
 
         // case this.NotificationHashes_CF.rafflePlayed:
         //   console.log("NotificationHashes_CF.rafflePlayed");

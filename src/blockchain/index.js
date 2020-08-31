@@ -22,7 +22,7 @@ const Index = {
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
-    ProfileManager.setUpdateHandler(this);
+    await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
     await this.refreshData();
 
@@ -36,7 +36,7 @@ const Index = {
 
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
-    ProfileManager.setUpdateHandler(null);
+    window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
   },
 
@@ -140,7 +140,7 @@ const Index = {
     Index.updateRunningGameAmounts();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -150,7 +150,7 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update(); // 1
+      window.ProfileManager.update(); // 1
 
       let message = "";
       if (_gameType == Types.Game.cf) {
@@ -162,7 +162,7 @@ const Index = {
       }
       showTopBannerMessage(message);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -186,7 +186,7 @@ const Index = {
     Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -203,7 +203,7 @@ const Index = {
     }
 
     if (isParticipant) {
-      ProfileManager.update();
+      window.ProfileManager.update();
       
       let message = "";
       if (_gameType == Types.Game.cf) {
@@ -241,7 +241,7 @@ const Index = {
     Index.updatePartnerFeesForAllGamesTotal();
 
     if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -263,7 +263,7 @@ const Index = {
     Index.updateCurrentRaffleJackpot();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -295,7 +295,7 @@ const Index = {
     Index.updateCurrentRaffleJackpot();
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -307,7 +307,7 @@ const Index = {
     }
 
     if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -344,7 +344,7 @@ const Index = {
         hideTopBannerMessage();
       }, 5000);
 
-      ProfileManager.update();
+      await window.ProfileManager.update();
     } else {
       console.log("NOT participant");
     }

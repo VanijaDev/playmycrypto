@@ -564,11 +564,11 @@ const RPS = {
       .once('receipt', function (receipt) {
         // console.log('%c CREATE GAME receipt: %s', 'color: #1d34ff', receipt);
         RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -606,13 +606,13 @@ const RPS = {
         showTopBannerMessage($t.tx_make_top, hash);
       })
       .once('receipt', function (receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         RPS.showGameViewForCurrentAccount();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -649,12 +649,12 @@ const RPS = {
         // console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
 
         RPS.showGameViewForCurrentAccount();
-        ProfileManager.updateCurrentAccountBalanceUI();
+        window.ProfileManager.updateCurrentAccountBalanceUI();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -689,13 +689,13 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         hideTopBannerMessage();
-        ProfileManager.update();
+        window.ProfileManager.update();
         RPS.showGameViewForCurrentAccount();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         hideTopBannerMessage();
-        ProfileManager.update();
+        window.ProfileManager.update();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -724,13 +724,13 @@ const RPS = {
         showTopBannerMessage($t.tx_unpause_game, hash);
       })
       .once('receipt', function (receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         RPS.showGameViewForCurrentAccount();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -758,12 +758,12 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.lost, null);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -824,11 +824,11 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -889,7 +889,7 @@ const RPS = {
         showTopBannerMessage($t.tx_play_move, hash);
       })
       .once('receipt', async function (receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
 
         const gameInfo = await PromiseManager.gameInfoPromise(Types.Game.rps, gameId);
@@ -903,7 +903,7 @@ const RPS = {
         }
       })
       .once('error', function (error, receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -934,11 +934,11 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
@@ -966,12 +966,12 @@ const RPS = {
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.won, null);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 

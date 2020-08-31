@@ -76,7 +76,7 @@ const Game = {
   update: async function () {
     console.log('%c game - update', 'color: #00aa00');
 
-    ProfileManager.setUpdateHandler(this);
+    await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
 
     this.updateMoneyIcons();
@@ -106,7 +106,7 @@ const Game = {
 
     NotificationManager.eventHandler = null;
     NotificationManager.clearAll();
-    ProfileManager.setUpdateHandler(null);
+    window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
 
   },
@@ -290,7 +290,7 @@ const Game = {
 
   updateProfileOnRaffle: function (_currentParticipants) {
     if (_currentParticipants < this.raffleParticipants) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -383,7 +383,7 @@ const Game = {
       showTopBannerMessage($t.tx_make_beneficiary_run, hash);
     })
     .once('receipt', function (receipt) {
-      ProfileManager.update();
+      window.ProfileManager.update();
       
       window.Game.updateBeneficiary(window.Game.gameType);
       hideTopBannerMessage();
@@ -462,7 +462,7 @@ const Game = {
       let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
       this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      await window.ProfileManager.update();
     }
   },
 
@@ -532,7 +532,7 @@ const Game = {
       }
 
       this.gameInst.showGameView(resultView, null);
-      ProfileManager.update();
+      await window.ProfileManager.update();
     }
   },
 
@@ -567,7 +567,7 @@ const Game = {
     Game.updateRaffleStateInfoForGame(Game.gameType, true);
 
     if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      ProfileManager.update();
+      window.ProfileManager.update();
     }
   },
 
@@ -636,7 +636,7 @@ const Game = {
         showTopBannerMessage($t.tx_raffle_run, hash);
       })
       .once('receipt', function (receipt) {
-        ProfileManager.update();
+        window.ProfileManager.update();
 
         Game.updateRaffleStateInfoForGame(Game.gameType, true);
         hideTopBannerMessage();

@@ -460,7 +460,7 @@ export default {
   async mounted() {
     console.log("----------- App mounted");
 
-    window.CommonManager.setCurrentGameId(0);
+    window.CommonManager.resetCurrentGameId();
 
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       if (!await window.BlockchainManager.init()) {
@@ -500,7 +500,7 @@ export default {
         window.Game.onUnload();
       }
 
-      if (await window.BlockchainManager.chainChanged(chainId)) {
+      if (window.BlockchainManager.chainChanged(chainId)) {
         hideTopBannerMessage();
         showAppDisabledView(false);
 

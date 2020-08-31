@@ -334,7 +334,7 @@ let ProfileManager = {
         btn.classList.add("btn");
         btn.classList.add("btn-animated");
         btn.onclick = function () {
-          ProfileManager.pendingClicked(this, _pendingTarget, gameType);
+          window.ProfileManager.pendingClicked(this, _pendingTarget, gameType);
         };
 
         var img = document.createElement('IMG');
@@ -396,8 +396,8 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            ProfileManager.updateAfterWithdrawal();
-            ProfileManager.profileUpdateHandler.pendingReferralWithdrawn();
+            window.ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.profileUpdateHandler.pendingReferralWithdrawn();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -425,7 +425,7 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.updateAfterWithdrawal();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -434,7 +434,7 @@ let ProfileManager = {
 
             _btn.classList.remove('disabled');
             hideTopBannerMessage();
-            ProfileManager.profileUpdateHandler.pendingPrizeWithdrawn();
+            window.ProfileManager.profileUpdateHandler.pendingPrizeWithdrawn();
           });
         break;
 
@@ -451,7 +451,7 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.updateAfterWithdrawal();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -476,7 +476,7 @@ let ProfileManager = {
             })
             .once('receipt', function (receipt) {
               hideTopBannerMessage();
-              ProfileManager.updateAfterWithdrawal();
+              window.ProfileManager.updateAfterWithdrawal();
               window.Game.updateBeneficiary(_gameType);
             })
             .once('error', function (error, receipt) {

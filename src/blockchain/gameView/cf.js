@@ -185,7 +185,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         CF.showGameViewForCurrentAccount(0);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) {
@@ -221,7 +221,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         CF.showGameViewForCurrentAccount(0);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
@@ -258,7 +258,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         CF.showGameViewForCurrentAccount(0);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
@@ -301,7 +301,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         // console.log('%c JOIN GAME receipt: %s', 'color: #1d34ff', receipt);
-        ProfileManager.update();
+        window.ProfileManager.update();
         hideTopBannerMessage();
         CF.showGamePlayed(receipt.events.CF_GamePlayed.returnValues);
       })

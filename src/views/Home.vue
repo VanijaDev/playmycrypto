@@ -268,8 +268,10 @@
 
       let loadInterval = setInterval(async function () {
         if (typeof window.Index !== "undefined") {
-          clearInterval(loadInterval);
-          window.Index.setup();
+          if (window.BlockchainManager.isInitted()) {
+            clearInterval(loadInterval);
+            window.Index.setup();
+          }
         }
       }, 100);
     },
