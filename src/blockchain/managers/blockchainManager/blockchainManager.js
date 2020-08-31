@@ -60,131 +60,131 @@ const BlockchainManager = {
   },
 
   //  API
-  totalUsedReferralFees: function () {
-    return this.currentBlockchainManager.totalUsedReferralFees();
+  totalUsedReferralFees: async function () {
+    return await this.currentBlockchainManager.totalUsedReferralFees();
   },
 
-  referralFeesWithdrawn: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.referralFeesWithdrawn(_gameType, _currentAccount);
+  referralFeesWithdrawn: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.referralFeesWithdrawn(_gameType, _currentAccount);
   },
 
-  referralFeesPending: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.referralFeesPending(_gameType, _currentAccount);
+  referralFeesPending: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.referralFeesPending(_gameType, _currentAccount);
   },
 
-  gamesWithPendingPrizeWithdrawalForAddress: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.gamesWithPendingPrizeWithdrawalForAddress(_gameType, _currentAccount);
+  gamesWithPendingPrizeWithdrawalForAddress: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.gamesWithPendingPrizeWithdrawalForAddress(_gameType, _currentAccount);
   },
-  currentRaffleJackpot: function (_gameType) {
-    return this.currentBlockchainManager.currentRaffleJackpot(_gameType);
-  },
-
-  partnerFeeUsedTotal: function (_gameType) {
-    return this.currentBlockchainManager.partnerFeeUsedTotal(_gameType);
+  currentRaffleJackpot: async function (_gameType) {
+    return await this.currentBlockchainManager.currentRaffleJackpot(_gameType);
   },
 
-  rafflePrizesWonTotal: function (_gameType) {
-    return this.currentBlockchainManager.rafflePrizesWonTotal(_gameType);
+  partnerFeeUsedTotal: async function (_gameType) {
+    return await this.currentBlockchainManager.partnerFeeUsedTotal(_gameType);
   },
 
-  rafflePrizePendingForAddress: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.rafflePrizePendingForAddress(_gameType, _currentAccount);
+  rafflePrizesWonTotal: async function (_gameType) {
+    return await this.currentBlockchainManager.rafflePrizesWonTotal(_gameType);
   },
 
-  addressPrizeTotal: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.addressPrizeTotal(_gameType, _currentAccount);
+  rafflePrizePendingForAddress: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.rafflePrizePendingForAddress(_gameType, _currentAccount);
   },
 
-  totalUsedInGame: function (_gameType) {
-    return this.currentBlockchainManager.totalUsedInGame(_gameType);
+  addressPrizeTotal: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.addressPrizeTotal(_gameType, _currentAccount);
   },
 
-  gamesCreatedAmount: function (_gameType) {
-    return this.currentBlockchainManager.gamesCreatedAmount(_gameType);
+  totalUsedInGame: async function (_gameType) {
+    return await this.currentBlockchainManager.totalUsedInGame(_gameType);
   },
 
-  gamesCompletedAmount: function (_gameType) {
-    return this.currentBlockchainManager.gamesCompletedAmount(_gameType);
+  gamesCreatedAmount: async function (_gameType) {
+    return await this.currentBlockchainManager.gamesCreatedAmount(_gameType);
   },
 
-  gameInfo: function (_gameType, _idx) {
-    return this.currentBlockchainManager.gameInfo(_gameType, _idx);
+  gamesCompletedAmount: async function (_gameType) {
+    return await this.currentBlockchainManager.gamesCompletedAmount(_gameType);
   },
 
-  minBetForGame: function (_gameType) {
-    return this.currentBlockchainManager.minBetForGame(_gameType);
+  gameInfo: async function (_gameType, _idx) {
+    return await this.currentBlockchainManager.gameInfo(_gameType, _idx);
   },
 
-  gameOwner: function (_gameType) {
-    return this.currentBlockchainManager.gameOwner(_gameType);
+  minBetForGame: async function (_gameType) {
+    return await this.currentBlockchainManager.minBetForGame(_gameType);
   },
 
-  ongoingGameAsCreator: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.ongoingGameAsCreator(_gameType, _currentAccount);
+  gameOwner: async function (_gameType) {
+    return await this.currentBlockchainManager.gameOwner(_gameType);
   },
 
-  ongoingGameAsOpponent: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.ongoingGameAsOpponent(_gameType, _currentAccount);
+  ongoingGameAsCreator: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.ongoingGameAsCreator(_gameType, _currentAccount);
   },
 
-  ongoingGameIdxForPlayer: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.ongoingGameIdxForPlayer(_gameType, _currentAccount);
+  ongoingGameAsOpponent: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.ongoingGameAsOpponent(_gameType, _currentAccount);
   },
 
-  playedGamesForPlayer: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.playedGamesForPlayer(_gameType, _currentAccount);
+  ongoingGameIdxForPlayer: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.ongoingGameIdxForPlayer(_gameType, _currentAccount);
   },
 
-  topGames: function (_gameType) {
-    return this.currentBlockchainManager.topGames(_gameType);
+  playedGamesForPlayer: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.playedGamesForPlayer(_gameType, _currentAccount);
   },
 
-  raffleParticipants: function (_gameType) {
-    return this.currentBlockchainManager.raffleParticipants(_gameType);
+  topGames: async function (_gameType) {
+    return await this.currentBlockchainManager.topGames(_gameType);
   },
 
-  raffleActivationParticipantsAmount: function (_gameType) {
-    return this.currentBlockchainManager.raffleActivationParticipantsAmount(_gameType);
+  raffleParticipants: async function (_gameType) {
+    return await this.currentBlockchainManager.raffleParticipants(_gameType);
   },
 
-  isRaffleActivated: function (_gameType) {
-    return this.currentBlockchainManager.isRaffleActivated(_gameType);
+  raffleActivationParticipantsAmount: async function (_gameType) {
+    return await this.currentBlockchainManager.raffleActivationParticipantsAmount(_gameType);
   },
 
-  ongoinRafflePrize: function (_gameType) {
-    return this.currentBlockchainManager.ongoinRafflePrize(_gameType);
+  isRaffleActivated: async function (_gameType) {
+    return await this.currentBlockchainManager.isRaffleActivated(_gameType);
   },
 
-  raffleResultCount: function (_gameType) {
-    return this.currentBlockchainManager.raffleResultCount(_gameType);
+  ongoinRafflePrize: async function (_gameType) {
+    return await this.currentBlockchainManager.ongoinRafflePrize(_gameType);
   },
 
-  raffleResultInfo: function (_gameType, _resultId) {
-    return this.currentBlockchainManager.raffleResultInfo(_gameType, _resultId);
+  raffleResultCount: async function (_gameType) {
+    return await this.currentBlockchainManager.raffleResultCount(_gameType);
   },
 
-  feeBeneficiar: function (_gameType) {
-    return this.currentBlockchainManager.feeBeneficiar(_gameType);
+  raffleResultInfo: async function (_gameType, _resultId) {
+    return await this.currentBlockchainManager.raffleResultInfo(_gameType, _resultId);
   },
 
-  latestBeneficiarPrice: function (_gameType) {
-    return this.currentBlockchainManager.latestBeneficiarPrice(_gameType);
+  feeBeneficiar: async function (_gameType) {
+    return await this.currentBlockchainManager.feeBeneficiar(_gameType);
   },
 
-  feeBeneficiarBalance: function (_gameType, _account) {
-    return this.currentBlockchainManager.feeBeneficiarBalance(_gameType, _account);
+  latestBeneficiarPrice: async function (_gameType) {
+    return await this.currentBlockchainManager.latestBeneficiarPrice(_gameType);
   },
 
-  addressBetTotal: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.addressBetTotal(_gameType, _currentAccount);
+  feeBeneficiarBalance: async function (_gameType, _account) {
+    return await this.currentBlockchainManager.feeBeneficiarBalance(_gameType, _account);
   },
 
-  playedGameIdxsForPlayer: function (_gameType, _currentAccount) {
-    return this.currentBlockchainManager.playedGameIdxsForPlayer(_gameType, _currentAccount);
+  addressBetTotal: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.addressBetTotal(_gameType, _currentAccount);
   },
 
-  isTopGame: function (_gameType, _gameId) {
-    return this.currentBlockchainManager.isTopGame(_gameType, _gameId);
+  playedGameIdxsForPlayer: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.playedGameIdxsForPlayer(_gameType, _currentAccount);
+  },
+
+  isTopGame: async function (_gameType, _gameId) {
+    return await this.currentBlockchainManager.isTopGame(_gameType, _gameId);
   },
 
   

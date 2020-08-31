@@ -249,15 +249,20 @@ const NotificationManager = {
       console.log("subscribe_cf_ethereum event: ", result);
 
       switch (result.topics[0]) {
+        case this.NotificationHashes_CF.gameCreated:
+          console.log("NotificationHashes_CF.gameCreated");
+          this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
+          break;
+
         case this.NotificationHashes_CF.gameUpdated:
           console.log("NotificationHashes_CF.gameUpdated");
           this.eventHandler.onGameUpdated((new BigNumber(result.topics[1])).toString());
           break;
-
-        // case this.NotificationHashes_CF.gameCreated:
-        //   console.log("NotificationHashes_CF.gameCreated");
-        //   this.eventHandler.onGameCreated(Types.Game.cf, result.topics[1], result.topics[2]);
-        //   break;
+          
+        case this.NotificationHashes_CF.gameAddedToTop:
+          console.log("NotificationHashes_CF.gameAddedToTop");
+          this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+          break;
 
         // case this.NotificationHashes_CF.gamePlayed:
         //   console.log("NotificationHashes_CF.gamePlayed");
@@ -270,15 +275,10 @@ const NotificationManager = {
         //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
         //   break;
 
-        // case this.NotificationHashes_CF.gameAddedToTop:
-        //   console.log("NotificationHashes_CF.gameAddedToTop");
-        //   this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+        // case this.NotificationHashes_CF.gameReferralWithdrawn:
+        //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
+
         //   break;
-
-          // case this.NotificationHashes_CF.gameReferralWithdrawn:
-          //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
-
-          //   break;
 
         // case this.NotificationHashes_CF.rafflePlayed:
         //   console.log("NotificationHashes_CF.rafflePlayed");

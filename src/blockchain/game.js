@@ -118,14 +118,13 @@ const Game = {
     this.availableGameIds.splice(0, this.availableGameIds.length);
     this.topGameIds.splice(0, this.topGameIds.length);
 
-    $('#TopGames').empty();
-    $("#AvailableGames").empty();
-
     this.loadTopGamesForGame(_gameType);
     this.loadAvailableGamesPortionForGame(_gameType);
   },
 
   loadTopGamesForGame: async function (_gameType) {
+    $('#TopGames').empty();
+    
     window.CommonManager.showSpinner(Types.SpinnerView.topGames);
     let ownGame;
 
@@ -140,8 +139,7 @@ const Game = {
     }
 
     let topGameIds_tmp = await window.BlockchainManager.topGames(_gameType);
-    this.topGameIds = this.topGameIds.concat(topGameIds_tmp);
-
+    this.topGameIds = [].concat(topGameIds_tmp);
     let ownGameTopGamesIdx = this.topGameIds.indexOf(ownGame);
 
     if (ownGameTopGamesIdx >= 0) {
@@ -162,6 +160,8 @@ const Game = {
   },
 
   loadAvailableGamesPortionForGame: async function (_gameType) {
+    $("#AvailableGames").empty();
+
     if (_gameType == Types.Game.cf) {
       // console.log("loadAvailableGamesPortionForGame - CF");
     } else if (_gameType == window.BlockchainManager.rockPaperScissors) {

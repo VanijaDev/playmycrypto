@@ -199,7 +199,7 @@ const CF = {
   },
 
   makeTopClicked: async function () {
-    // console.log("makeTopClicked");
+    console.log('%c makeTopClicked', 'color: #e51dff');
 
     if (parseInt(await window.BlockchainManager.getBalance()) < window.Game.minBet) {
       let str = $t.make_top_cost + Utils.weiToEtherFixed(window.Game.minBet) + '. ' + $t.not_enough_funds;
@@ -208,7 +208,7 @@ const CF = {
     }
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    let gameId = document.getElementById("cf_gameId_makeTop").innerHTML;
+    let gameId = $("#cfwfopponent_game_id")[0].innerHTML;
 
     window.BlockchainManager.gameInst(Types.Game.cf).methods.addTopGame(gameId).send({
         from: window.BlockchainManager.currentAccount(),
@@ -236,7 +236,7 @@ const CF = {
   },
 
   increaseBetClicked: async function () {
-    let increaseBet = document.getElementById("cfwfopponent_increase_bet").value;
+    let increaseBet = $("#cfwfopponent_increase_bet")[0].value;
 
     if ((increaseBet.length == 0) || (new BigNumber(Utils.etherToWei(increaseBet)).comparedTo(this.minBet) < 0)) {
       let str = $t.err_bet_increase_min + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
@@ -244,7 +244,7 @@ const CF = {
       return;
     }
 
-    let gameId = document.getElementById("cfwfopponent_game_id").innerHTML;
+    let gameId = $("#cfwfopponent_game_id").innerHTML;
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.increaseBetForGameBy(gameId).send({
