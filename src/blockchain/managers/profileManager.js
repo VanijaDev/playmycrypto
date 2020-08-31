@@ -2,6 +2,8 @@ import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min"
+import VueRouter from 'vue-router'
+import router from "../../router/index"
 
 let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
@@ -116,9 +118,9 @@ let ProfileManager = {
   },
 
   currentlyPlayingGameClicked(_gameType, _gameId) {
-    console.log("ProfileManager - _gameId: ", _gameId);
+    console.log("ProfileManager - _gameType:", _gameType, "_gameId:", _gameId);
     window.CommonManager.setCurrentGameId(_gameId);
-    // window.location.href = "/" + _gameType;
+    router.push(_gameType);
   },
 
   updatePlayedGamesTotalAmounts: async function () {

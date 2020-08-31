@@ -20,13 +20,10 @@ const CF = {
     lost: "cfLost"
   },
 
-  updateGameView: async function (_gameId) {
-    console.log('%c CF - updateGameView, %s', 'color: #00aa00', _gameId);
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-
-    console.log("cf - updateGameView gameId:", window.CommonManager.currentGameId);
+  updateGameView: async function () {
     this.gameId = window.CommonManager.currentGameId;
-    window.CommonManager.setCurrentGameId(111);
+    console.log('%c CF - updateGameView, %s', 'color: #00aa00', this.gameId);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
