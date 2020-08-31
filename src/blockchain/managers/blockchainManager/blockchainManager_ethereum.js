@@ -45,6 +45,7 @@ const BlockchainManager_ethereum = {
 
       try {
         this.currentAccount = (await ethereum.send('eth_requestAccounts')).result[0];
+        console.log("!!!!! ", this.currentAccount);
 
         if (!this.isNetworkValid(ethereum.chainId)) {
           // alert($t.err_wrong_network);
@@ -290,6 +291,10 @@ const BlockchainManager_ethereum = {
 
   playedGamesForPlayer: async function (_gameType, _currentAccount) {
     return await PromiseManager.playedGamesForPlayerPromise(_gameType, _currentAccount);
+  },
+
+  isTopGame: async function (_gameType, _gameId) {
+    return await PromiseManager.isTopGamePromise(_gameType, _gameId);
   },
 
 

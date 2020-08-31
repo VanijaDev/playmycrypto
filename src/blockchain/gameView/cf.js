@@ -5,7 +5,6 @@ import Types from "../types";
 const $t = $('#translations').data();
 
 const CF = {
-  gameId: 0,
   ownerAddress: "",
   coinSideChosen: 0,
   minBet: "",
@@ -16,37 +15,45 @@ const CF = {
     join: "cfjoingame",
     finish: "cffinishgame",
     waitCreator: "cfwaitcreator",
-    won: "cfWon",
-    lost: "cfLost"
+    won: "youWon",
+    lost: "youLost"
   },
+  /**
+   * cfwfopponent
+   * cfjoingame
+   * cfwaitcreator
+   * cffinishgame
+   */
 
   updateGameView: async function () {
-    this.gameId = window.CommonManager.currentGameId;
-    console.log('%c CF - updateGameView, %s', 'color: #00aa00', this.gameId);
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    const gameId = window.CommonManager.currentGameId;
+    window.CommonManager.resetCurrentGameId();
+    console.log('%c CF - updateGameView, %s', 'color: #00aa00', gameId);
 
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
     this.setPlaceholders();
-    this.showGameViewForCurrentAccount();
+    this.showGameViewForCurrentAccount(gameId);
   },
 
   setPlaceholders: function () {
     $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
     $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
     $('#cfstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cfwfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
 
     // $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
-  showGameViewForCurrentAccount: async function () {
+  showGameViewForCurrentAccount: async function (_gameId) {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
     let id = 0;
-    if (this.gameId != 0) {
-      id = this.gameId;
+    if (_gameId != 0) {
+      id = _gameId;
     } else {
       let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
       if (createdId > 0) {
@@ -71,38 +78,13 @@ const CF = {
 
   showGameView: function (_viewName, _gameInfo) {
     console.log("showGameView: ", _viewName, _gameInfo);
+    
+    this.clearGameView(_viewName);
     if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
     }
 
-    this.clearGameView(_viewName);
     window.showGameBlock(_viewName)
-  },
-  
-  populateViewWithGameInfo: async function (_viewName, _gameInfo) {
-    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
-
-    switch (_viewName) {
-      case "cfmaketop":
-        document.getElementById("cf_update_bet_input").value = "";
-        document.getElementById("cf_gameId_makeTop").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        document.getElementById("gameCreator_makeTop").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        document.getElementById("gameOpponent_makeTop").innerHTML = "0x0";
-        document.getElementById("gameBet_makeTop").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
-        document.getElementById("make_top_block_makeTop").style.display = (await PromiseManager.isTopGamePromise(Types.Game.cf, _gameInfo.id)) ? "none" : "block";
-        break;
-
-      case "cfjoin":
-        document.getElementById("cf_game_id_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-        document.getElementById("cf_game_creator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-        document.getElementById("cf_game_bet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-        document.getElementById("cf_coin_join").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
-        break;
-
-      default:
-        break;
-    }
   },
 
   clearGameView: function (_viewName) {
@@ -120,6 +102,44 @@ const CF = {
     }
   },
 
+  populateViewWithGameInfo: async function (_viewName, _gameInfo) {
+    console.log("populateWithGameInfo: ", _viewName, _gameInfo);
+
+    switch (_viewName) {
+      case this.GameView.waitingForOpponent:
+        $("#cfwfopponent_game_id")[0].textContent = _gameInfo.id;
+        $("#cfwfopponent_game_creator")[0].textContent = _gameInfo.creator;
+        $("#cfwfopponent_game_opponent")[0].textContent = "0x0";
+        $("#cfwfopponent_game_bet")[0].textContent = Utils.weiToEtherFixed(_gameInfo.bet);
+        $("#cfwfopponent_increase_bet")[0].value = "";
+
+        // document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
+
+        $("#cfwfopponent_paused").addClass('hidden');
+        $("#cfwfopponent_makeTop_block").addClass('hidden');
+        $("#cfwfopponent_pause_btn").addClass('disabled');
+
+        if (_gameInfo.paused) {
+          $("#cfwfopponent_paused").removeClass('hidden');
+        } else {
+          $("#cfwfopponent_pause_btn").removeClass('disabled');
+          if (!(await BlockchainManager.isTopGame(Types.Game.cf, _gameInfo.id))) {
+            $("#cfwfopponent_makeTop_block").removeClass('hidden');
+          }
+        }
+        break;
+
+      // case "cfjoin":
+      //   document.getElementById("cf_game_id_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
+      //   document.getElementById("cf_game_creator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
+      //   document.getElementById("cf_game_bet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
+      //   document.getElementById("cf_coin_join").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
+      //   break;
+
+      default:
+        break;
+    }
+  },
 
 
 
@@ -128,9 +148,6 @@ const CF = {
 
 
 
-
-
-  
 
   showJoinGame: function (_gameInfo) {
     // console.log("showJoinGame: ", _gameInfo);
@@ -167,7 +184,7 @@ const CF = {
         showTopBannerMessage($t.tx_create_game, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount(0);
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -203,7 +220,7 @@ const CF = {
         showTopBannerMessage($t.tx_make_top, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount(0);
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -219,20 +236,20 @@ const CF = {
   },
 
   increaseBetClicked: async function () {
-    let bet = document.getElementById("cf_update_bet_input").value;
+    let increaseBet = document.getElementById("cfwfopponent_increase_bet").value;
 
-    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+    if ((increaseBet.length == 0) || (new BigNumber(Utils.etherToWei(increaseBet)).comparedTo(this.minBet) < 0)) {
       let str = $t.err_bet_increase_min + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
       showTopBannerMessage(str, null, true);
       return;
     }
 
-    let gameId = document.getElementById("cf_gameId_makeTop").innerHTML;
+    let gameId = document.getElementById("cfwfopponent_game_id").innerHTML;
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.increaseBetForGameBy(gameId).send({
         from: window.BlockchainManager.currentAccount(),
-        value: Utils.etherToWei(bet).toString()
+        value: Utils.etherToWei(increaseBet).toString()
         // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
@@ -240,7 +257,7 @@ const CF = {
         showTopBannerMessage($t.tx_increase_bet, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
+        CF.showGameViewForCurrentAccount(0);
         ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -309,7 +326,7 @@ const CF = {
   },
 
   closeResultView: function () {
-    this.showGameViewForCurrentAccount();
+    this.showGameViewForCurrentAccount(0);
   },
 
   coinSideChanged: function (_side) {

@@ -15,6 +15,10 @@ const CommonManager = {
     this.currentGameId = _currentGameId;
   },
 
+  resetCurrentGameId: function () {
+    this.currentGameId = 0;
+  },
+
   showSpinner: function (_viewType) {
     let spinnerView = this.spinnerViewForType(_viewType);
 

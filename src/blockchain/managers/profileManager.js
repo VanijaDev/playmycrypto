@@ -2,7 +2,6 @@ import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min"
-import VueRouter from 'vue-router'
 import router from "../../router/index"
 
 let ProfileManager = {
@@ -56,7 +55,6 @@ let ProfileManager = {
   updateCurrentAccountUI: async function () {
     let account = window.BlockchainManager.currentAccount();
     if (!account) {
-      alert("Not logged in to MetaMask.");
       showTopBannerMessage("Not logged in to MetaMask.", null, false);
       showAppDisabledView(true);
       throw("Not logged in to MetaMask.");

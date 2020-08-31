@@ -155,15 +155,15 @@
 
       <div class="col-sm-8 border-left text-center inner-column">
         <h3 class="mt-4 mb-4 f18">{{ $t('WAITING_FOR_OPPONENT') }}</h3>
-        <h3 class="coin-side-selected">Your Coin Side:</h3>
+        <!-- <h3 class="coin-side-selected">Your Coin Side:</h3>
         <div class="mt-4 mt-sm-3 mb-4 mb-sm-5 small-selected-value">
           <img src="/img/ethereum-orange.svg" v-if="gameValue===1"/>
           <img src="/img/bitcoin-orange.svg" v-if="gameValue===2"/>
-        </div>
+        </div> -->
 
         <div
             id="cfwfopponent_makeTop_block"
-            class="mt-5 pt-5 hidden"
+            class="mt-5 pt-15 hidden"
             data-group="cfwfopponent_make_top"
         >
           <button

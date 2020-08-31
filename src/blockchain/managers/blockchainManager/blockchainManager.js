@@ -183,6 +183,12 @@ const BlockchainManager = {
     return this.currentBlockchainManager.playedGameIdxsForPlayer(_gameType, _currentAccount);
   },
 
+  isTopGame: function (_gameType, _gameId) {
+    return this.currentBlockchainManager.isTopGame(_gameType, _gameId);
+  },
+
+  
+
   contract_cf: function () {
     return this.currentBlockchainManager.contract_inst_cf;
   },
