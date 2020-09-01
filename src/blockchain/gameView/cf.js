@@ -140,14 +140,6 @@ const CF = {
     }
   },
 
-
-
-
-
-
-
-
-
   showJoinGame: function (_gameInfo) {
     // console.log("showJoinGame: ", _gameInfo);
     this.showGameView(this.GameView.join, _gameInfo);
@@ -260,7 +252,7 @@ const CF = {
       return;
     }
 
-    let gameId = $("#cfwfopponent_game_id").innerHTML;
+    let gameId = $("#cfwfopponent_game_id")[0].innerHTML;
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.increaseBetForGameBy(gameId).send({
@@ -286,6 +278,12 @@ const CF = {
         }
       });
   },
+
+
+
+
+
+
 
   joinAndPlay: async function () {
     let referral = document.getElementById("cf_game_referral_join").value;
