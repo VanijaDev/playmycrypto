@@ -43,16 +43,16 @@ const BlockchainManager = {
     }
   },
 
-  accountChanged: async function (_account) {
+  accountChanged: function (_account) {
     // console.log('%c BlockchainManager - accountChanged', 'color: #00aa00');
     this.currentBlockchainManager.accountChanged(_account);
   },
 
-  chainChanged: async function (_chainId) {
+  chainChanged: function (_chainId) {
     console.log('%c BlockchainManager - chainChanged %s', 'color: #00aa00', _chainId);
     if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
       if (this.currentBlockchainManager.chainChanged(_chainId)) {
-        await this.currentBlockchainManager.init();
+        this.currentBlockchainManager.init();
         return true;
       }
     }
