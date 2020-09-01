@@ -356,7 +356,7 @@ const Game = {
     $('#beneficiaryProfit')[0].classList.add("hidden");
     $('#makeBeneficiary')[0].classList.remove("hidden");
 
-    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(BigNumber(this.minBet)).toString();
+    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(Utils.weiToEtherFixed(BigNumber(this.minBet))).toString();
   },
 
   makeBeneficiaryClicked: async function () {
@@ -493,14 +493,14 @@ const Game = {
   },
 
   onGamePaused: function (_gameId) {
-    // console.log('%c game - onGamePaused_RPS: %s', 'color: #1d34ff', _gameId);
+    console.log('%c game - onGamePaused: %s', 'color: #1d34ff', _gameId);
     if (this.isGamePresentInAnyList(_gameId)) {
       this.removeGameWithId(_gameId);
     }
   },
 
   onGameUnpaused: async function (_gameId, _creator) {
-    // console.log('%c game - onGameUnpaused_RPS: %s', 'color: #1d34ff', _gameId);
+    console.log('%c game - onGameUnpaused: %s %s', 'color: #1d34ff', _gameId, _creator);
 
     if (!_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
@@ -664,6 +664,11 @@ const Game = {
   cf_joinAndPlay: function () {
     this.gameInst.joinAndPlay();
   },
+
+  cf_pauseGameClicked: function () {
+    this.gameInst.pauseGameClicked();
+  },
+
 
   //  rps
   rps_quitGameClicked: function () {

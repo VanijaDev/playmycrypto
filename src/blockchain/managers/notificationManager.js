@@ -21,7 +21,9 @@ const NotificationManager = {
     gameQuittedFinished: "0xb2d5361fc25bf5f72935b7dada9ef5aa3220aa1a8d72e922475140798153ae10",
     rafflePlayed: "0x3fcb6936a4c5aa28446d2519ebc71d8ce9f21cd4ecd4a6b362cdc9d403108ec2",
     rafflePrizeWithdrawn: "0x41f36e3513afe9499e34441f572f2e84284a9ae1416882252929b6b7c72a3089",
-    partnerFeeTransferred: "0xeea88262d89f946cfd575393481b34aedd68aabbe9cb764357a15b1e0226e861"
+    partnerFeeTransferred: "0xeea88262d89f946cfd575393481b34aedd68aabbe9cb764357a15b1e0226e861",
+    gamePaused: "0x700ef9560b7219bf268df827c61f5ae3323824a8b032726685696bdcfbe785b7",
+    gameUnpaused: "0xf0b0a4baf8f4fd56bb7663286eb293a4201e771c238bc79cfc108e6abc2abbbb",
   },
 
   NotificationHashes_RPS: {
@@ -262,6 +264,16 @@ const NotificationManager = {
         case this.NotificationHashes_CF.gameAddedToTop:
           console.log("NotificationHashes_CF.gameAddedToTop");
           this.eventHandler.onGameAddedToTop(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
+          break;
+
+        case this.NotificationHashes_CF.gamePaused:
+          console.log("NotificationHashes_CF.gamePaused");
+          this.eventHandler.onGamePaused((new BigNumber(result.topics[1])).toString());
+          break;
+
+        case this.NotificationHashes_CF.gameUnpaused:
+          console.log("NotificationHashes_CF.gameUnpaused");
+          this.eventHandler.onGameUnpaused((new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
         // case this.NotificationHashes_CF.gamePlayed:

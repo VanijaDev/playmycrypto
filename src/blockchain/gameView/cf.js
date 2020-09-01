@@ -114,14 +114,14 @@ const CF = {
 
         // document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
 
-        $("#cfwfopponent_paused").addClass('hidden');
         $("#cfwfopponent_makeTop_block").addClass('hidden');
-        $("#cfwfopponent_pause_btn").addClass('disabled');
+        $("#cfwfopponent_paused_block").addClass('hidden');
 
         if (_gameInfo.paused) {
-          $("#cfwfopponent_paused").removeClass('hidden');
+          $("#cfwfopponent_pause_btn")[0].textContent = $t.unpause_game;
+          $("#cfwfopponent_paused_block").removeClass('hidden');
         } else {
-          $("#cfwfopponent_pause_btn").removeClass('disabled');
+          $("#cfwfopponent_pause_btn")[0].textContent = $t.pause_game;
           if (!(await BlockchainManager.isTopGame(Types.Game.cf, _gameInfo.id))) {
             $("#cfwfopponent_makeTop_block").removeClass('hidden');
           }
@@ -144,6 +144,9 @@ const CF = {
     // console.log("showJoinGame: ", _gameInfo);
     this.showGameView(this.GameView.join, _gameInfo);
   },
+
+
+  /** UI HANDLERS */
 
   startGame: async function () {
     console.log('%c startGame_cf', 'color: #e51dff');
@@ -278,6 +281,84 @@ const CF = {
         }
       });
   },
+
+  pauseGameClicked: async function () {
+    console.log('%c pauseGameClicked_cf', 'color: #e51dff');
+
+    let gameId = $("#cfwfopponent_game_id")[0].innerHTML;
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+
+    let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, gameId);
+    gameInfo.paused ? this.unpauseGame(gameId) : this.pauseGame(gameId);
+  },
+
+  pauseGame: async function (_gameId) {
+    // console.log('%c pauseGame_cf: %s', 'color: #e51dff', _gameId);
+
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.pauseGame(_gameId).send({
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+      })
+      .on('transactionHash', function (hash) {
+        // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage($t.tx_pause_game, hash);
+      })
+      .once('receipt', function (receipt) {
+        hideTopBannerMessage();
+        window.ProfileManager.update();
+        CF.showGameViewForCurrentAccount(0);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        hideTopBannerMessage();
+        window.ProfileManager.update();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showTopBannerMessage($t.err_pause_game, null, true);
+          throw new Error(error, receipt);
+        }
+      });
+  },
+
+  unpauseGame: async function (_gameId) {
+    // console.log('%c unpauseGame_cf:', 'color: #e51dff');
+
+    if (parseInt(await window.BlockchainManager.getBalance()) < window.Game.minBet) {
+      let str = $t.err_unpause_game_cost + Utils.weiToEtherFixed(window.Game.minBet, 2) + '. ' + $t.not_enough_funds;
+      showTopBannerMessage(str, null, true);
+      return;
+    }
+
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.unpauseGame(_gameId).send({
+        from: window.BlockchainManager.currentAccount(),
+        value: window.Game.minBet
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+      })
+      .on('transactionHash', function (hash) {
+        // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage($t.tx_unpause_game, hash);
+      })
+      .once('receipt', function (receipt) {
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+        CF.showGameViewForCurrentAccount(0);
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showTopBannerMessage($t.err_unpause_game, null, true);
+          throw new Error(error, receipt);
+        }
+      });
+  },
+
+
+
 
 
 

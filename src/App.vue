@@ -381,6 +381,8 @@
       v-bind:data-tx_increase_bet="$t('TX_INCREASE_BET')"
       v-bind:data-err_increase_bet="$t('ERR_INCREASE_BET')"
       v-bind:data-tx_pause_game="$t('TX_PAUSE_GAME')"
+      v-bind:data-pause_game="$t('PAUSE_GAME')"
+      v-bind:data-unpause_game="$t('UNPAUSE_GAME')"
       v-bind:data-err_pause_game="$t('ERR_PAUSE_GAME')"
       v-bind:data-err_unpause_game_cost="$t('UNPAUSE_GAME_COST')"
       v-bind:data-tx_unpause_game="$t('TX_UNPAUSE_GAME')"
