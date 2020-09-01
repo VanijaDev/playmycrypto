@@ -18,12 +18,6 @@ const CF = {
     won: "youWon",
     lost: "youLost"
   },
-  /**
-   * cfwfopponent
-   * cfjoingame
-   * cfwaitcreator
-   * cffinishgame
-   */
 
   updateGameView: async function () {
     const gameId = window.CommonManager.currentGameId;
@@ -86,14 +80,21 @@ const CF = {
   },
 
   clearGameView: function (_viewName) {
+    console.log("clearGameView: ", _viewName);
+    selectMoveValue(null);
+
     switch (_viewName) {
       case this.GameView.start:
-        selectMoveValue(null);
-        console.log("clearGameView: ", _viewName);
-
         $('#cfstart_game_referral')[0].value = "";
         $('#cfstart_seed')[0].value = "";
-        $('#cfstart_bet')[0].value = "0x0";
+        $('#cfstart_bet')[0].value = "";
+        break;
+
+      case this.GameView.join:
+        $("#cfjoingame_game_id")[0].innerHTML = 0;
+        $("#cfjoingame_game_creator")[0].innerHTML = "0x0";
+        $("#cfjoingame_game_bet")[0].innerHTML = "0";
+        $('#cfjoingame_game_referral')[0].value = "";
         break;
 
       default:
@@ -128,21 +129,15 @@ const CF = {
         }
         break;
 
-      // case "cfjoin":
-      //   document.getElementById("cf_game_id_join").innerHTML = (_gameInfo && _gameInfo.id) ? _gameInfo.id : "0";
-      //   document.getElementById("cf_game_creator_join").innerHTML = (_gameInfo && _gameInfo.creator) ? _gameInfo.creator : "0";
-      //   document.getElementById("cf_game_bet_join").innerHTML = (_gameInfo && _gameInfo.bet) ? Utils.weiToEtherFixed(_gameInfo.bet) : "0";
-      //   document.getElementById("cf_coin_join").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/bitcoin-orange.svg" : "/img/ethereum-orange.svg";
-      //   break;
+      case this.GameView.join:
+        document.getElementById("cfjoingame_game_id").innerHTML = _gameInfo.id;
+        document.getElementById("cfjoingame_game_creator").innerHTML = _gameInfo.creator;
+        document.getElementById("cfjoingame_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
+        break;
 
       default:
         break;
     }
-  },
-
-  showJoinGame: function (_gameInfo) {
-    // console.log("showJoinGame: ", _gameInfo);
-    this.showGameView(this.GameView.join, _gameInfo);
   },
 
 

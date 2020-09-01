@@ -619,13 +619,9 @@ const Game = {
   joinGame: async function (_gameIdx, _isTopGame) {
     // console.log("joinGame _gameIdx in list: ", _gameIdx, ", top: ", _isTopGame);
     let gameId = (_isTopGame) ? this.topGameIds[_gameIdx] : this.availableGameIds[_gameIdx];
-    let gameInfo = await window.PromiseManager.gameInfo(this.gameType, gameId);
+    let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, gameId);
 
-    if (this.gameType == Types.Game.cf) {
-      this.gameInst.showJoinGame(gameInfo);
-    } else if (this.gameType == Types.Game.rps) {
-      this.gameInst.showGameView(this.gameInst.GameView.join, gameInfo);
-    }
+    this.gameInst.showGameView(this.gameInst.GameView.join, gameInfo);
   },
 
   startRaffle: function () {
