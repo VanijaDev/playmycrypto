@@ -14,7 +14,7 @@
             <label
                 for="SeedPhrase"
                 class="f10 opacity-text text-left opacity-text mt-3 mb-1"
-            >{{ $t('ENTER_SEED') }}:</label>
+            >{{ $t('ENTER_SEED_SAVE_IT') }}:</label>
             <input
                 type="text"
                 id="rpsstart_seed"
@@ -546,7 +546,7 @@
                 <label
                     for="Referal"
                     class="f10 opacity-text text-left opacity-text mt-2 mb-2"
-                >{{ $t('ENTER_SEED') }}:</label>
+                >{{ $t('ENTER_SEED_SAVE_IT') }}:</label>
                 <input
                     type="text"
                     id="rpscreatormove_next_move_seed"

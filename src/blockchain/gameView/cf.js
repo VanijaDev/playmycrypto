@@ -40,11 +40,9 @@ const CF = {
 
   setPlaceholders: function () {
     $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
-    $('#cfstart_game_referral')[0].placeholder = this.ownerAddress;
+    $('#cfstart_seed')[0].placeholder = $t.enter_seed_phrase_save_it;
     $('#cfstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#cfwfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
-
-    // $('#cf_update_bet_input')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
   //  game view
@@ -91,6 +89,7 @@ const CF = {
     switch (_viewName) {
       case this.GameView.start:
         selectMoveValue(null);
+        console.log("clearGameView: ", _viewName);
 
         $('#cfstart_game_referral')[0].value = "";
         $('#cfstart_seed')[0].value = "";
@@ -155,7 +154,32 @@ const CF = {
   },
 
   startGame: async function () {
-    let referral = document.getElementById("cf_game_referral_start").value;
+    console.log('%c startGame_cf', 'color: #e51dff');
+
+    let bet = document.getElementById("cfstart_bet").value;
+    let seedStr = document.getElementById("cfstart_seed").value;
+
+    if (this.coinSideChosen == 0) {
+      showTopBannerMessage($t.select_move, null, true);
+      return;
+    } else if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
+      let str = $t.wrong_bet + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
+      showTopBannerMessage(str, null, true);
+      return;
+    } else if (new BigNumber(await window.BlockchainManager.getBalance()).comparedTo(new BigNumber(Utils.etherToWei(bet))) < 0) {
+      showTopBannerMessage($t.not_enough_funds, null, true);
+      return;
+    } else if (seedStr.length == 0) {
+      showTopBannerMessage($t.enter_seed_phrase, null, true);
+      return;
+    }
+
+    let seedStrHash = web3.utils.soliditySha3(seedStr);
+    // console.log("seedStrHash: ", seedStrHash);
+    let seedHash = web3.utils.soliditySha3(this.coinSideChosen, seedStrHash);
+    // console.log("seedHash:    ", seedHash);
+
+    let referral = document.getElementById("cfstart_game_referral").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showTopBannerMessage($t.wrong_referral, null, true);
@@ -165,16 +189,8 @@ const CF = {
       referral = this.ownerAddress;
     }
 
-    let bet = document.getElementById("cf_bet_input").value;
-
-    if ((bet.length == 0) || (new BigNumber(Utils.etherToWei(bet)).comparedTo(this.minBet) < 0)) {
-      let str = $t.wrong_bet + Utils.weiToEtherFixed(this.minBet, 2) + " " + window.BlockchainManager.currentCryptoName();
-      showTopBannerMessage(str, null, true);
-      return;
-    }
-
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.cf).methods.createGame(this.coinSideChosen, referral).send({
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.createGame(seedHash, referral).send({
         from: window.BlockchainManager.currentAccount(),
         value: Utils.etherToWei(bet)
         // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()

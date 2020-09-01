@@ -573,7 +573,7 @@ const Game = {
 
 
   //  UI ACTIONS
-  startGame: function () {
+  startGameClicked: function () {
     this.gameInst.startGame();
   },
 
@@ -591,6 +591,10 @@ const Game = {
 
   rps_moveClicked: function (_value) {
     this.gameInst.moveClicked(_value);
+  },
+
+  cf_moveClicked: function (_value) {
+    this.gameInst.coinSideChanged(_value);
   },
 
   loadMoreAvailableGames: async function () {

@@ -13,7 +13,7 @@
             <label
                 for="cfstart_seed"
                 class="f10 opacity-text text-left opacity-text mt-3 mb-1"
-            >{{ $t('ENTER_SEED') }}:</label>
+            >{{ $t('ENTER_SEED_SAVE_IT') }}:</label>
             <input
                 type="text"
                 id="cfstart_seed"
@@ -538,12 +538,12 @@
       selectMoveValue(value) {
         // console.log(`Value selected: ${value}`);
         this.gameValue = value;
-        // window.Game.cf_moveClicked(value);
+        window.Game.cf_moveClicked(value);
       },
       selectPreviousValue(value) {
         // console.log(`Previous value selected: ${value}`);
         this.prevGameValue = value;
-        // window.Game.cf_moveClicked(value);
+        window.Game.cf_moveClicked(value);
       },
     },
   };

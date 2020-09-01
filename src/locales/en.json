@@ -69,7 +69,7 @@
   "LIST_OPENED_GAMES": "List of opened games",
   "MAKE_FIRST_MOVE": "MAKE FIRST MOVE",
   "MAKE_MOVE": "MAKE MOVE",
-  "ENTER_SEED": "Enter seed phrase ( IMPORTANT: save it )",
+  "ENTER_SEED_SAVE_IT": "Enter seed phrase ( IMPORTANT: save it )",
   "JOIN_GAME": "JOIN GAME",
   "COIN_SIDE": "YOUR COIN SIDE",
   "WAITING_FOR_OPPONENT": "WAITING FOR OPPONENT",

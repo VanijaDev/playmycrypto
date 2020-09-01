@@ -368,6 +368,7 @@
       v-bind:data-select_move="$t('SELECT_MOVE')"
       v-bind:data-wrong_bet="$t('WRONG_BET')"
       v-bind:data-not_enough_funds="$t('NO_ENOUGH_FUNDS')"
+      v-bind:data-enter_seed_phrase_save_it="$t('ENTER_SEED_SAVE_IT')"
       v-bind:data-enter_seed_phrase="$t('ENTER_SEED_PHRASE')"
       v-bind:data-wrong_referral="$t('WRONG_REFERRAL')"
       v-bind:data-wrong_beneficiary_profit="$t('BENEFICIARY_PROFIT')"
