@@ -783,7 +783,7 @@ const RPS = {
 
     let ongoingGameId = parseInt(await PromiseManager.ongoingGameIdxForPlayerPromise(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (ongoingGameId != 0) {
-      let str = $t.err_only_single_game + ongoingGameId;
+      let str = $t.err_only_single_game_as_opponent + ongoingGameId;
       showTopBannerMessage(str, null, true);
       return;
     }
