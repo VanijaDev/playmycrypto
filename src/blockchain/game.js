@@ -27,13 +27,10 @@ const Game = {
   maxGamesToAddCount: 2, // max count of games to be added each "load more"
   raffleParticipants: 0,
 
-  gameType: "",
+  gameType: "", //  Types.Game.cf / rps
   gameInst: null,
 
   setup: async function (_currentGameType) {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
     console.log('%c game - setup %s', 'color: #00aa00', _currentGameType);
 
     this.gameType = _currentGameType;

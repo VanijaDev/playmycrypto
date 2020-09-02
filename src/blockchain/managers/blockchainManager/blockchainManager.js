@@ -12,7 +12,7 @@ const BlockchainManager = {
 
   init: async function () {
     console.log('%c BlockchainManager - init', 'color: #00aa00');
-    this.setCurrentBlockchainManager(Types.BlockchainType.ethereum);
+    this.updateCurrentBlockchain(Types.BlockchainType.ethereum);
     return await this.currentBlockchainManager.init();
   },
 
@@ -24,10 +24,10 @@ const BlockchainManager = {
     return this.currentBlockchainManager.isCurrentNetworkValid();
   },
 
-  setCurrentBlockchainManager: function (_blockchainType) {
+  updateCurrentBlockchain: function (_blockchainType) {
+    console.log('BlockchainManager - updateCurrentBlockchain:', _blockchainType);
     this.currentBlockchainType = _blockchainType;
-    console.log('BlockchainManager - _blockchainType:', _blockchainType);
-
+    
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("setCurrentBlockchainManager - Ethereum");

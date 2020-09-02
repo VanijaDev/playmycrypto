@@ -123,10 +123,11 @@ let ProfileManager = {
     }
   },
 
-  currentlyPlayingGameClicked(_gameType, _gameId) {
+  currentlyPlayingGameClicked: function (_gameType, _gameId) {
     console.log("ProfileManager - _gameType:", _gameType, "_gameId:", _gameId);
     window.CommonManager.setCurrentGameId(_gameId);
-    router.push(_gameType);
+
+    (window.CommonManager.currentView == Types.View.game) ? window.Game.setup(_gameType) : router.push(_gameType);
   },
 
   updatePlayedGamesTotalAmounts: async function () {
