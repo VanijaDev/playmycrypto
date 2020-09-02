@@ -460,10 +460,15 @@ const Game = {
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
-      this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      await window.ProfileManager.update();
+      this.gameInst.showGameView(this.gameInst.GameView.finish, gameInfo);
     }
+
+    // if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+    //   let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
+    //   this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
+    // } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+    //   await window.ProfileManager.update();
+    // }
   },
 
   onGamePlayed: async function (_gameType, _gameId, _creator, _opponent) {
@@ -657,8 +662,8 @@ const Game = {
     this.gameInst.coinSideChanged(_side);
   },
 
-  cf_joinAndPlay: function () {
-    this.gameInst.joinAndPlay();
+  cf_joinGameClicked: function () {
+    this.gameInst.joinGameClicked();
   },
 
   cf_pauseGameClicked: function () {

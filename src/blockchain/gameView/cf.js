@@ -20,16 +20,15 @@ const CF = {
   },
 
   updateGameView: async function () {
-    const gameId = window.CommonManager.currentGameId;
-    window.CommonManager.resetCurrentGameId();
-    console.log('%c CF - updateGameView, %s', 'color: #00aa00', gameId);
+    const storedGameId = window.CommonManager.currentGameId;
+    console.log('%c CF - updateGameView, %s', 'color: #00aa00', storedGameId);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
     this.setPlaceholders();
-    this.showGameViewForCurrentAccount(gameId);
+    this.showGameViewForCurrentAccount();
   },
 
   setPlaceholders: function () {
@@ -39,33 +38,48 @@ const CF = {
     $('#cfwfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
   },
 
-  //  game view
-  showGameViewForCurrentAccount: async function (_gameId) {
+  showGameViewForCurrentAccount: async function () {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
 
-    let id = 0;
-    if (_gameId != 0) {
-      id = _gameId;
+    const storedGameId = window.CommonManager.currentGameId;
+    if (storedGameId > 0) {
+      window.CommonManager.resetCurrentGameId();
+
+      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, storedGameId);
+      let viewType = this.gameViewTypeForGameInfo(gameInfo);
+      this.showGameView(viewType, gameInfo);
     } else {
       let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
       if (createdId > 0) {
-        id = createdId;
+        let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, createdId);
+        let viewType = this.gameViewTypeForGameInfo(gameInfo);
+        this.showGameView(viewType, gameInfo);
       } else {
         let joinedId = parseInt(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
-        if (createdId > 0) {
-          id = joinedId;
+        if (joinedId > 0) {
+          let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, joinedId);
+          let viewType = this.gameViewTypeForGameInfo(gameInfo);
+          this.showGameView(viewType, gameInfo);
+        } else {
+          this.showGameView(this.GameView.start, null);
         }
       }
     }
-    console.log("cf - gameId: ", id);
-    if (id > 0) {
-      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, id);
-      this.showGameView(this.GameView.waitingForOpponent, gameInfo);
-    } else {
-      this.showGameView(this.GameView.start, null);
-    }
 
     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+  },
+
+  gameViewTypeForGameInfo: function (_gameInfo) {
+    let viewType = this.GameView.waitCreator; //  if opponent
+    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount())) {
+      if (Utils.zeroAddress(_gameInfo.opponent)) {
+        viewType = this.GameView.waitingForOpponent;
+      } else {
+        viewType = this.GameView.finish;
+      }
+    }
+
+    return viewType;
   },
 
   showGameView: function (_viewName, _gameInfo) {
@@ -190,7 +204,7 @@ const CF = {
         showTopBannerMessage($t.tx_create_game, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount(0);
+        CF.showGameViewForCurrentAccount();
         window.ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -226,7 +240,7 @@ const CF = {
         showTopBannerMessage($t.tx_make_top, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount(0);
+        CF.showGameViewForCurrentAccount();
         window.ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -263,7 +277,7 @@ const CF = {
         showTopBannerMessage($t.tx_increase_bet, hash);
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount(0);
+        CF.showGameViewForCurrentAccount();
         window.ProfileManager.update();
         hideTopBannerMessage();
       })
@@ -301,7 +315,7 @@ const CF = {
       .once('receipt', function (receipt) {
         hideTopBannerMessage();
         window.ProfileManager.update();
-        CF.showGameViewForCurrentAccount(0);
+        CF.showGameViewForCurrentAccount();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
@@ -337,7 +351,7 @@ const CF = {
       .once('receipt', function (receipt) {
         window.ProfileManager.update();
         hideTopBannerMessage();
-        CF.showGameViewForCurrentAccount(0);
+        CF.showGameViewForCurrentAccount();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
@@ -351,20 +365,25 @@ const CF = {
         }
       });
   },
+  
+  joinGameClicked: async function () {
+    console.log('%c joinGameClicked_CF', 'color: #e51dff');
 
+    let ongoingGameId = parseInt(await BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    if (ongoingGameId != 0) {
+      let str = $t.err_only_single_game_as_opponent + ongoingGameId;
+      showTopBannerMessage(str, null, true);
+      return;
+    }
 
+    if (this.selectedMove == 0) {
+      showTopBannerMessage($t.choose_coin_side, null, true);
+      return;
+    }
 
-
-
-
-
-
-
-
-  joinAndPlay: async function () {
-    let referral = document.getElementById("cf_game_referral_join").value;
+    let referral = document.getElementById("cfjoingame_game_referral").value;
     if (referral.length > 0) {
-      if (!web3.utils.isAddress(referral)) {
+      if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showTopBannerMessage($t.wrong_referral, null, true);
         return;
       }
@@ -372,30 +391,33 @@ const CF = {
       referral = this.ownerAddress;
     }
 
-    let gameInfo = await PromiseManager.gameInfoPromise(Types.Game.cf, document.getElementById("cf_game_id_join").innerHTML);
-    let bet = gameInfo.bet;
+    let gameId = document.getElementById("cfjoingame_game_id").innerHTML;
+    let gameInfo = await BlockchainManager.gameInfo(Types.Game.cf, gameId);
 
+    let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
       showTopBannerMessage($t.not_enough_funds, null, true);
       return;
     }
+
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.cf).methods.joinAndPlayGame(document.getElementById("cf_game_id_join").innerHTML, referral).send({
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.joinGame(gameId, this.coinSideChosen-1, referral).send({
         from: window.BlockchainManager.currentAccount(),
         value: bet
         // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
-        // console.log('%c JOIN GAME transactionHash: %s', 'color: #1d34ff', hash);
+        // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
         showTopBannerMessage($t.tx_join_game, hash);
       })
       .once('receipt', function (receipt) {
-        // console.log('%c JOIN GAME receipt: %s', 'color: #1d34ff', receipt);
+        CF.showGameViewForCurrentAccount(gameId);
         window.ProfileManager.update();
         hideTopBannerMessage();
-        CF.showGamePlayed(receipt.events.CF_GamePlayed.returnValues);
       })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+      .once('error', function (error, receipt) {
+        window.ProfileManager.update();
+        hideTopBannerMessage();
         window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -404,6 +426,18 @@ const CF = {
         }
       });
   },
+
+
+
+
+
+
+
+
+
+
+
+
 
   showGamePlayed: function (_gameInfo) {
     // console.log("showGamePlayed: ", _gameInfo);
@@ -416,7 +450,7 @@ const CF = {
   },
 
   closeResultView: function () {
-    this.showGameViewForCurrentAccount(0);
+    this.showGameViewForCurrentAccount();
   },
 
   coinSideChanged: function (_side) {

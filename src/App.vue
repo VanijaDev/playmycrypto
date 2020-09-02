@@ -410,6 +410,7 @@
       v-bind:data-no_profit_to_withdraw="$t('ERR_NO_PROFIT_TO_WITHDRAW')"
       v-bind:data-tx_withdraw_beneficiary="$t('TX_WITHDRAW_BENEFICIARY_RUN')"
       v-bind:data-err_withdraw_beneficiary="$t('ERR_WITHDRAW_BENEFICIAR')"
+      v-bind:data-choose_coin_side="$t('CHOOSE_COIN_SIDE')"
     ></div>
   </div>
 </template>
