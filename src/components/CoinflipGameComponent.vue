@@ -162,6 +162,14 @@
         </div> -->
 
         <div
+            id="cfwfopponent_isTop_block"
+            class="mt-5 pt-15 hidden"
+            data-group="cfwfopponent_is_top"
+        >
+         <h2 class="paused-game mb-0">{{ $t('IN_TOP_GAMES') }}</h2>
+        </div>
+
+        <div
             id="cfwfopponent_makeTop_block"
             class="mt-5 pt-15 hidden"
             data-group="cfwfopponent_make_top"

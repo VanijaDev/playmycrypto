@@ -129,6 +129,7 @@ const CF = {
 
         // document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
 
+        $("#cfwfopponent_isTop_block").addClass('hidden');
         $("#cfwfopponent_makeTop_block").addClass('hidden');
         $("#cfwfopponent_paused_block").addClass('hidden');
 
@@ -137,7 +138,9 @@ const CF = {
           $("#cfwfopponent_paused_block").removeClass('hidden');
         } else {
           $("#cfwfopponent_pause_btn")[0].textContent = $t.pause_game;
-          if (!(await BlockchainManager.isTopGame(Types.Game.cf, _gameInfo.id))) {
+          if ((await window.BlockchainManager.isTopGame(Types.Game.cf, _gameInfo.id))) {
+            $("#cfwfopponent_isTop_block").removeClass('hidden');
+          } else {
             $("#cfwfopponent_makeTop_block").removeClass('hidden');
           }
         }
@@ -369,7 +372,7 @@ const CF = {
   joinGameClicked: async function () {
     console.log('%c joinGameClicked_CF', 'color: #e51dff');
 
-    let ongoingGameId = parseInt(await BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let ongoingGameId = parseInt(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
     if (ongoingGameId != 0) {
       let str = $t.err_only_single_game_as_opponent + ongoingGameId;
       showTopBannerMessage(str, null, true);
@@ -392,7 +395,7 @@ const CF = {
     }
 
     let gameId = document.getElementById("cfjoingame_game_id").innerHTML;
-    let gameInfo = await BlockchainManager.gameInfo(Types.Game.cf, gameId);
+    let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, gameId);
 
     let bet = gameInfo.bet;
     if (parseInt(await window.BlockchainManager.getBalance()) < bet) {
