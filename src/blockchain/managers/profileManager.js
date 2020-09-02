@@ -71,6 +71,29 @@ let ProfileManager = {
     $('#listCurrentlyPlayingGames').empty();
     $('#profileNotification').addClass('hidden');
 
+
+
+    // var btn = document.createElement("BUTTON");
+    // btn.classList.add("btn", "btn-animated");
+    // btn.onclick = function () {
+    //   window.ProfileManager.pendingClicked(this, _pendingTarget, gameType);
+    // };
+
+    // var img = document.createElement('IMG');
+    // img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(gameType) + ".svg");
+    // img.classList.add("game-icon", "mr-3");
+    // btn.appendChild(img);
+
+    // var tooltiptext = document.createElement("SPAN");
+    // tooltiptext.classList.add("tooltiptext");
+    // var t = document.createTextNode(pendingValue + tooltipSuffix);
+    // tooltiptext.appendChild(t);
+    // btn.appendChild(tooltiptext);
+
+    // $('#' + _pendingTarget)[0].appendChild(btn);
+
+
+
     //  cf
     this.ongoingGameCF_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
@@ -330,28 +353,31 @@ let ProfileManager = {
           tooltipSuffix = $('#translations').data().suffix_games;
         }
 
-        var btn = document.createElement("BUTTON");
-        btn.classList.add("btn");
-        btn.classList.add("btn-animated");
+        let btn = this.createPendingButtonElement(Utils.gameIconSmallForGame(gameType), pendingValue + tooltipSuffix);
         btn.onclick = function () {
           window.ProfileManager.pendingClicked(this, _pendingTarget, gameType);
         };
-
-        var img = document.createElement('IMG');
-        img.setAttribute("src", "/img/" + Utils.gameIconSmallForGame(gameType) + ".svg");
-        img.classList.add("game-icon");
-        img.classList.add("mr-3");
-        btn.appendChild(img);
-
-        var tooltiptext = document.createElement("SPAN");
-        tooltiptext.classList.add("tooltiptext");
-        var t = document.createTextNode(pendingValue + tooltipSuffix);
-        tooltiptext.appendChild(t);
-        btn.appendChild(tooltiptext);
-
         $('#' + _pendingTarget)[0].appendChild(btn);
       });
     }
+  },
+
+  createPendingButtonElement: function (_img, _tooltipString) {
+    var btn = document.createElement("BUTTON");
+    btn.classList.add(...["btn", "btn-animated"]);
+
+    var img = document.createElement('IMG');
+    img.setAttribute("src", "/img/" + _img + ".svg");
+    img.classList.add("game-icon", "mr-3");
+    btn.appendChild(img);
+
+    var tooltiptext = document.createElement("SPAN");
+    tooltiptext.classList.add("tooltiptext");
+    var t = document.createTextNode(_tooltipString);
+    tooltiptext.appendChild(t);
+    btn.appendChild(tooltiptext);
+
+    return btn;
   },
 
   showPendingDot: function (_isShow, _pendingTarget) {
