@@ -187,6 +187,14 @@ const BlockchainManager = {
     return await this.currentBlockchainManager.isTopGame(_gameType, _gameId);
   },
 
+  isGameMoveExpired: async function (_gameType, _idx) {
+    return await this.currentBlockchainManager.isGameMoveExpired(_gameType, _idx);
+  },
+
+  moveDuration: async function (_gameType) {
+    return await this.currentBlockchainManager.moveDuration(_gameType);
+  },
+
   
 
   contract_cf: function () {

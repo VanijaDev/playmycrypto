@@ -87,6 +87,7 @@
   "YOU_LOST": "Sorry, but you lost",
   "YOU_DRAW": "Well, it’s draw",
   "WAITING_OPPONENT_MOVE": "WAITING FOR OPPONENT’S MOVE",
+  "HOUR": "h",
   "MIN": "min",
   "SEC": "sec",
   "PREV_MOVE": "Previous move",

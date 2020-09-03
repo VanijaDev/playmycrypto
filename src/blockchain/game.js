@@ -654,6 +654,17 @@ const Game = {
       });
   },
 
+  updateMoneyIcons: function () {
+    let srcStr = "/img/icon_amount-" + (window.BlockchainManager.currentCryptoName().toLowerCase()) + ".svg";
+
+    let loadInterval = setInterval(function () {
+      clearInterval(loadInterval);
+      $(".template_available_games").attr('src', srcStr);
+      $(".template_top_games").attr('src', srcStr);
+      $(".template_raffle").attr('src', srcStr);
+    }, 1000);
+  },
+
   //  cf
   cf_coinSideChanged: function (_side) {
     this.gameInst.coinSideChanged(_side);
@@ -665,6 +676,14 @@ const Game = {
 
   cf_pauseGameClicked: function () {
     this.gameInst.pauseGameClicked();
+  },
+
+  cf_quitGameClicked: function () {
+    this.gameInst.quitGameClicked();
+  },
+
+  cf_claimExpiredGameClicked: function () {
+    this.gameInst.claimExpiredGameClicked();
   },
 
 
@@ -695,17 +714,6 @@ const Game = {
 
   rps_quitGameClicked: function () {
     this.gameInst.quitGameClicked();
-  },
-
-  updateMoneyIcons: function () {
-    let srcStr = "/img/icon_amount-" + (window.BlockchainManager.currentCryptoName().toLowerCase()) + ".svg";
-
-    let loadInterval = setInterval(function () {
-      clearInterval(loadInterval);
-      $(".template_available_games").attr('src', srcStr);
-      $(".template_top_games").attr('src', srcStr);
-      $(".template_raffle").attr('src', srcStr);
-    }, 1000);
   }
 }
 

@@ -383,7 +383,7 @@ let PromiseManager = {
     });
   },
 
-  gameMoveExpiredPromise: function (_gameType, _gameId) {
+  isGameMoveExpiredPromise: function (_gameType, _gameId) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.gameMoveExpired(_gameId).call()
         .then(result => {

@@ -137,7 +137,7 @@
           <div class="col-5 offset-1">
             <button
                 id="cfwfopponent_quit_btn"
-                class="btn btn-small-orange"
+                class="btn btn-small-orange disabled"
                 onclick="window.Game.cf_quitGameClicked()"
             >{{ $t('QUIT_GAME') }}
             </button>
@@ -291,11 +291,11 @@
       <div class="col-sm-4 f13 info-column inner-column opacity-text">
         <div class="mt-0 pt-2 text-left opacity-text">
           <p class="mb-0 f10">{{ $t('GAME_ID') }}:</p>
-          <span id="cfjoingame_game_id" class="f10">0</span>
+          <span id="cfwaitcreator_game_id" class="f10">0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_CREATOR') }}:</p>
-          <span id="cfjoingame_game_creator" class="f10">0x0</span>
+          <span id="cfwaitcreator_game_creator" class="f10">0x0</span>
           <p class="mb-0 mt-4 f10">{{ $t('GAME_OPPONENT') }}:</p>
-          <span id="cfjoingame_game_opponent" class="f10">0x0</span>
+          <span id="cfwaitcreator_game_opponent" class="f10">0x0</span>
 
           <div class="row">
             <div class="col-6 pr-0">
@@ -308,19 +308,21 @@
                 />
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </p>
-              <b id="cfjoingame_game_bet">{{ currentBet ? currentBet : 0 }}</b>
+              <b id="cfwaitcreator_game_bet">{{ currentBet ? currentBet : 0 }}</b>
             </div>
           </div>
 
           <div class="row mt-4 f10">
-            <div class="col-6 pr-0">
+            <div class="col-7 pr-0">
               <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon"/>
-                <span id="rpswfopponentmove_move_remain_min" class="f13">0</span>
-                <span class="date mr-2 text-white-50">{{ $t('MIN') }}</span>
-                <span id="rpswfopponentmove_move_remain_sec" class="f13">0</span>
-                <span class="date mr-2 text-white-50">{{ $t('SEC') }}</span>
+                <span id="cfwaitcreator_move_remain_hour" class="f13">0</span>
+                <span class="date mr-2 text-white-50"> {{ $t('HOUR') }}</span>
+                <span id="cfwaitcreator_move_remain_min" class="f13">0</span>
+                <span class="date mr-2 text-white-50"> {{ $t('MIN') }}</span>
+                <span id="cfwaitcreator_move_remain_sec" class="f13">0</span>
+                <span class="date mr-2 text-white-50"> {{ $t('SEC') }}</span>
               </p>
             </div>
           </div>
@@ -329,17 +331,17 @@
             <div class="bottom-buttons row">
               <div class="col-5 offset-1">
                 <button
-                    id="rpswfopponent_quit_btn"
-                    class="btn btn-small-orange"
-                    onclick="window.Game.rps_quitGameClicked()"
+                    id="cfwaitcreator_quit_btn"
+                    class="btn btn-small-orange disabled"
+                    onclick="window.Game.cf_quitGameClicked()"
                 >{{ $t('QUIT_GAME') }}
                 </button>
               </div>
               <div class="col-5 pr-3 button-border-left">
                 <button
-                    id="rpswfopponent_pause_btn"
+                    id="cfwaitcreator_claim_expired_btn"
                     class="btn btn-small-orange disabled"
-                    onclick="window.Game.rps_pauseGameClicked()"
+                    onclick="window.Game.cf_claimExpiredGameClicked()"
                 >{{ $t('CLAIM_EXPIRED') }}
                 </button>
               </div>
@@ -352,9 +354,9 @@
         <h3 class="mt-sm-4 mb-sm-4 f18">{{ $t('CREATOR_FINISH_WAIT') }}</h3>
 
         <div
-            id="cf_move_expired"
+            id="cfwaitcreator_move_expired"
             class="mt-5 pt-5 hidden"
-            data-group="cfwfopponentmove"
+            data-group="cfwaitcreator"
         >
           <h2 class="paused-game mb-0">{{ $t('MOVE_EXPIRED') }}</h2>
           <p class="f18">{{ $t('CLAIM_PRIZE') }}</p>
@@ -421,7 +423,7 @@
             <div class="col-5 offset-1">
               <button
                   id="cfwfopponent_quit_btn"
-                  class="btn btn-small-orange"
+                  class="btn btn-small-orange disabled"
                   onclick="window.Game.cf_quitGameClicked()"
               >{{ $t('QUIT_GAME') }}
               </button>

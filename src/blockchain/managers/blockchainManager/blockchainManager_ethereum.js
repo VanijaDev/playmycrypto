@@ -296,6 +296,14 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.isTopGamePromise(_gameType, _gameId);
   },
 
+  isGameMoveExpired: async function (_gameType, _gameId) {
+    return await PromiseManager.isGameMoveExpiredPromise(_gameType, _gameId);
+  },
+
+  moveDuration: async function (_gameType) {
+    return await PromiseManager.moveDurationPromise(_gameType);
+  },
+
 
   /**
    * HELPERS

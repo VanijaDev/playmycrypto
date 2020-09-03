@@ -8,6 +8,7 @@ const CF = {
   ownerAddress: "",
   coinSideChosen: 0,
   minBet: "",
+  currentGameView: "",
 
   GameView: {
     start: "cfstart",
@@ -84,7 +85,8 @@ const CF = {
 
   showGameView: function (_viewName, _gameInfo) {
     console.log("showGameView: ", _viewName, _gameInfo);
-    
+
+    this.currentGameView = _viewName;
     this.clearGameView(_viewName);
     if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
       this.populateViewWithGameInfo(_viewName, _gameInfo);
@@ -109,6 +111,15 @@ const CF = {
         $("#cfjoingame_game_creator")[0].innerHTML = "0x0";
         $("#cfjoingame_game_bet")[0].innerHTML = "0";
         $('#cfjoingame_game_referral')[0].value = "";
+        break;
+
+      case this.GameView.waitCreator:
+        $("#cfwaitcreator_game_id")[0].innerHTML = 0;
+        $("#cfwaitcreator_game_creator")[0].innerHTML = "0x0";
+        $("#cfwaitcreator_game_opponent")[0].innerHTML = "0x0";
+        $('#cfwaitcreator_game_bet')[0].innerHTML = "0";
+        $("#cfwaitcreator_move_remain_min")[0].innerHTML = 0;
+        $("#cfwaitcreator_move_remain_sec")[0].innerHTML = 0;
         break;
 
       default:
@@ -152,10 +163,93 @@ const CF = {
         document.getElementById("cfjoingame_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
         break;
 
+      case this.GameView.waitCreator:
+        $("#cfwaitcreator_game_id")[0].innerHTML = _gameInfo.id;
+        $("#cfwaitcreator_game_creator")[0].innerHTML = _gameInfo.creator;
+        $("#cfwaitcreator_game_opponent")[0].innerHTML = _gameInfo.opponent;
+        $('#cfwaitcreator_game_bet')[0].innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
+
+        this.updateExpiredUIFor(_viewName, _gameInfo);
+        break;
+
       default:
         break;
     }
   },
+
+  //  gameExpired UI vvv
+  updateExpiredUIFor: async function (_viewName, _gameInfo) {
+    const isMoveExpired = await window.BlockchainManager.isGameMoveExpired(Types.Game.cf, _gameInfo.id);
+
+    this.updateExpiredUIFunctional(_viewName, isMoveExpired);
+
+    if (isMoveExpired) {
+      document.getElementById(_viewName + "_move_remain_min").innerHTML = 0;
+      document.getElementById(_viewName + "_move_remain_sec").innerHTML = 0;
+    } else {
+      this.updateMoveExpirationCountdown(_viewName, _gameInfo);
+    }
+  },
+
+  updateExpiredUIFunctional: function (_viewName, _isExpired) {
+    switch (_viewName) {
+      case this.GameView.waitCreator:
+        if (_isExpired) {
+          document.getElementById(_viewName + "_claim_expired_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
+        } else {
+          document.getElementById(_viewName + "_quit_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
+          document.getElementById(_viewName + "_move_expired").classList.add("hidden");
+        }
+        break;
+
+      case this.GameView.waitingForOpponent:
+        if (_isExpired) {
+          document.getElementById(_viewName + "_quit_btn").classList.add("disabled");
+          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
+          // document.getElementById(_viewName + "_next_move_action").classList.add("hidden");
+          document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
+          document.getElementById(_viewName + "_make_move_btn").classList.add("disabled");
+        } else {
+          document.getElementById(_viewName + "_quit_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
+          // document.getElementById(_viewName + "_next_move_action").classList.remove("hidden");
+          document.getElementById(_viewName + "_move_expired").classList.add("hidden");
+          document.getElementById(_viewName + "_make_move_btn").classList.remove("disabled");
+        }
+        break;
+
+      default:
+        throw("updateExpiredUIFunctional - no view: " + _viewName);
+    }
+  },
+
+  updateMoveExpirationCountdown: async function (_viewName, _gameInfo) {
+    let lastMoveTime = new BigNumber(_gameInfo.opponentJoinedAt);
+    let moveDuration = new BigNumber(await window.BlockchainManager.moveDuration(Types.Game.cf));
+    let endTime = parseInt(lastMoveTime.plus(moveDuration));
+
+    this.countdown = setInterval(function () {
+      let remain = Utils.getTimeRemaining(endTime);
+
+      document.getElementById(_viewName + "_move_remain_hour").innerHTML = remain.hours;
+      document.getElementById(_viewName + "_move_remain_min").innerHTML = remain.minutes;
+      document.getElementById(_viewName + "_move_remain_sec").innerHTML = remain.seconds;
+
+      if (remain.total <= 0) {
+        document.getElementById(_viewName + "_move_remain_hour").innerHTML = "0";
+        document.getElementById(_viewName + "_move_remain_min").innerHTML = "0";
+        document.getElementById(_viewName + "_move_remain_sec").innerHTML = "0";
+      }
+
+      if (remain.total <= 0) {
+        clearInterval(CF.countdown);
+        CF.updateExpiredUIFunctional(_viewName, true);
+      }
+    }, 1000);
+  },
+  //  gameExpired UI ^^^
 
 
   /** UI HANDLERS */
@@ -428,6 +522,73 @@ const CF = {
           throw new Error(error, receipt);
         }
       });
+  },
+
+  claimExpiredGameClicked: async function () {
+    console.log('%c claimExpiredGameClicked_CF: %s', 'color: #e51dff', this.currentGameView);
+
+    // let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
+    // // console.log("gameId: ", gameId);
+
+    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    // window.BlockchainManager.gameInst(Types.Game.cf).methods.finishExpiredGame(gameId).send({
+    //     from: window.BlockchainManager.currentAccount()
+    //     // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    //   })
+    //   .on('transactionHash', function (hash) {
+    //     // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
+    //     showTopBannerMessage($t.tx_claim_expired, hash);
+    //   })
+    //   .once('receipt', function (receipt) {
+    //     CF.showGameView(CF.GameView.won, null);
+    //     window.ProfileManager.update();
+    //     hideTopBannerMessage();
+    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    //   })
+    //   .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+    //     window.ProfileManager.update();
+    //     hideTopBannerMessage();
+    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+    //     if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+    //       showTopBannerMessage($t.err_claim_expired, null, true);
+    //       throw new Error(error, receipt);
+    //     }
+    //   });
+  },
+
+
+  quitGameClicked: async function () {
+    console.log('%c quitGameClicked_CF', 'color: #e51dff');
+
+    // let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
+    // // console.log("gameId: ", gameId);
+
+    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    // window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
+    //     from: window.BlockchainManager.currentAccount()
+    //     // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+    //   })
+    //   .on('transactionHash', function (hash) {
+    //     // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
+    //     showTopBannerMessage($t.tx_quit_game, hash);
+    //   })
+    //   .once('receipt', function (receipt) {
+    //     RPS.showGameView(RPS.GameView.lost, null);
+    //     window.ProfileManager.update();
+    //     hideTopBannerMessage();
+    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    //   })
+    //   .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+    //     window.ProfileManager.update();
+    //     hideTopBannerMessage();
+    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+    //     if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+    //       showTopBannerMessage($t.err_quit_game, null, true);
+    //       throw new Error(error, receipt);
+    //     }
+    //   });
   },
 
 
