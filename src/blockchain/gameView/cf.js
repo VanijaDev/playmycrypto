@@ -14,8 +14,8 @@ const CF = {
     start: "cfstart",
     waitingForOpponent: "cfwfopponent",
     join: "cfjoingame",
-    finish: "cffinishgame",
     waitCreator: "cfwaitcreator",
+    finish: "cffinishgame",
     won: "youWon",
     lost: "youLost"
   },
@@ -37,6 +37,7 @@ const CF = {
     $('#cfstart_seed')[0].placeholder = $t.enter_seed_phrase_save_it;
     $('#cfstart_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
     $('#cfwfopponent_increase_bet')[0].placeholder = Utils.weiToEtherFixed(this.minBet, 2);
+    $('#cffinishgame_finishSeedPhrase')[0].placeholder = $t.enter_seed_phrase;
   },
 
   showGameViewForCurrentAccount: async function () {
@@ -118,8 +119,19 @@ const CF = {
         $("#cfwaitcreator_game_creator")[0].innerHTML = "0x0";
         $("#cfwaitcreator_game_opponent")[0].innerHTML = "0x0";
         $('#cfwaitcreator_game_bet')[0].innerHTML = "0";
+        $("#cfwaitcreator_move_remain_hour")[0].innerHTML = 0;
         $("#cfwaitcreator_move_remain_min")[0].innerHTML = 0;
         $("#cfwaitcreator_move_remain_sec")[0].innerHTML = 0;
+        break;
+
+      case this.GameView.finish:
+        $("#cffinishgame_game_id")[0].innerHTML = 0;
+        $("#cffinishgame_game_creator")[0].innerHTML = "0x0";
+        $("#cffinishgame_game_opponent")[0].innerHTML = "0x0";
+        $('#cffinishgame_game_bet')[0].innerHTML = "0";
+        $("#cffinishgame_move_remain_hour")[0].innerHTML = 0;
+        $("#cffinishgame_move_remain_min")[0].innerHTML = 0;
+        $("#cffinishgame_move_remain_sec")[0].innerHTML = 0;
         break;
 
       default:
@@ -167,7 +179,16 @@ const CF = {
         $("#cfwaitcreator_game_id")[0].innerHTML = _gameInfo.id;
         $("#cfwaitcreator_game_creator")[0].innerHTML = _gameInfo.creator;
         $("#cfwaitcreator_game_opponent")[0].innerHTML = _gameInfo.opponent;
-        $('#cfwaitcreator_game_bet')[0].innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
+        $("#cfwaitcreator_game_bet")[0].innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
+
+        this.updateExpiredUIFor(_viewName, _gameInfo);
+        break;
+
+      case this.GameView.finish:
+        $("#cffinishgame_game_id")[0].innerHTML = _gameInfo.id;
+        $("#cffinishgame_game_creator")[0].innerHTML = _gameInfo.creator;
+        $("#cffinishgame_game_opponent")[0].innerHTML = _gameInfo.opponent;
+        $("#cffinishgame_game_bet")[0].innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
 
         this.updateExpiredUIFor(_viewName, _gameInfo);
         break;
@@ -204,19 +225,13 @@ const CF = {
         }
         break;
 
-      case this.GameView.waitingForOpponent:
+      case this.GameView.finish:
         if (_isExpired) {
-          document.getElementById(_viewName + "_quit_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
-          // document.getElementById(_viewName + "_next_move_action").classList.add("hidden");
           document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
-          document.getElementById(_viewName + "_make_move_btn").classList.add("disabled");
+          document.getElementById(_viewName + "_finish").classList.add("hidden");
         } else {
-          document.getElementById(_viewName + "_quit_btn").classList.remove("disabled");
-          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
-          // document.getElementById(_viewName + "_next_move_action").classList.remove("hidden");
           document.getElementById(_viewName + "_move_expired").classList.add("hidden");
-          document.getElementById(_viewName + "_make_move_btn").classList.remove("disabled");
+          document.getElementById(_viewName + "_finish").classList.remove("hidden");
         }
         break;
 
@@ -519,6 +534,54 @@ const CF = {
 
         if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
           showTopBannerMessage($t.err_join_game, null, true);
+          throw new Error(error, receipt);
+        }
+      });
+  },
+
+  playMoveClicked: async function () {
+    console.log('%c playMoveClicked_CF', 'color: #e51dff');
+
+    if (!this.coinSideChosen || this.coinSideChosen == 0) {
+      showTopBannerMessage($t.select_prev_move, null, true);
+      return;
+    }
+
+    let seedStrPrev = $("#cffinishgame_finishSeedPhrase")[0].value;
+    if (seedStrPrev.length == 0) {
+      showTopBannerMessage($t.enter_prev_seed, null, true);
+      return;
+    }
+
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+
+    let gameId = $("#cffinishgame_game_id")[0].innerHTML;
+    const prevSeedHash = web3.utils.soliditySha3(seedStrPrev);
+    // console.log("prevSeedHash: ", prevSeedHash);
+
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.playGame(gameId, this.coinSideChosen, prevSeedHash).send({
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+      })
+      .on('transactionHash', function (hash) {
+        // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage($t.tx_play_move, hash);
+      })
+      .once('receipt', async function (receipt) {
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+
+        const gameInfo = await BlockchainManager.gameInfo(Types.Game.cf, gameId);
+        (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? CF.showGameView(CF.GameView.won, null) : CF.showGameView(CF.GameView.lost, null);;
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) {
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showTopBannerMessage($t.err_play_move, null, true);
           throw new Error(error, receipt);
         }
       });

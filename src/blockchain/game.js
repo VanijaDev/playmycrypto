@@ -686,6 +686,10 @@ const Game = {
     this.gameInst.claimExpiredGameClicked();
   },
 
+  cf_playMoveClicked: function () {
+    this.gameInst.playMoveClicked();
+  },
+
 
   //  rps
   rps_quitGameClicked: function () {

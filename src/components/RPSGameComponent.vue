@@ -317,7 +317,7 @@
           <b id="rpswfopponentmove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
-            <div class="col-6 pr-0">
+            <div class="col-7 pr-0">
               <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon"/>
@@ -403,7 +403,7 @@
           <b id="rpscreatormove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
-            <div class="col-6 pr-0">
+            <div class="col-7 pr-0">
               <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon"/>
@@ -586,7 +586,7 @@
           <b id="rpsopponentmove_game_bet">{{ currentBet ? currentBet : 0 }}</b>
 
           <div class="row mt-4 f10">
-            <div class="col-6 pr-0">
+            <div class="col-7 pr-0">
               <p class="mb-0">{{ $t('MOVE_EXPIRES_IN') }}:</p>
               <p class="mt-1">
                 <img src="/img/clock.svg" class="mr-1 clock-icon"/>

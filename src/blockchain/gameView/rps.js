@@ -843,7 +843,7 @@ const RPS = {
     console.log('%c playMoveClicked', 'color: #e51dff');
 
     //  prev
-    if (this.selectedPrevMove == 0) {
+    if (!this.selectedPrevMove || this.selectedPrevMove == 0) {
       showTopBannerMessage($t.select_prev_move, null, true);
       return;
     }
