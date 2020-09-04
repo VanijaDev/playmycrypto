@@ -310,9 +310,11 @@ let ProfileManager = {
 
   isGameParticipant: function (_gameType, _id) {
     if (_gameType == Types.Game.cf) {
-      return this.ongoingGameCF.comparedTo(new BigNumber(_id)) == 0;
+      if ((this.ongoingGameCF_Creator.comparedTo(_id) == 0) || (this.ongoingGameCF_Opponent.comparedTo(_id) == 0)) {
+        return true;
+      }
     } else if (_gameType == Types.Game.rps) {
-      return this.ongoingGameRPS.comparedTo(new BigNumber(_id)) == 0;
+      //  TODO
     } else {
       throw ("ERROR: " + _gameType + _id);
     }

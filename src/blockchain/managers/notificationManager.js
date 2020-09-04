@@ -276,10 +276,14 @@ const NotificationManager = {
           this.eventHandler.onGameUnpaused((new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
-          //  TODO: here
         case this.NotificationHashes_CF.gameJoined:
           console.log("NotificationHashes_CF.gameJoined");
           this.eventHandler.onGameJoined(new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
+          break;
+
+        case this.NotificationHashes_CF.gameQuittedFinished:
+          console.log("NotificationHashes_CF.gameQuittedFinished");
+          this.eventHandler.onGameQuittedFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
         // case this.NotificationHashes_CF.gamePlayed:

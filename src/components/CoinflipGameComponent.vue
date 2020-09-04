@@ -137,7 +137,7 @@
           <div class="col-5 offset-1">
             <button
                 id="cfwfopponent_quit_btn"
-                class="btn btn-small-orange disabled"
+                class="btn btn-small-orange"
                 onclick="window.Game.cf_quitGameClicked()"
             >{{ $t('QUIT_GAME') }}
             </button>

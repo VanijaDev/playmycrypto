@@ -87,6 +87,11 @@ const CF = {
   showGameView: function (_viewName, _gameInfo) {
     console.log("showGameView: ", _viewName, _gameInfo);
 
+    if (_viewName == this.currentGameView) {
+      console.log("CF showGameView: Same view - return");
+      return;
+    }
+
     this.currentGameView = _viewName;
     this.clearGameView(_viewName);
     if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
@@ -150,8 +155,6 @@ const CF = {
         $("#cfwfopponent_game_bet")[0].textContent = Utils.weiToEtherFixed(_gameInfo.bet);
         $("#cfwfopponent_increase_bet")[0].value = "";
 
-        // document.getElementById("fromt_coin_makeTop").src = (_gameInfo.creatorGuessCoinSide == 0) ? "/img/ethereum-orange.svg" : "/img/bitcoin-orange.svg";
-
         $("#cfwfopponent_isTop_block").addClass('hidden');
         $("#cfwfopponent_makeTop_block").addClass('hidden');
         $("#cfwfopponent_paused_block").addClass('hidden');
@@ -170,9 +173,9 @@ const CF = {
         break;
 
       case this.GameView.join:
-        document.getElementById("cfjoingame_game_id").innerHTML = _gameInfo.id;
-        document.getElementById("cfjoingame_game_creator").innerHTML = _gameInfo.creator;
-        document.getElementById("cfjoingame_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
+        $("#cfjoingame_game_id").innerHTML = _gameInfo.id;
+        $("#cfjoingame_game_creator").innerHTML = _gameInfo.creator;
+        $("#cfjoingame_game_bet").innerHTML = Utils.weiToEtherFixed(_gameInfo.bet);
         break;
 
       case this.GameView.waitCreator:
@@ -200,13 +203,15 @@ const CF = {
 
   //  gameExpired UI vvv
   updateExpiredUIFor: async function (_viewName, _gameInfo) {
+    console.log("111: ", _viewName);
     const isMoveExpired = await window.BlockchainManager.isGameMoveExpired(Types.Game.cf, _gameInfo.id);
 
     this.updateExpiredUIFunctional(_viewName, isMoveExpired);
 
     if (isMoveExpired) {
-      document.getElementById(_viewName + "_move_remain_min").innerHTML = 0;
-      document.getElementById(_viewName + "_move_remain_sec").innerHTML = 0;
+      $("#"+_viewName + "_move_remain_hour")[0].innerHTML = 0;
+      $("#"+_viewName + "_move_remain_min")[0].innerHTML = 0;
+      $("#"+_viewName + "_move_remain_sec")[0].innerHTML = 0;
     } else {
       this.updateMoveExpirationCountdown(_viewName, _gameInfo);
     }
@@ -216,22 +221,22 @@ const CF = {
     switch (_viewName) {
       case this.GameView.waitCreator:
         if (_isExpired) {
-          document.getElementById(_viewName + "_claim_expired_btn").classList.remove("disabled");
-          document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
+          $("#"+_viewName + "_claim_expired_btn")[0].classList.remove("disabled");
+          $("#"+_viewName + "_move_expired")[0].classList.remove("hidden");
         } else {
-          document.getElementById(_viewName + "_quit_btn").classList.remove("disabled");
-          document.getElementById(_viewName + "_claim_expired_btn").classList.add("disabled");
-          document.getElementById(_viewName + "_move_expired").classList.add("hidden");
+          $("#"+_viewName + "_quit_btn")[0].classList.remove("disabled");
+          $("#"+_viewName + "_claim_expired_btn")[0].classList.add("disabled");
+          $("#"+_viewName + "_move_expired")[0].classList.add("hidden");
         }
         break;
 
       case this.GameView.finish:
         if (_isExpired) {
-          document.getElementById(_viewName + "_move_expired").classList.remove("hidden");
-          document.getElementById(_viewName + "_finish").classList.add("hidden");
+          $("#"+_viewName + "_move_expired")[0].classList.remove("hidden");
+          $("#"+_viewName + "_finish")[0].classList.add("hidden");
         } else {
-          document.getElementById(_viewName + "_move_expired").classList.add("hidden");
-          document.getElementById(_viewName + "_finish").classList.remove("hidden");
+          $("#"+_viewName + "_move_expired")[0].classList.add("hidden");
+          $("#"+_viewName + "_finish")[0].classList.remove("hidden");
         }
         break;
 
@@ -248,14 +253,20 @@ const CF = {
     this.countdown = setInterval(function () {
       let remain = Utils.getTimeRemaining(endTime);
 
-      document.getElementById(_viewName + "_move_remain_hour").innerHTML = remain.hours;
-      document.getElementById(_viewName + "_move_remain_min").innerHTML = remain.minutes;
-      document.getElementById(_viewName + "_move_remain_sec").innerHTML = remain.seconds;
+      if (!$("#"+_viewName + "_move_remain_hour")[0]) {
+        //  if moved to another page
+        clearInterval(CF.countdown);
+        return;
+      }
+
+      $("#"+_viewName + "_move_remain_hour")[0].innerHTML = remain.hours;
+      $("#"+_viewName + "_move_remain_min")[0].innerHTML = remain.minutes;
+      $("#"+_viewName + "_move_remain_sec")[0].innerHTML = remain.seconds;
 
       if (remain.total <= 0) {
-        document.getElementById(_viewName + "_move_remain_hour").innerHTML = "0";
-        document.getElementById(_viewName + "_move_remain_min").innerHTML = "0";
-        document.getElementById(_viewName + "_move_remain_sec").innerHTML = "0";
+        $("#"+_viewName + "_move_remain_hour")[0].innerHTML = "0";
+        $("#"+_viewName + "_move_remain_min")[0].innerHTML = "0";
+        $("#"+_viewName + "_move_remain_sec")[0].innerHTML = "0";
       }
 
       if (remain.total <= 0) {
@@ -272,8 +283,8 @@ const CF = {
   startGame: async function () {
     console.log('%c startGame_cf', 'color: #e51dff');
 
-    let bet = document.getElementById("cfstart_bet").value;
-    let seedStr = document.getElementById("cfstart_seed").value;
+    let bet = $("#cfstart_bet").value;
+    let seedStr = $("#cfstart_seed").value;
 
     if (this.coinSideChosen == 0) {
       showTopBannerMessage($t.select_move, null, true);
@@ -295,7 +306,7 @@ const CF = {
     let seedHash = web3.utils.soliditySha3(this.coinSideChosen, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
-    let referral = document.getElementById("cfstart_game_referral").value;
+    let referral = $("#cfstart_game_referral").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showTopBannerMessage($t.wrong_referral, null, true);
@@ -493,7 +504,7 @@ const CF = {
       return;
     }
 
-    let referral = document.getElementById("cfjoingame_game_referral").value;
+    let referral = $("#cfjoingame_game_referral").value;
     if (referral.length > 0) {
       if (!web3.utils.isAddress(referral) || !referral.toLowerCase().localeCompare(window.BlockchainManager.currentAccount().toLowerCase())) {
         showTopBannerMessage($t.wrong_referral, null, true);
@@ -503,7 +514,7 @@ const CF = {
       referral = this.ownerAddress;
     }
 
-    let gameId = document.getElementById("cfjoingame_game_id").innerHTML;
+    let gameId = $("#cfjoingame_game_id").innerHTML;
     let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, gameId);
 
     let bet = gameInfo.bet;
@@ -590,7 +601,7 @@ const CF = {
   claimExpiredGameClicked: async function () {
     console.log('%c claimExpiredGameClicked_CF: %s', 'color: #e51dff', this.currentGameView);
 
-    // let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
+    // let gameId = $("#"+this.currentGameView + "_game_id").innerHTML;
     // // console.log("gameId: ", gameId);
 
     // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
@@ -624,34 +635,34 @@ const CF = {
   quitGameClicked: async function () {
     console.log('%c quitGameClicked_CF', 'color: #e51dff');
 
-    // let gameId = document.getElementById(this.currentGameView + "_game_id").innerHTML;
-    // // console.log("gameId: ", gameId);
+    let gameId = $("#" + this.currentGameView + "_game_id")[0].innerHTML;
+    // console.log("gameId: ", gameId);
 
-    // window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    // window.BlockchainManager.gameInst(Types.Game.rps).methods.quitGame(gameId).send({
-    //     from: window.BlockchainManager.currentAccount()
-    //     // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
-    //   })
-    //   .on('transactionHash', function (hash) {
-    //     // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-    //     showTopBannerMessage($t.tx_quit_game, hash);
-    //   })
-    //   .once('receipt', function (receipt) {
-    //     RPS.showGameView(RPS.GameView.lost, null);
-    //     window.ProfileManager.update();
-    //     hideTopBannerMessage();
-    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    //   })
-    //   .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-    //     window.ProfileManager.update();
-    //     hideTopBannerMessage();
-    //     window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.quitGame(gameId).send({
+        from: window.BlockchainManager.currentAccount()
+        // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
+      })
+      .on('transactionHash', function (hash) {
+        // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
+        showTopBannerMessage($t.tx_quit_game, hash);
+      })
+      .once('receipt', function (receipt) {
+        CF.showGameView(CF.GameView.lost, null);
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+      })
+      .once('error', function (error, receipt) {
+        window.ProfileManager.update();
+        hideTopBannerMessage();
+        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-    //     if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-    //       showTopBannerMessage($t.err_quit_game, null, true);
-    //       throw new Error(error, receipt);
-    //     }
-    //   });
+        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+          showTopBannerMessage($t.err_quit_game, null, true);
+          throw new Error(error, receipt);
+        }
+      });
   },
 
 
