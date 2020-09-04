@@ -555,6 +555,19 @@ const Game = {
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
   },
 
+  onGameExpiredFinished: async function (_gameType, _id, _creator, _opponent) {
+    console.log('%c game - onGameExpiredFinished_CF, _id: %s', 'color: #1d34ff', _id);
+
+    if (window.ProfileManager.isGameParticipant(_gameType, _id)) {
+      await window.ProfileManager.update();
+
+      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, _id);
+      (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.gameInst.showGameView(this.gameInst.GameView.won, null) : this.gameInst.showGameView(this.gameInst.GameView.lost, null);
+    }
+
+    Game.updateRaffleStateInfoForGame(Game.gameType, false);
+  },
+
   onGameMovePlayed: function (_gameId, _nextMover) {
     // console.log('%c game - onGameMovePlayed: id: %s, _nextMover: %s', 'color: #1d34ff', _gameId, _nextMover);
 

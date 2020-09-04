@@ -68,8 +68,8 @@ let ProfileManager = {
   },
 
   updateCurrentlyPlayingGames: async function () {
-    $('#listCurrentlyPlayingGames').empty();
-    $('#profileNotification').addClass('hidden');
+    await $('#listCurrentlyPlayingGames').empty();
+    $('#profileNotification')[0].classList.add('hidden');
 
     //  cf
     this.ongoingGameCF_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));

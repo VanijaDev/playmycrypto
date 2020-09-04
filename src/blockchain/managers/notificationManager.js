@@ -286,6 +286,11 @@ const NotificationManager = {
           this.eventHandler.onGameQuittedFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
+        case this.NotificationHashes_CF.gameExpiredFinished:
+          console.log("NotificationHashes_CF.gameExpiredFinished");
+          this.eventHandler.onGameExpiredFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
+          break;
+
         // case this.NotificationHashes_CF.gamePlayed:
         //   console.log("NotificationHashes_CF.gamePlayed");
         //   // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner, uint256 bet);
