@@ -639,7 +639,6 @@ const CF = {
       });
   },
 
-
   quitGameClicked: async function () {
     console.log('%c quitGameClicked_CF', 'color: #e51dff');
 

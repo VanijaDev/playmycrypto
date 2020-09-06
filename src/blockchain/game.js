@@ -559,10 +559,13 @@ const Game = {
     console.log('%c game - onGameExpiredFinished_CF, _id: %s', 'color: #1d34ff', _id);
 
     if (window.ProfileManager.isGameParticipant(_gameType, _id)) {
-      await window.ProfileManager.update();
-
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, _id);
-      (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.gameInst.showGameView(this.gameInst.GameView.won, null) : this.gameInst.showGameView(this.gameInst.GameView.lost, null);
+      if (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) {
+        this.gameInst.showGameView(this.gameInst.GameView.won, null);
+        await window.ProfileManager.update();
+      } else {
+        this.gameInst.showGameView(this.gameInst.GameView.lost, null);
+      }
     }
 
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
