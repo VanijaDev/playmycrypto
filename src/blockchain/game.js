@@ -54,15 +54,15 @@ const Game = {
   },
 
   subscribeToEvents: function (_gameType) {
-    NotificationManager.eventHandler = this;
+    window.NotificationManager.eventHandler = this;
 
     switch (_gameType) {
       case Types.Game.cf:
-        NotificationManager.subscribe_cf();
+        window.NotificationManager.subscribe_cf();
         break;
 
       case Types.Game.rps:
-        NotificationManager.subscribe_rps();
+        window.NotificationManager.subscribe_rps();
         break;
     
       default:
@@ -101,8 +101,8 @@ const Game = {
   onUnload: function () {
     console.log('%c game - onUnload', 'color: #00aa00');
 
-    NotificationManager.eventHandler = null;
-    NotificationManager.clearAll();
+    window.NotificationManager.eventHandler = null;
+    window.NotificationManager.clearAll();
     window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
 

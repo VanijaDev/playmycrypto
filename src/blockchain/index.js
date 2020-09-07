@@ -26,17 +26,17 @@ const Index = {
     await ProfileManager.update();
     await this.refreshData();
 
-    // //  events
-    NotificationManager.eventHandler = this;
-    NotificationManager.subscribe_index();
+    //  events
+    window.NotificationManager.eventHandler = this;
+    window.NotificationManager.subscribe_index();
   },
 
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
 
-    NotificationManager.eventHandler = null;
-    NotificationManager.clearAll();
-    window.ProfileManager.setUpdateHandler(null);
+    window.NotificationManager.eventHandler = null;
+    window.NotificationManager.clearAll();
+    window.window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
   },
 

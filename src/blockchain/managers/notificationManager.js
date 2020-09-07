@@ -43,6 +43,7 @@ const NotificationManager = {
     partnerFeeTransferred: "0xcf6479f64bef705be7f01da6a3427e5c5f9b381f335bebc7d6939b727e8f2f2b"
   },
 
+  eventEmitter: null,
   eventHandler: null,
 
   //  notifications for Index view
@@ -56,7 +57,7 @@ const NotificationManager = {
 
         break;
 
-      case Types.currentBlockchainType.ethereum:
+      case Types.BlockchainType.tron:
         console.log("subscribe_index - Tron");
         break;
 
@@ -68,7 +69,7 @@ const NotificationManager = {
   subscribe_index_ethereum: function () {
     console.log('%c NotificationManager - subscribe_index_ethereum', 'color: #00aa00');
 
-    window.web3.eth.subscribe('logs', {
+    window.NotificationManager.eventEmitter = window.web3.eth.subscribe('logs', {
       address: [CoinFlipData.address, RockPaperScissorsData.address]
     }, (error, result) => {
       if (error) {
@@ -215,7 +216,7 @@ const NotificationManager = {
         default:
           break;
       }
-    })
+    });
   },
 
   subscribe_cf: function () {
@@ -228,7 +229,7 @@ const NotificationManager = {
 
         break;
 
-      case Types.currentBlockchainType.ethereum:
+      case Types.BlockchainType.tron:
         console.log("subscribe_index - Tron");
         break;
 
@@ -240,7 +241,7 @@ const NotificationManager = {
   subscribe_cf_ethereum: function () {
     console.log('%c NotificationManager - subscribe_cf_ethereum', 'color: #00aa00');
 
-    window.web3.eth.subscribe('logs', {
+    window.NotificationManager.eventEmitter = window.web3.eth.subscribe('logs', {
       address: CoinFlipData.address
     }, (error, result) => {
       if (error) {
@@ -421,11 +422,13 @@ const NotificationManager = {
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
-        console.log(window.web3.eth.clearSubscriptions());
+        window.NotificationManager.eventEmitter.unsubscribe(function(error, success){
+          console.log('error:', error, " success:", success);
+        });
         break;
 
 
-      case Types.currentBlockchainType.ethereum:
+      case Types.BlockchainType.tron:
         console.log("clearAll - Tron");
         break;
 

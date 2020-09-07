@@ -266,7 +266,7 @@
       }, 100);
     },
     beforeRouteLeave(to, from, next) {
-      console.log("Leave Game page");
+      // console.log("Leave Game page");
       window.Game.gameType = -1;
       window.Game.onUnload();
       document.getElementById("gameName").innerHTML = "";
