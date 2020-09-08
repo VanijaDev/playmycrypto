@@ -25,16 +25,19 @@ const CF = {
     clearInterval(CF.countdown);
   },
 
+  closeResultView: async function () {
+    await this.showGameViewForCurrentAccount(null);
+  },
+
   updateGameView: async function () {
     const storedGameId = window.CommonManager.currentGameId;
-    console.log('%c CF - updateGameView, %s', 'color: #00aa00', storedGameId);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
 
     this.setPlaceholders();
-    this.showGameViewForCurrentAccount();
+    await this.showGameViewForCurrentAccount(null);
   },
 
   setPlaceholders: function () {
@@ -121,6 +124,7 @@ const CF = {
 
     switch (_viewName) {
       case this.GameView.start:
+        console.log("clearGameView: start");
         $('#cfstart_game_referral')[0].value = "";
         $('#cfstart_seed')[0].value = "";
         $('#cfstart_bet')[0].value = "";
@@ -344,7 +348,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
-          CF.showGameViewForCurrentAccount();
+          CF.showGameViewForCurrentAccount(null);
           window.ProfileManager.update();
           hideTopBannerMessage();
         }
@@ -386,7 +390,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
-          CF.showGameViewForCurrentAccount();
+          CF.showGameViewForCurrentAccount(null);
           window.ProfileManager.update();
           hideTopBannerMessage();
         }
@@ -429,7 +433,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
-          CF.showGameViewForCurrentAccount();
+          CF.showGameViewForCurrentAccount(null);
           window.ProfileManager.update();
           hideTopBannerMessage();
         }
@@ -473,7 +477,7 @@ const CF = {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
           hideTopBannerMessage();
           window.ProfileManager.update();
-          CF.showGameViewForCurrentAccount();
+          CF.showGameViewForCurrentAccount(null);
           window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
         }
       })
@@ -515,7 +519,7 @@ const CF = {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
           window.ProfileManager.update();
           hideTopBannerMessage();
-          CF.showGameViewForCurrentAccount();
+          CF.showGameViewForCurrentAccount(null);
           window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
         }
       })
@@ -730,10 +734,6 @@ const CF = {
           }
         }
       });
-  },
-
-  closeResultView: function () {
-    this.showGameViewForCurrentAccount();
   },
 
   coinSideChanged: function (_side) {
