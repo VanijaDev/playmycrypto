@@ -22,7 +22,9 @@ const CF = {
   },
 
   onUnload: function() {
-    clearInterval(CF.countdown);
+    if(this.countdown) {
+      clearInterval(this.countdown);
+    }
   },
 
   closeResultView: async function () {
