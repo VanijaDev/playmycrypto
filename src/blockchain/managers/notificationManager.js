@@ -423,7 +423,9 @@ const NotificationManager = {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
         window.NotificationManager.eventEmitter.unsubscribe(function(error, success){
-          console.log('error:', error, " success:", success);
+          if (!success) {
+            throw(error);
+          }
         });
         break;
 
