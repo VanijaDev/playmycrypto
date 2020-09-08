@@ -377,22 +377,30 @@ const Game = {
     })
     .on('transactionHash', function (hash) {
       // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-      showTopBannerMessage($t.tx_make_beneficiary_run, hash);
+      if(window.CommonManager.isCurrentView(Types.View.game)) {
+        showTopBannerMessage($t.tx_make_beneficiary_run, hash, false);
+      }
     })
     .once('receipt', function (receipt) {
-      window.ProfileManager.update();
-      
-      window.Game.updateBeneficiary(window.Game.gameType);
-      hideTopBannerMessage();
+      if(window.CommonManager.isCurrentView(Types.View.game)) {
+        window.ProfileManager.update();
+        
+        window.Game.updateBeneficiary(window.Game.gameType);
+        hideTopBannerMessage();
+      }
     })
-    .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      showTopBannerMessage($t.err_make_beneficiary_run, null, true);
-      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+    .once('error', function (error, receipt) {
+      if(window.CommonManager.isCurrentView(Types.View.game)) {
+        showTopBannerMessage($t.err_make_beneficiary_run, null, true);
+        window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
 
-      throw new Error(error, receipt);
+        throw new Error(error, receipt);
+      }
     })
     .then(() => {
-      window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+      if(window.CommonManager.isCurrentView(Types.View.game)) {
+        window.CommonManager.hideSpinner(Types.SpinnerView.beneficiary);
+      }
     });
   },
   //  Beneficiary ^^^
@@ -662,22 +670,30 @@ const Game = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c makeTopClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_raffle_run, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_raffle_run, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        window.ProfileManager.update();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
 
-        Game.updateRaffleStateInfoForGame(Game.gameType, true);
-        hideTopBannerMessage();
+          Game.updateRaffleStateInfoForGame(Game.gameType, true);
+          hideTopBannerMessage();
+        }
       })
-      .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        showTopBannerMessage($t.err_run_raffle, null, true);
-        window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
+      .once('error', function (error, receipt) {
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.err_run_raffle, null, true);
+          window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
 
-        throw new Error(error, receipt);
+          throw new Error(error, receipt);
+        }
       })
       .then(() => {
-        window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
+        }
       });
   },
 

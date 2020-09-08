@@ -414,7 +414,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c withdrawReferralFees on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($('#translations').data().tx_referral_fee, hash);
+            showTopBannerMessage($('#translations').data().tx_referral_fee, hash, false);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -443,7 +443,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c withdrawGamePrizes on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($('#translations').data().tx_game_prize, hash);
+            showTopBannerMessage($('#translations').data().tx_game_prize, hash, false);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -469,7 +469,7 @@ let ProfileManager = {
           })
           .on('transactionHash', function (hash) {
             // console.log('%c withdrawRafflePrizes on transactionHash event: %s', 'color: #1d34ff', hash);
-            showTopBannerMessage($('#translations').data().tx_raffle_prize, hash);
+            showTopBannerMessage($('#translations').data().tx_raffle_prize, hash, false);
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
@@ -494,7 +494,7 @@ let ProfileManager = {
             })
             .on('transactionHash', function (hash) {
               // console.log('%c withdrawBeneficiaryFee on transactionHash event: %s', 'color: #1d34ff', hash);
-              showTopBannerMessage($('#translations').data().tx_withdraw_beneficiary, hash);
+              showTopBannerMessage($('#translations').data().tx_withdraw_beneficiary, hash, false);
             })
             .once('receipt', function (receipt) {
               hideTopBannerMessage();

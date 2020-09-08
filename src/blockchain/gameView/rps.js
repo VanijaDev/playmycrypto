@@ -559,7 +559,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c CREATE GAME transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_create_game, hash);
+        showTopBannerMessage($t.tx_create_game, hash, false);
       })
       .once('receipt', function (receipt) {
         // console.log('%c CREATE GAME receipt: %s', 'color: #1d34ff', receipt);
@@ -603,7 +603,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_make_top, hash);
+        showTopBannerMessage($t.tx_make_top, hash, false);
       })
       .once('receipt', function (receipt) {
         window.ProfileManager.update();
@@ -643,7 +643,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_increase_bet, hash);
+        showTopBannerMessage($t.tx_increase_bet, hash, false);
       })
       .once('receipt', function (receipt) {
         // console.log('%c increaseBetClicked receipt: %s', 'color: #1d34ff', receipt);
@@ -685,7 +685,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_pause_game, hash);
+        showTopBannerMessage($t.tx_pause_game, hash, false);
       })
       .once('receipt', function (receipt) {
         hideTopBannerMessage();
@@ -721,7 +721,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_unpause_game, hash);
+        showTopBannerMessage($t.tx_unpause_game, hash, false);
       })
       .once('receipt', function (receipt) {
         window.ProfileManager.update();
@@ -754,7 +754,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_quit_game, hash);
+        showTopBannerMessage($t.tx_quit_game, hash, false);
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.lost, null);
@@ -820,7 +820,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_join_game, hash);
+        showTopBannerMessage($t.tx_join_game, hash, false);
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
@@ -886,7 +886,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_play_move, hash);
+        showTopBannerMessage($t.tx_play_move, hash, false);
       })
       .once('receipt', async function (receipt) {
         window.ProfileManager.update();
@@ -930,7 +930,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c opponentNextMove transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_make_move, hash);
+        showTopBannerMessage($t.tx_make_move, hash, false);
       })
       .once('receipt', function (receipt) {
         RPS.showGameViewForCurrentAccount();
@@ -962,7 +962,7 @@ const RPS = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_claim_expired, hash);
+        showTopBannerMessage($t.tx_claim_expired, hash, false);
       })
       .once('receipt', function (receipt) {
         RPS.showGameView(RPS.GameView.won, null);

@@ -160,7 +160,7 @@ const Index = {
         // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
         message = $t.rps_game_joined_pending_move;
       }
-      showTopBannerMessage(message);
+      showTopBannerMessage(message, null, false);
     } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       window.ProfileManager.update();
     }
@@ -273,7 +273,7 @@ const Index = {
     // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage($t.rps_pending_move);
+      showTopBannerMessage($t.rps_pending_move, null, false);
     }
   },
 
@@ -281,7 +281,7 @@ const Index = {
     // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
     if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage($t.rps_pending_move);
+      showTopBannerMessage($t.rps_pending_move, null, false);
     }
   },
 
@@ -341,7 +341,7 @@ const Index = {
           break;
       }
 
-      showTopBannerMessage(infoStr, null);
+      showTopBannerMessage(infoStr, null, false);
       setTimeout(function () {
         hideTopBannerMessage();
       }, 5000);

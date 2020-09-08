@@ -337,19 +337,26 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c CREATE GAME transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_create_game, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_create_game, hash, false);
+        }
+        
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
-        window.ProfileManager.update();
-        hideTopBannerMessage();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          CF.showGameViewForCurrentAccount();
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+        }
       })
       .once('error', function (error, receipt) {
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_create_game, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_create_game, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -373,20 +380,26 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log("MAKE TOP: transactionHash");
-        showTopBannerMessage($t.tx_make_top, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_make_top, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
-        window.ProfileManager.update();
-        hideTopBannerMessage();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          CF.showGameViewForCurrentAccount();
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+        }
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
         // console.log("MAKE TOP: ERROR");
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_make_top, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_make_top, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -410,19 +423,25 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c INCREASE BET transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_increase_bet, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_increase_bet, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        CF.showGameViewForCurrentAccount();
-        window.ProfileManager.update();
-        hideTopBannerMessage();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          CF.showGameViewForCurrentAccount();
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+        }
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_increase_bet, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_increase_bet, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -446,22 +465,28 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c c oinflipMakeTop transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_pause_game, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_pause_game, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        hideTopBannerMessage();
-        window.ProfileManager.update();
-        CF.showGameViewForCurrentAccount();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          hideTopBannerMessage();
+          window.ProfileManager.update();
+          CF.showGameViewForCurrentAccount();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        }
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        hideTopBannerMessage();
-        window.ProfileManager.update();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          hideTopBannerMessage();
+          window.ProfileManager.update();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_pause_game, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_pause_game, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -482,22 +507,28 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c increaseBetClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_unpause_game, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_unpause_game, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        CF.showGameViewForCurrentAccount();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          CF.showGameViewForCurrentAccount();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        }
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_unpause_game, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_unpause_game, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -544,22 +575,28 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c joinGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_join_game, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_join_game, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        window.CommonManager.setCurrentGameId(gameId);
-        CF.showGameViewForCurrentAccount(CF.GameView.waitCreator);
-        window.ProfileManager.update();
-        hideTopBannerMessage();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.CommonManager.setCurrentGameId(gameId);
+          CF.showGameViewForCurrentAccount(CF.GameView.waitCreator);
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+        }
       })
       .once('error', function (error, receipt) {
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_join_game, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_join_game, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -589,24 +626,30 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c playMoveClicked transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_play_move, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_play_move, hash, false);
+        }
       })
       .once('receipt', async function (receipt) {
-        window.ProfileManager.update();
-        hideTopBannerMessage();
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
 
-        const gameInfo = await BlockchainManager.gameInfo(Types.Game.cf, gameId);
-        (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? CF.showGameView(CF.GameView.won, null) : CF.showGameView(CF.GameView.lost, null);;
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+          const gameInfo = await BlockchainManager.gameInfo(Types.Game.cf, gameId);
+          (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? CF.showGameView(CF.GameView.won, null) : CF.showGameView(CF.GameView.lost, null);;
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        }
       })
       .once('error', function (error, receipt) {
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_play_move, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_play_move, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -624,22 +667,28 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c claimExpiredGamePrize transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_claim_expired, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_claim_expired, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        CF.showGameView(CF.GameView.won, null);
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          CF.showGameView(CF.GameView.won, null);
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        }
       })
       .once('error', function (error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_claim_expired, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_claim_expired, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -657,22 +706,28 @@ const CF = {
       })
       .on('transactionHash', function (hash) {
         // console.log('%c quitGame transactionHash: %s', 'color: #1d34ff', hash);
-        showTopBannerMessage($t.tx_quit_game, hash);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          showTopBannerMessage($t.tx_quit_game, hash, false);
+        }
       })
       .once('receipt', function (receipt) {
-        CF.showGameView(CF.GameView.lost, null);
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          CF.showGameView(CF.GameView.lost, null);
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        }
       })
       .once('error', function (error, receipt) {
-        window.ProfileManager.update();
-        hideTopBannerMessage();
-        window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+        if(window.CommonManager.isCurrentView(Types.View.game)) {
+          window.ProfileManager.update();
+          hideTopBannerMessage();
+          window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
 
-        if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
-          showTopBannerMessage($t.err_quit_game, null, true);
-          throw new Error(error, receipt);
+          if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
+            showTopBannerMessage($t.err_quit_game, null, true);
+            throw new Error(error, receipt);
+          }
         }
       });
   },
@@ -703,15 +758,15 @@ const CF = {
 
 
 
-  showGamePlayed: function (_gameInfo) {
-    // console.log("showGamePlayed: ", _gameInfo);
-    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + this.GameView.waitingForOpponent)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
-    } else if (!$("#" + this.GameView.join)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
-    }
-  }
+  // showGamePlayed: function (_gameInfo) {
+  //   // console.log("showGamePlayed: ", _gameInfo);
+  //   window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+  //   if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + this.GameView.waitingForOpponent)[0].classList.contains('hidden')) {
+  //     (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
+  //   } else if (!$("#" + this.GameView.join)[0].classList.contains('hidden')) {
+  //     (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
+  //   }
+  // }
 };
 
 export default CF;
