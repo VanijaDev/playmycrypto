@@ -93,7 +93,7 @@ const NotificationManager = {
 
         case this.NotificationHashes_CF.gamePlayed:
           console.log("NotificationHashes_CF.gamePlayed");
-          this.eventHandler.onGamePlayed(Types.Game.cf, result.topics[2], result.topics[3]);
+          this.eventHandler.onGamePlayed(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
         case this.NotificationHashes_CF.gameAddedToTop:
@@ -292,11 +292,11 @@ const NotificationManager = {
           this.eventHandler.onGameExpiredFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
           break;
 
-        // case this.NotificationHashes_CF.gamePlayed:
-        //   console.log("NotificationHashes_CF.gamePlayed");
-        //   // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner, uint256 bet);
-        //   this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
-        //   break;
+        case this.NotificationHashes_CF.gamePlayed:
+          console.log("NotificationHashes_CF.gamePlayed");
+          // event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent);
+          this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
+          break;
 
         // case this.NotificationHashes_CF.gamePrizesWithdrawn:
         //   console.log("NotificationHashes_CF.gamePrizesWithdrawn");

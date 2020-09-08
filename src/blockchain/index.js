@@ -191,27 +191,25 @@ const Index = {
   },
 
   onGamePlayed: function (_gameType, _gameId, _creator, _opponent) {
-    // console.log('%c index - onGamePlayed_CF %s %s %s %s', 'color: #1d34ff', _gameId, _gameType, _creator, _opponent);
+    console.log('%c index - onGamePlayed_CF %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
 
     Index.updateRunningGameAmounts();
 
-    let isParticipant = false;
-    if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      isParticipant = true;
-    } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      isParticipant = true;
-    }
-
-    if (isParticipant) {
+    if (window.ProfileManager.isGameParticipant(_gameType, _gameId)) {
       window.ProfileManager.update();
       
       let message = "";
-      if (_gameType == Types.Game.cf) {
-        // console.log('%c index - onGameJoined_CF', 'color: #1d34ff');
-        message = $t.your_game_finished_cf;
-      } else if (_gameType == Types.Game.rps) {
-        // console.log('%c index - onGameJoined_RPS', 'color: #1d34ff');
-        message = $t.your_game_finished_rps;
+      switch (_gameType) {
+        case Types.Game.cf:
+          message = $t.your_game_finished_cf;
+          break;
+
+        case Types.Game.rps:
+          message = $t.your_game_finished_rps;
+          break;
+      
+        default:
+          break;
       }
       showTopBannerMessage(message + " (id: " + _gameId + ")", null, true);
     }
@@ -244,6 +242,10 @@ const Index = {
       window.ProfileManager.update();
     }
   },
+
+
+
+
 
 
 

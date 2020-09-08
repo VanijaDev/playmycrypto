@@ -74,7 +74,7 @@ const Game = {
     console.log('%c game - update', 'color: #00aa00');
 
     await window.ProfileManager.setUpdateHandler(this);
-    await ProfileManager.update();
+    await window.ProfileManager.update();
 
     this.updateMoneyIcons();
 
@@ -101,11 +101,11 @@ const Game = {
   onUnload: function () {
     console.log('%c game - onUnload', 'color: #00aa00');
 
+    this.gameInst.onUnload();
     window.NotificationManager.eventHandler = null;
     window.NotificationManager.clearAll();
     window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
-
   },
 
   //  LOAD GAMES
@@ -459,28 +459,22 @@ const Game = {
       let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
       this.gameInst.showGameView(this.gameInst.GameView.finish, gameInfo);
     }
-
-    // if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-    //   let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
-    //   this.gameInst.showGameView(this.gameInst.GameView.playMove, gameInfo);
-    // } else if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-    //   await window.ProfileManager.update();
-    // }
   },
 
-  onGamePlayed: async function (_gameType, _gameId, _creator, _opponent) {
+  onGamePlayed: async function (_gameType, _gameId, _creator, _opponent, _winner) {
     if (_gameType == Types.Game.cf) {
       // console.log('%c game - onGamePlayed_CF %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     } else if (_gameType == Types.Game.rps) {
       // console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    let gameInfo = await window.BlockchainManager.gameInfo(this.gameType, parseInt(_gameId));
-    this.gameInst.showGamePlayed(gameInfo);
-
-    if (this.isGamePresentInAnyList(_gameId)) {
-      this.removeGameWithId(_gameId);
+    if (window.ProfileManager.isGameParticipant(_gameType, _gameId)) {
+      let gameInfo = await window.BlockchainManager.gameInfo(_gameType, parseInt(_gameId));
+      let resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? this.gameInst.GameView.won : this.gameInst.GameView.lost;
+      this.gameInst.showGameView(resultView, null);
+      window.ProfileManager.update();
     }
+
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
@@ -518,7 +512,7 @@ const Game = {
     }
     Game.updateRaffleStateInfoForGame(Game.gameType, false);
 
-    if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
+    if (window.ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.rps, _id);
       let resultView;
 

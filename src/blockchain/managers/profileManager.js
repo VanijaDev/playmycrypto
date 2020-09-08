@@ -309,14 +309,19 @@ let ProfileManager = {
   }, 
 
   isGameParticipant: function (_gameType, _id) {
-    if (_gameType == Types.Game.cf) {
-      if ((this.ongoingGameCF_Creator.comparedTo(_id) == 0) || (this.ongoingGameCF_Opponent.comparedTo(_id) == 0)) {
-        return true;
-      }
-    } else if (_gameType == Types.Game.rps) {
-      //  TODO
-    } else {
-      throw ("ERROR: " + _gameType + _id);
+    switch (_gameType) {
+      case Types.Game.cf:
+        if ((this.ongoingGameCF_Creator.comparedTo(_id) == 0) || (this.ongoingGameCF_Opponent.comparedTo(_id) == 0)) {
+          return true;
+        }
+        break;
+
+      case Types.Game.rps:
+        
+        break;
+    
+      default:
+        throw("ERROR: " + _gameType + _id);
     }
   },
 

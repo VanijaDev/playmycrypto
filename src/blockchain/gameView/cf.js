@@ -9,6 +9,7 @@ const CF = {
   coinSideChosen: 0,
   minBet: "",
   currentGameView: "",
+  countdown: null,
 
   GameView: {
     start: "cfstart",
@@ -18,6 +19,10 @@ const CF = {
     finish: "cffinishgame",
     won: "youWon",
     lost: "youLost"
+  },
+
+  onUnload: function() {
+    clearInterval(CF.countdown);
   },
 
   updateGameView: async function () {
@@ -542,6 +547,7 @@ const CF = {
         showTopBannerMessage($t.tx_join_game, hash);
       })
       .once('receipt', function (receipt) {
+        window.CommonManager.setCurrentGameId(gameId);
         CF.showGameViewForCurrentAccount(CF.GameView.waitCreator);
         window.ProfileManager.update();
         hideTopBannerMessage();
@@ -572,14 +578,13 @@ const CF = {
       return;
     }
 
-    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-
     let gameId = $("#cffinishgame_game_id")[0].innerHTML;
     const prevSeedHash = web3.utils.soliditySha3(seedStrPrev);
     // console.log("prevSeedHash: ", prevSeedHash);
 
+    window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     window.BlockchainManager.gameInst(Types.Game.cf).methods.playGame(gameId, this.coinSideChosen, prevSeedHash).send({
-        from: window.BlockchainManager.currentAccount()
+      from: window.BlockchainManager.currentAccount()
         // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
       .on('transactionHash', function (hash) {
@@ -672,28 +677,6 @@ const CF = {
       });
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-  showGamePlayed: function (_gameInfo) {
-    // console.log("showGamePlayed: ", _gameInfo);
-    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
-    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + this.GameView.waitingForOpponent)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
-    } else if (!$("#" + this.GameView.join)[0].classList.contains('hidden')) {
-      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
-    }
-  },
-
   closeResultView: function () {
     this.showGameViewForCurrentAccount();
   },
@@ -714,6 +697,19 @@ const CF = {
 
       default:
         break;
+    }
+  },
+
+
+
+
+  showGamePlayed: function (_gameInfo) {
+    // console.log("showGamePlayed: ", _gameInfo);
+    window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
+    if (Utils.addressesEqual(_gameInfo.creator, window.BlockchainManager.currentAccount()) && !$("#" + this.GameView.waitingForOpponent)[0].classList.contains('hidden')) {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
+    } else if (!$("#" + this.GameView.join)[0].classList.contains('hidden')) {
+      (Utils.addressesEqual(_gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.showGameView(this.GameView.won, null): this.showGameView(this.GameView.lost, null);
     }
   }
 };
