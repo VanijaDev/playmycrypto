@@ -3,11 +3,15 @@ import $ from "../../../public/jquery.min"
 
 const CommonManager = {
 
-  currentView: -1,
+  currentView: null,
   currentGameId: 0,
 
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;
+  },
+
+  isCurrentView: function(_viewType) {
+    return _viewType.localeCompare(this.currentView) == 0;
   },
 
   setCurrentGameId: function (_currentGameId) {
