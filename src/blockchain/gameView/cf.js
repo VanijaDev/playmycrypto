@@ -340,7 +340,7 @@ const CF = {
 
     let seedStrHash = web3.utils.soliditySha3(seedStr);
     // console.log("seedStrHash: ", seedStrHash);
-    let seedHash = web3.utils.soliditySha3(this.coinSideChosen, seedStrHash);
+    let seedHash = web3.utils.soliditySha3(this.coinSideChosen-1, seedStrHash);
     // console.log("seedHash:    ", seedHash);
 
     let referral = $("#cfstart_game_referral")[0].value;
@@ -644,7 +644,7 @@ const CF = {
     // console.log("prevSeedHash: ", prevSeedHash);
 
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
-    window.BlockchainManager.gameInst(Types.Game.cf).methods.playGame(gameId, this.coinSideChosen, prevSeedHash).send({
+    window.BlockchainManager.gameInst(Types.Game.cf).methods.playGame(gameId, this.coinSideChosen-1, prevSeedHash).send({
       from: window.BlockchainManager.currentAccount()
         // gasPrice: await window.BlockchainManager.gasPriceNormalizedString()
       })
