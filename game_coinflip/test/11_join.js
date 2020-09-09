@@ -230,6 +230,22 @@ contract("Join game", (accounts) => {
       assert.equal((await game.games.call(1)).opponent, OPPONENT, "wrong opponent address");
     });
 
+    it("should set correct opponentCoinSide", async () => {
+      // 1 - create
+      await game.createGame(ownerHash, CREATOR_REFERRAL, {
+        from: CREATOR,
+        value: ether("1", ether)
+      });
+
+      //  2 - join
+      await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
+        from: OPPONENT,
+        value: ether("1", ether)
+      });
+
+      assert.equal((await game.games.call(1)).opponentCoinSide, OPPONENT_COIN_SIDE, "wrong opponentCoinSide");
+    });
+
     it("should set correct opponentJoinedAt", async () => {
       // 1 - create
       await game.createGame(ownerHash, CREATOR_REFERRAL, {

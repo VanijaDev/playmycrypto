@@ -73,6 +73,16 @@ contract("Play game", (accounts) => {
       }), "Not creator");
     });
 
+    it("should fail if Wrong coin side", async () => {
+      await expectRevert(game.playGame(1, 2, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      }), "Wrong coin side");
+
+      await expectRevert(game.playGame(1, 3, CREATOR_SEED_HASHED, {
+        from: CREATOR
+      }), "Wrong coin side");
+    });
+
     it("should fail if No opponent", async () => {
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: OTHER,
@@ -114,12 +124,12 @@ contract("Play game", (accounts) => {
       });
 
       // console.log((await game.games.call(1)).randCoinSide);
-      if ((await game.games.call(1)).randCoinSide.cmp(new BN(CREATOR_COIN_SIDE.toString())) == 0) {
-        // console.log("CREATOR");
-        assert.equal(CREATOR, (await game.games.call(1)).winner, "should be CREATOR");
-      } else {
+      if ((await game.games.call(1)).creatorCoinSide.cmp(new BN(OPPONENT_COIN_SIDE.toString())) == 0) {
         // console.log("OPPONENT");
         assert.equal(OPPONENT, (await game.games.call(1)).winner, "should be OPPONENT");
+      } else {
+        // console.log("CREATOR");
+        assert.equal(CREATOR, (await game.games.call(1)).winner, "should be CREATOR");
       }
     });
 

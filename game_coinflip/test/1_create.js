@@ -104,7 +104,7 @@ contract("Create game", (accounts) => {
       let gameObj = await game.games.call(1);
       assert.isFalse(gameObj.paused, "should not be paused");
       assert.equal(0, gameObj.creatorCoinSide.cmp(new BN(0)), "wrong creatorCoinSide");
-      assert.equal(0, gameObj.randCoinSide.cmp(new BN(0)), "wrong randCoinSide");
+      assert.equal(0, gameObj.opponentCoinSide.cmp(new BN(0)), "wrong opponentCoinSide");
       assert.equal(0, gameObj.id.cmp(new BN(1)), "wrong id");
       assert.equal(0, gameObj.bet.cmp(ether("1", ether)), "wrong bet");
       assert.equal(0, gameObj.opponentJoinedAt.cmp(new BN(0)), "wrong opponentJoinedAt");

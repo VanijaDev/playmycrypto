@@ -25,7 +25,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   struct Game {
     bool paused;
     uint8 creatorCoinSide;
-    uint8 randCoinSide;
+    uint8 opponentCoinSide;
     uint256 id;
     uint256 bet;
     uint256 opponentJoinedAt;
@@ -297,6 +297,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(game.bet == msg.value, "Wrong bet");
 
     game.opponent = msg.sender;
+    game.opponentCoinSide = _coinSide;
     game.opponentJoinedAt = now;
     (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
@@ -308,9 +309,6 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     if (isTopGame(_id)) {
       removeTopGame(_id);
     }
-
-    uint8 randNum = uint8(uint256(keccak256(abi.encodePacked(game.creatorGuessHash, _coinSide, now))) % 2);
-    game.randCoinSide = randNum;
 
     emit CF_GameJoined(_id, game.creator, msg.sender);
   }
@@ -325,12 +323,13 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   function playGame(uint256 _id, uint8 _coinSide, bytes32 _seedHash) external whenNotPaused onlyGameCreator(_id) {
     Game storage game = games[_id];
     
+    require(_coinSide < 2, "Wrong coin side");
     require(game.opponent != address(0), "No opponent");
     require(game.winner == address(0), "Game has winner");
     require(!gameMoveExpired(_id), "Expired");
     require(keccak256(abi.encodePacked(uint256(_coinSide), _seedHash)) == game.creatorGuessHash, "Wrong hash value");
 
-    game.winner = (game.randCoinSide == _coinSide) ? game.creator : game.opponent;
+    game.winner = (game.opponentCoinSide == _coinSide) ? game.opponent : game.creator;
     game.creatorCoinSide = _coinSide;
     gamesWithPendingPrizeWithdrawal[game.winner].push(_id);
 
