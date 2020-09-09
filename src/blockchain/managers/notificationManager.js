@@ -298,10 +298,10 @@ const NotificationManager = {
           this.eventHandler.onGamePlayed(Types.Game.cf, (new BigNumber(result.topics[1])).toString(), result.topics[2], result.topics[3]);
           break;
 
-        // case this.NotificationHashes_CF.gamePrizesWithdrawn:
-        //   console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-        //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
-        //   break;
+        case this.NotificationHashes_CF.gamePrizesWithdrawn:
+          console.log("NotificationHashes_CF.gamePrizesWithdrawn");
+          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
+          break;
 
         // case this.NotificationHashes_CF.gameReferralWithdrawn:
         //   console.log("NotificationHashes_CF.gameReferralWithdrawn");

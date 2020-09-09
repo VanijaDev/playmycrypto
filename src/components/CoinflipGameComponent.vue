@@ -122,7 +122,6 @@
                   step="0.01"
                   min="0.01"
                   class="col-5 offset-3 mr-1 offset-sm-0 bet-input"
-                  v-model="currentBet"
               />
               <button
                   class="btn btn-small-orange"

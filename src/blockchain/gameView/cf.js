@@ -111,6 +111,7 @@ const CF = {
       return;
     }
 
+    this.checkAndShowStartNewGameBtn(_viewName);
     this.currentGameView = _viewName;
     this.clearGameView(_viewName);
     if (_viewName != this.GameView.won && _viewName != this.GameView.lost) {
@@ -120,16 +121,35 @@ const CF = {
     window.showGameBlock(_viewName)
   },
 
+  checkAndShowStartNewGameBtn: function (_viewName) {
+    if (window.ProfileManager.ongoingGameCF_Creator.comparedTo(new BigNumber("0")) == 1) {
+      $("#StartNewGameBtn")[0].classList.add("hidden");
+    } else {
+      if ((_viewName == this.GameView.join) || (_viewName == this.GameView.waitCreator)) {
+        $("#StartNewGameBtn")[0].classList.remove("hidden");
+      } else {
+        $("#StartNewGameBtn")[0].classList.add("hidden");
+      }
+    }
+  },
+
   clearGameView: function (_viewName) {
-    console.log("clearGameView: ", _viewName);
+    // console.log("clearGameView: ", _viewName);
     selectMoveValue(null);
 
     switch (_viewName) {
       case this.GameView.start:
-        console.log("clearGameView: start");
         $('#cfstart_game_referral')[0].value = "";
         $('#cfstart_seed')[0].value = "";
         $('#cfstart_bet')[0].value = "";
+        break;
+
+      case this.GameView.waitCreator:
+        $("#cfwfopponent_game_id")[0].textContent = "0";
+        $("#cfwfopponent_game_creator")[0].textContent = "0x0";
+        $("#cfwfopponent_game_opponent")[0].textContent = "0x0";
+        $("#cfwfopponent_game_bet")[0].textContent = "0";
+        $("#cfwfopponent_increase_bet")[0].value = "";
         break;
 
       case this.GameView.join:
@@ -171,9 +191,7 @@ const CF = {
       case this.GameView.waitingForOpponent:
         $("#cfwfopponent_game_id")[0].textContent = _gameInfo.id;
         $("#cfwfopponent_game_creator")[0].textContent = _gameInfo.creator;
-        $("#cfwfopponent_game_opponent")[0].textContent = "0x0";
         $("#cfwfopponent_game_bet")[0].textContent = Utils.weiToEtherFixed(_gameInfo.bet);
-        $("#cfwfopponent_increase_bet")[0].value = "";
 
         $("#cfwfopponent_isTop_block")[0].classList.add('hidden');
         $("#cfwfopponent_makeTop_block")[0].classList.add('hidden');

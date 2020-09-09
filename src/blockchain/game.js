@@ -37,7 +37,7 @@ const Game = {
     this.gameInst = this.initGameInst(_currentGameType);
     this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
     this.subscribeToEvents(this.gameType);
-    await this.update(false);
+    await this.update();
   },
 
   initGameInst: function (_gameType) {
@@ -476,7 +476,7 @@ const Game = {
       // console.log('%c game - onGamePlayed_RPS %s, %s, %s', 'color: #1d34ff', _gameId, _creator, _opponent);
     }
 
-    if (window.ProfileManager.isGameParticipant(_gameType, _gameId)) {
+    if (_opponent.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       let gameInfo = await window.BlockchainManager.gameInfo(_gameType, parseInt(_gameId));
       let resultView = (Utils.addressesEqual(window.BlockchainManager.currentAccount(), gameInfo.winner)) ? this.gameInst.GameView.won : this.gameInst.GameView.lost;
       this.gameInst.showGameView(resultView, null);
@@ -610,6 +610,10 @@ const Game = {
 
 
   //  UI ACTIONS
+  startNewGameClicked: function () {
+    this.gameInst.showGameView(this.gameInst.GameView.start, null);
+  },
+
   startGameClicked: function () {
     this.gameInst.startGame();
   },

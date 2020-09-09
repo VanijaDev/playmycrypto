@@ -30,9 +30,10 @@
             <button class="btn btn-primary mr-2" onclick="window.showGameBlock('rpsopponentmove')">Opponent Move</button>
           </div>-->
 
-          <div class="mt-4">
+          <div class="mt-4 info-block">
             <h3 class="info-title mr-5 ml-5" @click="$modal.show('how-to-play-popup')">How to play?</h3>
             <h3 class="info-title" @click="$modal.show('faq-popup')">FAQ</h3>
+            <button onclick="Game.startNewGameClicked()" id="StartNewGameBtn" class="btn withdraw-btn hidden">{{ $t("START_NEW_GAME") }}</button>
 
             <modal name="how-to-play-popup" :height="600" :width="600">
               <h2 slot class="text-primary text-center pt-3">
