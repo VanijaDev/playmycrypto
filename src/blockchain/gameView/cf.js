@@ -106,11 +106,6 @@ const CF = {
   showGameView: function (_viewName, _gameInfo) {
     console.log("showGameView: ", _viewName, _gameInfo);
 
-    if (_viewName == this.currentGameView) {
-      console.log("CF showGameView: Same view - return");
-      return;
-    }
-
     this.checkAndShowStartNewGameBtn(_viewName);
     this.currentGameView = _viewName;
     this.clearGameView(_viewName);
@@ -134,7 +129,7 @@ const CF = {
   },
 
   clearGameView: function (_viewName) {
-    // console.log("clearGameView: ", _viewName);
+    console.log("clearGameView: ", _viewName);
     selectMoveValue(null);
 
     switch (_viewName) {
@@ -144,7 +139,7 @@ const CF = {
         $('#cfstart_bet')[0].value = "";
         break;
 
-      case this.GameView.waitCreator:
+      case this.GameView.waitingForOpponent:
         $("#cfwfopponent_game_id")[0].textContent = "0";
         $("#cfwfopponent_game_creator")[0].textContent = "0x0";
         $("#cfwfopponent_game_opponent")[0].textContent = "0x0";

@@ -371,7 +371,7 @@
       v-bind:data-enter_seed_phrase_save_it="$t('ENTER_SEED_SAVE_IT')"
       v-bind:data-enter_seed_phrase="$t('ENTER_SEED_PHRASE')"
       v-bind:data-wrong_referral="$t('WRONG_REFERRAL')"
-      v-bind:data-wrong_beneficiary_profit="$t('BENEFICIARY_PROFIT')"
+      v-bind:data-wrong_beneficiary_amount="$t('WRONG_BENEFICIARY_AMOUNT')"
       v-bind:data-tx_create_game="$t('TX_CREATE_GAME')"
       v-bind:data-err_create_game="$t('ERR_CREATE_GAME')"
       v-bind:data-make_top_cost="$t('MAKE_TOP_COST')"

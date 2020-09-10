@@ -121,97 +121,20 @@ const NotificationManager = {
           this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf, result.topics[1]);
           break;
 
-        // case this.NotificationHashes_CF.gameReferralWithdrawn:
-        //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
-        //   this.eventHandler.onGameReferralWithdrawn(Types.Game.cf, result.topics[1]);
-        //   break;
+        case this.NotificationHashes_CF.rafflePrizeWithdrawn:
+          console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
+          this.eventHandler.onRafflePrizeWithdrawn();
+          break;
 
-        // case this.NotificationHashes_CF.rafflePlayed:
-        //   console.log("NotificationHashes_CF.rafflePlayed");
-        //   this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
-        //   break;
+        case this.NotificationHashes_CF.rafflePlayed:
+          console.log("NotificationHashes_CF.rafflePlayed");
+          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
+          break;
 
-        // case this.NotificationHashes_CF.rafflePrizeWithdrawn:
-        //   console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
-        //   this.eventHandler.onRafflePrizeWithdrawn(Types.Game.cf, result.topics[1]);
-        //   break;
-
-        // case this.NotificationHashes_CF.partnerFeeTransferred:
-        //   console.log("NotificationHashes_CF.partnerFeeTransferred");
-        //   break;
-
-        //   //  RPS
-        // case this.NotificationHashes_RPS.gameCreated:
-        //   console.log("NotificationHashes_RPS.gameCreated");
-        //   this.eventHandler.onGameCreated(Types.Game.rps, result.topics[1]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameJoined:
-        //   console.log("NotificationHashes_RPS.gameJoined");
-        //   this.eventHandler.onGameJoined(Types.Game.rps, result.topics[2], result.topics[3]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameMovePlayed:
-        //   console.log("NotificationHashes_RPS.gameMovePlayed");
-        //   this.eventHandler.onGameMovePlayed(new BigNumber(result.topics[1]).toString(), result.topics[2]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameOpponentMoved:
-        //   console.log("NotificationHashes_RPS.gameOpponentMoved");
-        //   this.eventHandler.onGameOpponentMoved(new BigNumber(result.topics[1]).toString(), result.topics[2]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameFinished:
-        //   console.log("NotificationHashes_RPS.gameFinished");
-        //   this.eventHandler.onGameFinished(new BigNumber(result.topics[1]).toString());
-        //   break;
-
-        // case this.NotificationHashes_RPS.gamePrizesWithdrawn:
-        //   console.log("NotificationHashes_RPS.gamePrizesWithdrawn");
-        //   this.eventHandler.onGamePrizesWithdrawn(Types.Game.rps);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameQuitted:
-        //   console.log("NotificationHashes_RPS.gameQuitted");
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameUpdated:
-        //   console.log("NotificationHashes_RPS.gameUpdated");
-        //   this.eventHandler.onGameUpdated(Types.Game.rps, result.topics[2]);
-
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameAddedToTop:
-        //   console.log("NotificationHashes_RPS.gameAddedToTop");
-        //   this.eventHandler.onGameAddedToTop(Types.Game.rps);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameReferralWithdrawn:
-        //   console.log("NotificationHashes_RPS.gameReferralWithdrawn");
-        //   this.eventHandler.onGameReferralWithdrawn(Types.Game.rps, result.topics[1]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.rafflePlayed:
-        //   console.log("NotificationHashes_RPS.rafflePlayed");
-        //   this.eventHandler.onGameRafflePlayed(Types.Game.rps, result.topics[1]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.rafflePrizeWithdrawn:
-        //   console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
-        //   this.eventHandler.onRafflePrizeWithdrawn(Types.Game.rps, result.topics[1]);
-        //   break;
-
-        // case this.NotificationHashes_RPS.gamePaused:
-        //   // ("NotificationHashes_RPS.gamePaused");
-        //   break;
-
-        // case this.NotificationHashes_RPS.gameUnpaused:
-        //   console.log("NotificationHashes_RPS.gameUnpaused");
-        //   break;
-
-        // case this.NotificationHashes_RPS.partnerFeeTransferred:
-        //   console.log("NotificationHashes_RPS.partnerFeeTransferred");
-        //   break;
+        case this.NotificationHashes_CF.gameAddedToTop:
+          console.log("NotificationHashes_CF.gameAddedToTop");
+          this.eventHandler.onGameAddedToTop(Types.Game.cf, result.topics[1], result.topics[2]);
+          break;
 
         default:
           break;
@@ -303,25 +226,15 @@ const NotificationManager = {
           this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf);
           break;
 
-        // case this.NotificationHashes_CF.gameReferralWithdrawn:
-        //   console.log("NotificationHashes_CF.gameReferralWithdrawn");
+        case this.NotificationHashes_CF.rafflePrizeWithdrawn:
+          console.log("NotificationHashes_RPS.rafflePrizeWithdrawn");
+          this.eventHandler.onRafflePrizeWithdrawn(Types.Game.cf, result.topics[1]);
+          break;
 
-        //   break;
-
-        // case this.NotificationHashes_CF.rafflePlayed:
-        //   console.log("NotificationHashes_CF.rafflePlayed");
-        //   this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
-        //   break;
-
-          // case this.NotificationHashes_CF.rafflePrizeWithdrawn:
-          //   console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
-
-          //   break;
-
-          // case this.NotificationHashes_CF.partnerFeeTransferred:
-          //   console.log("NotificationHashes_CF.partnerFeeTransferred");
-
-          //   break;
+        case this.NotificationHashes_CF.rafflePlayed:
+          console.log("NotificationHashes_CF.rafflePlayed");
+          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
+          break;
 
         default:
           break;
@@ -385,9 +298,9 @@ const NotificationManager = {
           this.eventHandler.onGameAddedToTop(Types.Game.rps, (new BigNumber(result.topics[1])).toString(), result.topics[2]);
           break;
 
-        case this.NotificationHashes_RPS.gameReferralWithdrawn:
-          console.log("NotificationHashes_RPS.gameReferralWithdrawn");
-          break;
+        // case this.NotificationHashes_RPS.gameReferralWithdrawn:
+        //   console.log("NotificationHashes_RPS.gameReferralWithdrawn");
+        //   break;
 
         case this.NotificationHashes_RPS.rafflePlayed:
           console.log("NotificationHashes_RPS.rafflePlayed");

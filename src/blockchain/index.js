@@ -6,17 +6,8 @@ const $t = $('#translations').data();
 
 const Index = {
   // ProfileManager handler methods
-  pendingReferralWithdrawn: async function () {
-    Index.updateReferralFeesForAllGamesTotal();
-  },
-
-  pendingPrizeWithdrawn: async function () {
-    // Why PlayMyCrypto
-    Index.updateReferralFeesForAllGamesTotal();
-    Index.updatePartnerFeesForAllGamesTotal();
-
-    // Raffle
-    Index.updateCurrentRaffleJackpot();
+  pendingWithdrawn: async function () {
+    window.Index.refreshData();
   },
 
   setup: async function () {
@@ -44,15 +35,15 @@ const Index = {
     // console.log('%c index - refreshData', 'color: #1d34ff');
 
     // Why PlayMyCrypto
-    Index.updateReferralFeesForAllGamesTotal();
-    Index.updateRafflePrizesWonForAllGamesTotal();
-    Index.updatePartnerFeesForAllGamesTotal();
+    window.Index.updateReferralFeesForAllGamesTotal();
+    window.Index.updateRafflePrizesWonForAllGamesTotal();
+    window.Index.updatePartnerFeesForAllGamesTotal();
 
     // Raffle
-    Index.updateCurrentRaffleJackpot();
+    window.Index.updateCurrentRaffleJackpot();
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
-    Index.updateRunningGameAmounts();
+    window.Index.updateCryptoAmountPlayedOnSiteTotal();
+    window.Index.updateRunningGameAmounts();
   },
 
   updateReferralFeesForAllGamesTotal: async function () {
@@ -136,8 +127,8 @@ const Index = {
       // console.log('%c index - onGameCreated_RPS', 'color: #1d34ff');
     }
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
-    Index.updateRunningGameAmounts();
+    window.Index.updateCryptoAmountPlayedOnSiteTotal();
+    window.Index.updateRunningGameAmounts();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       window.ProfileManager.update();
@@ -147,7 +138,7 @@ const Index = {
   onGameJoined: function (_gameType, _creator, _opponent) {
     console.log("onGameJoined - _gameType: ", _gameType, " _creator: ", _creator);
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
+    window.Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       window.ProfileManager.update(); // 1
@@ -173,7 +164,7 @@ const Index = {
       // console.log('%c index - onGameAddedToTop_RPS', 'color: #1d34ff');
     }
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
+    window.Index.updateCryptoAmountPlayedOnSiteTotal();
   },
 
   onGameUpdated: function (_gameType, _creator) {
@@ -183,7 +174,7 @@ const Index = {
       // console.log('%c index - onGameUpdated_RPS', 'color: #1d34ff');
     }
 
-    Index.updateCryptoAmountPlayedOnSiteTotal();
+    window.Index.updateCryptoAmountPlayedOnSiteTotal();
 
     if (_creator.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       window.ProfileManager.update();
@@ -193,7 +184,7 @@ const Index = {
   onGamePlayed: function (_gameType, _gameId, _creator, _opponent) {
     console.log('%c index - onGamePlayed_CF %s %s %s %s', 'color: #1d34ff', _gameType, _gameId, _creator, _opponent);
 
-    Index.updateRunningGameAmounts();
+    window.Index.updateRunningGameAmounts();
 
     if (window.ProfileManager.isGameParticipant(_gameType, _gameId)) {
       window.ProfileManager.update();
@@ -225,34 +216,13 @@ const Index = {
     this.onGamePlayed(_gameType, _gameId, _creator, _opponent);
   },
 
-  onGamePrizesWithdrawn: function (_gameType, _address) {
-    // console.log('%c index - onGamePrizesWithdrawn %s %s', 'color: #1d34ff', _gameType, _address);
+  onGamePrizesWithdrawn: function () {
+    // console.log('%c index - onGamePrizesWithdrawn', 'color: #1d34ff');
 
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c index - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c index - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
-    }
-
-    Index.updateCurrentRaffleJackpot();
-    Index.updateReferralFeesForAllGamesTotal();
-    Index.updatePartnerFeesForAllGamesTotal();
-
-    if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      window.ProfileManager.update();
-    }
+    window.Index.updateCurrentRaffleJackpot();
+    window.Index.updateReferralFeesForAllGamesTotal();
+    window.Index.updatePartnerFeesForAllGamesTotal();
   },
-
-
-
-
-
-
-
-
-
-
-
 
   onGameRafflePlayed: function (_gameType, _winner) {
     if (_gameType == Types.Game.cf) {
@@ -261,96 +231,79 @@ const Index = {
       // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
-    Index.updateRafflePrizesWonForAllGamesTotal();
-    Index.updateCurrentRaffleJackpot();
-
-    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      window.ProfileManager.update();
-    }
+    window.Index.updateRafflePrizesWonForAllGamesTotal();
+    window.Index.updateCurrentRaffleJackpot();
+    window.ProfileManager.update();
   },
 
-  onGameOpponentMoved: function (_id, _nextMover) {
-    // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
-
-    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage($t.rps_pending_move, null, false);
-    }
+  onGameAddedToTop: function (_gameType, _gameId, _gameCreator) {
+    // console.log('%c index - onGameAddedToTop', 'color: #1d34ff');
   },
 
-  onGameMovePlayed: function (_id, _nextMover) {
-    // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
-    if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      showTopBannerMessage($t.rps_pending_move, null, false);
-    }
-  },
 
-  onRafflePrizeWithdrawn: function (_gameType, _winner) {
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c index - onRafflePrizeWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c index - onRafflePrizeWithdrawn_RPS', 'color: #1d34ff');
-    }
 
-    Index.updateReferralFeesForAllGamesTotal();
-    Index.updatePartnerFeesForAllGamesTotal();
-    Index.updateCurrentRaffleJackpot();
 
-    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      window.ProfileManager.update();
-    }
-  },
 
-  onGameReferralWithdrawn: function (_gameType, _address) {
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c index - onGameReferralWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c index - onGameReferralWithdrawn_RPS', 'color: #1d34ff');
-    }
 
-    if (_address.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
-      window.ProfileManager.update();
-    }
-  },
 
-  onGameFinished: async function (_id) {
-    // console.log('%c index - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
-    Index.updateRunningGameAmounts();
 
-    if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
-      // console.log("YES participant");
-      let gameInfo = await window.BlockchainManager.gameInfoPromise(Types.Game.rps, _id);
 
-      let infoStr = "";
-      switch (parseInt(gameInfo.state)) {
-        case Types.GameState.winnerPresent:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game : $t.lost_ongoing_game;
-          break;
+  // onGameOpponentMoved: function (_id, _nextMover) {
+  //   // console.log('%c index - onGameRafflePlayed_RPS', 'color: #1d34ff');
 
-        case Types.GameState.draw:
-          infoStr = $t.draw_ongoing_game;
-          break;
+  //   if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+  //     showTopBannerMessage($t.rps_pending_move, null, false);
+  //   }
+  // },
 
-        case Types.GameState.quitted:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_quitted : $t.lost_ongoing_game_you_quitted;
-          break;
+  // onGameMovePlayed: function (_id, _nextMover) {
+  //   // console.log('%c index - onGameMovePlayed_RPS', 'color: #1d34ff');
 
-        case Types.GameState.expired:
-          infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_expired : $t.lost_ongoing_game_you_expired;
-          break;
-      }
+  //   if (_nextMover.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+  //     showTopBannerMessage($t.rps_pending_move, null, false);
+  //   }
+  // },
 
-      showTopBannerMessage(infoStr, null, false);
-      setTimeout(function () {
-        hideTopBannerMessage();
-      }, 5000);
+  // onGameFinished: async function (_id) {
+  //   // console.log('%c index - onGameFinished_RPS, _id: %s', 'color: #1d34ff', _id);
 
-      await window.ProfileManager.update();
-    } else {
-      console.log("NOT participant");
-    }
-  }
+  //   window.Index.updateRunningGameAmounts();
+
+  //   if (ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
+  //     // console.log("YES participant");
+  //     let gameInfo = await window.BlockchainManager.gameInfoPromise(Types.Game.rps, _id);
+
+  //     let infoStr = "";
+  //     switch (parseInt(gameInfo.state)) {
+  //       case Types.GameState.winnerPresent:
+  //         infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game : $t.lost_ongoing_game;
+  //         break;
+
+  //       case Types.GameState.draw:
+  //         infoStr = $t.draw_ongoing_game;
+  //         break;
+
+  //       case Types.GameState.quitted:
+  //         infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_quitted : $t.lost_ongoing_game_you_quitted;
+  //         break;
+
+  //       case Types.GameState.expired:
+  //         infoStr = (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? $t.won_ongoing_game_opponent_expired : $t.lost_ongoing_game_you_expired;
+  //         break;
+  //     }
+
+  //     showTopBannerMessage(infoStr, null, false);
+  //     setTimeout(function () {
+  //       hideTopBannerMessage();
+  //     }, 5000);
+
+  //     await window.ProfileManager.update();
+  //   } else {
+  //     console.log("NOT participant");
+  //   }
+  // }
 };
 
 window.Index = Index;

@@ -30,6 +30,11 @@ const Game = {
   gameType: "", //  Types.Game.cf / rps
   gameInst: null,
 
+  // ProfileManager handler methods
+  pendingWithdrawn: async function () {
+    window.Game.update();
+  },
+
   setup: async function (_currentGameType) {
     console.log('%c game - setup %s', 'color: #00aa00', _currentGameType);
 
@@ -363,7 +368,7 @@ const Game = {
     let lastPayed = BigNumber($('#beneficiaryTransferred')[0].textContent);
 
     if (value.isLessThanOrEqualTo(lastPayed)) {
-      showTopBannerMessage($t.wrong_beneficiary_profit, null, true);
+      showTopBannerMessage($t.wrong_beneficiary_amount, null, true);
       return;
     } else if ((BigNumber(await BlockchainManager.getBalance()).isLessThan(BigNumber(Utils.etherToWei(value)).toString()))) {
       showTopBannerMessage($t.not_enough_funds, null, true);
@@ -486,13 +491,7 @@ const Game = {
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
-  onGamePrizesWithdrawn: function (_gameType) {
-    if (_gameType == Types.Game.cf) {
-      // console.log('%c game - onGamePrizesWithdrawn_CF', 'color: #1d34ff');
-    } else if (_gameType == Types.Game.rps) {
-      // console.log('%c game - onGamePrizesWithdrawn_RPS', 'color: #1d34ff');
-    }
-
+  onGamePrizesWithdrawn: function () {
     this.updateRaffleStateInfoForGame(this.gameType, false);
   },
 
@@ -518,7 +517,7 @@ const Game = {
     if (this.isGamePresentInAnyList(_id)) {
       this.removeGameWithId(_id);
     }
-    Game.updateRaffleStateInfoForGame(Game.gameType, false);
+    window.Game.updateRaffleStateInfoForGame(window.Game.gameType, false);
 
     if (window.ProfileManager.isGameParticipant(Types.Game.rps, _id)) {
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.rps, _id);
@@ -554,7 +553,7 @@ const Game = {
       (Utils.addressesEqual(gameInfo.winner, window.BlockchainManager.currentAccount())) ? this.gameInst.showGameView(this.gameInst.GameView.won, null) : this.gameInst.showGameView(this.gameInst.GameView.lost, null);
     }
 
-    Game.updateRaffleStateInfoForGame(Game.gameType, false);
+    window.Game.updateRaffleStateInfoForGame(window.Game.gameType, false);
   },
 
   onGameExpiredFinished: async function (_gameType, _id, _creator, _opponent) {
@@ -570,7 +569,7 @@ const Game = {
       }
     }
 
-    Game.updateRaffleStateInfoForGame(Game.gameType, false);
+    window.Game.updateRaffleStateInfoForGame(window.Game.gameType, false);
   },
 
   onGameMovePlayed: function (_gameId, _nextMover) {
@@ -601,10 +600,9 @@ const Game = {
       // console.log('%c Game - onGameRafflePlayed_RPS', 'color: #1d34ff');
     }
 
-    Game.updateRaffleStateInfoForGame(Game.gameType, true);
-
-    if (_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
+    if (!_winner.includes(window.BlockchainManager.currentAccount().replace("0x", ""))) {
       window.ProfileManager.update();
+      window.Game.updateRaffleStateInfoForGame(window.Game.gameType, true);
     }
   },
 
@@ -669,7 +667,7 @@ const Game = {
     window.CommonManager.showSpinner(Types.SpinnerView.raffle);
     this.raffleStartedByMe = true;
 
-    window.BlockchainManager.gameInst(window.CommonManager.currentGame).methods.runRaffle().send({
+    window.BlockchainManager.gameInst(this.gameType).methods.runRaffle().send({
         from: window.BlockchainManager.currentAccount()
       })
       .on('transactionHash', function (hash) {
@@ -682,7 +680,7 @@ const Game = {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
           window.ProfileManager.update();
 
-          Game.updateRaffleStateInfoForGame(Game.gameType, true);
+          window.Game.updateRaffleStateInfoForGame(window.Game.gameType, true);
           hideTopBannerMessage();
         }
       })
@@ -784,7 +782,7 @@ String.prototype.composetmp = (function () {
 }());
 
 var TableAvailableGamesTemplate = '<li>' +
-  '<div class="bordered mt-1 game-cell" onclick="Game.gameClicked(this)">' +
+  '<div class="bordered mt-1 game-cell" onclick="window.Game.gameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
   '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.creator + ':</span>' +
@@ -800,7 +798,7 @@ var TableAvailableGamesTemplate = '<li>' +
   '</li>';
 
 var TopGamesTemplate = '<li>' +
-  '<div class="bordered blue-border mt-1 game-cell" onclick="Game.topGameClicked(this)">' +
+  '<div class="bordered blue-border mt-1 game-cell" onclick="window.Game.topGameClicked(this)">' +
   '<p>' +
   '<img src="/img/game-icon-wallet.svg" class="creator">' +
   '<span class="pl-2 pr-2 text-black-50 creator-title">' + $t.creator + ':</span>' +

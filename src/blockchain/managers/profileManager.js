@@ -419,7 +419,7 @@ let ProfileManager = {
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
             window.ProfileManager.updateAfterWithdrawal();
-            window.ProfileManager.profileUpdateHandler.pendingReferralWithdrawn();
+            window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -456,7 +456,7 @@ let ProfileManager = {
 
             _btn.classList.remove('disabled');
             hideTopBannerMessage();
-            window.ProfileManager.profileUpdateHandler.pendingPrizeWithdrawn();
+            window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           });
         break;
 
@@ -482,6 +482,7 @@ let ProfileManager = {
 
             _btn.classList.remove('disabled');
             hideTopBannerMessage();
+            window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           });
         break;
 
@@ -499,7 +500,7 @@ let ProfileManager = {
             .once('receipt', function (receipt) {
               hideTopBannerMessage();
               window.ProfileManager.updateAfterWithdrawal();
-              window.Game.updateBeneficiary(_gameType);
+              window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
             })
             .once('error', function (error, receipt) {
               if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -508,6 +509,7 @@ let ProfileManager = {
 
               _btn.classList.remove('disabled');
               hideTopBannerMessage();
+              window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
             });
           break;
 
