@@ -492,8 +492,8 @@ export default {
       }
     });
 
-    window.ethereum.on("chainChanged", async function (chainId) {
-      console.log("%c App - chainChanged: %s", "color: #00aa00", chainId);
+    window.ethereum.on("chainChanged", async function (_chainId) {
+      console.log("%c App - chainChanged: %s", "color: #00aa00", _chainId);
 
       if (!window.BlockchainManager) {
         return;
@@ -505,23 +505,29 @@ export default {
         window.Game.onUnload();
       }
 
-      if (window.BlockchainManager.chainChanged(chainId)) {
+      if (window.BlockchainManager.chainChanged(_chainId)) {
         hideTopBannerMessage();
         showAppDisabledView(false);
 
-        if (window.CommonManager.currentView == Types.View.index) {
-          window.Index.setup();
-        } else if (window.CommonManager.currentView == Types.View.game) {
-          window.Game.setup();
-        } else {
-          throw ("chainChanged: wrong currentView");
+        switch (window.CommonManager.currentView) {
+          case Types.View.index:
+            window.Index.setup();
+            break;
+
+          case Types.View.game:
+            let currentGame = window.location.pathname.replace("/", "");
+            window.Game.setup(currentGame);
+            break;
+        
+          default:
+            throw ("chainChanged: wrong currentView");
         }
       } else {
         alert("Wrong network, switch to Ethereum Main Network");
         showTopBannerMessage("Wrong network, switch to Ethereum Main Network", null, false);
         showAppDisabledView(true);
 
-        throw ("chainChanged: wrong network");
+        throw ("chainChanged: wrong network: "+_chainId);
       }
     });
   },

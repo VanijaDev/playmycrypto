@@ -332,6 +332,10 @@ const NotificationManager = {
 
   clearAll: function () {
     console.log('%c NotificationManager - clearAll', 'color: #00aa00');
+    if (window.NotificationManager.eventEmitter == null) {
+      return;
+    }
+
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
         console.log("clearAll - Ethereum");
@@ -339,12 +343,14 @@ const NotificationManager = {
           if (!success) {
             throw(error);
           }
+          window.NotificationManager.eventEmitter = null;
         });
         break;
 
 
       case Types.BlockchainType.tron:
         console.log("clearAll - Tron");
+        window.NotificationManager.eventEmitter = null;
         break;
 
       default:
