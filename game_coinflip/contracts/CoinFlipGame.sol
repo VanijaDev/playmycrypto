@@ -38,8 +38,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   }
 
   uint256 private constant FEE_PERCENT = 1; //  from single bet, because prize is opponent's bet
-
-  uint256 public minBet = 10 finney;
+  uint256 public minBet = 10 finney; //  also used as fee add to TopGames, unpause
 
   uint256[5] public topGames;
 
@@ -243,6 +242,10 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     emit CF_GameExpiredFinished(_id, game.creator, game.opponent, game.winner);
   }
   
+  /**
+   * AcquiredFeeBeneficiar
+   * TESTED
+   */
   function makeFeeBeneficiar() public payable override {
      totalUsedInGame = totalUsedInGame.add(msg.value);
      AcquiredFeeBeneficiar.makeFeeBeneficiar();
