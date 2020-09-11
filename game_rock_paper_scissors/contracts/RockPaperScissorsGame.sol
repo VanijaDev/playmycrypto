@@ -5,21 +5,24 @@ import "./Partnership.sol";
 import "./IExpiryMoveDuration.sol";
 import "./IGamePausable.sol";
 import "./GameRaffle.sol";
+import "./AcquiredFeeBeneficiar.sol";
 import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
 
 
 /**
  * @notice IMPORTANT: owner should create first game.
- * @notice CoinFlipGame can be created by creator and run by joined player. Creator is not required to be online or perform any actions for game to be played.
+ *
+ *  Prize distribution will be performed on game prize withdrawal only with percentages:
+ *    95% - winner
+ *     1% - winner referral
+ *     1% - raffle
+ *     1% - partner project
+ *     1% - fee beneficiar
+ *     1% - dev
  */
 
- /**
-  * TODO:
-  * whenNotPaused - to all funcs
-  * 
-  */
 
-contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IGamePausable, GameRaffle {
+contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, IExpiryMoveDuration, IGamePausable, GameRaffle {
   
   enum GameState {WaitingForOpponent, Started, WinnerPresent, Draw, Quitted, Expired}
 
@@ -46,19 +49,19 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     address opponentReferral;
   }
 
-  uint256 private constant FEE_PERCENT = 1;
-
+  uint256 private constant FEE_PERCENT = 1; //  from single bet, because prize is opponent's bet
   uint256 public minBet = 10 finney; //  also used as fee add to TopGames, unpause
   
   uint256[5] public topGames; //  show above other games
 
   uint256 public gamesCreatedAmount;
   uint256 public gamesCompletedAmount; //  played, quitted, move expired
+
   mapping(uint256 => Game) public games;
-  mapping(address => uint256) public ongoingGameIdxForPlayer;
-  mapping(address => uint256[]) private playedGameIdxsForPlayer;
-  
-  mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawalForAddress; //  for both won & draw
+  mapping(address => uint256) public ongoingGameAsCreator;
+  mapping(address => uint256) public ongoingGameAsOpponent;
+  mapping(address => uint256[]) private playedGames;
+  mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal; //  for both won & draw
 
   mapping(address => uint256) public addressBetTotal;
   mapping(address => uint256) public addressPrizeTotal;
@@ -71,11 +74,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   uint256 public totalUsedReferralFees;
   uint256 public totalUsedInGame;
 
+
   event RPS_GameCreated(uint256 indexed id, address indexed creator, uint256 indexed bet);
-  event RPS_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent, address nextMover);
-  event RPS_GameMovePlayed(uint256 indexed id, address indexed nextMover);
-  event RPS_GameOpponentMoved(uint256 indexed id, address indexed nextMover);
-  event RPS_GameFinished(uint256 indexed id);
+  event RPS_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameMovePlayed(uint256 indexed id,);
+  event RPS_GameOpponentMoved(uint256 indexed id);
+  event RPS_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameQuittedFinished(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameFinished(uint256 indexed id, address indexed creator, address indexed opponent);
   event RPS_GamePrizesWithdrawn(address indexed player);
   event RPS_GameUpdated(uint256 indexed id, address indexed creator);
   event RPS_GameAddedToTop(uint256 indexed id, address indexed creator);
@@ -87,18 +93,28 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     _;
   }
 
+  modifier onlyAvailableToCreate() {
+    require(ongoingGameAsCreator[msg.sender] == 0, "No more creating");
+    _;
+  }
+
+  modifier onlyAvailableToJoin() {
+    require(ongoingGameAsOpponent[msg.sender] == 0, "No more opponenting");
+    _;
+  }
+
   modifier onlyCorrectReferral(address _referral) {
     require(_referral != msg.sender, "Wrong referral");
     _;
   }
 
-  modifier onlySingleGamePlaying() {
-    require(ongoingGameIdxForPlayer[msg.sender] == 0,  "No more participating");
+  modifier onlyGameCreator(uint256 _id) {
+    require(games[_id].creator == msg.sender,  "Not creator");
     _;
   }
 
-  modifier onlyGameCreator(uint256 _id) {
-    require(games[_id].creator == msg.sender,  "Not creator");
+  modifier onlyWaitingForOpponent(uint256 _id) {
+    require(games[_id].state == GameState.WaitingForOpponent,  "!= WaitingForOpponent");
     _;
   }
 
@@ -124,11 +140,6 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
   modifier onlyValidMoveMark(uint8 _moveMark) {
     require(_moveMark > 0 && _moveMark < 4, "Wrong move idx");
-    _;
-  }
-
-  modifier onlyWaitingForOpponent(uint256 _id) {
-    require(games[_id].state == GameState.WaitingForOpponent,  "!= WaitingForOpponent");
     _;
   }
   
@@ -251,6 +262,15 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
 
     emit RPS_GameUnpaused(_id, games[_id].creator);
   }
+  
+  /**
+   * AcquiredFeeBeneficiar
+   * TESTED
+   */
+  function makeFeeBeneficiar() public payable override {
+     totalUsedInGame = totalUsedInGame.add(msg.value);
+     AcquiredFeeBeneficiar.makeFeeBeneficiar();
+  }
 
 
   /**
@@ -263,7 +283,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveHash Move hash (moveId, moveSeed).
    * 
    */
-  function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlySingleGamePlaying onlyCorrectBet onlyCorrectReferral(_referral) {  
+  function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");
 
     addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
@@ -277,7 +297,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
     
     ongoingGameIdxForPlayer[msg.sender] = gamesCreatedAmount;
-    playedGameIdxsForPlayer[msg.sender].push(gamesCreatedAmount);
+    playedGames[msg.sender].push(gamesCreatedAmount);
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
@@ -293,7 +313,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveMark Move mark id.
    * 
    */
-  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlySingleGamePlaying onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
+  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlyAvailableToJoin onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
     
     require(game.bet == msg.value, "Wrong bet");
@@ -314,11 +334,11 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     game.state = GameState.Started;
 
     ongoingGameIdxForPlayer[msg.sender] = _id;
-    playedGameIdxsForPlayer[msg.sender].push(_id);
+    playedGames[msg.sender].push(_id);
     
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
-    emit RPS_GameJoined(_id, game.creator, game.opponent, game.nextMover);
+    emit RPS_GameJoined(_id, game.creator, game.opponent);
   }
 
   /**
@@ -329,7 +349,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _nextMoveHash Next move hash.
    * 
    */
-  function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
+  function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external whenNotPaused onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
     Game storage game = games[_id];
     
     uint8 gameRow;
@@ -350,7 +370,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
       game.nextMover = game.opponent;
       game.prevMoveTimestamp = now;
 
-      emit RPS_GameMovePlayed(_id, game.nextMover);
+      emit RPS_GameMovePlayed(_id);
       return;
     }
 
@@ -365,7 +385,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveMark Move mark.
    * 
    */
-  function opponentNextMove(uint256 _id, uint8 _moveMark) external onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
+  function opponentNextMove(uint256 _id, uint8 _moveMark) external whenNotPaused onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
     
     uint8 gameRow;
@@ -380,7 +400,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     game.nextMover = game.creator;
     game.prevMoveTimestamp = now;
     
-    emit RPS_GameOpponentMoved(_id, game.nextMover);
+    emit RPS_GameOpponentMoved(_id);
   }
 
 
@@ -438,6 +458,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee.mul(2));
+    addBeneficiarFee(singleFee);
 
     prizeTotal = prizeTotal.sub(singleFee.mul(5));
     msg.sender.transfer(prizeTotal);
@@ -676,10 +697,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @return List of indexes.
    * 
    */
-  function getPlayedGameIdxsForPlayer(address _address) external view returns (uint256[] memory) {
-    require(_address != address(0), "Wrong address");
-
-    return playedGameIdxsForPlayer[_address];
+  function getPlayedGamesForPlayer(address _address) external view returns (uint256[] memory) {
+    require(_address != address(0), "Cannt be 0x0");
+    return playedGames[_address];
   }
 
   /**
