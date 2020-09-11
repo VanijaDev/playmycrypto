@@ -62,6 +62,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   uint256 public totalUsedReferralFees;
   uint256 public totalUsedInGame;
 
+
   event CF_GameCreated(uint256 indexed id, address indexed creator, uint256 indexed bet);
   event CF_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
   event CF_GamePlayed(uint256 indexed id, address indexed creator, address indexed opponent, address winner);
@@ -71,6 +72,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   event CF_GameAddedToTop(uint256 indexed id, address indexed creator);
   event CF_GameReferralWithdrawn(address indexed referral);
   event CF_GameUpdated(uint256 indexed id, address indexed creator);
+
 
   modifier onlyCorrectBet() {
     require(msg.value >= minBet, "Wrong bet");
