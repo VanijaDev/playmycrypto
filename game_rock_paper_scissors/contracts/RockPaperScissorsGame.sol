@@ -25,7 +25,6 @@ import "../node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol";
 contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, IExpiryMoveDuration, IGamePausable, GameRaffle {
   
   enum GameState {WaitingForOpponent, Started, WinnerPresent, Draw, Quitted, Expired}
-
   struct Game {
     bool paused;
     bool prizeWithdrawn;
@@ -77,7 +76,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   event RPS_GameCreated(uint256 indexed id, address indexed creator, uint256 indexed bet);
   event RPS_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
-  event RPS_GameMovePlayed(uint256 indexed id,);
+  event RPS_GameMovePlayed(uint256 indexed id);
   event RPS_GameOpponentMoved(uint256 indexed id);
   event RPS_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent);
   event RPS_GameQuittedFinished(uint256 indexed id, address indexed creator, address indexed opponent);
@@ -163,6 +162,72 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   }
 
   /**
+   * Pausable.sol
+   * 
+   */
+  /**
+   * @dev Triggers stopped state.
+   * 
+   */
+  function pause() external onlyOwner {
+    Pausable._pause();
+  }
+
+  /**
+   * @dev Returns to normal state.
+   * 
+   */
+  function unpause() external onlyOwner {
+    Pausable._unpause();
+  }
+
+  /**
+   * IGamePausable
+   * 
+   */
+
+  /**
+   * @dev Pauses game.
+   * @param _id Game index.
+   * 
+   */
+  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
+    games[_id].paused = true;
+
+    if (isTopGame(_id)) {
+      removeTopGame(_id);
+    }
+
+    emit RPS_GamePaused(_id);
+  }
+
+  /** 
+   * @dev Unpauses game.
+   * @param _id Game index.
+   * 
+   */
+  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
+    require(msg.value == minBet, "Wrong fee");
+
+    games[_id].paused = false;
+    
+    devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
+
+    emit RPS_GameUnpaused(_id, games[_id].creator);
+  }
+
+  /**
+   * @dev Checks if game is paused.
+   * @param _id Game index.
+   * @return Is game paused.
+   * 
+   */
+  function gameOnPause(uint256 _id) public view override returns(bool) { 
+    return games[_id].paused;
+  }
+
+  /**
    * IExpiryMoveDuration
    * 
    */
@@ -207,70 +272,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
     finishGame(game);
   }
-
-  /**
-   * Pausable.sol
-   * 
-   */
-  /**
-   * @dev Triggers stopped state.
-   * 
-   */
-  function pause() external onlyOwner {
-    Pausable._pause();
-  }
-
-  /**
-   * IGamePausable
-   * 
-   */
-  /**
-   * @dev Checks if game is paused.
-   * @param _id Game index.
-   * @return Is game paused.
-   * 
-   */
-  function gameOnPause(uint256 _id) public view override returns(bool) { 
-    return games[_id].paused;
-  }
-
-  /**
-   * @dev Pauses game.
-   * @param _id Game index.
-   * 
-   */
-  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
-    games[_id].paused = true;
-
-    if (isTopGame(_id)) {
-      removeTopGame(_id);
-    }
-
-    emit RPS_GamePaused(_id);
-  }
-  /** 
-   * @dev Unpauses game.
-   * @param _id Game index.
-   * 
-   */
-  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
-    require(msg.value == minBet, "Wrong fee");
-
-    games[_id].paused = false;
-    
-    devFeePending = devFeePending.add(msg.value);
-    totalUsedInGame = totalUsedInGame.add(msg.value);
-
-    emit RPS_GameUnpaused(_id, games[_id].creator);
-  }
   
   /**
    * AcquiredFeeBeneficiar
    * TESTED
    */
   function makeFeeBeneficiar() public payable override {
-     totalUsedInGame = totalUsedInGame.add(msg.value);
-     AcquiredFeeBeneficiar.makeFeeBeneficiar();
+    totalUsedInGame = totalUsedInGame.add(msg.value);
+    AcquiredFeeBeneficiar.makeFeeBeneficiar();
   }
 
 
@@ -297,7 +306,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       games[gamesCreatedAmount].creatorReferral = _referral;
     }
     
-    ongoingGameIdxForPlayer[msg.sender] = gamesCreatedAmount;
+    ongoingGameAsCreator[msg.sender] = gamesCreatedAmount;
     playedGames[msg.sender].push(gamesCreatedAmount);
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -334,7 +343,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     game.movesOpponent[0] = _moveMark;
     game.state = GameState.Started;
 
-    ongoingGameIdxForPlayer[msg.sender] = _id;
+    ongoingGameAsOpponent[msg.sender] = _id;
     playedGames[msg.sender].push(_id);
     
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -417,7 +426,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
     
-    uint256[] storage pendingGames = gamesWithPendingPrizeWithdrawalForAddress[msg.sender];
+    uint256[] storage pendingGames = gamesWithPendingPrizeWithdrawal[msg.sender];
     require(pendingGames.length > 0, "no pending");
     require(_maxLoop <= pendingGames.length, "wrong _maxLoop");
     
@@ -721,13 +730,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   }
 
   /**
-   * @dev Gets gamesWithPendingPrizeWithdrawalForAddress.
+   * @dev Gets gamesWithPendingPrizeWithdrawal.
    * @param _address Player address.
    * @return ids Game id array.
    * 
    */
   function getGamesWithPendingPrizeWithdrawal(address _address) external view returns(uint256[] memory ids) {
-    ids = gamesWithPendingPrizeWithdrawalForAddress[_address];
+    ids = gamesWithPendingPrizeWithdrawal[_address];
   }
 
   /**
@@ -798,18 +807,18 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     }
 
     gamesCompletedAmount = gamesCompletedAmount.add(1);
-    delete ongoingGameIdxForPlayer[_game.creator];
-    delete ongoingGameIdxForPlayer[_game.opponent];
+    delete ongoingGameAsCreator[_game.creator];
+    delete ongoingGameAsOpponent[_game.opponent];
     delete _game.prevMoveTimestamp;
     delete _game.nextMover;
 
     if (_game.winner != address(0)) {
-      gamesWithPendingPrizeWithdrawalForAddress[_game.winner].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.winner].push(_game.id);
     } else {
-      gamesWithPendingPrizeWithdrawalForAddress[_game.creator].push(_game.id);
-      gamesWithPendingPrizeWithdrawalForAddress[_game.opponent].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.creator].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.opponent].push(_game.id);
     }
 
-    emit RPS_GameFinished(_game.id);
+    emit RPS_GameFinished(_game.id, _game.creator, _game.opponent);
   }
 }
