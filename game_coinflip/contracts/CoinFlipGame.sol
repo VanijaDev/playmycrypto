@@ -146,8 +146,16 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   }
 
   /**
+   * @dev Returns to normal state.
+   * 
+   */
+  function unpause() external onlyOwner {
+    Pausable._unpause();
+  }
+
+  /**
    * IGamePausable
-   * TESTING
+   * TESTED
    */
 
   /**
