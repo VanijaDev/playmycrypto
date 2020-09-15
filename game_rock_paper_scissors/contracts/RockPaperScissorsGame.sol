@@ -153,7 +153,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * @dev Destroys the contract.
-   * 
+   * TESTED
    */
   function kill() external onlyOwner {
     address payable addr = msg.sender;
