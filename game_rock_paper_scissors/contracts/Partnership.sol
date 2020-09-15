@@ -22,7 +22,7 @@ contract Partnership is Ownable {
    * @dev Initializes the contract.
    * @param _partnerAddress Partner address.
    * @param _transferThreshold Fee amount, that should trigger transfer.
-   * 
+   * TESTED
    */
   constructor(address payable _partnerAddress, uint256 _transferThreshold) public {
     updatePartner(_partnerAddress);
@@ -32,7 +32,7 @@ contract Partnership is Ownable {
   /**
    * @dev Updates partner address.
    * @param _partnerAddress Address for partner.
-   * 
+   * TESTED
    */
   function updatePartner(address payable _partnerAddress) public onlyOwner {
     require(_partnerAddress != address(0), "Cannt be 0x0");
@@ -43,7 +43,7 @@ contract Partnership is Ownable {
    * @dev Updates partner fee transfer threshold limit, when fee should be transferred to address.
    * @notice In wei.
    * @param _transferThreshold Fee amount, that should trigger transfer.
-   * 
+   * TESTED
    */
   function updatePartnerTransferThreshold(uint256 _transferThreshold) public onlyOwner {
     require(_transferThreshold > 0, "threshold must be > 0");

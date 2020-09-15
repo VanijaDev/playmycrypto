@@ -41,13 +41,21 @@ contract("Create", (accounts) => {
     });
   });
   
-  describe("Constructor", () => {
+  describe.only("Constructor", () => {
     it("should fail if partner == 0x0", async () => {
       await expectRevert(Game.new("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
     });
 
     it("should set parner", async () => {
       assert.equal(await game.partner.call(), PARTNER, "wrong partner");
+    });
+
+    it("should set partner transfer threshold == 1 ether", async () => {
+      assert.equal(await game.partnerFeeTransferThreshold.call(),  web3.utils.toWei("1", 'ether'), "wrong partnerFeeTransferThreshold");
+    });
+
+    it("should set feeBeneficiar as OWNER", async () => {
+      assert.equal(await game.feeBeneficiar.call(), OWNER, "wrong feeBeneficiar");
     });
   });
 

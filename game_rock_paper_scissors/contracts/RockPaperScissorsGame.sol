@@ -145,10 +145,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Contract constructor.
    * @param _partner Address for partner.
-   * 
+   * TESTED
    */
   constructor(address payable _partner) public Partnership(_partner, 1 ether) {
-    updatePartner(_partner);
     feeBeneficiar = msg.sender;
   }
 
