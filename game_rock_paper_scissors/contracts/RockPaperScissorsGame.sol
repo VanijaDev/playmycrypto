@@ -273,7 +273,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   
   /**
    * AcquiredFeeBeneficiar
-   * 
+   * TESTED
    */
   function makeFeeBeneficiar() public payable override {
     totalUsedInGame = totalUsedInGame.add(msg.value);
