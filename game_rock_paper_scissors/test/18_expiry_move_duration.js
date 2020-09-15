@@ -67,7 +67,7 @@ contract("IExpiryMoveDuration", (accounts) => {
         });
 
         it("should update gameMoveDuration variable", async () => {
-            assert.equal(0, (await game.gameMoveDuration.call()).cmp(time.duration.minutes(5)), "gameMoveDuration should be 5 minutes before");
+            assert.equal(0, (await game.gameMoveDuration.call()).cmp(time.duration.hours(12)), "gameMoveDuration should be 12 hours before");
 
             await game.updateGameMoveDuration(time.duration.minutes(6));
 
@@ -80,69 +80,65 @@ contract("IExpiryMoveDuration", (accounts) => {
             assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
         });
 
-        it("should return false ifnot yet expired", async () => {
+        it("should return false if not yet expired", async () => {
             await time.increase(time.duration.minutes(1));
             assert.isFalse(await game.gameMoveExpired.call(1), "should be false");
         });
 
         it("should return true if move is already expired", async () => {
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             assert.isTrue(await game.gameMoveExpired.call(1), "should be true");
         });
     });
 
     describe("finishExpiredGame", () => {
-        it("should fail if no game with provided id", async () => {
-            await expectRevert(game.finishExpiredGame(22), "No game with such id");
-        });
-
-        it("should fail if prizeWithdrawn", async () => {
-            await game.quitGame(1, {
-                from: CREATOR
-            });
-
-            await time.increase(time.duration.minutes(11));
-
-            await expectRevert(game.finishExpiredGame(1, {
-                from: OPPONENT
-            }), "Wrong state");
-
-            await expectRevert(game.finishExpiredGame(1, {
-                from: CREATOR
-            }), "Wrong state");
-        });
-
         it("should fail if claimer is not next mover", async () => {
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(14));
 
             await expectRevert(game.finishExpiredGame(1, {
                 from: OTHER
             }), "Wrong claimer");
         });
 
+        it("should fail if Wrong state", async () => {
+            await game.quitGame(1, {
+                from: CREATOR
+            });
+
+            await time.increase(time.duration.hours(14));
+
+            await expectRevert(game.finishExpiredGame(1, {
+                from: OPPONENT
+            }), "Wrong state");
+
+            await expectRevert(game.finishExpiredGame(1, {
+                from: CREATOR
+            }), "Wrong state");
+        });
+
         it("should fail if not yet expired", async () => {
             await time.increase(time.duration.minutes(2));
 
             await expectRevert(game.finishExpiredGame(1, {
-                from: OPPONENT
+                from: CREATOR
             }), "Not yet expired");
         });
 
         it("should set winner to claimer", async () => {
             assert.equal((await game.games.call(1)).winner, "0x0000000000000000000000000000000000000000", "should be no winner before");
 
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(14));
             await game.finishExpiredGame(1, {
-                from: OPPONENT
+                from: CREATOR
             });
 
-            assert.equal((await game.games.call(1)).winner, OPPONENT, "wrong winner after claim, should be OPPONENT");
+            assert.equal((await game.games.call(1)).winner, CREATOR, "wrong winner after claim, should be CREATOR");
         });
 
         it("should set game state to GameState.Expired", async () => {
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(14));
             await game.finishExpiredGame(1, {
-                from: OPPONENT
+                from: CREATOR
             });
 
             assert.equal(0, (await game.games.call(1)).state.cmp(new BN("5")), "state should be Expired");
@@ -150,10 +146,10 @@ contract("IExpiryMoveDuration", (accounts) => {
 
         it("should call finishGame - emit GameFinished event", async () => {
             // event GameFinished(uint256 indexed id, address indexed winner, uint256 bet);
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(14));
 
             let tx = await game.finishExpiredGame(1, {
-                from: OPPONENT
+                from: CREATOR
             });
             assert.equal(1, tx.logs.length, "should be 1 log");
             let event = tx.logs[0];

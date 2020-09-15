@@ -220,7 +220,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Checks if game is paused.
    * @param _id Game index.
    * @return Is game paused.
-   * 
+   * TESTED
    */
   function gameOnPause(uint256 _id) public view override returns(bool) { 
     return games[_id].paused;
@@ -228,24 +228,24 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * IExpiryMoveDuration
-   * 
+   * TESTED
    */
 
   /**
    * @dev Updates game move duration.
    * @param _duration Game duration.
-   * 
+   * TESTED
    */
   function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
     require(_duration > 0, "Should be > 0");
-    gameMoveDuration = _duration;    
+    gameMoveDuration = _duration;  
   }
 
   /**
    * @dev Checks if game move expired.
    * @param _id Game id.
    * @return Whether game move is expired.
-   * 
+   * TESTED
    */
   function gameMoveExpired(uint256 _id) public view override returns(bool) {
     if(games[_id].prevMoveTimestamp != 0) {
@@ -256,13 +256,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Finishes prize for expired game.
    * @param _id Game id.
-   * 
+   * TESTED
    */
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
 
-    require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
     require(game.state ==  GameState.Started, "Wrong state");
+    require((msg.sender == game.nextMover), "Wrong claimer");
     require(gameMoveExpired(_id), "Not yet expired");
 
     game.winner = msg.sender;
