@@ -197,14 +197,14 @@ contract("IGamePausable", (accounts) => {
 
     describe("unpauseGame", () => {
         it("should fail if not game creator", async () => {
-            await game.pauseGame(1, {
-                from: CREATOR
-            });
-
             await expectRevert(game.unpauseGame(1, {
                 from: OTHER,
                 value: ether("0.01")
             }), "Not creator");
+
+            await game.pauseGame(1, {
+                from: CREATOR
+            });
         });
 
         it("should fail if game is not paused", async () => {
@@ -253,23 +253,6 @@ contract("IGamePausable", (accounts) => {
             assert.equal(0, (await game.devFeePending.call()).cmp(ether("0.01")), "devFeePending should be 0.01 after");
         });
 
-        it("should emit GameUnpaused with correct args", async () => {
-            await game.pauseGame(1, {
-                from: CREATOR
-            });
-
-            let tx = await game.unpauseGame(1, {
-                from: CREATOR,
-                value: ether("0.01")
-            });
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            let event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameUnpaused", "should be RPS_GameUnpaused");
-            assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
-            assert.equal(event.args.creator, CREATOR, "creator should be CREATOR");
-        });
-
-
         it("should update totalUsedInGame", async() => {
             await game.pauseGame(1, {
                 from: CREATOR
@@ -284,6 +267,21 @@ contract("IGamePausable", (accounts) => {
             let totalUsedInGameAfter = await game.totalUsedInGame.call();
 
             assert.equal(0, totalUsedInGameAfter.sub(totalUsedInGameBefore).cmp(ether("0.01")), "wrong difference");
-          });
+        });
+
+        it("should emit GameUnpaused with correct args", async () => {
+            await game.pauseGame(1, {
+                from: CREATOR
+            });
+
+            let tx = await game.unpauseGame(1, {
+                from: CREATOR,
+                value: ether("0.01")
+            });
+            assert.equal(1, tx.logs.length, "should be 1 log");
+            let event = tx.logs[0];
+            assert.equal(event.event, "RPS_GameUnpaused", "should be RPS_GameUnpaused");
+            assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
+        });
     });
 });

@@ -166,7 +166,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    */
   /**
    * @dev Triggers stopped state.
-   * 
+   * TESTED
    */
   function pause() external onlyOwner {
     Pausable._pause();
@@ -174,7 +174,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * @dev Returns to normal state.
-   * 
+   * TESTED
    */
   function unpause() external onlyOwner {
     Pausable._unpause();
@@ -182,13 +182,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * IGamePausable
-   * 
+   * TESTED
    */
 
   /**
    * @dev Pauses game.
    * @param _id Game index.
-   * 
+   * TESTED
    */
   function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
     games[_id].paused = true;
@@ -203,7 +203,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /** 
    * @dev Unpauses game.
    * @param _id Game index.
-   * 
+   * TESTED
    */
   function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
     require(msg.value == minBet, "Wrong fee");
