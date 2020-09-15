@@ -54,7 +54,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   uint256[5] public topGames; //  show above other games
 
   uint256 public gamesCreatedAmount;
-  uint256 public gamesCompletedAmount; //  played, quitted, move expired
+  uint256 public gamesCompletedAmount; //  completed in any way
 
   mapping(uint256 => Game) public games;
   mapping(address => uint256) public ongoingGameAsCreator;
@@ -214,7 +214,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     devFeePending = devFeePending.add(msg.value);
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
-    emit RPS_GameUnpaused(_id, games[_id].creator);
+    emit RPS_GameUnpaused(_id);
   }
 
   /**
@@ -262,9 +262,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
 
-    require(game.creator != address(0), "No game with such id");
+    require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
     require(game.state ==  GameState.Started, "Wrong state");
-    require(msg.sender == ((game.nextMover == game.creator) ? game.opponent : game.creator), "Wrong claimer");
     require(gameMoveExpired(_id), "Not yet expired");
 
     game.winner = msg.sender;
@@ -275,7 +274,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   
   /**
    * AcquiredFeeBeneficiar
-   * TESTED
+   * 
    */
   function makeFeeBeneficiar() public payable override {
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -302,9 +301,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     games[gamesCreatedAmount].creator = msg.sender;
     games[gamesCreatedAmount].bet = msg.value;
     games[gamesCreatedAmount].creatorMoveHashes[0] = _moveHash;
-    if(_referral != address(0)) {
-      games[gamesCreatedAmount].creatorReferral = _referral;
-    }
+    (_referral == address(0)) ? games[gamesCreatedAmount].creatorReferral = owner() : games[gamesCreatedAmount].creatorReferral = _referral;
     
     ongoingGameAsCreator[msg.sender] = gamesCreatedAmount;
     playedGames[msg.sender].push(gamesCreatedAmount);
@@ -327,9 +324,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     Game storage game = games[_id];
     
     require(game.bet == msg.value, "Wrong bet");
-    if(_referral != address(0)) {
-      game.opponentReferral = _referral;
-    }
+    (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
     if (isTopGame(_id)) {
       removeTopGame(_id);
@@ -421,6 +416,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Withdraws prize for multiple games where user is winner.
    * @param _maxLoop Max loop.
+   * @notice 95% to transfer
    * 
    */
   function withdrawGamePrizes(uint256 _maxLoop) external {
@@ -428,10 +424,10 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     
     uint256[] storage pendingGames = gamesWithPendingPrizeWithdrawal[msg.sender];
     require(pendingGames.length > 0, "no pending");
-    require(_maxLoop <= pendingGames.length, "wrong _maxLoop");
+    require(_maxLoop <= pendingGames.length, "_maxLoop too big");
     
-    uint256 prizeTotal;
-    for (uint256 i = 0; i < _maxLoop; i ++) {
+    uint256 betsTotal;
+    for (uint256 i = 0; i < _maxLoop; i++) {
       uint256 gameId = pendingGames[pendingGames.length.sub(1)];
       Game storage game = games[gameId];
       
@@ -447,31 +443,29 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
         require((game.winner == msg.sender), "Fatal, not winner");
         require(!game.prizeWithdrawn, "Fatal,prize was with");
         game.prizeWithdrawn = true;
+        
+        //  referral
+        address winnerReferral = (msg.sender == game.creator) ? game.creatorReferral : game.opponentReferral;
+        uint256 referralFee = game.bet.mul(FEE_PERCENT).div(100);
+        referralFeesPending[winnerReferral] = referralFeesPending[winnerReferral].add(referralFee);
+        totalUsedReferralFees = totalUsedReferralFees.add(referralFee);
       }
 
-      uint256 gamePrize = prizeForGame(gameId);
-      require(gamePrize > 0, "Fatal, no prize");
-
-      //  referral
-      address referral = (msg.sender == game.creator) ? game.creatorReferral : game.opponentReferral;
-      uint256 referralFee = gamePrize.mul(FEE_PERCENT).div(100);
-      referralFeesPending[referral] = referralFeesPending[referral].add(referralFee);
-      totalUsedReferralFees = totalUsedReferralFees.add(referralFee);
-      
-      prizeTotal += gamePrize;
+      betsTotal = betsTotal.add(game.bet);
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prizeTotal);
-    
-    uint256 singleFee = prizeTotal.mul(FEE_PERCENT).div(100);
+    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsTotal);
+
+    //  5% fees
+    uint256 singleFee = betsTotal.mul(FEE_PERCENT).div(100);
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
-    devFeePending = devFeePending.add(singleFee.mul(2));
+    devFeePending = devFeePending.add(singleFee);
     addBeneficiarFee(singleFee);
 
-    prizeTotal = prizeTotal.sub(singleFee.mul(5));
-    msg.sender.transfer(prizeTotal);
+    uint256 transferAmount = betsTotal.sub(singleFee.mul(5));
+    msg.sender.transfer(transferAmount);
 
     //  partner transfer
     transferPartnerFee();
@@ -514,25 +508,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    */
    
   function withdrawRafflePrizes() external override {
-    require(rafflePrizePending[msg.sender] > 0, "No raffle prize");
-
     uint256 prize = rafflePrizePending[msg.sender];
+    require(prize > 0, "No raffle prize");
+
     delete rafflePrizePending[msg.sender];
-    
     addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
-
-    uint256 singleFee = prize.mul(FEE_PERCENT).div(100);
-    partnerFeePending = partnerFeePending.add(singleFee);
-    devFeePending = devFeePending.add(singleFee.mul(2));
-
-    //  transfer prize
-    prize = prize.sub(singleFee.mul(3));
     msg.sender.transfer(prize);
 
-    //  partner transfer
-    transferPartnerFee();
-
-    emit RPS_RafflePrizeWithdrawn(msg.sender, prize);
+    emit RPS_RafflePrizeWithdrawn(msg.sender);
   }
   
 
@@ -712,22 +695,22 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     return playedGames[_address];
   }
 
-  /**
-   * @dev Calculates prize for game for msg.sender.
-   * @param _id Game id.
-   * @return _prize Prize amount. Fees are included.
-   * 
-   */
-  function prizeForGame(uint256 _id) public view returns (uint256 _prize) {
-    if (games[_id].winner == msg.sender) {
-      //  WinnerPresent, Quitted, Expired
-      _prize = games[_id].bet.mul(2);
-    } else if (games[_id].state == GameState.Draw) {
-      if ((games[_id].creator == msg.sender) || (games[_id].opponent == msg.sender)) {
-        _prize = games[_id].bet;
-      }
-    }
-  }
+//   /**
+//   * @dev Calculates prize for game for msg.sender.
+//   * @param _id Game id.
+//   * @return _prize Prize amount. Fees are included.
+//   * 
+//   */
+//   function prizeForGame(uint256 _id) public view returns (uint256 _prize) {
+//     if (games[_id].winner == msg.sender) {
+//       //  WinnerPresent, Quitted, Expired
+//       _prize = games[_id].bet.mul(2);
+//     } else if (games[_id].state == GameState.Draw) {
+//       if ((games[_id].creator == msg.sender) || (games[_id].opponent == msg.sender)) {
+//         _prize = games[_id].bet;
+//       }
+//     }
+//   }
 
   /**
    * @dev Gets gamesWithPendingPrizeWithdrawal.
@@ -798,7 +781,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    */
   function finishGame(Game storage _game) private {
     if (_game.state == GameState.Expired || _game.state == GameState.Quitted) {
-      raffleParticipants.push(_game.winner);
+        if (_game.winner != owner()) {
+          raffleParticipants.push(_game.winner);
+        }
     } else if (_game.state == GameState.WinnerPresent || _game.state == GameState.Draw) {
       raffleParticipants.push(_game.creator);
       raffleParticipants.push(_game.opponent);

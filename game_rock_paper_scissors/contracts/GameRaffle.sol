@@ -23,7 +23,7 @@ abstract contract GameRaffle is Ownable {
 
 
   event RPS_RafflePlayed(address indexed winner, uint256 indexed prize);
-  event RPS_RafflePrizeWithdrawn(address indexed winner, uint256 indexed prize);
+  event RPS_RafflePrizeWithdrawn(address indexed winner);
 
 
   /**

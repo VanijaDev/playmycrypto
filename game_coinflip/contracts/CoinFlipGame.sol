@@ -43,7 +43,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   uint256[5] public topGames;
 
   uint256 public gamesCreatedAmount;
-  uint256 public gamesCompletedAmount; //  played, quitted, move expired
+  uint256 public gamesCompletedAmount; //  completed in any way
 
   mapping(uint256 => Game) public games;
   mapping(address => uint256) public ongoingGameAsCreator;
@@ -466,7 +466,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     Game storage game = games[_id];
 
     require((msg.sender == game.creator) || (msg.sender == game.opponent), "Not a game player");
-    require(game.winner == address(0), "Has winner");
+    require(game.winner == address(0), "Has winner"); 
     if (msg.sender == game.opponent) {
       require(!gameMoveExpired(_id), "Expired");
     }

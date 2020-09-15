@@ -4,7 +4,7 @@ pragma solidity ^0.6.0;
 abstract contract IGamePausable {
 
   event RPS_GamePaused(uint256 indexed id);
-  event RPS_GameUnpaused(uint256 indexed id, address indexed creator);
+  event RPS_GameUnpaused(uint256 indexed id);
 
   /**
    * @dev Checks if game is paused.

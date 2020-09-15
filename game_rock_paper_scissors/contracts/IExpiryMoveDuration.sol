@@ -2,7 +2,7 @@
 pragma solidity ^0.6.0;
 
 abstract contract IExpiryMoveDuration {
-  uint16 public gameMoveDuration = 5 minutes;
+  uint16 public gameMoveDuration = 12 hours;
 
   /**
    * @dev Updates game move duration.
