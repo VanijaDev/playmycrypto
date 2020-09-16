@@ -54,6 +54,14 @@ contract("Opponent Next Move", (accounts) => {
   });
 
   describe("opponentNextMove", () => {
+    it("should fail if paused", async () => {
+      await game.pause();
+
+      await expectRevert(game.opponentNextMove(1, 1, {
+        from: OPPONENT
+      }), "paused");
+    });
+
     it("should fail if not nextMover", async () => {
       await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
         from: CREATOR
@@ -69,7 +77,7 @@ contract("Opponent Next Move", (accounts) => {
         from: CREATOR
       });
 
-      await time.increase(time.duration.minutes(6));
+      await time.increase(time.duration.hours(16));
 
       await expectRevert(game.opponentNextMove(1, 1, {
         from: OPPONENT
@@ -149,8 +157,7 @@ contract("Opponent Next Move", (accounts) => {
       assert.equal(1, logs.length, "should be 1 event1");
       await expectEvent.inLogs(
         logs, 'RPS_GameOpponentMoved', {
-        id: new BN("1"),
-        nextMover: CREATOR
+        id: new BN("1")
       });
     });    
   });

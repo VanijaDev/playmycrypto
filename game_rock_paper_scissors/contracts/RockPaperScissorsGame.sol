@@ -392,7 +392,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Opponent makes move.
    * @param _id Game id.
    * @param _moveMark Move mark.
-   * 
+   * TESTED
    */
   function opponentNextMove(uint256 _id, uint8 _moveMark) external whenNotPaused onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
