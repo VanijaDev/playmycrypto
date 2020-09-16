@@ -189,7 +189,7 @@ contract("Create", (accounts) => {
       assert.equal(0, ((await game.games.call(2)).bet).cmp(ether("0.5", ether)), "wrong bet set");
     });
 
-    it.only("should set correct game state", async () => {
+    it("should set correct game state", async () => {
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("1", ether)
@@ -205,7 +205,7 @@ contract("Create", (accounts) => {
 
       // console.log("hash: ", hash);
       assert.deepEqual(await game.getCreatorMoveHashesForGame.call(1), [
-        '0xd5e9fc8f4f5488ef25c446f13c4ffa1c9cefa03d19d4ace8513dc6704153eba3',
+        hash, //'0xd5e9fc8f4f5488ef25c446f13c4ffa1c9cefa03d19d4ace8513dc6704153eba3'
         '0x0000000000000000000000000000000000000000000000000000000000000000',
         '0x0000000000000000000000000000000000000000000000000000000000000000'
       ], "wrong creatorMoveHashes");
@@ -233,39 +233,39 @@ contract("Create", (accounts) => {
         from: CREATOR,
         value: ether("1", ether)
       });
-      assert.equal((await game.games.call(1)).creatorReferral, "0x0000000000000000000000000000000000000000", "wrong creatorReferral set");
+      assert.equal((await game.games.call(1)).creatorReferral, OWNER, "wrong creatorReferral set, should be OWNER");
 
       //  2
       await game.createGame("0x0000000000000000000000000000000000000000", hash, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
-      assert.equal((await game.games.call(2)).creatorReferral, "0x0000000000000000000000000000000000000000", "wrong creatorReferral 2 set");
+      assert.equal((await game.games.call(2)).creatorReferral, OWNER, "wrong creatorReferral 2 set, should be OWNER");
     });
 
-    it("should update ongoingGameIdxForPlayer", async () => {
+    it("should update ongoingGameAsCreator", async () => {
       //  1
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      assert.equal(0, (await game.ongoingGameIdxForPlayer.call(CREATOR)).cmp(new BN("1")), "wrong ongoingGameIdxForPlayer after create");
+      assert.equal(0, (await game.ongoingGameAsCreator.call(CREATOR)).cmp(new BN("1")), "wrong ongoingGameAsCreator after create");
 
       //  2
       await game.createGame(CREATOR_2_REFERRAL, hash, {
         from: CREATOR_2,
         value: ether("1", ether)
       });
-      assert.equal(0, (await game.ongoingGameIdxForPlayer.call(CREATOR_2)).cmp(new BN("2")), "wrong ongoingGameIdxForPlayer 2 after create");
+      assert.equal(0, (await game.ongoingGameAsCreator.call(CREATOR_2)).cmp(new BN("2")), "wrong ongoingGameAsCreator 2 after create");
     });
 
-    it("should update playedGameIdxsForPlayer", async () => {
+    it("should update playedGames", async () => {
       //  1
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("1", ether)
       });
-      let idxs = await game.getPlayedGameIdxsForPlayer.call(CREATOR);
+      let idxs = await game.getPlayedGamesForPlayer.call(CREATOR);
       assert.equal(idxs.length, 1, "wrong idxs amount");
       assert.equal(0, idxs[0].cmp(new BN("1")), "wrong game index");
 
@@ -274,9 +274,21 @@ contract("Create", (accounts) => {
         from: CREATOR_2,
         value: ether("1", ether)
       });
-      let idxs_2 = await game.getPlayedGameIdxsForPlayer.call(CREATOR_2);
+      let idxs_2 = await game.getPlayedGamesForPlayer.call(CREATOR_2);
       assert.equal(idxs_2.length, 1, "wrong idxs amount");
       assert.equal(0, idxs_2[0].cmp(new BN("2")), "wrong game index");
+
+      //  3
+      await game.quitGame(1, {
+        from: CREATOR
+      });
+      await game.createGame(CREATOR_REFERRAL, hash, {
+        from: CREATOR,
+        value: ether("0.1", ether)
+      });
+      let idxs_3 = await game.getPlayedGamesForPlayer.call(CREATOR);
+      assert.equal(idxs_3.length, 2, "wrong idxs amount on 3");
+      assert.equal(0, idxs_3[1].cmp(new BN("3")), "wrong game index on 3");
     });
 
     it("should update totalUsedInGame", async () => {
@@ -295,7 +307,7 @@ contract("Create", (accounts) => {
       assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("1.2", ether)), "wrong totalUsedInGame after 2"); //  0.1 - first game by OWNER
     });
 
-    it("should emit GameCreated with correct args", async () => {
+    it("should emit RPS_GameCreated with correct args", async () => {
       // event GameCreated(uint256 indexed id, address indexed creator, uint256 bet);
 
       let tx = await game.createGame(CREATOR_REFERRAL, hash, {
