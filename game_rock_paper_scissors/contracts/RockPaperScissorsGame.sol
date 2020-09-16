@@ -289,7 +289,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Creates new game.
    * @param _referral Address for referral. 
    * @param _moveHash Move hash (moveId, moveSeed).
-   * 
+   * TESTING
    */
   function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");

@@ -55,7 +55,7 @@ contract("Create", (accounts) => {
     });
   });
 
-  describe("createGame", async () => {
+  describe.only("createGame", async () => {
     const CREATOR_COIN_SIDE = 1;
     const CREATOR_SEED = "Hello World creator";
     let hash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));
@@ -70,6 +70,20 @@ contract("Create", (accounts) => {
       }), "paused");
     });
 
+    it("should create if unpaused", async () => {
+      await game.pause();
+      await expectRevert(game.createGame(CREATOR_REFERRAL, hash, {
+        from: CREATOR,
+        value: ether("1", ether)
+      }), "paused");
+
+      await game.unpause();
+      await game.createGame(CREATOR_REFERRAL, hash, {
+        from: CREATOR,
+        value: ether("1", ether)
+      });
+    });
+
     it("should fail if already created one game", async () => {
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
@@ -79,24 +93,7 @@ contract("Create", (accounts) => {
       await expectRevert(game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("2", ether)
-      }), "No more participating");
-    });
-
-    it("should fail if joined another game", async () => {
-      await game.createGame(CREATOR_REFERRAL, hash, {
-        from: CREATOR,
-        value: ether("1", ether)
-      });
-
-      await game.joinGame(1, OPPONENT_REFERRAL, 1, {
-        from: OPPONENT,
-        value: ether("1", ether)
-      });
-
-      await expectRevert(game.createGame(CREATOR_REFERRAL, hash, {
-        from: OPPONENT,
-        value: ether("2", ether)
-      }), "No more participating");
+      }), "No more creating");
     });
 
     it("should fail if less, than min bet", async () => {
@@ -192,7 +189,7 @@ contract("Create", (accounts) => {
       assert.equal(0, ((await game.games.call(2)).bet).cmp(ether("0.5", ether)), "wrong bet set");
     });
 
-    it("should set correct game state", async () => {
+    it.only("should set correct game state", async () => {
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("1", ether)
