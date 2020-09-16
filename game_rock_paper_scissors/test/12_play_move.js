@@ -54,6 +54,14 @@ contract("Play Move", (accounts) => {
     });
 
     describe("makeMove - intermediate moves", () => {
+        it("should fail if paused", async () => {
+            await game.pause();
+
+            await expectRevert(game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(2, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: OTHER
+            }), "paused");
+        });
+
         it("should fail if not game creator", async () => {
             await expectRevert(game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(2, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: OTHER
@@ -73,7 +81,7 @@ contract("Play Move", (accounts) => {
         });
 
         it("should fail if game move was expired", async () => {
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
 
             await expectRevert(game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(2, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
@@ -112,7 +120,7 @@ contract("Play Move", (accounts) => {
             assert.equal(0, (await game.showRowMoves.call(1, 2))[0].cmp(new BN("1")), "wrong movesCreator[2]"); 
         });
 
-        it("should fail if empty moveHash", async() => {
+        it("should fail if empty moveHash if gameRow < 2", async() => {
             await expectRevert(game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), "0x0", {
                 from: CREATOR
             }), "Empty hash");
@@ -158,29 +166,29 @@ contract("Play Move", (accounts) => {
 
         it("should emit GameMovePlayed with correct args if gameRow < 2", async () => {
             //  1
-            let tx = await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(2, web3.utils.soliditySha3(CREATOR_SEED)), {
+
+            let { logs } = await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(2, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
+            assert.equal(1, logs.length, "should be 1 event");
+            await expectEvent.inLogs(
+            logs, 'RPS_GameMovePlayed', {
+                id: new BN("1")
+            });
 
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameMovePlayed", "should be RPS_GameMovePlayed");
-            assert.equal(0, event.args.id.cmp(new BN("1")), "id should be 1");
-            assert.equal(OPPONENT, event.args.nextMover, "nextMover should be OPPONENT");
-
-              2
+            //  2
              await game.opponentNextMove(1, 1, {
                 from: OPPONENT
             });
+
             tx = await game.playMove(1, 2, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
             assert.equal(1, tx.logs.length, "should be 1 log");
-            event = tx.logs[0];
+            let event = tx.logs[0];
             assert.equal(event.event, "RPS_GameMovePlayed", "should be RPS_GameMovePlayed");
             assert.equal(0, event.args.id.cmp(new BN("1")), "id should be 1");
-            assert.equal(OPPONENT, event.args.nextMover, "nextMover should be OPPONENT");
         });
     });
 
@@ -217,7 +225,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Scissors - Paper * 3", async() => {
@@ -251,7 +259,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Paper - Rock * 3", async() => {
@@ -285,7 +293,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         //  1 win (Rock - scissors), draw, draw
@@ -320,7 +328,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Rock - Scissors, Scissors - Scissors, Scissors - Scissors", async() => {
@@ -354,7 +362,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Rock - Scissors, Paper - Paper, Paper - Paper", async() => {
@@ -388,7 +396,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         //  1 win (Scissors - Paper), draw, draw
@@ -423,7 +431,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Scissors - Paper, Scissors - Scissors, Scissors - Scissors", async() => {
@@ -457,7 +465,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Scissors - Paper, Paper - Paper, Paper - Paper", async() => {
@@ -491,7 +499,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         //  1 win (Paper - Rock), draw, draw
@@ -526,7 +534,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Paper - Rock, Scissors - Scissors, Scissors - Scissors", async() => {
@@ -560,7 +568,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return CREATOR, Paper - Rock, Paper - Paper, Paper - Paper", async() => {
@@ -594,7 +602,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should return 0x0 on Draw, Rock - Rock * 3", async() => {
@@ -733,7 +741,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner");
+            assert.equal(CREATOR_2, (await game.games.call(2)).winner, "wrong winner, should be CREATOR_2");
         });
 
         it("should set 0x0 as winner if Draw", async() => {
@@ -768,7 +776,7 @@ contract("Play Move", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal("0x0000000000000000000000000000000000000000", (await game.games.call(2)).winner, "wrong winner");
+            assert.equal("0x0000000000000000000000000000000000000000", (await game.games.call(2)).winner, "wrong winner, should be draw");
         });
 
         it("should set GameState.WinnerPresent", async() => {
@@ -804,41 +812,6 @@ contract("Play Move", (accounts) => {
             });
 
             assert.equal(0, (await game.games.call(2)).state.cmp(new BN("2")), "wrong gameState");
-        });
-
-        it("should set 0x0 as winner if Draw", async() => {
-            //  Rock - Rock * 3
-            await game.createGame(CREATOR_REFERRAL, web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR_2,
-                value: ether("0.1")
-            });
-            await game.joinGame(2, OPPONENT_REFERRAL, 1, {
-                from: OPPONENT_2,
-                value: ether("0.1")
-            });
-
-            //  1
-            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR_2
-            });
-            await game.opponentNextMove(2, 1, {
-                from: OPPONENT_2
-            });
-            
-            //  2
-            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR_2
-            });
-            await game.opponentNextMove(2, 1, {
-                from: OPPONENT_2
-            });
-
-            //  3
-            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR_2
-            });
-
-            assert.equal(0, (await game.games.call(2)).state.cmp(new BN("3")), "wrong gameState");
         });
 
         it("should call finishGame - emit GameFinished", async() => {

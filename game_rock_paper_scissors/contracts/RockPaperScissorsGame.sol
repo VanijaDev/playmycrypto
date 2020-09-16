@@ -356,7 +356,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @param _prevMoveMark Move mark used in previous move hash.
    * @param _prevSeedHashFromHash Seed string hash used in previous move hash.
    * @param _nextMoveHash Next move hash.
-   * 
+   * TESTED
    */
   function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external whenNotPaused onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
     Game storage game = games[_id];
