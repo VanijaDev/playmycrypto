@@ -55,7 +55,7 @@ contract("Create", (accounts) => {
     });
   });
 
-  describe.only("createGame", async () => {
+  describe("createGame", async () => {
     const CREATOR_COIN_SIDE = 1;
     const CREATOR_SEED = "Hello World creator";
     let hash = web3.utils.soliditySha3(CREATOR_COIN_SIDE, web3.utils.soliditySha3(CREATOR_SEED));

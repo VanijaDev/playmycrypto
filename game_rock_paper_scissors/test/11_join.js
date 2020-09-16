@@ -57,7 +57,7 @@ contract("Join", (accounts) => {
             }), "paused");
         });
 
-        it("should fail if already participating in other game", async () => {
+        it("should fail if already joined other game", async () => {
             //  1
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
@@ -78,7 +78,7 @@ contract("Join", (accounts) => {
             await expectRevert(game.joinGame(2, OPPONENT_REFERRAL, 1, {
                 from: OPPONENT,
                 value: ether("1")
-            }), "No more participating");
+            }), "No more opponenting");
         });
 
         it("should fail if creator tries to to join his game", async () => {
@@ -90,7 +90,7 @@ contract("Join", (accounts) => {
             await expectRevert(game.joinGame(1, OPPONENT_REFERRAL, 1, {
                 from: CREATOR,
                 value: ether("1")
-            }), "No more participating");
+            }), "Game creator");
         });
 
         it("should fail if game is paused", async () => {
@@ -195,7 +195,7 @@ contract("Join", (accounts) => {
                 from: OPPONENT,
                 value: ether("1")
             });
-            assert.equal((await game.games.call(1)).opponentReferral, "0x0000000000000000000000000000000000000000", "wrong opponentReferral set");
+            assert.equal((await game.games.call(1)).opponentReferral, OWNER, "wrong opponentReferral, should be OWNER");
         });
 
         it("should remove game from TOP GAMES if present", async () => {
@@ -346,7 +346,7 @@ contract("Join", (accounts) => {
             assert.equal(0, (await game.games.call(1)).state.cmp(new BN("1")), "state should be Started");
         });
 
-        it("should set correct ongoingGameIdxForPlayer", async () => {
+        it("should set correct ongoingGameAsOpponent", async () => {
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
                 value: ether("1")
@@ -362,10 +362,10 @@ contract("Join", (accounts) => {
                 value: ether("2")
             });
 
-            assert.equal(0, (await game.ongoingGameIdxForPlayer.call(OPPONENT)).cmp(new BN("2")), "wrong ongoingGameIdxForPlayer after join");
+            assert.equal(0, (await game.ongoingGameAsOpponent.call(OPPONENT)).cmp(new BN("2")), "wrong ongoingGameAsOpponent after join");
         });
 
-        it("should update playedGameIdxsForPlayer", async () => {
+        it("should update getPlayedGamesForPlayer", async () => {
             //  1
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
@@ -382,7 +382,7 @@ contract("Join", (accounts) => {
                 value: ether("2")
             });
 
-            let idxs = await game.getPlayedGameIdxsForPlayer.call(OPPONENT);
+            let idxs = await game.getPlayedGamesForPlayer.call(OPPONENT);
             assert.equal(idxs.length, 1, "wrong idxs amount");
             assert.equal(0, idxs[0].cmp(new BN("2")), "wrong game index");
 
@@ -396,7 +396,7 @@ contract("Join", (accounts) => {
                 value: ether("1")
             });
 
-            idxs = await game.getPlayedGameIdxsForPlayer.call(OPPONENT);
+            idxs = await game.getPlayedGamesForPlayer.call(OPPONENT);
             assert.equal(idxs.length, 2, "wrong idxs amount");
             assert.equal(0, idxs[0].cmp(new BN("2")), "wrong game index, has to be 2");
             assert.equal(0, idxs[1].cmp(new BN("1")), "wrong game index, has to be 1");
@@ -416,7 +416,7 @@ contract("Join", (accounts) => {
             assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("3")), "wrong totalUsedInGame");
         });
 
-        it("should emit GameJoined with correct args", async () => {
+        it("should emit RPS_GameJoined with correct args", async () => {
             // event GameJoined(uint256 indexed id, address indexed creator, address indexed opponent, address nextMover);
 
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -429,18 +429,17 @@ contract("Join", (accounts) => {
                 value: ether("2", ether)
             });
 
-            let tx = await game.joinGame(2, OPPONENT_REFERRAL, 2, {
+            const { logs } = await game.joinGame(2, OPPONENT_REFERRAL, 2, {
                 from: OPPONENT,
                 value: ether("2")
             });
-
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            let event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameJoined", "should be RPS_GameJoined");
-            assert.equal(0, event.args.id.cmp(new BN("2")), "should be 2");
-            assert.equal(event.args.creator, CREATOR_2, "should be CREATOR_2");
-            assert.equal(event.args.opponent, OPPONENT, "should be OPPONENT");
-            assert.equal(event.args.nextMover, CREATOR_2, "should be Creator");
+            assert.equal(1, logs.length, "should be 1 event");
+            await expectEvent.inLogs(
+            logs, 'RPS_GameJoined', {
+                id: new BN("2"),
+                creator: CREATOR_2,
+                opponent: OPPONENT
+            });
         });
     });
 });

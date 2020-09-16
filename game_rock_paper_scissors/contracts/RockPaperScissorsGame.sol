@@ -107,6 +107,11 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     _;
   }
 
+  modifier onlyNotGameCreator(uint256 _id) {
+    require(games[_id].creator != msg.sender,  "Game creator");
+    _;
+  }
+
   modifier onlyGameCreator(uint256 _id) {
     require(games[_id].creator == msg.sender,  "Not creator");
     _;
@@ -289,7 +294,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Creates new game.
    * @param _referral Address for referral. 
    * @param _moveHash Move hash (moveId, moveSeed).
-   * TESTING
+   * TESTED
    */
   function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");
@@ -317,9 +322,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @param _id Game id.
    * @param _referral Address for referral.
    * @param _moveMark Move mark id.
-   * 
+   * TESTED
    */
-  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlyAvailableToJoin onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
+  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlyAvailableToJoin onlyNotGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
     
     require(game.bet == msg.value, "Wrong bet");
