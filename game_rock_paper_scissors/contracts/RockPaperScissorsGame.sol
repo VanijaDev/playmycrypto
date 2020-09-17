@@ -267,8 +267,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     Game storage game = games[_id];
 
     require(game.state ==  GameState.Started, "Wrong state");
-    require((msg.sender == game.nextMover), "Wrong claimer");
     require(gameMoveExpired(_id), "Not yet expired");
+    address correctClaimer = (game.nextMover == game.creator) ? game.opponent : game.creator;
+    require((msg.sender == correctClaimer), "Wrong claimer");
 
     game.winner = msg.sender;
     game.state = GameState.Expired;
@@ -509,7 +510,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * GameRaffle
    * @dev Withdraw prizes for all won raffles.
-   * TESTING
+   * TESTED
    */
    
   function withdrawRafflePrizes() external override {
@@ -531,7 +532,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Quits the game.
    * @param _id Game id.
-   * 
+   * TESTED
    */
   function quitGame(uint256 _id) external {
     Game storage game = games[_id];
@@ -546,7 +547,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     }
 
     if (gameMoveExpired(_id)) {
-      if (game.winner == msg.sender) {
+      address correctClaimer = (game.nextMover == game.creator) ? game.opponent : game.creator;
+      if (msg.sender == correctClaimer) {
         revert("Claim, not quit");
       }
     }

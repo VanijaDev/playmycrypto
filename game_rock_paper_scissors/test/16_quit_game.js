@@ -134,7 +134,7 @@ contract("Quit Game", (accounts) => {
         });
 
         it("should fail if Game.State == Expired", async () => {
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: OPPONENT
             });
@@ -158,7 +158,7 @@ contract("Quit Game", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal((await game.games.call(2)).winner, OWNER, "wrong winner, shold be OWNER");
+            assert.strictEqual((await game.games.call(2)).winner, OWNER, "wrong winner, shold be OWNER");
         });
 
         it("should set game.winner to opposite to quitter if both players present", async () => {
@@ -166,7 +166,7 @@ contract("Quit Game", (accounts) => {
                 from: CREATOR
             });
 
-            assert.equal((await game.games.call(1)).winner, OPPONENT, "wrong winner, should be OPPONENT");
+            assert.strictEqual((await game.games.call(1)).winner, OPPONENT, "wrong winner, should be OPPONENT");
 
             //  2
             await game.createGame(CREATOR_REFERRAL, hash, {
@@ -183,6 +183,14 @@ contract("Quit Game", (accounts) => {
             });
 
             assert.equal((await game.games.call(2)).winner, CREATOR_2, "wrong winner, should be CREATOR_2");
+        });
+
+        it("should fail if claimer & Game.State == Expired", async () => {
+            await time.increase(time.duration.hours(16));
+
+            await expectRevert(game.quitGame(1, {
+                from: OPPONENT
+            }), "Claim, not quit");
         });
 
         it("should set game.state = GameState.Quitted", async () => {
