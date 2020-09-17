@@ -595,78 +595,64 @@ contract("Withdraw", (accounts) => {
         });
     });
 
-    describe.only("withdrawReferralFees", () => {
-        it.only("should fail if No referral fee", async() => {
+    describe("withdrawReferralFees", () => {
+        it("should fail if No referral fee", async() => {
             await expectRevert(game.withdrawReferralFees({from: OPPONENT_REFERRAL}), "No referral fee");
         });
 
         it("should delete referralFeesPending[msg.sender]", async() => {
             //  1
-            await game.withdrawGamePrizes(1, {from: OPPONENT});
+            await game.withdrawGamePrizes(4, {from: OPPONENT});
 
-            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_2)).cmp(ether("0.003")), "wrong referralFeesPending before 1");
-            await game.withdrawReferralFees({from: OPPONENT_2});
-            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_2)).cmp(ether("0")), "wrong referralFeesPending after 1");
+            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0.002")), "wrong referralFeesPending before 1");
+            await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
+            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0")), "wrong referralFeesPending after 1");
 
             //  2
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
+            await game.withdrawGamePrizes(1, {from: OPPONENT});
 
-            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0.004")), "wrong referralFeesPending before 2");
+            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0.01")), "wrong referralFeesPending before 2");
             await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
             assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0")), "wrong referralFeesPending after 2");
-            
-            //  3
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
-
-            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0.022")), "wrong referralFeesPending before 3");
-            await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
-            assert.strictEqual(0, (await game.referralFeesPending.call(OPPONENT_REFERRAL)).cmp(ether("0")), "wrong referralFeesPending after 3");
         });
 
         it("should update referralFeesWithdrawn[msg.sender]", async() => {
              //  1
-             await game.withdrawGamePrizes(1, {from: OPPONENT});
+             await game.withdrawGamePrizes(4, {from: OPPONENT});
 
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_2)).cmp(ether("0")), "wrong referralFeesWithdrawn before 1");
-             await game.withdrawReferralFees({from: OPPONENT_2});
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_2)).cmp(ether("0.003")), "wrong referralFeesWithdrawn after 1");
+             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0")), "wrong referralFeesWithdrawn before 1");
+             await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
+             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.002")), "wrong referralFeesWithdrawn after 1");
  
              //  2
-             await game.withdrawGamePrizes(2, {from: OPPONENT});
+             await game.withdrawGamePrizes(1, {from: OPPONENT});
  
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0")), "wrong referralFeesWithdrawn before 2");
+             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.002")), "wrong referralFeesWithdrawn before 2");
              await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.004")), "wrong referralFeesWithdrawn after 2");
-
-             //  3
-             await game.withdrawGamePrizes(2, {from: OPPONENT});
- 
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.004")), "wrong referralFeesWithdrawn before 3");
-             await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
-             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.026")), "wrong referralFeesWithdrawn after 3");
+             assert.strictEqual(0, (await game.referralFeesWithdrawn.call(OPPONENT_REFERRAL)).cmp(ether("0.012")), "wrong referralFeesWithdrawn after 2");
         });
 
         it("should transfer correct amount", async() => {
-            let OPPONENT_2_before = new BN(await web3.eth.getBalance(OPPONENT_2));
+            let OPPONENT_REFERRAL_before = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
 
-            await game.withdrawGamePrizes(1, {from: OPPONENT});
+            await game.withdrawGamePrizes(4, {from: OPPONENT});
 
             //  1
-            let tx = await game.withdrawReferralFees({from: OPPONENT_2});
+            let tx = await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
             let gasUsed = new BN(tx.receipt.gasUsed);
             let txInfo = await web3.eth.getTransaction(tx.tx);
             let gasPrice = new BN(txInfo.gasPrice);
             let gasSpent = gasUsed.mul(gasPrice);
 
-            let OPPONENT_2_after = new BN(await web3.eth.getBalance(OPPONENT_2));
-            assert.strictEqual(0, OPPONENT_2_before.add(ether("0.003")).sub(gasSpent).cmp(OPPONENT_2_after), "wrong OPPONENT_2_after");
+            let OPPONENT_REFERRAL_after = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
+            assert.strictEqual(0, OPPONENT_REFERRAL_before.add(ether("0.002")).sub(gasSpent).cmp(OPPONENT_REFERRAL_after), "wrong OPPONENT_REFERRAL_after");
 
             //  2
             await time.increase(time.duration.seconds(6));
 
             let OPPONENT_REFERRAL_before_2 = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
 
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
+            await game.withdrawGamePrizes(1, {from: OPPONENT});
 
             tx = await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
             gasUsed = new BN(tx.receipt.gasUsed);
@@ -675,30 +661,14 @@ contract("Withdraw", (accounts) => {
             gasSpent = gasUsed.mul(gasPrice);
 
             let OPPONENT_REFERRAL_after_2 = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
-            assert.strictEqual(0, OPPONENT_REFERRAL_before_2.add(ether("0.004")).sub(gasSpent).cmp(OPPONENT_REFERRAL_after_2), "wrong OPPONENT_REFERRAL_after_2");
+            assert.strictEqual(0, OPPONENT_REFERRAL_before_2.add(ether("0.01")).sub(gasSpent).cmp(OPPONENT_REFERRAL_after_2), "wrong OPPONENT_REFERRAL_after_2");
 
-            //  3
-            await time.increase(time.duration.seconds(6));
-
-            let OPPONENT_REFERRAL_before_3 = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
-
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
-
-            tx = await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
-            gasUsed = new BN(tx.receipt.gasUsed);
-            txInfo = await web3.eth.getTransaction(tx.tx);
-            gasPrice = new BN(txInfo.gasPrice);
-            gasSpent = gasUsed.mul(gasPrice);
-
-            let OPPONENT_REFERRAL_after_3 = new BN(await web3.eth.getBalance(OPPONENT_REFERRAL));
-            assert.strictEqual(0, OPPONENT_REFERRAL_before_3.add(ether("0.022")).sub(gasSpent).cmp(OPPONENT_REFERRAL_after_3), "wrong OPPONENT_REFERRAL_after_3");
-
-            //  4 - Quit
+            //  3 - Quit
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
                 value: ether("0.33")
             });
-            await game.joinGame(6, OPPONENT_2, 1, {
+            await game.joinGame(6, OPPONENT_REFERRAL, 1, {
                 from: OPPONENT,
                 value: ether("0.33")
             });
@@ -723,7 +693,7 @@ contract("Withdraw", (accounts) => {
             //  5
             await time.increase(time.duration.seconds(6));
 
-            let CREATOR_REFERRAL_before_4 = new BN(await web3.eth.getBalance(CREATOR_REFERRAL));
+            let CREATOR_REFERRAL_before_3 = new BN(await web3.eth.getBalance(CREATOR_REFERRAL));
 
             await game.withdrawGamePrizes(1, {from: CREATOR});
 
@@ -733,23 +703,23 @@ contract("Withdraw", (accounts) => {
             gasPrice = new BN(txInfo.gasPrice);
             gasSpent = gasUsed.mul(gasPrice);
 
-            let CREATOR_REFERRAL_after_4 = new BN(await web3.eth.getBalance(CREATOR_REFERRAL));
-            assert.strictEqual(0, CREATOR_REFERRAL_before_4.add(ether("0.0066")).sub(gasSpent).cmp(CREATOR_REFERRAL_after_4), "wrong CREATOR_REFERRAL_after_4");
+            let CREATOR_REFERRAL_after_3 = new BN(await web3.eth.getBalance(CREATOR_REFERRAL));
+            assert.strictEqual(0, CREATOR_REFERRAL_before_3.add(ether("0.0033")).sub(gasSpent).cmp(CREATOR_REFERRAL_after_3), "wrong CREATOR_REFERRAL_after_3");
         });
 
         it("should emit RPS_GameReferralWithdrawn with correct params", async() => {
-            await game.withdrawGamePrizes(1, {from: OPPONENT});
+            await game.withdrawGamePrizes(4, {from: OPPONENT});
             
-            const { logs } = await game.withdrawReferralFees({from: OPPONENT_2});
+            const { logs } = await game.withdrawReferralFees({from: OPPONENT_REFERRAL});
     
             assert.strictEqual(1, logs.length, "should be single event");
             await expectEvent.inLogs(logs, 'RPS_GameReferralWithdrawn', {
-                referral: OPPONENT_2
+                referral: OPPONENT_REFERRAL
             });
         });
     });
 
-    describe("withdrawDevFee", () => {
+    describe.only("withdrawDevFee", () => {
         it("should fail if No dev fee", async() => {
             await expectRevert(game.withdrawDevFee({from: OWNER}), "No dev fee");
         });

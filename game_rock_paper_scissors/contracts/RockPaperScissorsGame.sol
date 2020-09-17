@@ -480,7 +480,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * @dev Withdraws referral fees.
-   * 
+   * TESTED
    */
   function withdrawReferralFees() external {
     uint256 feeTmp = referralFeesPending[msg.sender];
