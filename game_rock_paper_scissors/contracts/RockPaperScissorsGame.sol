@@ -509,7 +509,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * GameRaffle
    * @dev Withdraw prizes for all won raffles.
-   * 
+   * TESTING
    */
    
   function withdrawRafflePrizes() external override {
