@@ -495,7 +495,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
 
   /**
    * @dev Withdraws developer fees.
-   * 
+   * TESTED
    */
   function withdrawDevFee() external onlyOwner {
     require(devFeePending > 0, "No dev fee");

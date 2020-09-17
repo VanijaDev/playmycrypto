@@ -719,38 +719,31 @@ contract("Withdraw", (accounts) => {
         });
     });
 
-    describe.only("withdrawDevFee", () => {
+    describe("withdrawDevFee", () => {
         it("should fail if No dev fee", async() => {
             await expectRevert(game.withdrawDevFee({from: OWNER}), "No dev fee");
         });
 
         it("should delete devFeePending", async() => {
             //  1
-            await game.withdrawGamePrizes(1, {from: OPPONENT});
+            await game.withdrawGamePrizes(4, {from: OPPONENT});
 
-            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0.006")), "wrong devFeePending before 1");
+            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0.002")), "wrong devFeePending before 1");
             await game.withdrawDevFee({from: OWNER});
             assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0")), "wrong devFeePending after 1");
 
             //  2
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
+            await game.withdrawGamePrizes(1, {from: OPPONENT});
 
-            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0.008")), "wrong devFeePending before 2");
+            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0.01")), "wrong devFeePending before 2");
             await game.withdrawDevFee({from: OWNER});
             assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0")), "wrong devFeePending after 2");
-
-            //  3
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
-
-            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0.044")), "wrong devFeePending before 3");
-            await game.withdrawDevFee({from: OWNER});
-            assert.strictEqual(0, (await game.devFeePending.call()).cmp(ether("0")), "wrong devFeePending after 3");
         });
 
         it("should transfer correct amount", async() => {
             let OWNER_before = new BN(await web3.eth.getBalance(OWNER));
 
-            await game.withdrawGamePrizes(1, {from: OPPONENT});
+            await game.withdrawGamePrizes(4, {from: OPPONENT});
 
             //  1
             let tx = await game.withdrawDevFee({from: OWNER});
@@ -760,14 +753,14 @@ contract("Withdraw", (accounts) => {
             let gasSpent = gasUsed.mul(gasPrice);
 
             let OWNER_after = new BN(await web3.eth.getBalance(OWNER));
-            assert.strictEqual(0, OWNER_before.add(ether("0.006")).sub(gasSpent).cmp(OWNER_after), "wrong OWNER_after");
+            assert.strictEqual(0, OWNER_before.add(ether("0.002")).sub(gasSpent).cmp(OWNER_after), "wrong OWNER_after");
 
             //  2
             await time.increase(time.duration.seconds(6));
 
             let OWNER_before_2 = new BN(await web3.eth.getBalance(OWNER));
 
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
+            await game.withdrawGamePrizes(1, {from: OPPONENT});
 
             tx = await game.withdrawDevFee({from: OWNER});
             gasUsed = new BN(tx.receipt.gasUsed);
@@ -776,25 +769,9 @@ contract("Withdraw", (accounts) => {
             gasSpent = gasUsed.mul(gasPrice);
 
             let OWNER_after_2 = new BN(await web3.eth.getBalance(OWNER));
-            assert.strictEqual(0, OWNER_before_2.add(ether("0.008")).sub(gasSpent).cmp(OWNER_after_2), "wrong OWNER_after_2");
+            assert.strictEqual(0, OWNER_before_2.add(ether("0.01")).sub(gasSpent).cmp(OWNER_after_2), "wrong OWNER_after_2");
 
-            //  3
-            await time.increase(time.duration.seconds(6));
-
-            let OWNER_before_3 = new BN(await web3.eth.getBalance(OWNER));
-
-            await game.withdrawGamePrizes(2, {from: OPPONENT});
-
-            tx = await game.withdrawDevFee({from: OWNER});
-            gasUsed = new BN(tx.receipt.gasUsed);
-            txInfo = await web3.eth.getTransaction(tx.tx);
-            gasPrice = new BN(txInfo.gasPrice);
-            gasSpent = gasUsed.mul(gasPrice);
-
-            let OWNER_after_3 = new BN(await web3.eth.getBalance(OWNER));
-            assert.strictEqual(0, OWNER_before_3.add(ether("0.044")).sub(gasSpent).cmp(OWNER_after_3), "wrong OWNER_after_3");
-
-            //  4 - Quit
+            //  3 - Quit
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
                 value: ether("0.33")
@@ -821,10 +798,9 @@ contract("Withdraw", (accounts) => {
                 from: CREATOR
             });
 
-            //  5
             await time.increase(time.duration.seconds(6));
 
-            let OWNER_before_4 = new BN(await web3.eth.getBalance(OWNER));
+            let OWNER_before_3 = new BN(await web3.eth.getBalance(OWNER));
 
             await game.withdrawGamePrizes(1, {from: OPPONENT});
 
@@ -834,10 +810,10 @@ contract("Withdraw", (accounts) => {
             gasPrice = new BN(txInfo.gasPrice);
             gasSpent = gasUsed.mul(gasPrice);
 
-            let OWNER_after_4 = new BN(await web3.eth.getBalance(OWNER));
-            assert.strictEqual(0, OWNER_before_4.add(ether("0.0132")).sub(gasSpent).cmp(OWNER_after_4), "wrong OWNER_after_4");
+            let OWNER_after_3 = new BN(await web3.eth.getBalance(OWNER));
+            assert.strictEqual(0, OWNER_before_3.add(ether("0.0033")).sub(gasSpent).cmp(OWNER_after_3), "wrong OWNER_after_3");
 
-            //  7 - Quit
+            //  4 - Quit
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
                 value: ether("0.22")
@@ -864,10 +840,9 @@ contract("Withdraw", (accounts) => {
                 from: CREATOR
             });
 
-            //  8
             await time.increase(time.duration.seconds(6));
 
-            let OWNER_before_5 = new BN(await web3.eth.getBalance(OWNER));
+            let OWNER_before_4 = new BN(await web3.eth.getBalance(OWNER));
 
             await game.withdrawGamePrizes(1, {from: OPPONENT});
 
@@ -877,17 +852,17 @@ contract("Withdraw", (accounts) => {
             gasPrice = new BN(txInfo.gasPrice);
             gasSpent = gasUsed.mul(gasPrice);
 
-            let OWNER_after_5 = new BN(await web3.eth.getBalance(OWNER));
-            assert.strictEqual(0, OWNER_before_5.add(ether("0.0088")).sub(gasSpent).cmp(OWNER_after_5), "wrong OWNER_after_5");
+            let OWNER_after_4 = new BN(await web3.eth.getBalance(OWNER));
+            assert.strictEqual(0, OWNER_before_4.add(ether("0.0022")).sub(gasSpent).cmp(OWNER_after_4), "wrong OWNER_after_4");
         });
     });
 
-    describe("withdrawRafflePrizes", () => {
+    describe.only("withdrawRafflePrizes", () => {
         beforeEach("update for raffle test", async() => {
             await game.updateRaffleActivationParticipantsCount(2, {from: OWNER});
         });
         
-        it("should fail if No raffle prize", async() => {
+        it.only("should fail if No raffle prize", async() => {
             await expectRevert(game.withdrawRafflePrizes({from: OTHER}), "No raffle prize");
         });
 
