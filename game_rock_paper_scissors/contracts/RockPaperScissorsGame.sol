@@ -420,8 +420,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Withdraws prize for multiple games where user is winner.
    * @param _maxLoop Max loop.
-   * @notice 95% to transfer
-   * 
+   * @notice 95% to transfer. Fee will be deducted only from prize, but not draw.
+   * TESTING
    */
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
@@ -444,7 +444,6 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
           game.drawWithdrawn[1] = true;
         }
       } else {
-        require((game.winner == msg.sender), "Fatal, not winner");
         require(!game.prizeWithdrawn, "Fatal,prize was with");
         game.prizeWithdrawn = true;
         
