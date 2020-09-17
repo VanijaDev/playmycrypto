@@ -63,7 +63,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal; //  for both won & draw
 
   mapping(address => uint256) public addressBetTotal;
-  mapping(address => uint256) public addressPrizeTotal;
+  mapping(address => uint256) public addressPrizeTotal; //  game prize + raffle prize, not draw
 
   mapping(address => uint256) public referralFeesPending;
   mapping(address => uint256) public referralFeesWithdrawn;
@@ -421,7 +421,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Withdraws prize for multiple games where user is winner.
    * @param _maxLoop Max loop.
    * @notice 95% to transfer. Fee will be deducted only from prize, but not draw.
-   * TESTING
+   * TESTED
    */
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
@@ -430,12 +430,15 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     require(pendingGames.length > 0, "no pending");
     require(_maxLoop <= pendingGames.length, "_maxLoop too big");
     
-    uint256 betsTotal;
+    uint256 betsPrize;
+    uint256 betsDraw;
     for (uint256 i = 0; i < _maxLoop; i++) {
       uint256 gameId = pendingGames[pendingGames.length.sub(1)];
       Game storage game = games[gameId];
       
       if (game.state == GameState.Draw) {
+        betsDraw = betsDraw.add(game.bet);
+
         if (game.creator == msg.sender) {
           require(!game.drawWithdrawn[0], "Fatal, cr with draw");
           game.drawWithdrawn[0] = true;
@@ -446,6 +449,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       } else {
         require(!game.prizeWithdrawn, "Fatal,prize was with");
         game.prizeWithdrawn = true;
+        betsPrize = betsPrize.add(game.bet);
         
         //  referral
         address winnerReferral = (msg.sender == game.creator) ? game.creatorReferral : game.opponentReferral;
@@ -453,21 +457,19 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
         referralFeesPending[winnerReferral] = referralFeesPending[winnerReferral].add(referralFee);
         totalUsedReferralFees = totalUsedReferralFees.add(referralFee);
       }
-
-      betsTotal = betsTotal.add(game.bet);
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsTotal);
+    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsPrize);
 
     //  5% fees
-    uint256 singleFee = betsTotal.mul(FEE_PERCENT).div(100);
+    uint256 singleFee = betsPrize.mul(FEE_PERCENT).div(100);
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
     devFeePending = devFeePending.add(singleFee);
     addBeneficiarFee(singleFee);
 
-    uint256 transferAmount = betsTotal.sub(singleFee.mul(5));
+    uint256 transferAmount = betsPrize.sub(singleFee.mul(5)).add(betsDraw);
     msg.sender.transfer(transferAmount);
 
     //  partner transfer

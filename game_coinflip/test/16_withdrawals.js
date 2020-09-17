@@ -313,7 +313,7 @@ contract("Withdrawals", (accounts) => {
         beneficiarFeePendingTotal = beneficiarFeePendingTotal.add(gamePrize.div(new BN("100")));
       }  
       // console.log("beneficiarFeePendingTotal:             ", (await game.beneficiarFeePendingTotal.call()).toString());
-      assert.equal(0, (await game.devFeePending.call()).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
+      assert.equal(0, (await game.feeBeneficiarBalances.call()).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
     });
 
     it("should transfer correct prizeTotal after single withdrawal", async() => {
