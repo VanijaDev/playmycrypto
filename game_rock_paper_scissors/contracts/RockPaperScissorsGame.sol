@@ -565,7 +565,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Adds game idx to the beginning of topGames.
    * @param _id Game idx to be added.
-   * TESTING
+   * TESTED
    */  
   function addTopGame(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) onlyGameNotPaused(_id) external payable {
     require(msg.value == minBet, "Wrong fee");
@@ -589,7 +589,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Removes game idx from topGames.
    * @param _id Game idx to be removed.
-   * 
+   * TESTING
    */
   function removeTopGame(uint256 _id) public {
     uint256[5] memory tmpArr;

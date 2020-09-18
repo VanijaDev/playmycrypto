@@ -77,7 +77,7 @@ contract("Top Games", (accounts) => {
                 value: ether("1")
             });
 
-            assert.equal(0, (await game.games.call(1)).state.cmp(new BN("1")), "should be Started");
+            assert.strictEqual(0, (await game.games.call(1)).state.cmp(new BN("1")), "should be Started");
             await expectRevert(game.addTopGame(1, {
                 from: CREATOR,
                 value: UPDATE_FEE
@@ -112,7 +112,7 @@ contract("Top Games", (accounts) => {
                 from: CREATOR
             });
 
-            assert.equal(0, (await game.games.call(1)).state.cmp(new BN("2")), "should be WinnerPresent");
+            assert.strictEqual(0, (await game.games.call(1)).state.cmp(new BN("2")), "should be WinnerPresent");
             await expectRevert(game.addTopGame(1, {
                 from: CREATOR,
                 value: UPDATE_FEE
@@ -148,7 +148,7 @@ contract("Top Games", (accounts) => {
                 from: CREATOR
             });
 
-            assert.equal(0, (await game.games.call(1)).state.cmp(new BN("3")), "should be Draw");
+            assert.strictEqual(0, (await game.games.call(1)).state.cmp(new BN("3")), "should be Draw");
             await expectRevert(game.addTopGame(1, {
                 from: CREATOR,
                 value: UPDATE_FEE
@@ -177,7 +177,7 @@ contract("Top Games", (accounts) => {
                 value: ether("1")
             });
 
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: OPPONENT
             });
@@ -326,24 +326,37 @@ contract("Top Games", (accounts) => {
             });
 
             let devFee_after = await game.devFeePending.call();
-            assert.equal(0, devFee_after.sub(devFee_before).cmp(UPDATE_FEE), "wrong devFeePending after adding game to top");
+            assert.strictEqual(0, devFee_after.sub(devFee_before).cmp(UPDATE_FEE), "wrong devFeePending after adding game to top");
         });
 
-        it("should emit GameAddedToTop event with correct prams", async () => {
-            let tx = await game.addTopGame(1, {
+        it("should update totalUsedInGame by adding UPDATE_FEE", async () => {
+            let totalUsedInGame_before = await game.totalUsedInGame.call();
+
+            await game.addTopGame(1, {
                 from: CREATOR,
                 value: UPDATE_FEE
             });
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameAddedToTop", "should be GameAddedToTop");
-            assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
-            assert.equal(CREATOR, event.args.creator, "should be CREATOR");
+
+            let totalUsedInGame_after = await game.totalUsedInGame.call();
+            assert.strictEqual(0, totalUsedInGame_after.sub(totalUsedInGame_before).cmp(UPDATE_FEE), "wrong totalUsedInGame after adding game to top");
+        });
+
+        it("should emit GameAddedToTop event with correct prams", async () => {
+            const { logs } = await game.addTopGame(1, {
+                from: CREATOR,
+                value: UPDATE_FEE
+            });
+            assert.strictEqual(1, logs.length, "should be 1 event");
+            await expectEvent.inLogs(
+            logs, 'RPS_GameAddedToTop', {
+                id: new BN("1"),
+                creator: CREATOR
+            });
         });
     });
 
-    describe("removeTopGame", ()=> {
-        it("should fail if Not TopGame", async() => {
+    describe.only("removeTopGame", ()=> {
+        it.only("should fail if Not TopGame", async() => {
             //  1
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR_2,
