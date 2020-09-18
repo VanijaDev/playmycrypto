@@ -624,7 +624,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Checks if game id is in top games.
    * @param _id Game id to check.
    * @return Whether game id is in top games.
-   * 
+   * TESTED
    */
   function isTopGame(uint256 _id) public view returns (bool) {
     for (uint8 i = 0; i < 5; i++) {

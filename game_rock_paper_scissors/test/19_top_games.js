@@ -466,23 +466,24 @@ contract("Top Games", (accounts) => {
         });
     });
 
-    describe.only("isTopGame", () => {
-        it.only("should return false if no such game", async() => {
-            assert.equal(await game.isTopGame.call(3), false, "should return false");
+    describe("isTopGame", () => {
+        it("should return false if no such game", async() => {
+            assert.strictEqual(await game.isTopGame.call(3), false, "should return false");
         });
 
         it("should return false if not TopGame", async() => {
-            assert.equal(await game.isTopGame.call(1), false, "should return false");
+            assert.strictEqual(await game.isTopGame.call(1), false, "should return false");
         });
 
         it("should return true if TopGame", async() => {
-            assert.equal(await game.isTopGame.call(1), false, "should return false");
+            assert.strictEqual(await game.isTopGame.call(1), false, "should return false");
 
             await game.addTopGame(1, {
                 from: CREATOR,
                 value: UPDATE_FEE
             });
-            assert.equal(await game.isTopGame.call(1), true, "should return true");
+
+            assert.strictEqual(await game.isTopGame.call(1), true, "should return true");
         });
     });
 });
