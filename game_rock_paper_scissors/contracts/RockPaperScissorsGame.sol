@@ -685,7 +685,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Game withdrawal information.
    * @param _id Game index.
    * @return prizeWithdrawn, drawWithdrawnCreator, drawWithdrawnOpponent.
-   * 
+   * TESTED
    */
   function gameWithdrawalInfo(uint256 _id) external view returns (bool, bool, bool) {
     return (games[_id].prizeWithdrawn, games[_id].drawWithdrawn[0], games[_id].drawWithdrawn[1]);
