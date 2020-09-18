@@ -54,98 +54,6 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-    describe("getGamesWithPendingPrizeWithdrawal", () => {
-        it("should add game on multiple finish", async() => {
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "wrong amount before");
-
-            //  Quitted
-            await game.quitGame(1, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty");
-
-            //  Expired
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR,
-                value: ether("1")
-            });
-            await game.joinGame(2, OPPONENT_REFERRAL, 2, {
-                from: OPPONENT,
-                value: ether("1")
-            });
-
-            await time.increase(time.duration.minutes(6));
-            await game.finishExpiredGame(2, {from: OPPONENT});
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2")], "should be 2");
-
-            //  WinnerPresent
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR,
-                value: ether("1")
-            });
-            await game.joinGame(3, OPPONENT_REFERRAL, 2, {
-                from: OPPONENT,
-                value: ether("1")
-            });
-
-            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            //  2
-            await game.opponentNextMove(3, 1, {
-                from: OPPONENT
-            });
-            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            //  3
-            await game.opponentNextMove(3, 1, {
-                from: OPPONENT
-            });
-            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3")], "should be 2, 3");
-
-            //  Draw
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR,
-                value: ether("1")
-            });
-            await game.joinGame(4, OPPONENT_REFERRAL, 1, {
-                from: OPPONENT,
-                value: ether("1")
-            });
-
-            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            //  2
-            await game.opponentNextMove(4, 1, {
-                from: OPPONENT
-            });
-            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            //  3
-            await game.opponentNextMove(4, 1, {
-                from: OPPONENT
-            });
-            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1"), new BN("4")], "should be 1");
-            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3"), new BN("4")], "should be 2, 3, 4");
-        });
-    });
-
     describe("showRowMoves", () => {
         it("should return correct moves after each move", async () => {
             assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("0")), "wrong CREATOR move (1, 0) after join");
@@ -378,6 +286,100 @@ contract("Get Game Info", (accounts) => {
             assert.deepEqual(await game.getPlayedGamesForPlayer.call(OTHER), [new BN("4")], "wrong idx after 4");
         });
     });
+
+    describe("getGamesWithPendingPrizeWithdrawal", () => {
+        it("should add game on multiple finish", async() => {
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "wrong amount before");
+
+            //  Quitted
+            await game.quitGame(1, {from: OPPONENT});
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty");
+
+            //  Expired
+            await game.createGame(CREATOR_REFERRAL, hash, {
+                from: CREATOR,
+                value: ether("1")
+            });
+            await game.joinGame(2, OPPONENT_REFERRAL, 2, {
+                from: OPPONENT,
+                value: ether("1")
+            });
+
+            await time.increase(time.duration.hours(16));
+            await game.finishExpiredGame(2, {from: OPPONENT});
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2")], "should be 2");
+
+            //  WinnerPresent
+            //  1
+            await game.createGame(CREATOR_REFERRAL, hash, {
+                from: CREATOR,
+                value: ether("1")
+            });
+            await game.joinGame(3, OPPONENT_REFERRAL, 2, {
+                from: OPPONENT,
+                value: ether("1")
+            });
+
+            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            //  2
+            await game.opponentNextMove(3, 1, {
+                from: OPPONENT
+            });
+            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            //  3
+            await game.opponentNextMove(3, 1, {
+                from: OPPONENT
+            });
+            await game.playMove(3, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3")], "should be 2, 3");
+
+            //  Draw
+            await game.createGame(CREATOR_REFERRAL, hash, {
+                from: CREATOR,
+                value: ether("1")
+            });
+            await game.joinGame(4, OPPONENT_REFERRAL, 1, {
+                from: OPPONENT,
+                value: ether("1")
+            });
+
+            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            //  2
+            await game.opponentNextMove(4, 1, {
+                from: OPPONENT
+            });
+            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            //  3
+            await game.opponentNextMove(4, 1, {
+                from: OPPONENT
+            });
+            await game.playMove(4, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [new BN("1"), new BN("4")], "should be 1");
+            assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("2"), new BN("3"), new BN("4")], "should be 2, 3, 4");
+        });
+    });
+
 
     describe("balance", () => {
         it("should update balance on game creation", async () => {

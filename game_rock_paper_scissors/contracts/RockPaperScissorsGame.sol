@@ -706,7 +706,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Gets gamesWithPendingPrizeWithdrawal.
    * @param _address Player address.
    * @return ids Game id array.
-   * 
+   * TESTED
    */
   function getGamesWithPendingPrizeWithdrawal(address _address) external view returns(uint256[] memory ids) {
     ids = gamesWithPendingPrizeWithdrawal[_address];
