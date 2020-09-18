@@ -43,7 +43,7 @@ contract("Update Game Params", (accounts) => {
         });
     });
 
-    describe("increaseBetForGameBy", () => {
+    describe.only("increaseBetForGameBy", () => {
         beforeEach("create game", async () => {
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
@@ -67,10 +67,21 @@ contract("Update Game Params", (accounts) => {
             }), "Not creator");
         });
 
-        it("should fail if != WaitingForOpponent", async () => {
+        it("should fail if joined", async () => {
             await game.joinGame(1, OPPONENT_REFERRAL, 1, {
                 from: OPPONENT,
                 value: ether("0.1")
+            });
+
+            await expectRevert(game.increaseBetForGameBy(1, {
+                from: CREATOR,
+                value: ether("0.1")
+            }), "!= WaitingForOpponent");
+        });
+        
+        it("should fail if quitted", async () => {
+            await game.quitGame(1, {
+                from: CREATOR
             });
 
             await expectRevert(game.increaseBetForGameBy(1, {
@@ -90,10 +101,10 @@ contract("Update Game Params", (accounts) => {
         
             await game.increaseBetForGameBy(1, {
                 from: CREATOR,
-                value: ether("0.1")
+                value: ether("0.11")
             });
         
-            assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("0.1")), "wrong addressBetTotal");
+            assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("0.11")), "wrong addressBetTotal");
         });
 
         it("should increase bet for game", async () => {
@@ -133,15 +144,16 @@ contract("Update Game Params", (accounts) => {
           });
 
         it("should emit GameUpdated with correct args", async () => {
-            let tx = await game.increaseBetForGameBy(1, {
+            const { logs } = await game.increaseBetForGameBy(1, {
                 from: CREATOR,
                 value: ether("0.2")
             });
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            let event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameUpdated", "should be GameUpdated");
-            assert.equal(0, event.args.id.cmp(new BN("1")), "should be 1");
-            assert.equal(event.args.creator, CREATOR, "should be CREATOR");
+            assert.strictEqual(1, logs.length, "should be 1 event");
+            await expectEvent.inLogs(
+            logs, 'RPS_GameUpdated', {
+                id: new BN("1"),
+                creator: CREATOR
+            });
         });
     });
 

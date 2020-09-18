@@ -638,7 +638,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Updates bet for game.
    * @param _id Game index.
-   * 
+   * TESTED
    */
   function increaseBetForGameBy(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) external payable {
     require(msg.value > 0, "increase must be > 0");
