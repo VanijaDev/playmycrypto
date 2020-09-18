@@ -355,120 +355,50 @@ contract("Top Games", (accounts) => {
         });
     });
 
-    describe.only("removeTopGame", ()=> {
-        it.only("should fail if Not TopGame", async() => {
-            //  1
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR_2,
-                value: ether("0.1")
-            });
-        
-            await game.addTopGame(2, {
-                from: CREATOR_2,
+    describe("removeTopGame", ()=> {
+        it("should remove on quit", async() => {        
+            await game.addTopGame(1, {
+                from: CREATOR,
                 value: UPDATE_FEE
             });
 
-            await expectRevert(game.removeTopGame(22, {
-                from: CREATOR_2
-            }), "Not TopGame");
+            assert.deepEqual(await game.getTopGames.call(), [new BN("1"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array before");
+            await game.quitGame(1, {
+                from: CREATOR
+            });
+            assert.deepEqual(await game.getTopGames.call(), [new BN("0"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array after");
         });
 
-        it("should remove game from TopGames and form correct array", async() => {
-            //  1
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR_2,
-                value: ether("0.1")
-            });
-        
-            await game.addTopGame(2, {
-                from: CREATOR_2,
+        it("should remove on join", async() => {
+            await game.addTopGame(1, {
+                from: CREATOR,
                 value: UPDATE_FEE
             });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("2"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array 1");
 
-            //  2
-            await game.createGame(CREATOR, hash, {
-                from: CREATOR_REFERRAL,
-                value: ether("0.1")
-            });
-        
-            await game.addTopGame(3, {
-                from: CREATOR_REFERRAL,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("3"), new BN("2"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array 2");
-
-            //  3
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: CREATOR_2_REFERRAL,
-                value: ether("0.1")
-            });
-        
-            await game.addTopGame(4, {
-                from: CREATOR_2_REFERRAL,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("4"), new BN("3"), new BN("2"), new BN("0"), new BN("0")], "wrong topGames array 3");
-
-            //  3.1
-            await game.removeTopGame(3, {
-                from: CREATOR_REFERRAL
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("4"), new BN("2"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array 3.1");
-
-            //  4
-            await game.createGame(CREATOR_REFERRAL, hash, {
-                from: OTHER,
-                value: ether("0.1")
-            });
-        
-            await game.addTopGame(5, {
-                from: OTHER,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("5"), new BN("4"), new BN("2"), new BN("0"), new BN("0")], "wrong topGames array 4");
-
-            //  4.1
-            await game.removeTopGame(5, {
-                from: OTHER
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("4"), new BN("2"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array 4.1");
-
-            //  5
-            await game.createGame(CREATOR_REFERRAL, hash, {
+            assert.deepEqual(await game.getTopGames.call(), [new BN("1"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array before");
+            await game.joinGame(1, OPPONENT_REFERRAL, 2, {
                 from: OPPONENT,
-                value: ether("0.1")
+                value: ether("1")
             });
+            assert.deepEqual(await game.getTopGames.call(), [new BN("0"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array after");
+        });
+
+        it("should remove on pause", async() => {
+            await game.addTopGame(1, {
+                from: CREATOR,
+                value: UPDATE_FEE
+            });
+
+            assert.deepEqual(await game.getTopGames.call(), [new BN("1"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array before");
+            await game.pauseGame(1, {
+                from: CREATOR
+            });
+            assert.deepEqual(await game.getTopGames.call(), [new BN("0"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array after");
         
-            await game.addTopGame(6, {
-                from: OPPONENT,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("6"), new BN("4"), new BN("2"), new BN("0"), new BN("0")], "wrong topGames array 5.1");
-
-            //  6
-            await game.addTopGame(5, {
-                from: OTHER,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("5"), new BN("6"), new BN("4"), new BN("2"), new BN("0")], "wrong topGames array 6");
-
-            //  7
-            await game.addTopGame(3, {
-                from: CREATOR_REFERRAL,
-                value: UPDATE_FEE
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("3"), new BN("5"), new BN("6"), new BN("4"), new BN("2")], "wrong topGames array 7");
-            
-            //  7.1
-            await game.removeTopGame(2, {
-                from: CREATOR_2
-            });
-            assert.deepEqual(await game.getTopGames.call(), [new BN("3"), new BN("5"), new BN("6"), new BN("4"), new BN("0")], "wrong topGames array 7.1");
         });
     });
 
-    describe("getTopGames", () => {
+    describe.only("getTopGames", () => {
         it("should return correct topGames", async () => {
             //  1
             await game.addTopGame(1, {

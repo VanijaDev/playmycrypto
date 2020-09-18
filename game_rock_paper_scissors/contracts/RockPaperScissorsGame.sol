@@ -589,9 +589,9 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Removes game idx from topGames.
    * @param _id Game idx to be removed.
-   * TESTING
+   * TESTED
    */
-  function removeTopGame(uint256 _id) public {
+  function removeTopGame(uint256 _id) private {
     uint256[5] memory tmpArr;
     bool found;
     
