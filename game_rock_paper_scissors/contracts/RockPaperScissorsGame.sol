@@ -614,7 +614,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Gets top games.
    * @return Returns list of top games.
-   * 
+   * TESTED
    */
   function getTopGames() external view returns (uint256[5] memory) {
     return topGames;

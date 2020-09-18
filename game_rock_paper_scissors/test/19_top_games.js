@@ -398,7 +398,7 @@ contract("Top Games", (accounts) => {
         });
     });
 
-    describe.only("getTopGames", () => {
+    describe("getTopGames", () => {
         it("should return correct topGames", async () => {
             //  1
             await game.addTopGame(1, {
@@ -466,8 +466,8 @@ contract("Top Games", (accounts) => {
         });
     });
 
-    describe("isTopGame", () => {
-        it("should return false if no such game", async() => {
+    describe.only("isTopGame", () => {
+        it.only("should return false if no such game", async() => {
             assert.equal(await game.isTopGame.call(3), false, "should return false");
         });
 
