@@ -146,55 +146,55 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-    describe("showRowMoves", () => {
+    describe.only("showRowMoves", () => {
         it("should return correct moves after each move", async () => {
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("0")), "wrong CREATOR move (1, 0) after join");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after join");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("0")), "wrong CREATOR move (1, 0) after join");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after join");
 
             // 1
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 1");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 1");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 1");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 1");
 
             //  2
             await game.opponentNextMove(1, 3, {
                 from: OPPONENT
             });
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after OPPONENT move 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after OPPONENT move 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("0")), "wrong CREATOR move (1, 1) after OPPONENT move 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after OPPONENT move 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after OPPONENT move 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after OPPONENT move 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("0")), "wrong CREATOR move (1, 1) after OPPONENT move 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after OPPONENT move 2");
 
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after playMove 2");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after playMove 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after playMove 2");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after playMove 2");
 
             //  3
             await game.opponentNextMove(1, 1, {
                 from: OPPONENT
             });
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after OPPONENT move 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after OPPONENT move 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after OPPONENT move 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after OPPONENT move 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 2))[0].cmp(new BN("0")), "wrong CREATOR move (1, 1) after OPPONENT move 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 2))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 1) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 2))[0].cmp(new BN("0")), "wrong CREATOR move (1, 1) after OPPONENT move 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 2))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 1) after OPPONENT move 3");
 
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after playMove 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after playMove 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 2))[0].cmp(new BN("1")), "wrong CREATOR move (1, 2) after playMove 3");
-            assert.equal(0, (await game.showRowMoves.call(1, 2))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 2) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("1")), "wrong CREATOR move (1, 0) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[0].cmp(new BN("1")), "wrong CREATOR move (1, 1) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 1))[1].cmp(new BN("3")), "wrong OPPONENT move (1, 1) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 2))[0].cmp(new BN("1")), "wrong CREATOR move (1, 2) after playMove 3");
+            assert.strictEqual(0, (await game.showRowMoves.call(1, 2))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 2) after playMove 3");
         });
     });
 
@@ -272,9 +272,9 @@ contract("Get Game Info", (accounts) => {
             await game.withdrawGamePrizes(1, {
                 from: CREATOR
             });
-            assert.equal((await game.gameWithdrawalInfo.call(1))[0], true, "should be true PrizeWithdrawn");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[1], false, "should be false drawWithdrawnCreator");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[2], false, "should be false drawWithdrawnOpponent");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[0], true, "should be true PrizeWithdrawn");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[1], false, "should be false drawWithdrawnCreator");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[2], false, "should be false drawWithdrawnOpponent");
         });
 
         it("should return true for drawWithdrawnCreator", async () => {
@@ -302,9 +302,9 @@ contract("Get Game Info", (accounts) => {
             await game.withdrawGamePrizes(1, {
                 from: CREATOR
             });
-            assert.equal((await game.gameWithdrawalInfo.call(1))[0], false, "should be false PrizeWithdrawn");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[1], true, "should be true drawWithdrawnCreator");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[2], false, "should be false drawWithdrawnOpponent");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[0], false, "should be false PrizeWithdrawn");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[1], true, "should be true drawWithdrawnCreator");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[2], false, "should be false drawWithdrawnOpponent");
         });
 
         it("should return true for drawWithdrawnOpponent", async () => {
@@ -334,9 +334,9 @@ contract("Get Game Info", (accounts) => {
             await game.withdrawGamePrizes(1, {
                 from: OPPONENT
             });
-            assert.equal((await game.gameWithdrawalInfo.call(1))[0], false, "should be false PrizeWithdrawn");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[1], false, "should be false drawWithdrawnCreator");
-            assert.equal((await game.gameWithdrawalInfo.call(1))[2], true, "should be true drawWithdrawnOpponent");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[0], false, "should be false PrizeWithdrawn");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[1], false, "should be false drawWithdrawnCreator");
+            assert.strictEqual((await game.gameWithdrawalInfo.call(1))[2], true, "should be true drawWithdrawnOpponent");
         });
     });
 
@@ -393,7 +393,7 @@ contract("Get Game Info", (accounts) => {
                 value: ether("1")
             });
             let balanceAfter = await balance.current(game.address);
-            assert.equal(0, balanceAfter.sub(balanceBefore).cmp(ether("1")), "wrong balnce after game created");
+            assert.strictEqual(0, balanceAfter.sub(balanceBefore).cmp(ether("1")), "wrong balnce after game created");
         });
 
         it("should update balance after game joined", async () => {
@@ -408,7 +408,7 @@ contract("Get Game Info", (accounts) => {
                 value: ether("1")
             });
             let balanceAfter = await balance.current(game.address);
-            assert.equal(0, balanceAfter.sub(balanceBefore).cmp(ether("2")), "wrong balnce after game joined");
+            assert.strictEqual(0, balanceAfter.sub(balanceBefore).cmp(ether("2")), "wrong balnce after game joined");
         });
 
         it("should update balance after prize withdrawal", async () => {
@@ -442,7 +442,7 @@ contract("Get Game Info", (accounts) => {
             });
             let balanceAfter = await balance.current(game.address);
             let prize = ether("1.9");
-            assert.equal(0, balanceBefore.sub(balanceAfter).cmp(prize), "wrong balnce after withdrawGamePrize");
+            assert.strictEqual(0, balanceBefore.sub(balanceAfter).cmp(prize), "wrong balnce after withdrawGamePrize");
         });
 
         it("should update balance on devFeePending withdraw", async () => {
@@ -481,7 +481,7 @@ contract("Get Game Info", (accounts) => {
 
             let balanceAfter = await balance.current(game.address);
             let prize = ether("1.9");
-            assert.equal(0, balanceBefore.sub(balanceAfter).cmp(prize.add(devFeePending)), "wrong balnce after dev fee withdraw");
+            assert.strictEqual(0, balanceBefore.sub(balanceAfter).cmp(prize.add(devFeePending)), "wrong balnce after dev fee withdraw");
         });
     });
 });

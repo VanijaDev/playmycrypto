@@ -665,7 +665,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @param _id Game index.
    * @param _row Game moves row.
    * @return Game moves.
-   * 
+   * TESTED
    */
   function showRowMoves(uint256 _id, uint8 _row) external view returns (uint8, uint8) {
     return (games[_id].movesCreator[_row], games[_id].movesOpponent[_row]);
