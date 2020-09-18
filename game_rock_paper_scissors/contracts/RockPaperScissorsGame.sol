@@ -675,7 +675,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Gets creator's hashes for game.
    * @param _id Game id.
    * @return Array of hash values.
-   * 
+   * TESTED
    */
   function getCreatorMoveHashesForGame(uint256 _id) external view returns(bytes32[3] memory) {
     return games[_id].creatorMoveHashes;

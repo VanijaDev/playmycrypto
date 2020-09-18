@@ -146,7 +146,7 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-    describe.only("showRowMoves", () => {
+    describe("showRowMoves", () => {
         it("should return correct moves after each move", async () => {
             assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[0].cmp(new BN("0")), "wrong CREATOR move (1, 0) after join");
             assert.strictEqual(0, (await game.showRowMoves.call(1, 0))[1].cmp(new BN("1")), "wrong OPPONENT move (1, 0) after join");
