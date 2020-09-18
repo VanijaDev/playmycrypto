@@ -702,23 +702,6 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     return playedGames[_address];
   }
 
-//   /**
-//   * @dev Calculates prize for game for msg.sender.
-//   * @param _id Game id.
-//   * @return _prize Prize amount. Fees are included.
-//   * 
-//   */
-//   function prizeForGame(uint256 _id) public view returns (uint256 _prize) {
-//     if (games[_id].winner == msg.sender) {
-//       //  WinnerPresent, Quitted, Expired
-//       _prize = games[_id].bet.mul(2);
-//     } else if (games[_id].state == GameState.Draw) {
-//       if ((games[_id].creator == msg.sender) || (games[_id].opponent == msg.sender)) {
-//         _prize = games[_id].bet;
-//       }
-//     }
-//   }
-
   /**
    * @dev Gets gamesWithPendingPrizeWithdrawal.
    * @param _address Player address.

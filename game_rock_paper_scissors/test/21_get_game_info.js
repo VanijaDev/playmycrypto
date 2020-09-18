@@ -340,27 +340,25 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-    describe("getPlayedGameIdxsForPlayer", () => {
+    describe("getPlayedGamesForPlayer", () => {
         it("should fail if address == 0x0", async () => {
-            await expectRevert(game.getPlayedGameIdxsForPlayer.call("0x0000000000000000000000000000000000000000"), "Wrong address");
+            await expectRevert(game.getPlayedGamesForPlayer.call("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
         });
 
-        it("should return correct getPlayedGameIdxsForPlayer after game activity", async () => {
+        it("should return correct getPlayedGamesForPlayer after game activity", async () => {
             //  1
             await game.createGame(CREATOR_2_REFERRAL, hash, {
                 from: CREATOR_2,
                 value: ether("1")
             });
-            assert.ok((await game.getPlayedGameIdxsForPlayer.call(CREATOR_2)).length == 1, "wrong length after 1");
-            assert.deepEqual(0, (await game.getPlayedGameIdxsForPlayer.call(CREATOR_2))[0].cmp(new BN("2")), "wrong idx, should be [2] after 1");
+            assert.deepEqual(await game.getPlayedGamesForPlayer.call(CREATOR_2), [new BN("2")], "wrong idx after 1");
 
             //  2
             await game.joinGame(2, OPPONENT_REFERRAL, 1, {
                 from: OPPONENT_2,
                 value: ether("1")
             });
-            assert.ok((await game.getPlayedGameIdxsForPlayer.call(OPPONENT_2)).length == 1, "wrong length after 2");
-            assert.deepEqual(0, (await game.getPlayedGameIdxsForPlayer.call(OPPONENT_2))[0].cmp(new BN("2")), "wrong idx, should be [2] after 2");
+            assert.deepEqual(await game.getPlayedGamesForPlayer.call(OPPONENT_2), [new BN("2")], "wrong idx after 2");
 
             //  3
             await game.quitGame(2, {
@@ -370,17 +368,14 @@ contract("Get Game Info", (accounts) => {
                 from: CREATOR_2,
                 value: ether("1")
             });
-            assert.ok((await game.getPlayedGameIdxsForPlayer.call(CREATOR_2)).length == 2, "wrong length after 2");
-            assert.deepEqual(0, (await game.getPlayedGameIdxsForPlayer.call(CREATOR_2))[0].cmp(new BN("2")), "wrong idx, should be [2] after 3");
-            assert.deepEqual(0, (await game.getPlayedGameIdxsForPlayer.call(CREATOR_2))[1].cmp(new BN("3")), "wrong idx, should be [3] after 3");
+            assert.deepEqual(await game.getPlayedGamesForPlayer.call(CREATOR_2), [new BN("2"), new BN("3")], "wrong idx after 3");
 
             //  4
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: OTHER,
                 value: ether("1")
             });
-            assert.ok((await game.getPlayedGameIdxsForPlayer.call(OTHER)).length == 1, "wrong length after 4");
-            assert.deepEqual(0, (await game.getPlayedGameIdxsForPlayer.call(OTHER))[0].cmp(new BN("4")), "wrong idx, should be [4] after 4");
+            assert.deepEqual(await game.getPlayedGamesForPlayer.call(OTHER), [new BN("4")], "wrong idx after 4");
         });
     });
 
