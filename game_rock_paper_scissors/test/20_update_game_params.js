@@ -43,7 +43,7 @@ contract("Update Game Params", (accounts) => {
         });
     });
 
-    describe.only("increaseBetForGameBy", () => {
+    describe("increaseBetForGameBy", () => {
         beforeEach("create game", async () => {
             await game.createGame(CREATOR_REFERRAL, hash, {
                 from: CREATOR,
@@ -157,15 +157,21 @@ contract("Update Game Params", (accounts) => {
         });
     });
 
-    describe("updateMinBet", () => {
+    describe.only("updateMinBet", () => {
         it("should fail if not OWNER", async () => {
             await expectRevert(game.updateMinBet(ether("0.5"), {
                 from: OTHER
             }), "Ownable: caller is not the owner");
+
+            await game.updateMinBet(ether("0.5"), {
+                from: OWNER
+            })
         });
 
         it("should fail if bet is 0", async () => {
             await expectRevert(game.updateMinBet(ether("0")), "Wrong bet");
+
+            await game.updateMinBet(ether("1"));
         });
 
         it("should update minBet variable", async () => {
