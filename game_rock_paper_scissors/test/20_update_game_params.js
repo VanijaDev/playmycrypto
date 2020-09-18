@@ -157,7 +157,7 @@ contract("Update Game Params", (accounts) => {
         });
     });
 
-    describe.only("updateMinBet", () => {
+    describe("updateMinBet", () => {
         it("should fail if not OWNER", async () => {
             await expectRevert(game.updateMinBet(ether("0.5"), {
                 from: OTHER
@@ -185,6 +185,11 @@ contract("Update Game Params", (accounts) => {
             await expectRevert(game.updatePartner(CREATOR, {
                 from: OTHER
             }), "Ownable: caller is not the owner");
+        });
+
+        it("should fail if partner == 0x0", async () => {
+            await expectRevert(game.updatePartner("0x0000000000000000000000000000000000000000"), "Cannt be 0x0");
+            await game.updatePartner(OTHER);
         });
 
         it("should update partner", async () => {
