@@ -126,16 +126,16 @@ contract("Create game", (accounts) => {
       assert.equal(gameObj.creatorReferral, await game.owner.call(), "wrong creatorReferral, should be 0x0");
     });
 
-    it("should increase addressBetTotal for sender", async () => {
+    it("should increase betTotal for sender", async () => {
       //  1
-      let prev = await game.addressBetTotal.call(CREATOR);
+      let prev = await game.betTotal.call(CREATOR);
 
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
         value: ether("1")
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("1")), "wrong addressBetTotal 1");
+      assert.equal(0, (await game.betTotal.call(CREATOR)).sub(prev).cmp(ether("1")), "wrong betTotal 1");
 
       await game.quitGame(1, {
         from: CREATOR
@@ -147,7 +147,7 @@ contract("Create game", (accounts) => {
         value: ether("0.1")
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("1.1")), "wrong addressBetTotal 2");
+      assert.equal(0, (await game.betTotal.call(CREATOR)).sub(prev).cmp(ether("1.1")), "wrong betTotal 2");
     });
 
     it("should increase totalUsedInGame", async () => {

@@ -59,7 +59,7 @@ contract("Withdrawals", (accounts) => {
     beforeEach("setup", async() => {
       // play 3 games, so there will be 2 + 1 win for players
       
-      //  1
+      //  1 - CREATOR wins
       await game.joinGame(1, OPPONENT_COIN_SIDE, OPPONENT_REFERRAL, {
         from: OPPONENT,
         value: ether("1", ether)
@@ -68,7 +68,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR
       });
 
-      //  2
+      //  2 - CREATOR wins
       await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
@@ -82,7 +82,7 @@ contract("Withdrawals", (accounts) => {
         from: CREATOR
       });
 
-      //  3
+      //  3 - OPPONENT wins
       await time.increase(1);
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
@@ -174,7 +174,7 @@ contract("Withdrawals", (accounts) => {
       assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(addr_won_2_times), won_2_ids, "wrong pending after");
     });
 
-    it("should increase addressPrizeTotal with correct amount", async() => {
+    it("should increase prizeTotal with correct amount", async() => {
       let won_2_ids = await game.getGamesWithPendingPrizeWithdrawal.call(addr_won_2_times);
       // console.log(won_2_ids);
       won_2_ids.reverse();
@@ -185,8 +185,8 @@ contract("Withdrawals", (accounts) => {
         prizeTotal = prizeTotal.add(gamePrize);
         // console.log("prizeTotal:        ", prizeTotal.toString());
         await game.withdrawGamePrizes(1, {from: addr_won_2_times});
-        // console.log("addressPrizeTotal: ", (await game.addressPrizeTotal.call(addr_won_2_times)).toString());
-        assert.equal(0, (await game.addressPrizeTotal.call(addr_won_2_times)).cmp(prizeTotal), "wrong addressPrizeTotal amount after");
+        // console.log("prizeTotal: ", (await game.prizeTotal.call(addr_won_2_times)).toString());
+        assert.equal(0, (await game.prizeTotal.call(addr_won_2_times)).cmp(prizeTotal), "wrong prizeTotal amount after");
       }
     });
 
@@ -313,48 +313,37 @@ contract("Withdrawals", (accounts) => {
         beneficiarFeePendingTotal = beneficiarFeePendingTotal.add(gamePrize.div(new BN("100")));
       }  
       // console.log("beneficiarFeePendingTotal:             ", (await game.beneficiarFeePendingTotal.call()).toString());
-      assert.equal(0, (await game.feeBeneficiarBalances.call()).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
+      assert.equal(0, (await game.feeBeneficiarBalances.call(OWNER)).cmp(beneficiarFeePendingTotal), "wrong beneficiarFeePendingTotal amount after");
     });
 
-    it("should transfer correct prizeTotal after single withdrawal", async() => {
-      let addr_won_2_times_before = new BN(await web3.eth.getBalance(addr_won_2_times));
-      
-      let won_2_ids = await game.getGamesWithPendingPrizeWithdrawal.call(addr_won_2_times);
-      // console.log(won_2_ids);
+    it("should transfer correct amount after single withdrawal", async() => {
+      //  OPPONENT
+      let OPPONENT_before = new BN(await web3.eth.getBalance(OPPONENT));
+      let gamePrize = ether("0.3").mul(new BN("95")).div(new BN("100")).add(ether("0.3"));
 
-      let gamePrize = (await game.games.call(won_2_ids[won_2_ids.length-1])).bet.mul(new BN("95")).div(new BN("100"));
-
-      let tx = await game.withdrawGamePrizes(1, {from: addr_won_2_times});
+      let tx = await game.withdrawGamePrizes(1, {from: OPPONENT});
       gasUsed = new BN(tx.receipt.gasUsed);
       txInfo = await web3.eth.getTransaction(tx.tx);
       gasPrice = new BN(txInfo.gasPrice);
       gasSpent = gasUsed.mul(gasPrice);
 
-      let addr_won_2_times_after = new BN(await web3.eth.getBalance(addr_won_2_times));
-      assert.equal(0, addr_won_2_times_before.add(gamePrize).sub(gasSpent).cmp(addr_won_2_times_after), "wrong addr_won_2_times_after");
+      let OPPONENT_after = new BN(await web3.eth.getBalance(OPPONENT));
+      assert.equal(0, OPPONENT_before.add(gamePrize).sub(gasSpent).cmp(OPPONENT_after), "wrong OPPONENT_after");
     });
 
-    it("should transfer correct prizeTotal after multiple withdrawals", async() => {
-      let addr_won_2_times_before = new BN(await web3.eth.getBalance(addr_won_2_times));
+    it("should transfer correct amount after multiple withdrawals", async() => {
+      //  CREATOR
+      let CREATOR_before = new BN(await web3.eth.getBalance(CREATOR));
+      let gamePrize = ether("1.2").mul(new BN("95")).div(new BN("100")).add(ether("1.2"));
 
-      let won_2_ids = await game.getGamesWithPendingPrizeWithdrawal.call(addr_won_2_times);
-      // console.log(won_2_ids);
-
-      let gamePrizeTotal = new BN("0");
-      for (let i = 0; i < won_2_ids.length; i ++) {
-        let gameId = new BN(won_2_ids[i]);
-        let gamePrize = (await game.games.call(gameId)).bet.mul(new BN("95")).div(new BN("100"));
-        gamePrizeTotal = gamePrizeTotal.add(gamePrize);
-      }  
-
-      let tx = await game.withdrawGamePrizes(won_2_ids.length, {from: addr_won_2_times});
+      let tx = await game.withdrawGamePrizes(2, {from: CREATOR});
       gasUsed = new BN(tx.receipt.gasUsed);
       txInfo = await web3.eth.getTransaction(tx.tx);
       gasPrice = new BN(txInfo.gasPrice);
       gasSpent = gasUsed.mul(gasPrice);
 
-      let addr_won_2_times_after = new BN(await web3.eth.getBalance(addr_won_2_times));
-      assert.equal(0, addr_won_2_times_before.add(gamePrizeTotal).sub(gasSpent).cmp(addr_won_2_times_after), "wrong addr_won_2_times_after");
+      let CREATOR_after = new BN(await web3.eth.getBalance(CREATOR));
+      assert.equal(0, CREATOR_before.add(gamePrize).sub(gasSpent).cmp(CREATOR_after), "wrong CREATOR_after");
     });
 
     it("should not transferPartnerFee if < than threshold", async() => {

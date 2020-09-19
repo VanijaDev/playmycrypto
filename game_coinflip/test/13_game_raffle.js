@@ -541,7 +541,7 @@ contract("Game Raffle", (accounts) => {
       assert.equal(0, (await game.rafflePrizePending.call(randWinner)).cmp(new BN("0")), "should delete rafflePrizePending[msg.sender]");
     });
 
-    it("should increse addressPrizeTotal for winner", async() => {
+    it("should increse rafflePrizeWithdrawn for winner", async() => {
       await game.updateRaffleActivationParticipantsCount(4);
 
       //  withdraw
@@ -576,14 +576,14 @@ contract("Game Raffle", (accounts) => {
       let randWinner = await game.raffleParticipants.call(randNum);
       await game.runRaffle();
 
-      let addressPrizeTotalBefore = await game.addressPrizeTotal.call(randWinner);
+      let rafflePrizeWithdrawnBefore = await game.rafflePrizeWithdrawn.call(randWinner);
       
       await game.withdrawRafflePrizes({
         from: randWinner
       });
 
-      let addressPrizeTotalAfter = await game.addressPrizeTotal.call(randWinner);
-      assert.equal(0, addressPrizeTotalAfter.sub(addressPrizeTotalBefore).cmp(ongoinRafflePrize), "wrong addressPrizeTotal after raffle");
+      let rafflePrizeWithdrawnAfter = await game.rafflePrizeWithdrawn.call(randWinner);
+      assert.equal(0, rafflePrizeWithdrawnAfter.sub(rafflePrizeWithdrawnBefore).cmp(ongoinRafflePrize), "wrong rafflePrizeWithdrawn after raffle");
     });
 
     it("should transfer correct prize to raffle winner", async () => {

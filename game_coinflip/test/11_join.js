@@ -319,7 +319,7 @@ contract("Join game", (accounts) => {
       assert.equal(0, (await game.totalUsedInGame.call()).cmp(ether("5")), "totalUsedInGame should be 5 ether");
     });
 
-    it("should increase addressBetTotal for opponent", async () => {
+    it("should increase betTotal for opponent", async () => {
       //  1
       await game.createGame(ownerHash, CREATOR_REFERRAL, {
         from: CREATOR,
@@ -331,7 +331,7 @@ contract("Join game", (accounts) => {
         value: ether("1", ether)
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(OPPONENT)).cmp(ether("1")), "wrong addressBetTotal 1");
+      assert.equal(0, (await game.betTotal.call(OPPONENT)).cmp(ether("1")), "wrong betTotal 1");
 
 
       await game.quitGame(1, {
@@ -350,7 +350,7 @@ contract("Join game", (accounts) => {
         value: ether("0.5", ether)
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(OPPONENT)).cmp(ether("1.5")), "wrong addressBetTotal 2");
+      assert.equal(0, (await game.betTotal.call(OPPONENT)).cmp(ether("1.5")), "wrong betTotal 2");
     });
 
     it("should set correct ongoingGameAsOpponent", async () => {

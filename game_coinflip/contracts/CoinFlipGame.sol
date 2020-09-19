@@ -51,8 +51,8 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   mapping(address => uint256[]) private playedGames;
   mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal;
 
-  mapping(address => uint256) public addressBetTotal;
-  mapping(address => uint256) public addressPrizeTotal;
+  mapping(address => uint256) public betTotal;
+  mapping(address => uint256) public prizeTotal;
 
   mapping(address => uint256) public referralFeesPending;
   mapping(address => uint256) public referralFeesWithdrawn;
@@ -281,7 +281,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     games[gamesCreatedAmount].creatorGuessHash = _guessHash;
     (_referral == address(0)) ? games[gamesCreatedAmount].creatorReferral = owner() : games[gamesCreatedAmount].creatorReferral = _referral;
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
     ongoingGameAsCreator[msg.sender] = gamesCreatedAmount;
@@ -315,7 +315,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     ongoingGameAsOpponent[msg.sender] = _id;
     playedGames[msg.sender].push(_id);
 
@@ -389,7 +389,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsTotal);
+    prizeTotal[msg.sender] = prizeTotal[msg.sender].add(betsTotal);
 
     //  5% fees
     uint256 singleFee = betsTotal.mul(FEE_PERCENT).div(100);
@@ -398,7 +398,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     devFeePending = devFeePending.add(singleFee);
     addBeneficiarFee(singleFee);
 
-    uint256 transferAmount = betsTotal.sub(singleFee.mul(5));
+    uint256 transferAmount = betsTotal.sub(singleFee.mul(5)).add(betsTotal);
     msg.sender.transfer(transferAmount);
 
     //  partner transfer
@@ -434,7 +434,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
     require(prize > 0, "No raffle prize");
 
     delete rafflePrizePending[msg.sender];
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
+    rafflePrizeWithdrawn[msg.sender] = rafflePrizeWithdrawn[msg.sender].add(prize);
     msg.sender.transfer(prize);
 
     emit CF_RafflePrizeWithdrawn(msg.sender);
@@ -583,7 +583,7 @@ contract CoinFlipGame is Pausable, Partnership, AcquiredFeeBeneficiar, GameRaffl
   function increaseBetForGameBy(uint256 _id) external payable whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) {
     require(msg.value > 0, "increase must be > 0");
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
 
     games[_id].bet = games[_id].bet.add(msg.value);
     totalUsedInGame = totalUsedInGame.add(msg.value);
