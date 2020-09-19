@@ -14,6 +14,8 @@ abstract contract GameRaffle is Ownable {
   }
   
   mapping(address => uint256) public rafflePrizePending;
+  mapping(address => uint256) public rafflePrizeWithdrawn;
+  
   uint256 public ongoinRafflePrize;
   uint256 public rafflePrizesWonTotal;
 

@@ -380,7 +380,6 @@ contract("Get Game Info", (accounts) => {
         });
     });
 
-
     describe("balance", () => {
         it("should update balance on game creation", async () => {
             let balanceBefore = await balance.current(game.address);
@@ -438,7 +437,8 @@ contract("Get Game Info", (accounts) => {
                 from: CREATOR
             });
             let balanceAfter = await balance.current(game.address);
-            let prize = ether("1.9");
+            // console.log(balanceAfter.toString());
+            let prize = ether("1.95");
             assert.strictEqual(0, balanceBefore.sub(balanceAfter).cmp(prize), "wrong balnce after withdrawGamePrize");
         });
 

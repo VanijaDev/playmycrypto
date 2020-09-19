@@ -117,16 +117,16 @@ contract("Create", (accounts) => {
       }), "Empty hash");
     });
 
-    it("should increase addressBetTotal for creator", async () => {
+    it("should increase betTotal for creator", async () => {
       //  1
-      let prev = await game.addressBetTotal.call(CREATOR);
+      let prev = await game.betTotal.call(CREATOR);
 
       await game.createGame(CREATOR_REFERRAL, hash, {
         from: CREATOR,
         value: ether("1", ether)
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("1")), "wrong addressBetTotal 1");
+      assert.equal(0, (await game.betTotal.call(CREATOR)).sub(prev).cmp(ether("1")), "wrong betTotal 1");
 
       await game.quitGame(1, {
         from: CREATOR
@@ -138,7 +138,7 @@ contract("Create", (accounts) => {
         value: ether("0.1", ether)
       });
 
-      assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("1.1")), "wrong addressBetTotal 2");
+      assert.equal(0, (await game.betTotal.call(CREATOR)).sub(prev).cmp(ether("1.1")), "wrong betTotal 2");
     });
 
     it("should set correct game id", async () => {

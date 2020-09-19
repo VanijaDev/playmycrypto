@@ -201,7 +201,7 @@ contract("Withdraw", (accounts) => {
             await expectRevert(game.withdrawGamePrizes(10, {from: OPPONENT}), "_maxLoop too big");
         });
 
-        it("should set drawWithdrawn == true for CREATOR for last game - gameWithdrawalInfo", async() => {
+        it("should set isDrawWithdrawn == true for CREATOR for last game - gameWithdrawalInfo", async() => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[1], "should be false before for CREATOR");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[2], "should be false before for OPPONENT");
             
@@ -211,7 +211,7 @@ contract("Withdraw", (accounts) => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[2], "should be false after for OPPONENT");
         });
 
-        it("should set drawWithdrawn == true for CREATOR for two last games - gameWithdrawalInfo", async() => {
+        it("should set isDrawWithdrawn == true for CREATOR for two last games - gameWithdrawalInfo", async() => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[1], "should be false before for CREATOR - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[2], "should be false before for OPPONENT - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(4))[1], "should be false before for CREATOR - 4");
@@ -225,7 +225,7 @@ contract("Withdraw", (accounts) => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(4))[2], "should be false after for OPPONENT - 4");
         });
 
-        it("should set drawWithdrawn == true for OPPONENT - gameWithdrawalInfo", async() => {
+        it("should set isDrawWithdrawn == true for OPPONENT - gameWithdrawalInfo", async() => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[1], "should be false before for CREATOR - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[2], "should be false before for OPPONENT - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(4))[1], "should be false before for CREATOR - 4");
@@ -239,7 +239,7 @@ contract("Withdraw", (accounts) => {
             await assert.strictEqual(true, (await game.gameWithdrawalInfo.call(4))[2], "should be true after for OPPONENT - 4");
         });
 
-        it("should set prizeWithdrawn = true if winner withdrawn - gameWithdrawalInfo", async() => {
+        it("should set isPrizeWithdrawn = true if winner withdrawn - gameWithdrawalInfo", async() => {
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[0], "should be false after for winner - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[1], "should be false before for CREATOR - 5");
             await assert.strictEqual(false, (await game.gameWithdrawalInfo.call(5))[2], "should be false before for OPPONENT - 5");
@@ -404,16 +404,16 @@ contract("Withdraw", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], ", should be empty after - OPPONENT");
         });
 
-        it("should increase addressPrizeTotal with correct amount", async() => {
-            assert.strictEqual(0, (await game.addressPrizeTotal.call(OPPONENT)).cmp(ether("0")), "should be 0 before");
+        it("should increase prizeWithdrawn with correct amount", async() => {
+            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0")), "should be 0 before");
             await game.withdrawGamePrizes(1, {from: OPPONENT});
-            assert.strictEqual(0, (await game.addressPrizeTotal.call(OPPONENT)).cmp(ether("0")), "should be 0 after last");
+            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0")), "should be 0 after last");
 
             await game.withdrawGamePrizes(2, {from: OPPONENT});
-            assert.strictEqual(0, (await game.addressPrizeTotal.call(OPPONENT)).cmp(ether("0.1")), "should be 0.1 after 2");
+            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0.1")), "should be 0.1 after 2");
 
             await game.withdrawGamePrizes(2, {from: OPPONENT});
-            assert.strictEqual(0, (await game.addressPrizeTotal.call(OPPONENT)).cmp(ether("1.2")), "should be 1.2 after last 2");
+            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("1.2")), "should be 1.2 after last 2");
         });
 
         it("should calculate correct partnerFeePending", async() => {
@@ -487,9 +487,9 @@ contract("Withdraw", (accounts) => {
             gasSpent = gasUsed.mul(gasPrice);
 
             let OPPONENT_total_after_2 = new BN(await web3.eth.getBalance(OPPONENT));
-            let correctAmount = ether("0.2").add(ether("0.1").mul(new BN("95")).div(new BN("100")));
+            let correctAmount = ether("0.2").add(ether("0.1")).add(ether("0.1").mul(new BN("95")).div(new BN("100")));
             assert.strictEqual(0, OPPONENT_total_after.add(correctAmount).sub(gasSpent).cmp(OPPONENT_total_after_2), "wrong OPPONENT_total_after_2");
-
+            
             //  3, game, 2, 1
             await time.increase(time.duration.seconds(6));
 
@@ -500,7 +500,7 @@ contract("Withdraw", (accounts) => {
             gasSpent = gasUsed.mul(gasPrice);
 
             let OPPONENT_total_after_3 = new BN(await web3.eth.getBalance(OPPONENT));
-            correctAmount = ether("1.1").mul(new BN("95")).div(new BN("100"));
+            correctAmount = ether("1.1").mul(new BN("95")).div(new BN("100")).add(ether("1.1"));
             assert.strictEqual(0, OPPONENT_total_after_2.add(correctAmount).sub(gasSpent).cmp(OPPONENT_total_after_3), "wrong OPPONENT_total_after_3");
         });
 
@@ -915,17 +915,17 @@ contract("Withdraw", (accounts) => {
             await assert.strictEqual(0, (await game.rafflePrizePending.call(raffleWinner)).cmp(ether("0")), "wrong rafflePrizePending after 2");
         });
 
-        it("should increase addressPrizeTotal[msg.sender]", async() => {
+        it("should increase rafflePrizeWithdrawn[msg.sender]", async() => {
             //  1
             await game.withdrawGamePrizes(4, {from: OPPONENT});
             
             let randNum = await game.rand.call();
             let raffleWinner = await game.raffleParticipants.call(randNum);
-            let winnerBalanceBefore = await game.addressPrizeTotal.call(raffleWinner);
+            let winnerBalanceBefore = await game.rafflePrizeWithdrawn.call(raffleWinner);
 
             await game.runRaffle();
             await game.withdrawRafflePrizes({from: raffleWinner});
-            await assert.strictEqual(0, (await game.addressPrizeTotal.call(raffleWinner)).sub(winnerBalanceBefore).cmp(ether("0.002")), "wrong addressPrizeTotal after");
+            await assert.strictEqual(0, (await game.rafflePrizeWithdrawn.call(raffleWinner)).sub(winnerBalanceBefore).cmp(ether("0.002")), "wrong rafflePrizeWithdrawn after");
 
             await time.increase(time.duration.seconds(6));
 
@@ -960,11 +960,11 @@ contract("Withdraw", (accounts) => {
             
             randNum = await game.rand.call();
             raffleWinner = await game.raffleParticipants.call(randNum);
-            winnerBalanceBefore = await game.addressPrizeTotal.call(raffleWinner);
+            winnerBalanceBefore = await game.rafflePrizeWithdrawn.call(raffleWinner);
 
             await game.runRaffle();
             await game.withdrawRafflePrizes({from: raffleWinner});  //  0.123 * 0.01 = 0.00123
-            await assert.strictEqual(0, (await game.addressPrizeTotal.call(raffleWinner)).sub(winnerBalanceBefore).cmp(ether("0.00123")), "wrong addressPrizeTotal after 1");
+            await assert.strictEqual(0, (await game.rafflePrizeWithdrawn.call(raffleWinner)).sub(winnerBalanceBefore).cmp(ether("0.00123")), "wrong rafflePrizeWithdrawn after 1");
         });
 
         it("should transfer correct prize", async() => {

@@ -238,9 +238,9 @@ contract("Join", (accounts) => {
             assert.equal(0, (await game.getTopGames.call())[1].cmp(new BN("0")), "top game[0] should be excluded again");
         });
 
-        it("should increase addressBetTotal for opponent", async () => {
+        it("should increase betTotal for opponent", async () => {
             //  1
-            let prev = await game.addressBetTotal.call(OPPONENT);
+            let prev = await game.betTotal.call(OPPONENT);
       
             await game.createGame(CREATOR_REFERRAL, hash, {
               from: CREATOR,
@@ -252,7 +252,7 @@ contract("Join", (accounts) => {
                 value: ether("1")
             });
       
-            assert.equal(0, (await game.addressBetTotal.call(OPPONENT)).sub(prev).cmp(ether("1")), "wrong addressBetTotal 1");
+            assert.equal(0, (await game.betTotal.call(OPPONENT)).sub(prev).cmp(ether("1")), "wrong betTotal 1");
       
             await game.quitGame(1, {
               from: CREATOR
@@ -269,7 +269,7 @@ contract("Join", (accounts) => {
                 value: ether("0.2")
             });
       
-            assert.equal(0, (await game.addressBetTotal.call(OPPONENT)).sub(prev).cmp(ether("1.2")), "wrong addressBetTotal 2");
+            assert.equal(0, (await game.betTotal.call(OPPONENT)).sub(prev).cmp(ether("1.2")), "wrong betTotal 2");
           });
 
         it("should set opponent", async () => {

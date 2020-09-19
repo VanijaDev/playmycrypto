@@ -27,8 +27,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   enum GameState {WaitingForOpponent, Started, WinnerPresent, Draw, Quitted, Expired}
   struct Game {
     bool paused;
-    bool prizeWithdrawn;
-    bool[2] drawWithdrawn;  //  0 - creator; 1 - opponent
+    bool isPrizeWithdrawn;
+    bool[2] isDrawWithdrawn;  //  0 - creator; 1 - opponent
 
     GameState state;
 
@@ -62,8 +62,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   mapping(address => uint256[]) private playedGames;
   mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal; //  for both won & draw
 
-  mapping(address => uint256) public addressBetTotal;
-  mapping(address => uint256) public addressPrizeTotal; //  game prize + raffle prize, not draw
+  mapping(address => uint256) public betTotal;
+  mapping(address => uint256) public prizeWithdrawn; //  game bet if won. TODO: rename 
 
   mapping(address => uint256) public referralFeesPending;
   mapping(address => uint256) public referralFeesWithdrawn;
@@ -300,7 +300,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
 
     games[gamesCreatedAmount].id = gamesCreatedAmount;
     games[gamesCreatedAmount].creator = msg.sender;
@@ -335,7 +335,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       removeTopGame(_id);
     }
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     
     game.opponent = msg.sender;
     game.nextMover = game.creator;
@@ -441,15 +441,15 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
         betsDraw = betsDraw.add(game.bet);
 
         if (game.creator == msg.sender) {
-          require(!game.drawWithdrawn[0], "Fatal, cr with draw");
-          game.drawWithdrawn[0] = true;
+          require(!game.isDrawWithdrawn[0], "Fatal, cr with draw");
+          game.isDrawWithdrawn[0] = true;
         } else if (game.opponent == msg.sender) {
-          require(!game.drawWithdrawn[1], "Fatal, opp with draw");
-          game.drawWithdrawn[1] = true;
+          require(!game.isDrawWithdrawn[1], "Fatal, opp with draw");
+          game.isDrawWithdrawn[1] = true;
         }
       } else {
-        require(!game.prizeWithdrawn, "Fatal,prize was with");
-        game.prizeWithdrawn = true;
+        require(!game.isPrizeWithdrawn, "Fatal,prize was with");
+        game.isPrizeWithdrawn = true;
         betsPrize = betsPrize.add(game.bet);
         
         //  referral
@@ -461,7 +461,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(betsPrize);
+    prizeWithdrawn[msg.sender] = prizeWithdrawn[msg.sender].add(betsPrize);
 
     //  5% fees
     uint256 singleFee = betsPrize.mul(FEE_PERCENT).div(100);
@@ -470,7 +470,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     devFeePending = devFeePending.add(singleFee);
     addBeneficiarFee(singleFee);
 
-    uint256 transferAmount = betsPrize.sub(singleFee.mul(5)).add(betsDraw);
+    uint256 transferAmount = betsPrize.sub(singleFee.mul(5)).add(betsDraw).add(betsPrize);
     msg.sender.transfer(transferAmount);
 
     //  partner transfer
@@ -518,7 +518,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     require(prize > 0, "No raffle prize");
 
     delete rafflePrizePending[msg.sender];
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
+    rafflePrizeWithdrawn[msg.sender] = rafflePrizeWithdrawn[msg.sender].add(prize);
     msg.sender.transfer(prize);
 
     emit RPS_RafflePrizeWithdrawn(msg.sender);
@@ -643,7 +643,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   function increaseBetForGameBy(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) external payable {
     require(msg.value > 0, "increase must be > 0");
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     
     games[_id].bet = games[_id].bet.add(msg.value);
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -684,11 +684,11 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Game withdrawal information.
    * @param _id Game index.
-   * @return prizeWithdrawn, drawWithdrawnCreator, drawWithdrawnOpponent.
+   * @return isPrizeWithdrawn, isDrawWithdrawnCreator, isDrawWithdrawnOpponent.
    * TESTED
    */
   function gameWithdrawalInfo(uint256 _id) external view returns (bool, bool, bool) {
-    return (games[_id].prizeWithdrawn, games[_id].drawWithdrawn[0], games[_id].drawWithdrawn[1]);
+    return (games[_id].isPrizeWithdrawn, games[_id].isDrawWithdrawn[0], games[_id].isDrawWithdrawn[1]);
   }
 
   /**

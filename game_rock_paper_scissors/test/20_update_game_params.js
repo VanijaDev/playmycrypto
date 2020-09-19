@@ -96,15 +96,15 @@ contract("Update Game Params", (accounts) => {
             }), "increase must be > 0");
         });
 
-        it("should increase addressBetTotal[msg.sender]", async() => {
-            let prev = await game.addressBetTotal.call(CREATOR);
+        it("should increase betTotal[msg.sender]", async() => {
+            let prev = await game.betTotal.call(CREATOR);
         
             await game.increaseBetForGameBy(1, {
                 from: CREATOR,
                 value: ether("0.11")
             });
         
-            assert.equal(0, (await game.addressBetTotal.call(CREATOR)).sub(prev).cmp(ether("0.11")), "wrong addressBetTotal");
+            assert.equal(0, (await game.betTotal.call(CREATOR)).sub(prev).cmp(ether("0.11")), "wrong betTotal");
         });
 
         it("should increase bet for game", async () => {
