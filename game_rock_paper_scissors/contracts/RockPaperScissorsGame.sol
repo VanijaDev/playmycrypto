@@ -720,7 +720,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
    * @dev Finds player address with more wins.
    * @param _id Game id.
    * @return playerAddr Winner address with more wins.
-   * 
+   * TESTED
    */
   function playerWithMoreWins(uint256 _id) private view returns (address payable playerAddr) {
     //  0 - None
