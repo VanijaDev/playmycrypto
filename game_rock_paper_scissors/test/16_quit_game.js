@@ -218,13 +218,27 @@ contract("Quit Game", (accounts) => {
             assert.deepEqual(await game.getTopGames.call(), [new BN("0"), new BN("0"), new BN("0"), new BN("0"), new BN("0")], "wrong topGames array after");
         });
 
-        it("should emit GameFinished event to finish game", async () => {
-            let tx = await game.quitGame(1, {
+        it("should call finishGame", async () => {
+            // event RPS_GameQuittedFinished(uint256 indexed id, address indexed winner, uint256 bet);
+            await time.increase(time.duration.hours(1));
+
+            await game.quitGame(1, {
+                from: OPPONENT
+            });
+            assert.strictEqual(0, (await game.games.call(1)).state.cmp(new BN("4")), "wrong game.state");
+        });
+
+        it("should emit RPS_GameQuittedFinished event", async () => {
+            const {logs} = await game.quitGame(1, {
                 from: CREATOR
             });
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameFinished", "should be RPS_GameFinished");
+
+            assert.strictEqual(1, logs.length, "should be single event");
+            await expectEvent.inLogs(logs, 'RPS_GameQuittedFinished', {
+                id: new BN("1"),
+                creator: CREATOR,
+                opponent: OPPONENT
+            });
         });
     });
 });

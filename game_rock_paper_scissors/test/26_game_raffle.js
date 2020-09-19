@@ -109,13 +109,13 @@ contract("GameRaffle", (accounts) => {
       });
 
       it("should update activation count", async() => {
-        assert.equal(0, (await game.raffleActivationParticipantsAmount.call()).cmp(new BN("200")), "should be 200 before");
+        assert.strictEqual(0, (await game.raffleActivationParticipantsAmount.call()).cmp(new BN("200")), "should be 200 before");
 
         await game.updateRaffleActivationParticipantsCount([10], {
           from: OWNER
         });
 
-        assert.equal(0, (await game.raffleActivationParticipantsAmount.call()).cmp(new BN("10")), "should be 10 after");
+        assert.strictEqual(0, (await game.raffleActivationParticipantsAmount.call()).cmp(new BN("10")), "should be 10 after");
       });
     });
 
@@ -129,7 +129,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -145,16 +145,13 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1");
-
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1");
+        
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
           from: CREATOR_2,
@@ -188,7 +185,7 @@ contract("GameRaffle", (accounts) => {
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("2")), "should be 2");
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("2")), "should be 2");
       });
     });
 
@@ -198,13 +195,13 @@ contract("GameRaffle", (accounts) => {
           from: OWNER
         });
 
-        assert.equal(await game.raffleActivated.call(), false, "should be false before");
-
+        assert.strictEqual(await game.raffleActivated.call(), false, "should be false before");
+        
         //  1 - play
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -220,18 +217,15 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
-        assert.equal(await game.raffleActivated.call(), true, "should be true before 1");
+        assert.strictEqual(await game.raffleActivated.call(), true, "should be true before 1");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(await game.raffleActivated.call(), false, "should be false after 1");
-
+        assert.strictEqual(await game.raffleActivated.call(), false, "should be false after 1");
+        
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
           from: CREATOR_2,
@@ -263,11 +257,11 @@ contract("GameRaffle", (accounts) => {
           from: CREATOR_2
         });
 
-        assert.equal(await game.raffleActivated.call(), true, "should be true before 2");
+        assert.strictEqual(await game.raffleActivated.call(), true, "should be true before 2");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(await game.raffleActivated.call(), false, "should be false after 2");
+        assert.strictEqual(await game.raffleActivated.call(), false, "should be false after 2");
       });
     });
 
@@ -287,7 +281,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -303,21 +297,18 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
 
         let randNum = await game.rand.call(); //  is the same as will be in raffle
         let randWinner_1 = await game.raffleParticipants.call(randNum);
-        assert.equal(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0")), "should be 0 before");
+        assert.strictEqual(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0")), "should be 0 before");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0.02")), "should be 0.02 after");
-
+        assert.strictEqual(0, (await game.rafflePrizePending.call(randWinner_1)).cmp(ether("0.01")), "should be 0.01 after");
+        
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
           from: CREATOR_2,
@@ -351,11 +342,11 @@ contract("GameRaffle", (accounts) => {
 
         let randNum_2 = await game.rand.call(); //  is the same as will be in raffle
         let randWinner_2 = await game.raffleParticipants.call(randNum_2);
-        assert.equal(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0")), "should be 0 before 1");
+        assert.strictEqual(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0")), "should be 0 before 1");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0.002")), "should be 0.002 after 1");
+        assert.strictEqual(0, (await game.rafflePrizePending.call(randWinner_2)).cmp(ether("0.001")), "should be 0.001 after 1");
       });
 
       it("should update rafflePrizesWonTotal", async() => {
@@ -367,7 +358,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -383,17 +374,14 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
-        assert.equal(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0")), "should be 0 before");
+        assert.strictEqual(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0")), "should be 0 before");
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0.02")), "should be 0.02 after");
+        assert.strictEqual(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0.01")), "should be 0.01 after");
 
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
@@ -429,7 +417,7 @@ contract("GameRaffle", (accounts) => {
         await game.runRaffle({
           from: OTHER
         })
-        assert.equal(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0.022")), "should be 0.022 after 1");
+        assert.strictEqual(0, (await game.rafflePrizesWonTotal.call()).cmp(ether("0.011")), "should be 0.011 after 1");
       });
     });
 
@@ -443,7 +431,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -459,17 +447,14 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("0")), "should be 0 before");
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("0")), "should be 0 before");
         await game.runRaffle({
           from: OTHER
         });
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1 after");
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1 after");
 
         //  2 - play
         await game.createGame(CREATOR_REFERRAL, hash, {
@@ -502,11 +487,11 @@ contract("GameRaffle", (accounts) => {
           from: CREATOR_2
         });
 
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1 before 1");
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("1")), "should be 1 before 1");
         await game.runRaffle({
           from: OTHER
         });
-        assert.equal(0, (await game.getRaffleResultCount.call()).cmp(new BN("2")), "should be 2 after 1");
+        assert.strictEqual(0, (await game.getRaffleResultCount.call()).cmp(new BN("2")), "should be 2 after 1");
       });
     });
 
@@ -520,7 +505,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -536,9 +521,6 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
@@ -548,10 +530,10 @@ contract("GameRaffle", (accounts) => {
         const {logs} = await game.runRaffle({
           from: OTHER
         });
-        assert.equal(1, logs.length, "should be single event");
+        assert.strictEqual(1, logs.length, "should be single event");
         await expectEvent.inLogs(logs, 'RPS_RafflePlayed', {
           winner: randWinner_1,
-          prize: ether("0.02")
+          prize: ether("0.01")
         });
       });
 
@@ -564,7 +546,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
           from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
         
@@ -580,17 +562,14 @@ contract("GameRaffle", (accounts) => {
         });
 
         await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
-        await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });
 
-        assert.equal(0, (await game.ongoinRafflePrize.call()).cmp(ether("0.02")), "wrong ongoinRafflePrize before");
+        assert.strictEqual(0, (await game.ongoinRafflePrize.call()).cmp(ether("0.01")), "wrong ongoinRafflePrize before");
         await game.runRaffle({
           from: OTHER
         });
-        assert.equal(0, (await game.ongoinRafflePrize.call()).cmp(ether("0")), "wrong ongoinRafflePrize after");
+        assert.strictEqual(0, (await game.ongoinRafflePrize.call()).cmp(ether("0")), "wrong ongoinRafflePrize after");
       });
 
       it("should delete raffleParticipants", async() => {
@@ -609,7 +588,7 @@ contract("GameRaffle", (accounts) => {
         await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
             from: CREATOR
         });
-        await game.opponentNextMove(1, 1, {
+        await game.opponentNextMove(1, 2, {
             from: OPPONENT
         });
 
@@ -617,9 +596,6 @@ contract("GameRaffle", (accounts) => {
             from: CREATOR
         });
 
-        await game.withdrawGamePrizes(1, {
-          from: CREATOR
-        });
         await game.withdrawGamePrizes(1, {
           from: OPPONENT
         });

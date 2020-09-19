@@ -64,7 +64,7 @@ contract("finishGame", (accounts) => {
 
             assert.deepEqual(await game.getRaffleParticipants.call(), [], "should be empty before");
             
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: CREATOR
             });
@@ -84,7 +84,7 @@ contract("finishGame", (accounts) => {
                 from: CREATOR_2
             });
 
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(2, {
                 from: CREATOR_2
             });
@@ -103,7 +103,7 @@ contract("finishGame", (accounts) => {
 
             assert.deepEqual(await game.getRaffleParticipants.call(), [], "should be empty before");
             
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: OPPONENT
             });
@@ -120,7 +120,7 @@ contract("finishGame", (accounts) => {
                 value: ether("0.1")
             });
 
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(2, {
                 from: OPPONENT_2
             });
@@ -257,13 +257,13 @@ contract("finishGame", (accounts) => {
                 from: CREATOR
             });
 
-            assert.equal(0, (await game.gamesCompletedAmount.call()).cmp(new BN("0")), "should be 0 before");
-            await time.increase(time.duration.minutes(6));
+            assert.strictEqual(0, (await game.gamesCompletedAmount.call()).cmp(new BN("0")), "should be 0 before");
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: CREATOR
             });
-            assert.equal(0, (await game.gamesCompletedAmount.call()).cmp(new BN("1")), "should be 1");
-
+            assert.strictEqual(0, (await game.gamesCompletedAmount.call()).cmp(new BN("1")), "should be 1");
+            
             //  Quitted
             await game.createGame(CREATOR_REFERRAL, web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR_2,
@@ -277,8 +277,8 @@ contract("finishGame", (accounts) => {
             await game.quitGame(2, {
                 from: CREATOR_2
             });
-            assert.equal(0, (await game.gamesCompletedAmount.call()).cmp(new BN("2")), "should be 2");
-
+            assert.strictEqual(0, (await game.gamesCompletedAmount.call()).cmp(new BN("2")), "should be 2");
+            
             //  WinnerPresent
             await time.increase(time.duration.minutes(6));
 
@@ -312,8 +312,8 @@ contract("finishGame", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(0, (await game.gamesCompletedAmount.call()).cmp(new BN("3")), "should be 3");
-
+            assert.strictEqual(0, (await game.gamesCompletedAmount.call()).cmp(new BN("3")), "should be 3");
+            
             //  Draw
             await time.increase(time.duration.minutes(6));
 
@@ -347,10 +347,10 @@ contract("finishGame", (accounts) => {
                 from: CREATOR_2
             });
 
-            assert.equal(0, (await game.gamesCompletedAmount.call()).cmp(new BN("4")), "should be 4");
+            assert.strictEqual(0, (await game.gamesCompletedAmount.call()).cmp(new BN("4")), "should be 4");
         });
 
-        it("should delete ongoingGameIdxForPlayer", async() => {
+        it("should delete ongoingGameAsCreator", async() => {
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
@@ -365,15 +365,37 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.equal(0, (await game.ongoingGameIdxForPlayer.call(CREATOR)).cmp(new BN("1")), "should be 1");
-            assert.equal(0, (await game.ongoingGameIdxForPlayer.call(OPPONENT)).cmp(new BN("1")), "should be 1");
+            assert.strictEqual(0, (await game.ongoingGameAsCreator.call(CREATOR)).cmp(new BN("1")), "should be 1");
 
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.equal(0, (await game.ongoingGameIdxForPlayer.call(CREATOR)).cmp(new BN("0")), "should be 0");
-            assert.equal(0, (await game.ongoingGameIdxForPlayer.call(OPPONENT)).cmp(new BN("0")), "should be 0");
+            assert.strictEqual(0, (await game.ongoingGameAsCreator.call(CREATOR)).cmp(new BN("0")), "should be 0");
+        });
+
+        it("should delete ongoingGameAsOpponent", async() => {
+            await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+            await game.opponentNextMove(1, 1, {
+                from: OPPONENT
+            });
+
+            await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+            await game.opponentNextMove(1, 1, {
+                from: OPPONENT
+            });
+
+            assert.strictEqual(0, (await game.ongoingGameAsOpponent.call(OPPONENT)).cmp(new BN("1")), "should be 1");
+
+            await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR
+            });
+
+            assert.strictEqual(0, (await game.ongoingGameAsOpponent.call(OPPONENT)).cmp(new BN("0")), "should be 0");
         });
 
         it("should delete _game.prevMoveTimestamp", async() => {
@@ -391,13 +413,13 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.equal(1, (await game.games.call(1)).prevMoveTimestamp.cmp(new BN("0")), "should be > 0");
+            assert.strictEqual(1, (await game.games.call(1)).prevMoveTimestamp.cmp(new BN("0")), "should be > 0");
 
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.equal(0, (await game.games.call(1)).prevMoveTimestamp.cmp(new BN("0")), "should be == 0");
+            assert.strictEqual(0, (await game.games.call(1)).prevMoveTimestamp.cmp(new BN("0")), "should be == 0");
         });
 
         it("should delete _game.nextMover", async() => {
@@ -415,16 +437,16 @@ contract("finishGame", (accounts) => {
                 from: OPPONENT
             });
 
-            assert.equal((await game.games.call(1)).nextMover, CREATOR, "should be CREATOR");
+            assert.strictEqual((await game.games.call(1)).nextMover, CREATOR, "should be CREATOR");
 
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
 
-            assert.equal((await game.games.call(1)).nextMover, "0x0000000000000000000000000000000000000000", "should be 0x0");
+            assert.strictEqual((await game.games.call(1)).nextMover, "0x0000000000000000000000000000000000000000", "should be 0x0");
         });
 
-        it("should push CREATOR to gamesWithPendingPrizeWithdrawalForAddress if GameState.Expired", async() => {
+        it("should push CREATOR to gamesWithPendingPrizeWithdrawal if GameState.Expired", async() => {
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
@@ -432,7 +454,7 @@ contract("finishGame", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(CREATOR), [], "should be empty before");
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty before");
             
-            await time.increase(time.duration.minutes(6));
+            await time.increase(time.duration.hours(16));
             await game.finishExpiredGame(1, {
                 from: CREATOR
             });
@@ -441,7 +463,7 @@ contract("finishGame", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], "should be empty after");
         });
 
-        it("should push OPPONENT to gamesWithPendingPrizeWithdrawalForAddress if GameState.Quitted", async() => {
+        it("should push OPPONENT to gamesWithPendingPrizeWithdrawal if GameState.Quitted", async() => {
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
             });
@@ -455,7 +477,7 @@ contract("finishGame", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 after");
         });
 
-        it("should push OPPONENT to gamesWithPendingPrizeWithdrawalForAddress if GameState.WinnerPresent", async() => {    
+        it("should push OPPONENT to gamesWithPendingPrizeWithdrawal if GameState.WinnerPresent", async() => {    
             //  1
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
@@ -484,7 +506,7 @@ contract("finishGame", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [new BN("1")], "should be 1 after");
         });
 
-        it("should push both players to gamesWithPendingPrizeWithdrawalForAddress if GameState.Draw", async() => {    
+        it("should push both players to gamesWithPendingPrizeWithdrawal if GameState.Draw", async() => {    
             //  1
             await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR
@@ -550,31 +572,31 @@ contract("finishGame", (accounts) => {
 
         });
 
-        it("should emit GameFinished event if GameState.Draw", async() => {
-            //  1
-            await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-            await game.opponentNextMove(1, 1, {
-                from: OPPONENT
-            });
+        // it.only("should emit GameFinished event if GameState.Draw", async() => {
+        //     //  1
+        //     await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+        //         from: CREATOR
+        //     });
+        //     await game.opponentNextMove(1, 1, {
+        //         from: OPPONENT
+        //     });
 
-            //  2
-            await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
-            await game.opponentNextMove(1, 1, {
-                from: OPPONENT
-            });
+        //     //  2
+        //     await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+        //         from: CREATOR
+        //     });
+        //     await game.opponentNextMove(1, 1, {
+        //         from: OPPONENT
+        //     });
 
-            const {logs} = await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
-                from: CREATOR
-            });
+            // const {logs} = await game.playMove(1, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+            //     from: CREATOR
+            // });
 
-            assert.equal(1, logs.length, "should be single event");
-            await expectEvent.inLogs(logs, 'RPS_GameFinished', {
-                id: new BN("1")
-            });
-        });
+            // assert.strictEqual(1, logs.length, "should be single event");
+            // await expectEvent.inLogs(logs, 'RPS_GameFinished', {
+            //     id: new BN("1")
+            // });
+        // });
     });
 });

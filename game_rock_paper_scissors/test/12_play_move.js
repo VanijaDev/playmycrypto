@@ -814,7 +814,7 @@ contract("Play Move", (accounts) => {
             assert.equal(0, (await game.games.call(2)).state.cmp(new BN("2")), "wrong gameState");
         });
 
-        it("should call finishGame - emit GameFinished", async() => {
+        it("should call finishGame", async() => {
             //  Rock - Rock * 3
             await game.createGame(CREATOR_REFERRAL, web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR_2,
@@ -842,13 +842,51 @@ contract("Play Move", (accounts) => {
             });
 
             //  3
-            let tx = await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
                 from: CREATOR_2
             });
 
-            let event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameFinished", "should be RPS_GameFinished");
+            assert.strictEqual(0, (await game.games.call(2)).state.cmp(new BN("3")), "wrong game.state");
         });
 
+        it("should emit RPS_GameFinished", async() => {
+            //  Rock - Rock * 3
+            await game.createGame(CREATOR_REFERRAL, web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR_2,
+                value: ether("0.1")
+            });
+            await game.joinGame(2, OPPONENT_REFERRAL, 1, {
+                from: OPPONENT_2,
+                value: ether("0.1")
+            });
+
+            //  1
+            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR_2
+            });
+            await game.opponentNextMove(2, 1, {
+                from: OPPONENT_2
+            });
+
+            //  2
+            await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR_2
+            });
+            await game.opponentNextMove(2, 1, {
+                from: OPPONENT_2
+            });
+
+            //  3
+            const {logs} = await game.playMove(2, 1, web3.utils.soliditySha3(CREATOR_SEED), web3.utils.soliditySha3(1, web3.utils.soliditySha3(CREATOR_SEED)), {
+                from: CREATOR_2
+            });
+
+            assert.strictEqual(1, logs.length, "should be single event");
+            await expectEvent.inLogs(logs, 'RPS_GameFinished', {
+                id: new BN("2"),
+                creator: CREATOR_2,
+                opponent: OPPONENT_2
+            });
+        });
     });
 });

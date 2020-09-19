@@ -477,7 +477,7 @@ contract("Get Game Info", (accounts) => {
             await game.withdrawDevFee();
 
             let balanceAfter = await balance.current(game.address);
-            let prize = ether("1.9");
+            let prize = ether("1.95");
             assert.strictEqual(0, balanceBefore.sub(balanceAfter).cmp(prize.add(devFeePending)), "wrong balnce after dev fee withdraw");
         });
     });

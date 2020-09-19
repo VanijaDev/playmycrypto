@@ -152,16 +152,30 @@ contract("IExpiryMoveDuration", (accounts) => {
             assert.equal(0, (await game.games.call(1)).state.cmp(new BN("5")), "state should be Expired");
         });
 
-        it("should call finishGame - emit GameFinished event", async () => {
+        it("should call finishGame", async () => {
             // event GameFinished(uint256 indexed id, address indexed winner, uint256 bet);
             await time.increase(time.duration.hours(14));
 
-            let tx = await game.finishExpiredGame(1, {
+            await game.finishExpiredGame(1, {
                 from: OPPONENT
             });
-            assert.equal(1, tx.logs.length, "should be 1 log");
-            let event = tx.logs[0];
-            assert.equal(event.event, "RPS_GameFinished", "should be RPS_GameFinished");
+            assert.equal(0, (await game.games.call(1)).state.cmp(new BN("5")), "wrong game.state");
+        });
+
+        it("should emit RPS_GameExpiredFinished event", async () => {
+            // event RPS_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent);
+            await time.increase(time.duration.hours(16));
+
+            const {logs} = await game.finishExpiredGame(1, {
+                from: OPPONENT
+            });
+
+            assert.strictEqual(1, logs.length, "should be single event");
+            await expectEvent.inLogs(logs, 'RPS_GameExpiredFinished', {
+                id: new BN("1"),
+                creator: CREATOR,
+                opponent: OPPONENT
+            });
         });
     });
 });

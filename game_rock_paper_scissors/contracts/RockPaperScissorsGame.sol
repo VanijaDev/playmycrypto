@@ -275,6 +275,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     game.state = GameState.Expired;
 
     finishGame(game);
+
+    emit RPS_GameExpiredFinished(game.id, game.creator, game.opponent);
   }
   
   /**
@@ -387,6 +389,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     game.winner = playerWithMoreWins(_id);
     game.state = (game.winner != address(0)) ? GameState.WinnerPresent : GameState.Draw;
     finishGame(game);
+    emit RPS_GameFinished(game.id, game.creator, game.opponent);
   }
 
   /**
@@ -560,6 +563,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
     }
     
     finishGame(game);
+
+    emit RPS_GameQuittedFinished(game.id, game.creator, game.opponent);
   }
 
   /**
@@ -767,7 +772,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   /**
    * @dev Adds raffle participants & delete all ongoing statuses for players.
    * @param _game Game instance.
-   * 
+   * TESTING
    */
   function finishGame(Game storage _game) private {
     if (_game.state == GameState.Expired || _game.state == GameState.Quitted) {
@@ -793,7 +798,5 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       gamesWithPendingPrizeWithdrawal[_game.creator].push(_game.id);
       gamesWithPendingPrizeWithdrawal[_game.opponent].push(_game.id);
     }
-
-    emit RPS_GameFinished(_game.id, _game.creator, _game.opponent);
   }
 }
