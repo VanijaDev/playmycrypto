@@ -1,0 +1,1745 @@
+{
+	"compiler": {
+		"version": "0.6.0+commit.26b70077"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "_partner",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameAddedToTop",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bet",
+						"type": "uint256"
+					}
+				],
+				"name": "CF_GameCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "opponent",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameExpiredFinished",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "opponent",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameJoined",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					}
+				],
+				"name": "CF_GamePaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "opponent",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					}
+				],
+				"name": "CF_GamePlayed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "player",
+						"type": "address"
+					}
+				],
+				"name": "CF_GamePrizesWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "opponent",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameQuittedFinished",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "referral",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameReferralWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameUnpaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					}
+				],
+				"name": "CF_GameUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "CF_PartnerFeeTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "prize",
+						"type": "uint256"
+					}
+				],
+				"name": "CF_RafflePlayed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					}
+				],
+				"name": "CF_RafflePrizeWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Unpaused",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "ACQUIRED_FEE_BENEFICIARY_MAX_DURATION",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "addTopGame",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "betTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "_guessHash",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "_referral",
+						"type": "address"
+					}
+				],
+				"name": "createGame",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "devFeePending",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeBeneficiar",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "feeBeneficiarBalances",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeBeneficiarPurchasedAt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "finishExpiredGame",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "gameMoveDuration",
+				"outputs": [
+					{
+						"internalType": "uint16",
+						"name": "",
+						"type": "uint16"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "gameMoveExpired",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "gameOnPause",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "games",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint8",
+						"name": "creatorCoinSide",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "opponentCoinSide",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bet",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "opponentJoinedAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "creatorGuessHash",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address payable",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "opponent",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "creatorReferral",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "opponentReferral",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "gamesCompletedAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "gamesCreatedAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "gamesWithPendingPrizeWithdrawal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "getGamesWithPendingPrizeWithdrawal",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "ids",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "getPlayedGamesForPlayer",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRaffleParticipants",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRaffleResultCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTopGames",
+				"outputs": [
+					{
+						"internalType": "uint256[5]",
+						"name": "",
+						"type": "uint256[5]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "increaseBetForGameBy",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "isTopGame",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "_coinSide",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "_referral",
+						"type": "address"
+					}
+				],
+				"name": "joinGame",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "kill",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "latestBeneficiarPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "makeFeeBeneficiar",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minBet",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "ongoinRafflePrize",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "ongoingGameAsCreator",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "ongoingGameAsOpponent",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "partner",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "partnerFeePending",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "partnerFeeTotalUsed",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "partnerFeeTransferThreshold",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "pauseGame",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "_coinSide",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "_seedHash",
+						"type": "bytes32"
+					}
+				],
+				"name": "playGame",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "prizeTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "quitGame",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "raffleActivated",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "raffleActivationParticipantsAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "raffleParticipants",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "rafflePrizePending",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "rafflePrizeWithdrawn",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rafflePrizesWonTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "raffleResults",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "prize",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rand",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "referralFeesPending",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "referralFeesWithdrawn",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "runRaffle",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "topGames",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalUsedInGame",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalUsedReferralFees",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "unpause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "unpauseGame",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint16",
+						"name": "_duration",
+						"type": "uint16"
+					}
+				],
+				"name": "updateGameMoveDuration",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_minBet",
+						"type": "uint256"
+					}
+				],
+				"name": "updateMinBet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "_partnerAddress",
+						"type": "address"
+					}
+				],
+				"name": "updatePartner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_transferThreshold",
+						"type": "uint256"
+					}
+				],
+				"name": "updatePartnerTransferThreshold",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "updateRaffleActivationParticipantsCount",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawBeneficiaryFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawDevFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_maxLoop",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawGamePrizes",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawRafflePrizes",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawReferralFees",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {
+				"addTopGame(uint256)": {
+					"details": "Add game idx to the beginning of topGames.",
+					"params": {
+						"_id": "Game idx to be added. TESTED"
+					}
+				},
+				"constructor": {
+					"details": "Contract constructor.",
+					"params": {
+						"_partner": "Address for partner. TESTED"
+					}
+				},
+				"createGame(bytes32,address)": {
+					"details": "Create new game.",
+					"params": {
+						"_guessHash": "Hash of guess, coinSide + seedHash. Coin side should be 0 / 1.",
+						"_referral": "Address for referral. TESTED"
+					}
+				},
+				"finishExpiredGame(uint256)": {
+					"details": "Finish expired game.",
+					"params": {
+						"_id": "Game id. TESTED"
+					}
+				},
+				"gameMoveExpired(uint256)": {
+					"details": "Check if game move expired.",
+					"params": {
+						"_id": "Game id."
+					},
+					"returns": {
+						"_0": "Whether game move is expired. TESTED"
+					}
+				},
+				"gameOnPause(uint256)": {
+					"details": "Check if game is paused.",
+					"params": {
+						"_id": "Game index."
+					},
+					"returns": {
+						"_0": "Is game paused. TESTED"
+					}
+				},
+				"getGamesWithPendingPrizeWithdrawal(address)": {
+					"details": "Return game ids with pending withdrawal for address.",
+					"params": {
+						"_address": "Player address."
+					},
+					"returns": {
+						"ids": "Game ids. TESTED"
+					}
+				},
+				"getPlayedGamesForPlayer(address)": {
+					"details": "Get game indexes where player participated. Created and joined",
+					"params": {
+						"_address": "Player address."
+					},
+					"returns": {
+						"_0": "List of indexes. TESTED"
+					}
+				},
+				"getRaffleParticipants()": {
+					"details": "Gets raffle participants.",
+					"returns": {
+						"_0": "Participants count. TESTED"
+					}
+				},
+				"getRaffleResultCount()": {
+					"details": "Gets past raffle results count.",
+					"returns": {
+						"_0": "Results count. TESTED"
+					}
+				},
+				"getTopGames()": {
+					"details": "Get top games.",
+					"returns": {
+						"_0": "Returns list of top games. TESTED"
+					}
+				},
+				"increaseBetForGameBy(uint256)": {
+					"details": "Update bet for game.",
+					"params": {
+						"_id": "Game index. TESTED"
+					}
+				},
+				"isTopGame(uint256)": {
+					"details": "Check if game id is in top games.",
+					"params": {
+						"_id": "Game id to check."
+					},
+					"returns": {
+						"_0": "Whether game id is in top games. TESTED"
+					}
+				},
+				"joinGame(uint256,uint8,address)": {
+					"details": "Join game.",
+					"params": {
+						"_coinSide": "Coin side for randomness. Coin side should be 0 / 1.",
+						"_id": "Game id to join.",
+						"_referral": "Address for referral. TESTED"
+					}
+				},
+				"kill()": {
+					"details": "Destroy the contract. TESTED"
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"pause()": {
+					"details": "Trigger stopped state. TESTED"
+				},
+				"pauseGame(uint256)": {
+					"details": "Pauses game.",
+					"params": {
+						"_id": "Game index. TESTED"
+					}
+				},
+				"paused()": {
+					"details": "Returns true if the contract is paused, and false otherwise."
+				},
+				"playGame(uint256,uint8,bytes32)": {
+					"details": "Play game.",
+					"params": {
+						"_coinSide": "Coin side in _guessHash.",
+						"_id": "Game id.",
+						"_seedHash": "Seed str hash in _guessHash. TESTED"
+					}
+				},
+				"quitGame(uint256)": {
+					"details": "Quit game.",
+					"params": {
+						"_id": "Game id. TESTED"
+					}
+				},
+				"raffleActivated()": {
+					"details": "Checks if raffle is activated.",
+					"returns": {
+						"_0": "Wether raffle is activated. TESTED"
+					}
+				},
+				"rand()": {
+					"details": "Generates random number TESTED"
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+				},
+				"runRaffle()": {
+					"details": "Runs the raffle. TESTED"
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				},
+				"unpause()": {
+					"details": "Returns to normal state.    "
+				},
+				"unpauseGame(uint256)": {
+					"details": "Unpause game.",
+					"params": {
+						"_id": "Game index. TESTED"
+					}
+				},
+				"updateGameMoveDuration(uint16)": {
+					"details": "Updates game move duration.",
+					"params": {
+						"_duration": "Game duration. TESTED"
+					}
+				},
+				"updateMinBet(uint256)": {
+					"details": "Update minimum bet value. Can be 0 if no restrictions.",
+					"params": {
+						"_minBet": "Min bet value. TESTED"
+					}
+				},
+				"updatePartner(address)": {
+					"details": "Updates partner address.",
+					"params": {
+						"_partnerAddress": "Address for partner. TESTED"
+					}
+				},
+				"updatePartnerTransferThreshold(uint256)": {
+					"details": "Updates partner fee transfer threshold limit, when fee should be transferred to address.",
+					"params": {
+						"_transferThreshold": "Fee amount, that should trigger transfer. TESTED"
+					}
+				},
+				"updateRaffleActivationParticipantsCount(uint256)": {
+					"details": "Updates raffle minimum participants count to activate.",
+					"params": {
+						"_amount": "Amount to be set. TESTED"
+					}
+				},
+				"withdrawBeneficiaryFee()": {
+					"details": "Withdraws beneficiary fee. TESTED"
+				},
+				"withdrawDevFee()": {
+					"details": "Withdraw developer fees."
+				},
+				"withdrawGamePrizes(uint256)": {
+					"details": "Withdraw prize for won game.",
+					"params": {
+						"_maxLoop": "max loop."
+					}
+				},
+				"withdrawRafflePrizes()": {
+					"details": "Withdraw reffle prize."
+				},
+				"withdrawReferralFees()": {
+					"details": "Withdraw referral fees."
+				}
+			}
+		},
+		"userdoc": {
+			"methods": {
+				"makeFeeBeneficiar()": {
+					"notice": "AcquiredFeeBeneficiar TESTED"
+				},
+				"updatePartnerTransferThreshold(uint256)": {
+					"notice": "In wei."
+				},
+				"withdrawDevFee()": {
+					"notice": "100% to transfer. TESTED"
+				},
+				"withdrawGamePrizes(uint256)": {
+					"notice": "95% to transfer TESTED"
+				},
+				"withdrawRafflePrizes()": {
+					"notice": "GameRaffle100% to transfer. TESTED"
+				},
+				"withdrawReferralFees()": {
+					"notice": "100% to transfer. TESTED"
+				}
+			},
+			"notice": "IMPORTANT: owner should create first game. *  Prize distribution will be performed on game prize withdrawal only with percentages:   95% - winner    1% - winner referral    1% - raffle    1% - partner project    1% - fee beneficiar    1% - dev"
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"localhost/game_coinflip/contracts/CoinFlipGame.sol": "CoinFlipGame"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"localhost/game_coinflip/contracts/AcquiredFeeBeneficiar.sol": {
+			"keccak256": "0x2017120b931d86e2551371e838dac41785b074d042ecb530115114bafbfe1938",
+			"urls": [
+				"bzz-raw://0763c98a52bbeed084205a14ddd2c2e4d80f2268f63e371e49fca858e1760baf",
+				"dweb:/ipfs/QmTF1keMkhCRpoiHaUw2xa4YQzjtpeVUAx4xXPM71ecMMg"
+			]
+		},
+		"localhost/game_coinflip/contracts/CoinFlipGame.sol": {
+			"keccak256": "0x7fc28a558e93c1c5af814873659d25b0b059ea7a2c4a2e1ba7e5b5dfdd694d36",
+			"urls": [
+				"bzz-raw://295714cccfce6aa7945ae731439bd790b18d5d0714420757c86aaa75926fc274",
+				"dweb:/ipfs/QmX6uQ1DbmA1vb42642rJRCB1AUU8UY19rCsgYMpoDWNA3"
+			]
+		},
+		"localhost/game_coinflip/contracts/GameRaffle.sol": {
+			"keccak256": "0x3996f7c2da17cc904367366eef53f8725a230bfd5c8d46d8386fd6d404c97235",
+			"urls": [
+				"bzz-raw://bdacf10fb045d2df9888c604dbbb224e7fb068b74a27404650777794cb33c09a",
+				"dweb:/ipfs/QmXtKERCTc431VrorRfXZKrQbNhK5xfHbKaYgvF1Bw2xTL"
+			]
+		},
+		"localhost/game_coinflip/contracts/IExpiryMoveDuration.sol": {
+			"keccak256": "0xa992cbdc8171bd4e982d66888a77fe07f69364b73682b094b8ba252510786284",
+			"urls": [
+				"bzz-raw://b3a8d4e15bcf5f628befbd2b24ae1b2705abcf97547170661a3d4727772ad235",
+				"dweb:/ipfs/QmetkdD3F1S8H2jW4C97y2WUtVDybbDXqReTKCDLLh6ieG"
+			]
+		},
+		"localhost/game_coinflip/contracts/IGamePausable.sol": {
+			"keccak256": "0x310289d7a63c45ad7eb16550aca32118a922cb1f1beb64bcf921ac91ea481a6d",
+			"urls": [
+				"bzz-raw://420fdf24eaffb5274a51fc7db3cb912435264ff90b70181459a8340b978cd9aa",
+				"dweb:/ipfs/QmWs7Z3s2Rp42zeV3pauevunLWq4a7PbUFdkn5rs2JGcjo"
+			]
+		},
+		"localhost/game_coinflip/contracts/Partnership.sol": {
+			"keccak256": "0x681cc86da215bff127af6f65d8b2bb9acfd2a51a31382d871b1e6c65a25242ae",
+			"urls": [
+				"bzz-raw://f1ac3e17be85dcab2bc041847d23bdc4582e8e204e067aaf1f55dedc915622bb",
+				"dweb:/ipfs/QmRyEBsYgCGHqsNhtV3vRQase4X14BxHT9woUynppSVDvf"
+			]
+		},
+		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol": {
+			"keccak256": "0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183",
+			"urls": [
+				"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a",
+				"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP"
+			]
+		},
+		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol": {
+			"keccak256": "0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc",
+			"urls": [
+				"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3",
+				"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba"
+			]
+		},
+		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol": {
+			"keccak256": "0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806",
+			"urls": [
+				"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5",
+				"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV"
+			]
+		},
+		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol": {
+			"keccak256": "0x5d1b1dcbc0396f44c1c8d554857f71e3187503bf1e54062bf9ec6782e21f3a08",
+			"urls": [
+				"bzz-raw://9aa7fa580393aab7ca3d9f606f5ab7434d51e1c0f3632a593fca82c80ef8cc4c",
+				"dweb:/ipfs/QmRy84N7QfkwBM2AeR7UB5G1PPHdRLi6s1iyzAwCzevcHe"
+			]
+		}
+	},
+	"version": 1
+}
