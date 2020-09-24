@@ -9,26 +9,6 @@ let CoinFlipData = {
         {
             "inputs": [
                 {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "addTopGame",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "kill",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
                     "internalType": "address payable",
                     "name": "_partner",
                     "type": "address"
@@ -334,80 +314,6 @@ let CoinFlipData = {
             "type": "event"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "bytes32",
-                    "name": "_guessHash",
-                    "type": "bytes32"
-                },
-                {
-                    "internalType": "address",
-                    "name": "_referral",
-                    "type": "address"
-                }
-            ],
-            "name": "createGame",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "finishExpiredGame",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "increaseBetForGameBy",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint8",
-                    "name": "_coinSide",
-                    "type": "uint8"
-                },
-                {
-                    "internalType": "address",
-                    "name": "_referral",
-                    "type": "address"
-                }
-            ],
-            "name": "joinGame",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "makeFeeBeneficiar",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
@@ -427,13 +333,6 @@ let CoinFlipData = {
             "type": "event"
         },
         {
-            "inputs": [],
-            "name": "pause",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
@@ -447,82 +346,6 @@ let CoinFlipData = {
             "type": "event"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "pauseGame",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint8",
-                    "name": "_coinSide",
-                    "type": "uint8"
-                },
-                {
-                    "internalType": "bytes32",
-                    "name": "_seedHash",
-                    "type": "bytes32"
-                }
-            ],
-            "name": "playGame",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "quitGame",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "renounceOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "runRaffle",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "transferOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
@@ -534,125 +357,6 @@ let CoinFlipData = {
             ],
             "name": "Unpaused",
             "type": "event"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "unpauseGame",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint16",
-                    "name": "_duration",
-                    "type": "uint16"
-                }
-            ],
-            "name": "updateGameMoveDuration",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_minBet",
-                    "type": "uint256"
-                }
-            ],
-            "name": "updateMinBet",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address payable",
-                    "name": "_partnerAddress",
-                    "type": "address"
-                }
-            ],
-            "name": "updatePartner",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_transferThreshold",
-                    "type": "uint256"
-                }
-            ],
-            "name": "updatePartnerTransferThreshold",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "updateRaffleActivationParticipantsCount",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "withdrawBeneficiaryFee",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "withdrawDevFee",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_maxLoop",
-                    "type": "uint256"
-                }
-            ],
-            "name": "withdrawGamePrizes",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "withdrawRafflePrizes",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "withdrawReferralFees",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
         },
         {
             "inputs": [],
@@ -670,12 +374,25 @@ let CoinFlipData = {
         {
             "inputs": [
                 {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "addTopGame",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
                     "internalType": "address",
                     "name": "",
                     "type": "address"
                 }
             ],
-            "name": "addressBetTotal",
+            "name": "betTotal",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -689,20 +406,19 @@ let CoinFlipData = {
         {
             "inputs": [
                 {
+                    "internalType": "bytes32",
+                    "name": "_guessHash",
+                    "type": "bytes32"
+                },
+                {
                     "internalType": "address",
-                    "name": "",
+                    "name": "_referral",
                     "type": "address"
                 }
             ],
-            "name": "addressPrizeTotal",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
+            "name": "createGame",
+            "outputs": [],
+            "stateMutability": "payable",
             "type": "function"
         },
         {
@@ -761,6 +477,19 @@ let CoinFlipData = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "finishExpiredGame",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -1023,6 +752,19 @@ let CoinFlipData = {
                     "type": "uint256"
                 }
             ],
+            "name": "increaseBetForGameBy",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
             "name": "isTopGame",
             "outputs": [
                 {
@@ -1032,6 +774,36 @@ let CoinFlipData = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "_coinSide",
+                    "type": "uint8"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_referral",
+                    "type": "address"
+                }
+            ],
+            "name": "joinGame",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "kill",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -1049,7 +821,27 @@ let CoinFlipData = {
         },
         {
             "inputs": [],
+            "name": "makeFeeBeneficiar",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
             "name": "minBet",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "ongoinRafflePrize",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -1088,19 +880,6 @@ let CoinFlipData = {
                 }
             ],
             "name": "ongoingGameAsOpponent",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "ongoinRafflePrize",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -1178,6 +957,26 @@ let CoinFlipData = {
         },
         {
             "inputs": [],
+            "name": "pause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "pauseGame",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
             "name": "paused",
             "outputs": [
                 {
@@ -1187,6 +986,61 @@ let CoinFlipData = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "_coinSide",
+                    "type": "uint8"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "_seedHash",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "playGame",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "prizeTotal",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "quitGame",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -1243,6 +1097,25 @@ let CoinFlipData = {
                 }
             ],
             "name": "rafflePrizePending",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "rafflePrizeWithdrawn",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -1347,6 +1220,20 @@ let CoinFlipData = {
             "type": "function"
         },
         {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "runRaffle",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "uint256",
@@ -1389,6 +1276,145 @@ let CoinFlipData = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "unpause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "unpauseGame",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "_duration",
+                    "type": "uint16"
+                }
+            ],
+            "name": "updateGameMoveDuration",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_minBet",
+                    "type": "uint256"
+                }
+            ],
+            "name": "updateMinBet",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address payable",
+                    "name": "_partnerAddress",
+                    "type": "address"
+                }
+            ],
+            "name": "updatePartner",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_transferThreshold",
+                    "type": "uint256"
+                }
+            ],
+            "name": "updatePartnerTransferThreshold",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "updateRaffleActivationParticipantsCount",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "withdrawBeneficiaryFee",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "withdrawDevFee",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_maxLoop",
+                    "type": "uint256"
+                }
+            ],
+            "name": "withdrawGamePrizes",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "withdrawRafflePrizes",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "withdrawReferralFees",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         }
     ],
@@ -1496,6 +1522,43 @@ let RockPaperScissorsData = {
                     "internalType": "uint256",
                     "name": "id",
                     "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "creator",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "opponent",
+                    "type": "address"
+                }
+            ],
+            "name": "RPS_GameExpiredFinished",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "creator",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "opponent",
+                    "type": "address"
                 }
             ],
             "name": "RPS_GameFinished",
@@ -1521,12 +1584,6 @@ let RockPaperScissorsData = {
                     "internalType": "address",
                     "name": "opponent",
                     "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "address",
-                    "name": "nextMover",
-                    "type": "address"
                 }
             ],
             "name": "RPS_GameJoined",
@@ -1540,12 +1597,6 @@ let RockPaperScissorsData = {
                     "internalType": "uint256",
                     "name": "id",
                     "type": "uint256"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "nextMover",
-                    "type": "address"
                 }
             ],
             "name": "RPS_GameMovePlayed",
@@ -1559,12 +1610,6 @@ let RockPaperScissorsData = {
                     "internalType": "uint256",
                     "name": "id",
                     "type": "uint256"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "nextMover",
-                    "type": "address"
                 }
             ],
             "name": "RPS_GameOpponentMoved",
@@ -1601,6 +1646,31 @@ let RockPaperScissorsData = {
             "inputs": [
                 {
                     "indexed": true,
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "creator",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "opponent",
+                    "type": "address"
+                }
+            ],
+            "name": "RPS_GameQuittedFinished",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
                     "internalType": "address",
                     "name": "referral",
                     "type": "address"
@@ -1617,12 +1687,6 @@ let RockPaperScissorsData = {
                     "internalType": "uint256",
                     "name": "id",
                     "type": "uint256"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "creator",
-                    "type": "address"
                 }
             ],
             "name": "RPS_GameUnpaused",
@@ -1699,12 +1763,6 @@ let RockPaperScissorsData = {
                     "internalType": "address",
                     "name": "winner",
                     "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "uint256",
-                    "name": "prize",
-                    "type": "uint256"
                 }
             ],
             "name": "RPS_RafflePrizeWithdrawn",
@@ -1722,6 +1780,19 @@ let RockPaperScissorsData = {
             ],
             "name": "Unpaused",
             "type": "event"
+        },
+        {
+            "inputs": [],
+            "name": "ACQUIRED_FEE_BENEFICIARY_MAX_DURATION",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
         },
         {
             "inputs": [
@@ -1744,26 +1815,7 @@ let RockPaperScissorsData = {
                     "type": "address"
                 }
             ],
-            "name": "addressBetTotal",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "addressPrizeTotal",
+            "name": "betTotal",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -1795,6 +1847,51 @@ let RockPaperScissorsData = {
         {
             "inputs": [],
             "name": "devFeePending",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "feeBeneficiar",
+            "outputs": [
+                {
+                    "internalType": "address payable",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "feeBeneficiarBalances",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "feeBeneficiarPurchasedAt",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -1915,7 +2012,7 @@ let RockPaperScissorsData = {
                 },
                 {
                     "internalType": "bool",
-                    "name": "prizeWithdrawn",
+                    "name": "isPrizeWithdrawn",
                     "type": "bool"
                 },
                 {
@@ -2011,7 +2108,7 @@ let RockPaperScissorsData = {
                     "type": "uint256"
                 }
             ],
-            "name": "gamesWithPendingPrizeWithdrawalForAddress",
+            "name": "gamesWithPendingPrizeWithdrawal",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -2049,7 +2146,7 @@ let RockPaperScissorsData = {
                     "type": "address"
                 }
             ],
-            "name": "getGamesWithPendingPrizeWithdrawalForAddress",
+            "name": "getGamesWithPendingPrizeWithdrawal",
             "outputs": [
                 {
                     "internalType": "uint256[]",
@@ -2068,7 +2165,7 @@ let RockPaperScissorsData = {
                     "type": "address"
                 }
             ],
-            "name": "getPlayedGameIdxsForPlayer",
+            "name": "getPlayedGamesForPlayer",
             "outputs": [
                 {
                     "internalType": "uint256[]",
@@ -2182,6 +2279,26 @@ let RockPaperScissorsData = {
         },
         {
             "inputs": [],
+            "name": "latestBeneficiarPrice",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "makeFeeBeneficiar",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
             "name": "minBet",
             "outputs": [
                 {
@@ -2214,7 +2331,26 @@ let RockPaperScissorsData = {
                     "type": "address"
                 }
             ],
-            "name": "ongoingGameIdxForPlayer",
+            "name": "ongoingGameAsCreator",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "ongoingGameAsOpponent",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -2372,16 +2508,16 @@ let RockPaperScissorsData = {
         {
             "inputs": [
                 {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
                 }
             ],
-            "name": "prizeForGame",
+            "name": "prizeWithdrawn",
             "outputs": [
                 {
                     "internalType": "uint256",
-                    "name": "_prize",
+                    "name": "",
                     "type": "uint256"
                 }
             ],
@@ -2454,7 +2590,26 @@ let RockPaperScissorsData = {
                     "type": "address"
                 }
             ],
-            "name": "rafflePrizePendingForAddress",
+            "name": "rafflePrizePending",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "rafflePrizeWithdrawn",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -2559,19 +2714,6 @@ let RockPaperScissorsData = {
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "removeTopGame",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "inputs": [],
             "name": "renounceOwnership",
             "outputs": [],
@@ -2673,6 +2815,13 @@ let RockPaperScissorsData = {
             "type": "function"
         },
         {
+            "inputs": [],
+            "name": "unpause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "uint256",
@@ -2746,6 +2895,13 @@ let RockPaperScissorsData = {
                 }
             ],
             "name": "updateRaffleActivationParticipantsCount",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "withdrawBeneficiaryFee",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
