@@ -15,11 +15,11 @@ const Index = {
 
     await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
-    await this.refreshData();
+    // await this.refreshData();
 
-    //  events
-    window.NotificationManager.eventHandler = this;
-    window.NotificationManager.subscribe_index();
+    // //  events
+    // window.NotificationManager.eventHandler = this;
+    // window.NotificationManager.subscribe_index();
   },
 
   onUnload: function () {

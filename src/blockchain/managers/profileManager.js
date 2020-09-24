@@ -34,11 +34,11 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerGameplayProfit();
-    await this.updateReferralFeesWithdrawn();
-    await this.updatePlayerTotalProfit();
-    await this.updatePendingWithdrawals();
+    // await this.updatePlayedGamesTotalAmounts();
+    // await this.updatePlayerGameplayProfit();
+    // await this.updateReferralFeesWithdrawn();
+    // await this.updatePlayerTotalProfit();
+    // await this.updatePendingWithdrawals();
   },
 
   updateAfterWithdrawal: async function () {
@@ -85,15 +85,15 @@ let ProfileManager = {
       }
     }
 
-    this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
-    if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
-      let btn = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), "opponent: " + this.ongoingGameCF_Opponent);
-        btn.onclick = function () {
-          window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
-        };
-      $('#listCurrentlyPlayingGames')[0].appendChild(btn);
-    }
+    // this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
+    // if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
+    //   let btn = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), "opponent: " + this.ongoingGameCF_Opponent);
+    //     btn.onclick = function () {
+    //       window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
+    //     };
+    //   $('#listCurrentlyPlayingGames')[0].appendChild(btn);
+    // }
 
     // //  rps
     // this.ongoingGameRPS = new BigNumber(await window.BlockchainManager.ongoingGameIdxForPlayer(Types.Game.rps, window.BlockchainManager.currentAccount()));

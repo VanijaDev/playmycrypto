@@ -12,7 +12,7 @@ const Utils = {
       validatedValue = validatedValue.toString();
     }
 
-    return parseFloat(web3.utils.fromWei(validatedValue, "ether")).toFixed((_decimals) ? _decimals : 5);
+    return parseFloat(web3.utils.fromWei(validatedValue, "ether")).toFixed((_decimals) ? _decimals : 4);
   },
 
   etherToWei: (_value) => {
