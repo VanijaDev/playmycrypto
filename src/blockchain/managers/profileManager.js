@@ -36,7 +36,7 @@ let ProfileManager = {
     await this.updateCurrentlyPlayingGames();
     await this.updatePlayedGamesTotalAmounts();
     await this.updatePlayerGameplayProfit();
-    // await this.updateReferralFeesWithdrawn();
+    await this.updateReferralFeesWithdrawn();
     // await this.updatePlayerTotalProfit();
     // await this.updatePendingWithdrawals();
   },
