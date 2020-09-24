@@ -256,8 +256,8 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.rafflePrizePendingForAddressPromise(_gameType, _currentAccount);
   },
 
-  addressPrizeTotal: async function (_gameType, _currentAccount) {
-    return await PromiseManager.addressPrizeTotalPromise(_gameType, _currentAccount);
+  prizeTotal: async function (_gameType, _currentAccount) {
+    return await PromiseManager.prizeTotalPromise(_gameType, _currentAccount);
   },
 
   raffleResultCount: async function (_gameType) {
@@ -280,8 +280,8 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.feeBeneficiarBalancePromise(_gameType, _account);
   },
 
-  addressBetTotal: async function (_gameType, _currentAccount) {
-    return await PromiseManager.addressBetTotalPromise(_gameType, _currentAccount);
+  betTotal: async function (_gameType, _currentAccount) {
+    return await PromiseManager.betTotalPromise(_gameType, _currentAccount);
   },
 
   playedGameIdxsForPlayer: async function (_gameType, _currentAccount) {

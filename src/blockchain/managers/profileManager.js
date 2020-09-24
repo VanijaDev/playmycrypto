@@ -34,8 +34,8 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    // await this.updatePlayedGamesTotalAmounts();
-    // await this.updatePlayerGameplayProfit();
+    await this.updatePlayedGamesTotalAmounts();
+    await this.updatePlayerGameplayProfit();
     // await this.updateReferralFeesWithdrawn();
     // await this.updatePlayerTotalProfit();
     // await this.updatePendingWithdrawals();
@@ -85,15 +85,15 @@ let ProfileManager = {
       }
     }
 
-    // this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
-    // if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
-    //   let btn = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), "opponent: " + this.ongoingGameCF_Opponent);
-    //     btn.onclick = function () {
-    //       window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
-    //     };
-    //   $('#listCurrentlyPlayingGames')[0].appendChild(btn);
-    // }
+    this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
+    if (this.ongoingGameCF_Opponent.comparedTo(new BigNumber("0")) == 1) {
+      let btn = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), "opponent: " + this.ongoingGameCF_Opponent);
+        btn.onclick = function () {
+          window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
+        };
+      $('#listCurrentlyPlayingGames')[0].appendChild(btn);
+    }
 
     // //  rps
     // this.ongoingGameRPS = new BigNumber(await window.BlockchainManager.ongoingGameIdxForPlayer(Types.Game.rps, window.BlockchainManager.currentAccount()));
@@ -144,18 +144,20 @@ let ProfileManager = {
     profitAmountElement.classList.remove("red");
     profitAmountElement.classList.add("green");
 
-    let cfBetResult = new BigNumber(await window.BlockchainManager.addressBetTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    let rpsBetResult = new BigNumber(await window.BlockchainManager.addressBetTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    let totalBet = cfBetResult.plus(rpsBetResult);
+    let cfBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let betTotal = cfBetResult;
+    // let rpsBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    // let betTotal = cfBetResult.plus(rpsBetResult);
 
-    let cfPrizeResult = new BigNumber(await window.BlockchainManager.addressPrizeTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    let rpsPrizeResult = new BigNumber(await window.BlockchainManager.addressPrizeTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    let prizeTotal = cfPrizeResult.plus(rpsPrizeResult);
+    let cfPrizeResult = new BigNumber(await window.BlockchainManager.prizeTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let prizeTotal = cfPrizeResult
+    // let rpsPrizeResult = new BigNumber(await window.BlockchainManager.addressprizeTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    // let prizeTotal = cfPrizeResult.plus(rpsPrizeResult);
 
-    let profit = prizeTotal.minus(totalBet);
+    let profit = betTotal.multipliedBy(new BigNumber("-1")).plus(prizeTotal.multipliedBy(new BigNumber("2")));
     profitAmountElement.innerText = Utils.weiToEtherFixed(profit.toString());
 
-    if (profit.comparedTo(new BigNumber("0")) < 0) {
+    if (profit.isNegative()) {
       document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
       profitAmountElement.classList.remove("green");
       profitAmountElement.classList.add("red");

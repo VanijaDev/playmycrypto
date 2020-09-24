@@ -59,9 +59,9 @@ let PromiseManager = {
     });
   },
 
-  addressBetTotalPromise: function (_gameType, _account) {
+  betTotalPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.addressBetTotal(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.betTotal(_account).call()
         .then(result => {
           resolve(result);
         })
@@ -71,9 +71,9 @@ let PromiseManager = {
     });
   },
 
-  addressPrizeTotalPromise: function (_gameType, _account) {
+  prizeTotalPromise: function (_gameType, _account) {
     return new Promise(resolve => {
-      window.BlockchainManager.gameInst(_gameType).methods.addressPrizeTotal(_account).call()
+      window.BlockchainManager.gameInst(_gameType).methods.prizeTotal(_account).call()
         .then(result => {
           resolve(result);
         })

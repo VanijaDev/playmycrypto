@@ -4,7 +4,7 @@ const Web3 = require("web3");
 // var web3 = new Web3(Web3.givenProvider);
 
 let CoinFlipData = {
-    address: "0x1181d2f40659B8445d120B86A7c15bF1BfD6Ecdf", //    Ganache
+    address: "0xD120Da352442573bAa58743cBfE1B9Cb059b4ce5", //    Ganache
     abi: [
         {
             "inputs": [
