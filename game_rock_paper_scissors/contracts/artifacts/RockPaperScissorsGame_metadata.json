@@ -1788,7 +1788,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"localhost/game_rock_paper_scissors/contracts/RockPaperScissorsGame.sol": "RockPaperScissorsGame"
+			"localhost/contracts/RockPaperScissorsGame.sol": "RockPaperScissorsGame"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -1802,70 +1802,70 @@
 		"remappings": []
 	},
 	"sources": {
-		"localhost/game_rock_paper_scissors/contracts/AcquiredFeeBeneficiar.sol": {
+		"localhost/contracts/AcquiredFeeBeneficiar.sol": {
 			"keccak256": "0x2017120b931d86e2551371e838dac41785b074d042ecb530115114bafbfe1938",
 			"urls": [
 				"bzz-raw://0763c98a52bbeed084205a14ddd2c2e4d80f2268f63e371e49fca858e1760baf",
 				"dweb:/ipfs/QmTF1keMkhCRpoiHaUw2xa4YQzjtpeVUAx4xXPM71ecMMg"
 			]
 		},
-		"localhost/game_rock_paper_scissors/contracts/GameRaffle.sol": {
+		"localhost/contracts/GameRaffle.sol": {
 			"keccak256": "0x949ec9c04699c5429ddd0f412796e196ef9e69bbd9daed1b0a15d711e8d659eb",
 			"urls": [
 				"bzz-raw://dd8fa8c5b4429bcd50c230f41211e697a34aab322fa6199fe16cff62656f52a1",
 				"dweb:/ipfs/Qmbj4GYjjUkgoZDkXDQJgWa2M5383kZQdWXRb1daiQWmcs"
 			]
 		},
-		"localhost/game_rock_paper_scissors/contracts/IExpiryMoveDuration.sol": {
+		"localhost/contracts/IExpiryMoveDuration.sol": {
 			"keccak256": "0xb2dd2b29be00e46670675793544e4344b952757bec16c47c2a4e391ddaccbadd",
 			"urls": [
 				"bzz-raw://60787150829e76054e7dedc521b0dad26a7527637c8f5b0b4a207583b6799203",
 				"dweb:/ipfs/Qmf2iZp147pwvyNgtSdc8147MDiGn4Ryidry2FdnrN1UBd"
 			]
 		},
-		"localhost/game_rock_paper_scissors/contracts/IGamePausable.sol": {
+		"localhost/contracts/IGamePausable.sol": {
 			"keccak256": "0x5b3ba1529ea94d0224322d9cd6bf633d6fd1a14230c1801ca3185499f9b384ec",
 			"urls": [
 				"bzz-raw://c54c0d269bc702c168cce895d78cf21d716b2420906b3b99afebac4b0bdac981",
 				"dweb:/ipfs/Qmd6REzySharURqoF9Dj9y3bhERRPi2Z1sZhT7c2s1v9rN"
 			]
 		},
-		"localhost/game_rock_paper_scissors/contracts/Partnership.sol": {
+		"localhost/contracts/Partnership.sol": {
 			"keccak256": "0x00d47c35234db17196984c538f82a8b28d5a216a433f2b0849c0e428567c7126",
 			"urls": [
 				"bzz-raw://03c167b851c328c1c663b39f53c8af684d3ad1cefce7a54580a86055290f874a",
 				"dweb:/ipfs/Qme3pxn9yTiizUvX7xHJJzP2fXQj1F8D2bMJVyWn5LQVfW"
 			]
 		},
-		"localhost/game_rock_paper_scissors/contracts/RockPaperScissorsGame.sol": {
+		"localhost/contracts/RockPaperScissorsGame.sol": {
 			"keccak256": "0x82e35024e273161c807249071c0205fe5ff238385e23b02ec9406a618b5f37e2",
 			"urls": [
 				"bzz-raw://044abdfe0769fb71aa8f2bb572097117913c14d04efd9ba03fb2ae577ba4c818",
 				"dweb:/ipfs/QmcsMaH3usTTQ8UsRR9SdYhGQYVypgDUZMdmKVVMjUc5PN"
 			]
 		},
-		"localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol": {
 			"keccak256": "0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183",
 			"urls": [
 				"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a",
 				"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP"
 			]
 		},
-		"localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol": {
 			"keccak256": "0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc",
 			"urls": [
 				"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3",
 				"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba"
 			]
 		},
-		"localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol": {
 			"keccak256": "0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806",
 			"urls": [
 				"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5",
 				"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV"
 			]
 		},
-		"localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol": {
 			"keccak256": "0x5d1b1dcbc0396f44c1c8d554857f71e3187503bf1e54062bf9ec6782e21f3a08",
 			"urls": [
 				"bzz-raw://9aa7fa580393aab7ca3d9f606f5ab7434d51e1c0f3632a593fca82c80ef8cc4c",

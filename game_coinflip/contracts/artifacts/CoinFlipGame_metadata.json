@@ -1656,7 +1656,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"localhost/game_coinflip/contracts/CoinFlipGame.sol": "CoinFlipGame"
+			"localhost/contracts/CoinFlipGame.sol": "CoinFlipGame"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -1670,70 +1670,70 @@
 		"remappings": []
 	},
 	"sources": {
-		"localhost/game_coinflip/contracts/AcquiredFeeBeneficiar.sol": {
+		"localhost/contracts/AcquiredFeeBeneficiar.sol": {
 			"keccak256": "0x2017120b931d86e2551371e838dac41785b074d042ecb530115114bafbfe1938",
 			"urls": [
 				"bzz-raw://0763c98a52bbeed084205a14ddd2c2e4d80f2268f63e371e49fca858e1760baf",
 				"dweb:/ipfs/QmTF1keMkhCRpoiHaUw2xa4YQzjtpeVUAx4xXPM71ecMMg"
 			]
 		},
-		"localhost/game_coinflip/contracts/CoinFlipGame.sol": {
+		"localhost/contracts/CoinFlipGame.sol": {
 			"keccak256": "0x7fc28a558e93c1c5af814873659d25b0b059ea7a2c4a2e1ba7e5b5dfdd694d36",
 			"urls": [
 				"bzz-raw://295714cccfce6aa7945ae731439bd790b18d5d0714420757c86aaa75926fc274",
 				"dweb:/ipfs/QmX6uQ1DbmA1vb42642rJRCB1AUU8UY19rCsgYMpoDWNA3"
 			]
 		},
-		"localhost/game_coinflip/contracts/GameRaffle.sol": {
+		"localhost/contracts/GameRaffle.sol": {
 			"keccak256": "0x3996f7c2da17cc904367366eef53f8725a230bfd5c8d46d8386fd6d404c97235",
 			"urls": [
 				"bzz-raw://bdacf10fb045d2df9888c604dbbb224e7fb068b74a27404650777794cb33c09a",
 				"dweb:/ipfs/QmXtKERCTc431VrorRfXZKrQbNhK5xfHbKaYgvF1Bw2xTL"
 			]
 		},
-		"localhost/game_coinflip/contracts/IExpiryMoveDuration.sol": {
+		"localhost/contracts/IExpiryMoveDuration.sol": {
 			"keccak256": "0xa992cbdc8171bd4e982d66888a77fe07f69364b73682b094b8ba252510786284",
 			"urls": [
 				"bzz-raw://b3a8d4e15bcf5f628befbd2b24ae1b2705abcf97547170661a3d4727772ad235",
 				"dweb:/ipfs/QmetkdD3F1S8H2jW4C97y2WUtVDybbDXqReTKCDLLh6ieG"
 			]
 		},
-		"localhost/game_coinflip/contracts/IGamePausable.sol": {
+		"localhost/contracts/IGamePausable.sol": {
 			"keccak256": "0x310289d7a63c45ad7eb16550aca32118a922cb1f1beb64bcf921ac91ea481a6d",
 			"urls": [
 				"bzz-raw://420fdf24eaffb5274a51fc7db3cb912435264ff90b70181459a8340b978cd9aa",
 				"dweb:/ipfs/QmWs7Z3s2Rp42zeV3pauevunLWq4a7PbUFdkn5rs2JGcjo"
 			]
 		},
-		"localhost/game_coinflip/contracts/Partnership.sol": {
+		"localhost/contracts/Partnership.sol": {
 			"keccak256": "0x681cc86da215bff127af6f65d8b2bb9acfd2a51a31382d871b1e6c65a25242ae",
 			"urls": [
 				"bzz-raw://f1ac3e17be85dcab2bc041847d23bdc4582e8e204e067aaf1f55dedc915622bb",
 				"dweb:/ipfs/QmRyEBsYgCGHqsNhtV3vRQase4X14BxHT9woUynppSVDvf"
 			]
 		},
-		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol": {
 			"keccak256": "0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183",
 			"urls": [
 				"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a",
 				"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP"
 			]
 		},
-		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol": {
 			"keccak256": "0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc",
 			"urls": [
 				"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3",
 				"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba"
 			]
 		},
-		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol": {
 			"keccak256": "0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806",
 			"urls": [
 				"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5",
 				"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV"
 			]
 		},
-		"localhost/game_coinflip/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol": {
+		"localhost/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol": {
 			"keccak256": "0x5d1b1dcbc0396f44c1c8d554857f71e3187503bf1e54062bf9ec6782e21f3a08",
 			"urls": [
 				"bzz-raw://9aa7fa580393aab7ca3d9f606f5ab7434d51e1c0f3632a593fca82c80ef8cc4c",
