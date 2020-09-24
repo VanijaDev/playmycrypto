@@ -1,6 +1,7 @@
 import Types from '../types'
 import $ from "../../../public/jquery.min"
 
+
 const CommonManager = {
   currentView: null,
   currentGameId: 0,
