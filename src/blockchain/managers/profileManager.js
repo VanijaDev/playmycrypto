@@ -231,7 +231,7 @@ let ProfileManager = {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
     this.updatePendingRafflePrize();
-    // this.updatePendingBeneficiaryPrize();
+    this.updatePendingBeneficiaryPrize();
   },
 
   updatePendingReferral: async function () {
