@@ -189,7 +189,7 @@ let ProfileManager = {
         totalProfit = totalProfit.plus(new BigNumber(resultInfo.prize));
       }
     }
-    console.log("totalProfit after raffle ", totalProfit.toString());
+    // console.log("totalProfit after raffle ", totalProfit.toString());
 
     //  referral
     //  cf

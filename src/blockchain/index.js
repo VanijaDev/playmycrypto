@@ -15,7 +15,7 @@ const Index = {
 
     await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
-    // await this.refreshData();
+    await this.refreshData();
 
     // //  events
     // window.NotificationManager.eventHandler = this;
@@ -32,7 +32,7 @@ const Index = {
   },
 
   refreshData: function () {
-    // console.log('%c index - refreshData', 'color: #1d34ff');
+    console.log('%c index - refreshData', 'color: #1d34ff');
 
     // Why PlayMyCrypto
     window.Index.updateReferralFeesForAllGamesTotal();
@@ -59,6 +59,16 @@ const Index = {
     document.getElementById("totalUsedRaffleFees").innerText = Utils.weiToEtherFixed(raffleTotalCF.plus(raffleTotalRPS)).toString();
   },
 
+  updatePartnerFeesForAllGamesTotal: async function () {
+    let partnerFeeUsedTotal_cf = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.cf));
+    // console.log("partnerFeeUsedTotal_cf: ", partnerFeeUsedTotal_cf.toString());
+
+    let partnerFeeUsedTotal_rps = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.rps));
+    // console.log("partnerFeeUsedTotal_rps: ", partnerFeeUsedTotal_rps.toString());
+
+    document.getElementById("totalUsedPartnerFees").textContent = Utils.weiToEtherFixed((partnerFeeUsedTotal_cf.plus(partnerFeeUsedTotal_rps)).toString());
+  },
+
   updateCurrentRaffleJackpot: async function () {
     let currentRaffleJackpotCF = await window.BlockchainManager.currentRaffleJackpot(Types.Game.cf);
     // console.log("currentRaffleJackpot: ", currentRaffleJackpot.toString());
@@ -69,16 +79,6 @@ const Index = {
     document.getElementById("currentRaffleJackpotRPS").innerText = Utils.weiToEtherFixed(currentRaffleJackpotRPS.toString());
 
     document.getElementById("currentRaffleJackpotTotal").innerText = Utils.weiToEtherFixed(currentRaffleJackpotCF.plus(currentRaffleJackpotRPS)).toString();
-  },
-
-  updatePartnerFeesForAllGamesTotal: async function () {
-    let partnerFeeUsedTotal_cf = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.cf));
-    // console.log("partnerFeeUsedTotal_cf: ", partnerFeeUsedTotal_cf.toString());
-
-    let partnerFeeUsedTotal_rps = new BigNumber(await window.BlockchainManager.partnerFeeUsedTotal(Types.Game.rps));
-    // console.log("partnerFeeUsedTotal_rps: ", partnerFeeUsedTotal_rps.toString());
-
-    document.getElementById("totalUsedPartnerFees").textContent = Utils.weiToEtherFixed((partnerFeeUsedTotal_cf.plus(partnerFeeUsedTotal_rps)).toString());
   },
 
   updateCryptoAmountPlayedOnSiteTotal: async function () {
