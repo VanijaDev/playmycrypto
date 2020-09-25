@@ -35,9 +35,8 @@ let ProfileManager = {
 
     await this.updateCurrentlyPlayingGames();
     await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerGameplayProfit();
+    await this.updatePlayerProfit();
     await this.updateReferralFeesWithdrawn();
-    // await this.updatePlayerTotalProfit();
     // await this.updatePendingWithdrawals();
   },
 
@@ -138,11 +137,11 @@ let ProfileManager = {
     // document.getElementById("rockPaperScissorsPlayedTotalAmount").innerText = rpsResult.length;
   },
 
-  updatePlayerGameplayProfit: async function () {
-    //  gameplay
-    var profitAmountElement = document.getElementById("profit_amount_gameplay");
-    profitAmountElement.classList.remove("red");
-    profitAmountElement.classList.add("green");
+  updatePlayerProfit: async function () {
+    //  GAMEPLAY
+    var gamePlayProfitAmountElement = document.getElementById("profit_amount_gameplay");
+    gamePlayProfitAmountElement.classList.remove("red");
+    gamePlayProfitAmountElement.classList.add("green");
 
     let cfBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
     let betTotal = cfBetResult;
@@ -154,15 +153,69 @@ let ProfileManager = {
     // let rpsPrizeResult = new BigNumber(await window.BlockchainManager.addressprizeTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
     // let prizeTotal = cfPrizeResult.plus(rpsPrizeResult);
 
-    let profit = betTotal.multipliedBy(new BigNumber("-1")).plus(prizeTotal.multipliedBy(new BigNumber("2")));
-    profitAmountElement.innerText = Utils.weiToEtherFixed(profit.toString());
+    let gamePlayProfit = betTotal.multipliedBy(new BigNumber("-1")).plus(prizeTotal.multipliedBy(new BigNumber("2")));
+    // console.log("PPP ", (gamePlayProfit).toString());
+    gamePlayProfitAmountElement.innerText = Utils.weiToEtherFixed(gamePlayProfit.toString());
 
-    if (profit.isNegative()) {
+    if (gamePlayProfit.isNegative()) {
       document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
-      profitAmountElement.classList.remove("green");
-      profitAmountElement.classList.add("red");
+      gamePlayProfitAmountElement.classList.remove("green");
+      gamePlayProfitAmountElement.classList.add("red");
     } else {
       document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
+    }
+
+    //  TOTAL
+    let totalProfit = gamePlayProfit;
+    console.log("totalProfit after gamePlayProfit: ", totalProfit.toString());
+
+    //  raffle
+    //  cf
+    let raffleResults = await window.BlockchainManager.raffleResultCount(Types.Game.cf);
+    for (let i = 0; i < raffleResults; i++) {
+      let resultInfo = await window.BlockchainManager.raffleResultInfo(Types.Game.cf, i);
+      if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
+        console.log("raffleResults cf ", i, resultInfo);
+        totalProfit = totalProfit.plus(new BigNumber(resultInfo.prize));
+      }
+    }
+
+    //  rps
+    raffleResults = await window.BlockchainManager.raffleResultCount(Types.Game.rps);
+    for (let i = 0; i < raffleResults; i++) {
+      let resultInfo = await window.BlockchainManager.raffleResultInfo(Types.Game.rps, i);
+      if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
+        console.log("raffleResults rps ", i, resultInfo);
+        totalProfit = totalProfit.plus(new BigNumber(resultInfo.prize));
+      }
+    }
+    console.log("totalProfit after raffle ", totalProfit.toString());
+
+    //  referral
+    //  cf
+    let cfReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    console.log("cfReferralResult: ", cfReferralResult.toString());
+    totalProfit = totalProfit.plus(cfReferralResult);
+    
+    //  rps
+    let rpsReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    console.log("rpsReferralResult: ", rpsReferralResult.toString());
+    
+    totalProfit = totalProfit.plus(rpsReferralResult);
+    console.log("totalProfit after referral ", totalProfit.toString());
+
+    var profitAmountTotalElement = document.getElementById("profit_amount_total");
+    let totalProfitLengthCorrect = Utils.weiToEtherFixed(totalProfit.toString());
+    profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
+
+    if (totalProfit.isNegative()) {
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
+      profitAmountTotalElement.classList.remove("green");
+      profitAmountTotalElement.classList.add("red");
+    } else {
+      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
+      profitAmountTotalElement.classList.remove("red");
+      profitAmountTotalElement.classList.add("green");
     }
   },
 
@@ -172,65 +225,6 @@ let ProfileManager = {
 
     let rpsResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
     document.getElementById('ReferralFeesWithdrawnRPS').innerHTML = Utils.weiToEtherFixed(rpsResult.toString());
-  },
-
-  updatePlayerTotalProfit: async function () {
-    // console.log("updatePlayerTotalProfit");
-
-    //  raffle
-    //  cf
-    let totalProfit = new BigNumber("0");
-
-    let raffleResults = await window.BlockchainManager.raffleResultCount(Types.Game.cf);
-    for (let i = 0; i < raffleResults; i++) {
-      let resultInfo = await window.BlockchainManager.raffleResultInfo(Types.Game.cf, i);
-      // console.log("raffleResults cf ", i, resultInfo);
-      if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
-        totalProfit = totalProfit.plus(resultInfo.prize);
-      }
-    }
-    // console.log("raffleResults cf: ", totalProfit.toString());
-    //  rps
-    raffleResults = await window.BlockchainManager.raffleResultCount(Types.Game.rps);
-    for (let i = 0; i < raffleResults; i++) {
-      let resultInfo = await window.BlockchainManager.raffleResultInfo(Types.Game.rps, i);
-      // console.log("raffleResults rps ", i, resultInfo);
-      if (Utils.addressesEqual(resultInfo.winner, window.BlockchainManager.currentAccount())) {
-        totalProfit = totalProfit.plus(resultInfo.prize);
-      }
-    }
-    // console.log("raffleResults totalProfit after rps: ", totalProfit.toString());
-
-    //  referral
-    let cfReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    // console.log("cfReferralResult: ", cfReferralResult.toString());
-    let rpsReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    // console.log("rpsReferralResult: ", rpsReferralResult.toString());
-    totalProfit = totalProfit.plus(cfReferralResult).plus(rpsReferralResult);
-    // console.log("totalProfit: ", totalProfit.toString());
-    // console.log("totalProfit: raffle + referral: ", totalProfit.toString());
-    // console.log("totalProfit raffle + referral: ", new BigNumber(Utils.weiToEtherFixed(totalProfit).toString()).toString());
-
-    //  gameplayProfit
-    let gameplayProfit = new BigNumber(profit_amount_gameplay.innerText);
-    // console.log("gameplayProfit: ", gameplayProfit.toString());
-
-    totalProfit = new BigNumber(Utils.weiToEtherFixed(totalProfit).toString()).plus(gameplayProfit);
-    // console.log("totalProfit: ", totalProfit.toString());
-
-    var profitAmountTotalElement = document.getElementById("profit_amount_total");
-    let totalProfitLengthCorrect = parseFloat(totalProfit).toFixed(5);
-    profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
-
-    if (totalProfit.comparedTo(new BigNumber("0")) < 0) {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
-      profitAmountTotalElement.classList.remove("green");
-      profitAmountTotalElement.classList.add("red");
-    } else {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
-      profitAmountTotalElement.classList.remove("red");
-      profitAmountTotalElement.classList.add("green");
-    }
   },
 
   updatePendingWithdrawals: async function () {
