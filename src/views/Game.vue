@@ -79,7 +79,7 @@
                 <div class="f13">{{ $t("IN_RAFFLE") }}:</div>
 
                 <div class="raffle-amount">
-                  <b id="cryptoForRaffle">0.00000</b>
+                  <b id="cryptoForRaffle">0.0000</b>
                   <img
                     src="/img/icon_amount-eth.svg"
                     class="money-icon"
@@ -123,7 +123,7 @@
                 <div class="f13">{{ $t("BENEFICIARY_PROFIT") }}:</div>
 
                 <div class="raffle-amount">
-                  <b id="beneficiaryAmount">0.00000</b>
+                  <b id="beneficiaryAmount">0.0000</b>
                   <img
                     src="/img/icon_amount-eth.svg"
                     class="money-icon"
@@ -143,7 +143,7 @@
                 </div>
                 <div class="ml-5">
                   {{ $t("BENEFICIARY_TRANSFERRED") }}:
-                  <b id="beneficiaryTransferred">0.00000</b>
+                  <b id="beneficiaryTransferred">0.0000</b>
                   <img
                     src="/img/icon_amount-eth.svg"
                     class="money-icon"
@@ -159,7 +159,7 @@
                 <div class="mt-4 hidden beneficiary-block" id="beneficiaryProfit">
                   <b class="f18">{{ $t("BENEFICIARY_PROFIT") }}:</b>
                   <h3 class="text-center current-profit-block">
-                    <span class="text-primary current-profit" id="beneficiaryCurrentAmount">0.00000</span>
+                    <span class="text-primary current-profit" id="beneficiaryCurrentAmount">0.0000</span>
                     <img
                       src="/img/icon_amount-eth.svg"
                       class="money-icon"

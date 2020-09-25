@@ -18,8 +18,8 @@ const Index = {
     await this.refreshData();
 
     // //  events
-    // window.NotificationManager.eventHandler = this;
-    // window.NotificationManager.subscribe_index();
+    window.NotificationManager.eventHandler = this;
+    window.NotificationManager.subscribe_index();
   },
 
   onUnload: function () {
@@ -233,11 +233,10 @@ const Index = {
 
     window.Index.updateRafflePrizesWonForAllGamesTotal();
     window.Index.updateCurrentRaffleJackpot();
-    window.ProfileManager.update();
-  },
-
-  onGameAddedToTop: function (_gameType, _gameId, _gameCreator) {
-    // console.log('%c index - onGameAddedToTop', 'color: #1d34ff');
+    
+    if (Utils.addressesEqual(_winner, window.BlockchainManager.currentAccount())) {
+      window.ProfileManager.update();
+    }
   },
 
 

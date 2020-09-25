@@ -77,7 +77,7 @@ const NotificationManager = {
         return;
       }
 
-      console.log("subscribe event: ", result);
+      console.log("event received: ", result);
 
       switch (result.topics[0]) {
         //  CF

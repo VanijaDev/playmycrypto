@@ -106,25 +106,25 @@
             <div class="col-sm-10 text-right total-amounts">
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
-                <span id="totalUsedReferralFees">0.00000</span>
+                <span id="totalUsedReferralFees">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
-                <span id="totalUsedRaffleFees">0.00000</span>
+                <span id="totalUsedRaffleFees">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
-                <span id="totalUsedPartnerFees">0.00000</span>
+                <span id="totalUsedPartnerFees">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-item d-inline-block">
                 <img src="/img/bg-hand-money.svg" class="hand-money"/>
-                <span id="totalUsedFeeBeneficiary">0.00000</span>
+                <span id="totalUsedFeeBeneficiary">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
@@ -182,26 +182,26 @@
           <div class="border-block">
             <div class="header">
               {{ $t("JACKPOT") }}:
-              <b id="currentRaffleJackpotTotal">0.00000</b>
+              <b id="currentRaffleJackpotTotal">0.0000</b>
               <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
               <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
             </div>
             <div class="content">
               <div class="total-won">
                 <img src="/img/icon-coinflip-sm.svg" class="game-sm-icon"/>
-                <span id="currentRaffleJackpotCoinFlip">0.00000</span>
+                <span id="currentRaffleJackpotCoinFlip">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <div class="total-won">
                 <img src="/img/icon-rock-paper-scissors-sm.svg" class="game-sm-icon"/>
-                <span id="currentRaffleJackpotRPS">0.00000</span>
+                <span id="currentRaffleJackpotRPS">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div>
               <!-- <div class="total-won">
                 <img src="/img/icon-tic-tac-toe-sm.svg" class="game-sm-icon"/>
-                <span id="rafflePrizesWonTotalGameTTT">0.00000</span>
+                <span id="rafflePrizesWonTotalGameTTT">0.0000</span>
                 <img src="/img/icon_amount-eth.svg" class="money-icon" v-show="currency === 'eth'"/>
                 <img src="/img/icon_amount-trx.svg" class="money-icon" v-show="currency === 'trx'"/>
               </div> -->
@@ -219,11 +219,11 @@
               <tr></tr>
               <tr>
                 <td class="total-column total-column-1"><img src="/img/icon_amount-eth.svg" class="money-icon"></td>
-                <td class="total-column total-column-2">0.00000</td>
+                <td class="total-column total-column-2">0.0000</td>
               </tr>
               <tr>
                 <td class="total-column total-column-1"><img src="/img/icon_amount-trx.svg" class="money-icon"></td>
-                <td class="total-column total-column-2">0.00000</td>
+                <td class="total-column total-column-2">0.0000</td>
               </tr>
               </tbody>
             </table>
