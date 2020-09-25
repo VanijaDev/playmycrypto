@@ -162,8 +162,8 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.referralFeesPendingPromise(_gameType, _currentAccount);
   },
 
-  gamesWithPendingPrizeWithdrawalForAddress: async function (_gameType, _currentAccount) {
-    return await PromiseManager.gamesWithPendingPrizeWithdrawalForAddressPromise(_gameType, _currentAccount);
+  gamesWithPendingPrizeWithdrawal: async function (_gameType, _currentAccount) {
+    return await PromiseManager.gamesWithPendingPrizeWithdrawalPromise(_gameType, _currentAccount);
   },
 
   currentRaffleJackpot: async function (_gameType) {

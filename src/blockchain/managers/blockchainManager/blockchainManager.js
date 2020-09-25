@@ -72,8 +72,8 @@ const BlockchainManager = {
     return await this.currentBlockchainManager.referralFeesPending(_gameType, _currentAccount);
   },
 
-  gamesWithPendingPrizeWithdrawalForAddress: async function (_gameType, _currentAccount) {
-    return await this.currentBlockchainManager.gamesWithPendingPrizeWithdrawalForAddress(_gameType, _currentAccount);
+  gamesWithPendingPrizeWithdrawal: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.gamesWithPendingPrizeWithdrawal(_gameType, _currentAccount);
   },
   currentRaffleJackpot: async function (_gameType) {
     return await this.currentBlockchainManager.currentRaffleJackpot(_gameType);

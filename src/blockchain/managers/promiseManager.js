@@ -131,7 +131,7 @@ let PromiseManager = {
     });
   },
 
-  gamesWithPendingPrizeWithdrawalForAddressPromise: function (_gameType, _account) {
+  gamesWithPendingPrizeWithdrawalPromise: function (_gameType, _account) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.getGamesWithPendingPrizeWithdrawal(_account).call()
         .then(result => {
