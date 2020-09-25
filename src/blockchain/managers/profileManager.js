@@ -230,7 +230,7 @@ let ProfileManager = {
   updatePendingWithdrawals: async function () {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
-    // this.updatePendingRafflePrize();
+    this.updatePendingRafflePrize();
     // this.updatePendingBeneficiaryPrize();
   },
 
@@ -276,7 +276,7 @@ let ProfileManager = {
     let pendingGames = [];
     let pendingValues = [];
 
-    let cfResult = new BigNumber(await window.BlockchainManager.rafflePrizePendingForAddress(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let cfResult = new BigNumber(await window.BlockchainManager.rafflePrizePending(Types.Game.cf, window.BlockchainManager.currentAccount()));
     if (cfResult.isGreaterThan(new BigNumber("0"))) {
       pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);

@@ -143,7 +143,7 @@ let PromiseManager = {
     });
   },
 
-  rafflePrizePendingForAddressPromise: function (_gameType, _account) {
+  rafflePrizePendingPromise: function (_gameType, _account) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.rafflePrizePending(_account).call()
         .then(result => {

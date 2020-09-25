@@ -252,8 +252,8 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.ongoinRafflePrizePromise(_gameType);
   },
 
-  rafflePrizePendingForAddress: async function (_gameType, _currentAccount) {
-    return await PromiseManager.rafflePrizePendingForAddressPromise(_gameType, _currentAccount);
+  rafflePrizePending: async function (_gameType, _currentAccount) {
+    return await PromiseManager.rafflePrizePendingPromise(_gameType, _currentAccount);
   },
 
   prizeTotal: async function (_gameType, _currentAccount) {

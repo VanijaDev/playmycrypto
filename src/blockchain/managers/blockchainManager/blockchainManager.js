@@ -87,8 +87,8 @@ const BlockchainManager = {
     return await this.currentBlockchainManager.rafflePrizesWonTotal(_gameType);
   },
 
-  rafflePrizePendingForAddress: async function (_gameType, _currentAccount) {
-    return await this.currentBlockchainManager.rafflePrizePendingForAddress(_gameType, _currentAccount);
+  rafflePrizePending: async function (_gameType, _currentAccount) {
+    return await this.currentBlockchainManager.rafflePrizePending(_gameType, _currentAccount);
   },
 
   prizeTotal: async function (_gameType, _currentAccount) {
