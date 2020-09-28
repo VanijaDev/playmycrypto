@@ -159,13 +159,13 @@ let ProfileManager = {
 
     let cfBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
     let betTotal = cfBetResult;
-    // let rpsBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    // let betTotal = cfBetResult.plus(rpsBetResult);
+    let rpsBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    betTotal = betTotal.plus(rpsBetResult);
 
     let cfPrizeResult = new BigNumber(await window.BlockchainManager.prizeTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
     let prizeTotal = cfPrizeResult
-    // let rpsPrizeResult = new BigNumber(await window.BlockchainManager.addressprizeTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    // let prizeTotal = cfPrizeResult.plus(rpsPrizeResult);
+    let rpsPrizeResult = new BigNumber(await window.BlockchainManager.prizeTotal(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    prizeTotal = prizeTotal.plus(rpsPrizeResult);
 
     let gamePlayProfit = betTotal.multipliedBy(new BigNumber("-1")).plus(prizeTotal.multipliedBy(new BigNumber("2")));
     // console.log("PPP ", (gamePlayProfit).toString());
