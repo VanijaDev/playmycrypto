@@ -404,16 +404,16 @@ contract("Withdraw", (accounts) => {
             assert.deepEqual(await game.getGamesWithPendingPrizeWithdrawal.call(OPPONENT), [], ", should be empty after - OPPONENT");
         });
 
-        it("should increase prizeWithdrawn with correct amount", async() => {
-            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0")), "should be 0 before");
+        it("should increase prizeTotal with correct amount", async() => {
+            assert.strictEqual(0, (await game.prizeTotal.call(OPPONENT)).cmp(ether("0")), "should be 0 before");
             await game.withdrawGamePrizes(1, {from: OPPONENT});
-            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0")), "should be 0 after last");
+            assert.strictEqual(0, (await game.prizeTotal.call(OPPONENT)).cmp(ether("0")), "should be 0 after last");
 
             await game.withdrawGamePrizes(2, {from: OPPONENT});
-            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("0.1")), "should be 0.1 after 2");
+            assert.strictEqual(0, (await game.prizeTotal.call(OPPONENT)).cmp(ether("0.1")), "should be 0.1 after 2");
 
             await game.withdrawGamePrizes(2, {from: OPPONENT});
-            assert.strictEqual(0, (await game.prizeWithdrawn.call(OPPONENT)).cmp(ether("1.2")), "should be 1.2 after last 2");
+            assert.strictEqual(0, (await game.prizeTotal.call(OPPONENT)).cmp(ether("1.2")), "should be 1.2 after last 2");
         });
 
         it("should calculate correct partnerFeePending", async() => {

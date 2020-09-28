@@ -63,7 +63,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
   mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal; //  for both won & draw
 
   mapping(address => uint256) public betTotal;
-  mapping(address => uint256) public prizeWithdrawn; //  game bet if won. TODO: rename 
+  mapping(address => uint256) public prizeTotal;
 
   mapping(address => uint256) public referralFeesPending;
   mapping(address => uint256) public referralFeesWithdrawn;
@@ -464,7 +464,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, 
       pendingGames.pop();
     }
 
-    prizeWithdrawn[msg.sender] = prizeWithdrawn[msg.sender].add(betsPrize);
+    prizeTotal[msg.sender] = prizeTotal[msg.sender].add(betsPrize);
 
     //  5% fees
     uint256 singleFee = betsPrize.mul(FEE_PERCENT).div(100);
