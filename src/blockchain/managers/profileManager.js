@@ -210,11 +210,9 @@ let ProfileManager = {
     let cfReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("cfReferralResult: ", cfReferralResult.toString());
     totalProfit = totalProfit.plus(cfReferralResult);
-    
     //  rps
     let rpsReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
     // console.log("rpsReferralResult: ", rpsReferralResult.toString());
-    
     totalProfit = totalProfit.plus(rpsReferralResult);
     // console.log("totalProfit after referral ", totalProfit.toString());
 
