@@ -127,11 +127,11 @@
                     <div class="user-table row">
                       <div class="col-4 pr-0">
                         <img src="/img/icon-coinflip-sm.svg" class="mr-2" />
-                        <em id="coinFlipPlayedTotalAmount">0</em>
+                        <em id="cfPlayedTotalAmount">0</em>
                       </div>
                       <div class="col-4 pr-0">
                         <img src="/img/icon-rock-paper-scissors-sm.svg" class="mr-2" />
-                        <em id="rockPaperScissorsPlayedTotalAmount">0</em>
+                        <em id="rpsPlayedTotalAmount">0</em>
                       </div>
                       <!-- <div class="col-4 pr-0">
                         <img src="/img/icon-tic-tac-toe-sm.svg" class="mr-2">

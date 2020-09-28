@@ -36,7 +36,7 @@ let ProfileManager = {
 
     await this.updateCurrentlyPlayingGames();
     await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerProfit();
+    await this.updatePlayerProfit(); //  now
     await this.updateReferralFeesWithdrawn();
     await this.updatePendingWithdrawals();
   },
@@ -145,10 +145,10 @@ let ProfileManager = {
 
   updatePlayedGamesTotalAmounts: async function () {
     let cfResult = await window.BlockchainManager.playedGamesForPlayer(Types.Game.cf, window.BlockchainManager.currentAccount());
-    document.getElementById("coinFlipPlayedTotalAmount").innerText = cfResult.length;
+    $("#cfPlayedTotalAmount")[0].innerText = cfResult.length;
 
-    // let rpsResult = await window.BlockchainManager.playedGameIdxsForPlayer(Types.Game.rps, window.BlockchainManager.currentAccount());
-    // document.getElementById("rockPaperScissorsPlayedTotalAmount").innerText = rpsResult.length;
+    let rpsResult = await window.BlockchainManager.playedGamesForPlayer(Types.Game.rps, window.BlockchainManager.currentAccount());
+    $("#rpsPlayedTotalAmount")[0].innerText = rpsResult.length;
   },
 
   updatePlayerProfit: async function () {
