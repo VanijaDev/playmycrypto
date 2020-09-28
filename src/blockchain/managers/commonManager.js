@@ -14,7 +14,7 @@ const CommonManager = {
   },
 
   setCurrentGameId: function (_currentGameId) {
-    console.log("setCurrentGameId: ", _currentGameId);
+    // console.log("setCurrentGameId: ", _currentGameId);
     this.currentGameId = _currentGameId;
   },
 

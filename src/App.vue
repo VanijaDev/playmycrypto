@@ -477,6 +477,8 @@ export default {
     window.ethereum.on("accountsChanged", function (accounts) {
       console.log("%c App - accountsChanged: %s", "color: #00aa00", accounts[0]);
 
+      window.CommonManager.resetCurrentGameId();
+
       if (
         window.BlockchainManager &&
         window.BlockchainManager.isInitted() &&
@@ -494,6 +496,8 @@ export default {
 
     window.ethereum.on("chainChanged", async function (_chainId) {
       console.log("%c App - chainChanged: %s", "color: #00aa00", _chainId);
+
+      window.CommonManager.resetCurrentGameId();
 
       if (!window.BlockchainManager) {
         return;

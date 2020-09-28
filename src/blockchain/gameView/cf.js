@@ -25,15 +25,15 @@ const CF = {
     if(this.countdown) {
       clearInterval(this.countdown);
     }
+    window.CommonManager.resetCurrentGameId();
   },
 
   closeResultView: async function () {
+    window.CommonManager.resetCurrentGameId();
     await this.showGameViewForCurrentAccount(null);
   },
 
   updateGameView: async function () {
-    const storedGameId = window.CommonManager.currentGameId;
-
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
@@ -57,21 +57,19 @@ const CF = {
     
     if (_priorityView) {
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, storedGameId);
-      window.CommonManager.resetCurrentGameId();
       this.showGameView(_priorityView, gameInfo);
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       return;
     }
 
     if (storedGameId > 0) {
-      window.CommonManager.resetCurrentGameId();
-
       let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, storedGameId);
       let viewType = this.gameViewTypeForGameInfo(gameInfo);
       this.showGameView(viewType, gameInfo);
     } else {
       let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
       if (createdId > 0) {
+        window.CommonManager.setCurrentGameId(createdId);
         let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, createdId);
         let viewType = this.gameViewTypeForGameInfo(gameInfo);
         this.showGameView(viewType, gameInfo);
@@ -80,8 +78,10 @@ const CF = {
         if (joinedId > 0) {
           let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, joinedId);
           let viewType = this.gameViewTypeForGameInfo(gameInfo);
+          window.CommonManager.setCurrentGameId(joinedId);
           this.showGameView(viewType, gameInfo);
         } else {
+          window.CommonManager.setCurrentGameId(0);
           this.showGameView(this.GameView.start, null);
         }
       }
