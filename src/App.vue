@@ -192,7 +192,7 @@
                     <div class="user-table row">
                       <div class="col-sm-6 mb-2">
                         <img src="/img/icon-coinflip-sm.svg" class="mr-2" />
-                        <em id="ReferralFeesWithdrawnCoinflip">0</em>
+                        <em id="ReferralFeesWithdrawnCF">0</em>
                         <img
                           src="/img/icon_amount-eth.svg"
                           width="24"
