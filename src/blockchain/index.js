@@ -15,7 +15,7 @@ const Index = {
 
     await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
-    await this.refreshData();
+    await this.refreshData(); //  now
 
     // //  events
     window.NotificationManager.eventHandler = this;
@@ -36,7 +36,7 @@ const Index = {
 
     // Why PlayMyCrypto
     window.Index.updateReferralFeesForAllGamesTotal();
-    window.Index.updateRafflePrizesWonForAllGamesTotal();
+    window.Index.updateRafflePrizesWonForAllGamesTotal(); //  now
     window.Index.updatePartnerFeesForAllGamesTotal();
 
     // Raffle
@@ -47,10 +47,12 @@ const Index = {
   },
 
   updateReferralFeesForAllGamesTotal: async function () {
-    let totalUsedReferralFees = await window.BlockchainManager.totalUsedReferralFees();
-    // console.log("totalUsedReferralFees: ", totalUsedReferralFees.toString());
-    document.getElementById("totalUsedReferralFees").textContent = Utils.weiToEtherFixed(totalUsedReferralFees.toString());
-    document.getElementById("totalUsedFeeBeneficiary").textContent = Utils.weiToEtherFixed(totalUsedReferralFees.toString());
+    let referralTotalCF = await window.BlockchainManager.referralFeesUsedTotal(Types.Game.cf);
+    let referralTotalRPS = await window.BlockchainManager.referralFeesUsedTotal(Types.Game.rps);
+    let sumStr = Utils.weiToEtherFixed(referralTotalCF.plus(referralTotalRPS)).toString();
+    // console.log("totalUsedReferralFees: ", sumStr);
+    document.getElementById("totalUsedReferralFees").textContent = sumStr;
+    document.getElementById("totalUsedFeeBeneficiary").textContent = sumStr;
   },
 
   updateRafflePrizesWonForAllGamesTotal: async function () {

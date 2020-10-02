@@ -145,13 +145,8 @@ const BlockchainManager_ethereum = {
 
 
   //  API
-  totalUsedReferralFees: async function () {
-    let referralFees_cf = await PromiseManager.totalUsedReferralFeesPromise(Types.Game.cf);
-    // console.log("referralFees_cf: ", referralFees_cf.toString());
-    let referralFees_rps = await PromiseManager.totalUsedReferralFeesPromise(Types.Game.rps);
-    // console.log("referralFees_rps: ", referralFees_rps.toString());
-
-    return new BigNumber(referralFees_cf).plus(referralFees_rps);
+  referralFeesUsedTotal: async function (_gameType) {
+    return new BigNumber(await PromiseManager.referralFeesUsedTotalPromise(_gameType));
   },
 
   referralFeesWithdrawn: async function (_gameType, _currentAccount) {

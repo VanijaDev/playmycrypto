@@ -60,8 +60,9 @@ const BlockchainManager = {
   },
 
   //  API
-  totalUsedReferralFees: async function () {
-    return await this.currentBlockchainManager.totalUsedReferralFees();
+
+  referralFeesUsedTotal: async function (_gameType) {
+    return await this.currentBlockchainManager.referralFeesUsedTotal(_gameType);
   },
 
   referralFeesWithdrawn: async function (_gameType, _currentAccount) {

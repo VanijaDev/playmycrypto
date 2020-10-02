@@ -155,7 +155,7 @@ let PromiseManager = {
     });
   },
 
-  totalUsedReferralFeesPromise: function (_gameType) {
+  referralFeesUsedTotalPromise: function (_gameType) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.totalUsedReferralFees().call()
         .then(result => {
