@@ -15,11 +15,11 @@ const Index = {
 
     await window.ProfileManager.setUpdateHandler(this);
     await ProfileManager.update();
-    await this.refreshData(); //  now
+    await this.refreshData();
 
     // //  events
     window.NotificationManager.eventHandler = this;
-    window.NotificationManager.subscribe_index();
+    window.NotificationManager.subscribe_index(); //  now
   },
 
   onUnload: function () {
@@ -36,7 +36,7 @@ const Index = {
 
     // Why PlayMyCrypto
     window.Index.updateReferralFeesForAllGamesTotal();
-    window.Index.updateRafflePrizesWonForAllGamesTotal(); //  now
+    window.Index.updateRafflePrizesWonForAllGamesTotal();
     window.Index.updatePartnerFeesForAllGamesTotal();
 
     // Raffle

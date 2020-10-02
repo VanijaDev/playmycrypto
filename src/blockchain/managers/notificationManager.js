@@ -28,18 +28,20 @@ const NotificationManager = {
 
   NotificationHashes_RPS: {
     gameCreated: "0xc8a7ad4588594944c5c6ec5e3dd1fc3a1aeb831f1a2bc35611c78302594092e0",
-    gameJoined: "0x5f44cb4ec9720ed076031e2710d445527f4665689588ba6c7c7cd89bf7c76d0f",
-    gameMovePlayed: "0x128c0d69f1a687d53c6845c37ed5e18b705dbcff4757abe1704440321f0277fa",
-    gameOpponentMoved: "0x2102733ba214a57539a831c4f95e5b39b02fe44bff48b54a8c03fc783779ef95",
-    gameFinished: "0x9729817a7a496a7d0e87303b24d9ccb8891421d3d2564f4c70a0d5c8bac35ac4",
+    gameJoined: "0xaba5d162e66d41009bc11b7b907e28b31fa8feec985e73e3f560d6fc992f1483",
+    gameMovePlayed: "0xf50d17e73cf4e73941359b5ec4a170090373f19a1799067b78c212416acc7772",
+    gameOpponentMoved: "0xa3145d54ce461478262e98db7db814906e9d7d8e86b6edd4e7dcd1454ecb9611",
+    gameExpiredFinished: "0x8b023d36169c1dab146e45ef2b43d49654ea34b2b627411c86a9cb759f2da5a5",
+    gameQuittedFinished: "0xbb663dedd46761762b0e54ccda01dd39c41aaa4bda1c4a01300475bbfdf7e138",
+    gameFinished: "0x857dc2544260b99930e5fb628b1606d38ff80ffe794f0fa80922e462af8e3b80",
     gamePrizesWithdrawn: "0x49dadfb9c0997e442b5c7378b159dfdab6c9261478186a18465f051014e761d6",
     gameUpdated: "0xb8d5c4acb2a233249b2c857bdc4149dfe9c4c56be5b4240797ec520890e86f84",
     gameAddedToTop: "0x10837c20b552775deff603be2e6bbd6011110295cf5729edc4da0376f0501a88",
     gameReferralWithdrawn: "0xaf3062c46366e85d91db7f7495492b8216bc40c609348a6d8b6fc3992410f589",
     rafflePlayed: "0x5b855748ec47b3a8c7d02c2551af912f3900fdd754f66a381dc33c8dea252f00",
-    rafflePrizeWithdrawn: "0x99ac1c03579bfc1599617b99962258086dccf711612985a2dcf15c7f5c7e7f5e",
+    rafflePrizeWithdrawn: "0xc6378dfc7a408ccde7fd4fc7126edb802aff5cca70afa44a52dfc6e9ab7dfc3b",
     gamePaused: "0xe05d203b1f744b2ba3112cf7cc9724fbc303fcbfca30c1fdcb8a5498fd97dc35",
-    gameUnpaused: "0xe61b4812784f2e1e26d39703eb3d699469dc08b1b23ab37f0a21bf76cd96d214",
+    gameUnpaused: "0x9c35b9254daa7c98abd3abaf007ae9932475df816b2b74caec46fa3356162319",
     partnerFeeTransferred: "0xcf6479f64bef705be7f01da6a3427e5c5f9b381f335bebc7d6939b727e8f2f2b"
   },
 
