@@ -54,11 +54,13 @@
     $('#' + blockId).removeClass('hidden');
   }
 
-  function showActionRequired(gameButtonId) {
-    //  playingCFCreator, playingCFOpponent
-    //  playingRPSCreator, playingRPSOpponent
+  function showActionRequired(_element) {
     $('#profileNotification').removeClass('hidden');
-    $('#' + gameButtonId).append('<img src="/img/notification.svg" class="notification-icon">');
+    
+    var img = document.createElement('img');
+    img.classList.add("notification-icon");
+    img.src = '/img/notification.svg'; 
+    _element.append(img); 
   }
 
   function hideActionRequired(gameButtonId) {

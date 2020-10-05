@@ -80,11 +80,12 @@ let ProfileManager = {
       btn_cf_creator.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Creator.toString());
       };
+      if (await this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
+        showActionRequired(btn_cf_creator);
+      }
+
       btns.push(btn_cf_creator);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_creator);
-      if (await this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
-        showActionRequired("ongoingGameCF_Creator");
-      }
     }
 
     this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
@@ -106,11 +107,11 @@ let ProfileManager = {
       btn_rps_creator.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Creator.toString());
       };
-      btns.push(btn_rps_creator);
-      // $('#listCurrentlyPlayingGames')[0].appendChild(btn_rps_creator);
       if (await this.checkIfPendingMove(Types.Game.rps, this.ongoingGameRPS_Creator)) {
-        showActionRequired("ongoingGameRPS_Creator");
+        showActionRequired(btn_rps_creator);
       }
+
+      btns.push(btn_rps_creator);
     }
 
     this.ongoingGameRPS_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.rps, window.BlockchainManager.currentAccount()));

@@ -48,114 +48,14 @@ const NotificationManager = {
   eventEmitter: null,
   eventHandler: null,
 
-  //  notifications for Index view
-  subscribe_index: function () {
-    console.log('%c NotificationManager - subscribe_index', 'color: #00aa00');
-
-    switch (window.BlockchainManager.currentBlockchainType) {
-      case Types.BlockchainType.ethereum:
-        console.log("subscribe_index - Ethereum");
-        this.subscribe_index_ethereum();
-
-        break;
-
-      case Types.BlockchainType.tron:
-        console.log("subscribe_index - Tron");
-        break;
-
-      default:
-        throw("ERROR: subscribe_index");
-    }
-  },
-
-  subscribe_index_ethereum: function () {
-    console.log('%c NotificationManager - subscribe_index_ethereum', 'color: #00aa00');
-
-    window.NotificationManager.eventEmitter = window.web3.eth.subscribe('logs', {
-      address: [CoinFlipData.address, RockPaperScissorsData.address]
-    }, (error, result) => {
-      if (error) {
-        console.log("ERROR: ", error);
-        return;
-      }
-
-      console.log("event received: ", result);
-
-      switch (result.topics[0]) {
-        //  CF
-        case this.NotificationHashes_CF.gameCreated:
-          console.log("NotificationHashes_CF.gameCreated");
-          this.eventHandler.onGameCreated(Types.Game.cf, result.topics[2]);
-          break;
-
-        case this.NotificationHashes_CF.gameJoined:
-          console.log("NotificationHashes_CF.gameJoined");
-          this.eventHandler.onGameJoined(Types.Game.cf, result.topics[2], result.topics[3]);
-          break;
-
-        case this.NotificationHashes_CF.gamePlayed:
-          console.log("NotificationHashes_CF.gamePlayed");
-          this.eventHandler.onGamePlayed(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
-          break;
-
-        case this.NotificationHashes_CF.gameAddedToTop:
-          console.log("NotificationHashes_CF.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Types.Game.cf);
-          break;
-
-        case this.NotificationHashes_CF.gameUpdated:
-          console.log("NotificationHashes_CF.gameUpdated");
-          this.eventHandler.onGameUpdated(Types.Game.cf, result.topics[2]);
-          break;
-
-        case this.NotificationHashes_CF.gameQuittedFinished:
-          console.log("NotificationHashes_CF.gameQuittedFinished");
-          this.eventHandler.onGameQuittedFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
-          break;
-
-        case this.NotificationHashes_CF.gameExpiredFinished:
-          console.log("NotificationHashes_CF.gameExpiredFinished");
-          this.eventHandler.onGameExpiredFinished(Types.Game.cf, new BigNumber(result.topics[1]).toString(), result.topics[2], result.topics[3]);
-          break;
-
-        case this.NotificationHashes_CF.gamePrizesWithdrawn:
-          console.log("NotificationHashes_CF.gamePrizesWithdrawn");
-          this.eventHandler.onGamePrizesWithdrawn(Types.Game.cf, result.topics[1]);
-          break;
-
-        case this.NotificationHashes_CF.rafflePrizeWithdrawn:
-          console.log("NotificationHashes_CF.rafflePrizeWithdrawn");
-          this.eventHandler.onRafflePrizeWithdrawn();
-          break;
-
-        case this.NotificationHashes_CF.rafflePlayed:
-          console.log("NotificationHashes_CF.rafflePlayed");
-          this.eventHandler.onGameRafflePlayed(Types.Game.cf, result.topics[1]);
-          break;
-
-        case this.NotificationHashes_CF.gameAddedToTop:
-          console.log("NotificationHashes_CF.gameAddedToTop");
-          this.eventHandler.onGameAddedToTop(Types.Game.cf, result.topics[1], result.topics[2]);
-          break;
-
-        default:
-          break;
-      }
-    });
-  },
-
+  // CF
   subscribe_cf: function () {
-    console.log('%c NotificationManager - subscribe_cf', 'color: #00aa00');
-
     switch (window.BlockchainManager.currentBlockchainType) {
       case Types.BlockchainType.ethereum:
-        console.log("subscribe_index - Ethereum");
         this.subscribe_cf_ethereum();
-
         break;
 
       case Types.BlockchainType.tron:
-        console.log("subscribe_index - Tron");
         break;
 
       default:
@@ -244,8 +144,24 @@ const NotificationManager = {
     })
   },
 
+  //  RPS
   subscribe_rps: function () {
-    console.log('%c NotificationManager - subscribe_rps', 'color: #00aa00');
+    switch (window.BlockchainManager.currentBlockchainType) {
+      case Types.BlockchainType.ethereum:
+        this.subscribe_rps_ethereum();
+
+        break;
+
+      case Types.BlockchainType.tron:
+        break;
+
+      default:
+        throw("ERROR: subscribe_index");
+    }
+  },
+
+  subscribe_rps_ethereum: function () {
+    console.log('%c NotificationManager - subscribe_rps_ethereum', 'color: #00aa00');
 
     window.web3.eth.subscribe('logs', {
       address: RockPaperScissorsData.address
@@ -358,7 +274,7 @@ const NotificationManager = {
       default:
         break;
     }
-  },
+  }
 }
 
 window.NotificationManager = NotificationManager;
