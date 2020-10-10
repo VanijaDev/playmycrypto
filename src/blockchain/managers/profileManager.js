@@ -1,8 +1,9 @@
 import Utils from "../utils";
 import BigNumber from "bignumber.js";
 import Types from "../types";
-import $ from "../../../public/jquery.min"
-import router from "../../router/index"
+import $ from "../../../public/jquery.min";
+import router from "../../router/index";
+import Hash from "object-hash";
 
 let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
@@ -15,6 +16,7 @@ let ProfileManager = {
   },
 
   profileUpdateHandler: null,
+  currentlyPlayingGamesBtnsHash: null,
 
   ongoingGameCF_Creator: new BigNumber("0"),
   ongoingGameCF_Opponent: new BigNumber("0"),
@@ -35,10 +37,10 @@ let ProfileManager = {
     this.updateCurrentAccountBalanceUI();
 
     await this.updateCurrentlyPlayingGames();
-    await this.updatePlayedGamesTotalAmounts();
-    await this.updatePlayerProfit();
-    await this.updateReferralFeesWithdrawn();
-    await this.updatePendingWithdrawals();
+    // await this.updatePlayedGamesTotalAmounts();
+    // await this.updatePlayerProfit();
+    // await this.updateReferralFeesWithdrawn();
+    // await this.updatePendingWithdrawals();
   },
 
   updateAfterWithdrawal: async function () {
@@ -58,25 +60,30 @@ let ProfileManager = {
       showAppDisabledView(true);
       throw("Not logged in to MetaMask.");
     }
-    document.getElementById("playerAccount").innerText = account.replace(/(0x[a-zA-Z0-9]{3})[a-zA-Z0-9]{34}/, "$1***");
+
+    let str = account.replace(/(0x[a-zA-Z0-9]{3})[a-zA-Z0-9]{34}/, "$1***");
+    if ($("#playerAccount")[0].textContent.localeCompare(str) != 0) {
+      $("#playerAccount")[0].textContent = str;
+    }
   },
 
   updateCurrentAccountBalanceUI: async function () {
-    let balance = (await window.BlockchainManager.getBalance()).toString();
-    document.getElementById("currentAccountBalance").innerText = Utils.weiToEtherFixed(balance);
+    let balanceStr = (await window.BlockchainManager.getBalance()).toString();
+    if ($("#currentAccountBalance")[0].textContent.localeCompare(balanceStr) != 0) {
+      $("#currentAccountBalance")[0].textContent = Utils.weiToEtherFixed(balanceStr);
+    }
   },
 
   updateCurrentlyPlayingGames: async function () {
-    await $('#listCurrentlyPlayingGames').empty();
-    $('#profileNotification')[0].classList.add('hidden');
-
     let btns = [];
+    let btnsStr = "";
 
     //  cf
     this.ongoingGameCF_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
     if (this.ongoingGameCF_Creator.isGreaterThan(new BigNumber("0"))) {
-      let btn_cf_creator = this.createPendingButtonElement("ongoingGameCF_Creator", Utils.gameIconSmallForGame(Types.Game.cf), "creator: " + this.ongoingGameCF_Creator);
+      let tooltipStr = "creator: " + this.ongoingGameCF_Creator;
+      let btn_cf_creator = this.createPendingButtonElement("ongoingGameCF_Creator", Utils.gameIconSmallForGame(Types.Game.cf), tooltipStr);
       btn_cf_creator.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Creator.toString());
       };
@@ -85,17 +92,20 @@ let ProfileManager = {
       }
 
       btns.push(btn_cf_creator);
+      btnsStr = btnsStr.concat(Types.Game.cf).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_creator);
     }
 
     this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
     if (this.ongoingGameCF_Opponent.isGreaterThan(new BigNumber("0"))) {
-      let btn_cf_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), "opponent: " + this.ongoingGameCF_Opponent);
+      let tooltipStr = "opponent: " + this.ongoingGameCF_Opponent;
+      let btn_cf_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), tooltipStr);
       btn_cf_opponent.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
       };
       btns.push(btn_cf_opponent);
+      btnsStr = btnsStr.concat(Types.Game.cf).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_opponent);
     }
 
@@ -103,7 +113,8 @@ let ProfileManager = {
     this.ongoingGameRPS_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.rps, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameRPS_Creator: ", this.ongoingGameRPS_Creator.toString());
     if (this.ongoingGameRPS_Creator.isGreaterThan(new BigNumber("0"))) {
-      let btn_rps_creator = this.createPendingButtonElement("ongoingGameRPS_Creator", Utils.gameIconSmallForGame(Types.Game.rps), "creator: " + this.ongoingGameRPS_Creator);
+      let tooltipStr =  "creator: " + this.ongoingGameRPS_Creator;
+      let btn_rps_creator = this.createPendingButtonElement("ongoingGameRPS_Creator", Utils.gameIconSmallForGame(Types.Game.rps),tooltipStr);
       btn_rps_creator.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Creator.toString());
       };
@@ -112,22 +123,32 @@ let ProfileManager = {
       }
 
       btns.push(btn_rps_creator);
+      btnsStr = btnsStr.concat(Types.Game.rps).concat(tooltipStr);
     }
 
     this.ongoingGameRPS_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.rps, window.BlockchainManager.currentAccount()));
     // console.log("this.ongoingGameRPS_Opponent: ", this.ongoingGameRPS_Opponent.toString());
     if (this.ongoingGameRPS_Opponent.isGreaterThan(new BigNumber("0"))) {
-      let btn_rps_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.rps), "opponent: " + this.ongoingGameRPS_Opponent);
+      let tooltipStr =  "opponent: " + this.ongoingGameRPS_Opponent;
+      let btn_rps_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.rps), tooltipStr);
       btn_rps_opponent.onclick = function () {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Opponent.toString());
       };
       btns.push(btn_rps_opponent);
+      btnsStr = btnsStr.concat(Types.Game.rps).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_rps_opponent);
     }
 
-    btns.forEach(btn => {
-      $('#listCurrentlyPlayingGames')[0].appendChild(btn);
-    });
+    if (this.currentlyPlayingGamesBtnsHash == null || this.currentlyPlayingGamesBtnsHash != Hash(btnsStr)) {
+      this.currentlyPlayingGamesBtnsHash = Hash(btnsStr);
+
+      await $('#listCurrentlyPlayingGames').empty();
+      $('#profileNotification')[0].classList.add('hidden');
+
+      btns.forEach(btn => {
+        $('#listCurrentlyPlayingGames')[0].appendChild(btn);
+      });
+    }
   },
 
   checkIfPendingMove: async function (_gameType, _gameId) {

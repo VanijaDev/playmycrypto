@@ -5,7 +5,7 @@ import Types from "./types";
 const $t = $('#translations').data();
 
 const Index = {
-  countdown: null,
+  timer: null,
 
   // ProfileManager handler methods
   pendingWithdrawn: async function () {
@@ -19,17 +19,17 @@ const Index = {
     await window.ProfileManager.update();
     await this.update();
 
-    this.countdown = setInterval(function () {
+    this.timer = setInterval(function () {
       window.Index.update();
-      // window.ProfileManager.update();
+      window.ProfileManager.update();
     }, 5000);
   },
 
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
     
-    if(this.countdown) {
-      clearInterval(this.countdown);
+    if(this.timer) {
+      clearInterval(this.timer);
     }
 
     window.window.ProfileManager.setUpdateHandler(null);

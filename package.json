@@ -35,7 +35,8 @@
     "vue-cli-plugin-i18n": "~1.0.1",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.44.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "object-hash": "^2.0.3"
   },
   "eslintConfig": {
     "root": true,
