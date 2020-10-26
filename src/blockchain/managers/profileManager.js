@@ -15,8 +15,18 @@ let ProfileManager = {
     beneficiary: "withdrawBeneficiaryPrize"
   },
 
+  isSetup_Update: false,
   profileUpdateHandler: null,
-  currentlyPlayingGamesBtnsHash: null,
+  currentlyPlayingGamesBtnsStr: "",
+  gamePlayProfitStr: "",
+  totalProfitStr: "",
+
+  pendingReferralBN_cf: new BigNumber("0"),
+  pendingReferralBN_rps: new BigNumber("0"),
+  pendingGamePrizeCount_cf: 0,
+  pendingGamePrizeCount_rps: 0,
+  pendingRafflePrizeBN_cf: new BigNumber("0"),
+  pendingRafflePrizeBN_rps: new BigNumber("0"),
 
   ongoingGameCF_Creator: new BigNumber("0"),
   ongoingGameCF_Opponent: new BigNumber("0"),
@@ -27,27 +37,48 @@ let ProfileManager = {
     this.profileUpdateHandler = _handler;
   },
 
-  update: async function (_handler) {
-    console.log('%c ProfileManager - update', 'color: #00aa00');
+  clearData: function () {
+    this.isSetup_Update = false;
+    this.currentlyPlayingGamesBtnsStr = "";
+    this.gamePlayProfitStr = "";
+    this.totalProfitStr = "";
 
-    hideTopBannerMessage();
-    showAppDisabledView(false);
+    this.pendingReferralBN_cf = new BigNumber("0");
+    this.pendingReferralBN_rps = new BigNumber("0");
+    this.pendingGamePrizeCount_cf = 0;
+    this.pendingGamePrizeCount_rps = 0;
+    this.pendingRafflePrizeBN_cf = new BigNumber("0");
+    this.pendingRafflePrizeBN_rps = new BigNumber("0");
 
-    this.updateCurrentAccountUI();
-    this.updateCurrentAccountBalanceUI();
+    this.ongoingGameCF_Creator = new BigNumber("0"),
+    this.ongoingGameCF_Opponent = new BigNumber("0"),
+    this.ongoingGameRPS_Creator = new BigNumber("0"),
+    this.ongoingGameRPS_Opponent = new BigNumber("0"),
 
-    await this.updateCurrentlyPlayingGames();
-    // await this.updatePlayedGamesTotalAmounts();
-    // await this.updatePlayerProfit();
-    // await this.updateReferralFeesWithdrawn();
-    // await this.updatePendingWithdrawals();
+    this.updatePendingPictures(this.PendingWithdraw.referral, [], []);
+    this.updatePendingPictures(this.PendingWithdraw.gamePrize, [], []);
+    this.updatePendingPictures(this.PendingWithdraw.raffle, [], []);
+    this.updatePendingPictures(this.PendingWithdraw.beneficiary, [], []);
   },
 
-  updateAfterWithdrawal: async function () {
-    console.log('%c updateAfterWithdrawal - update', 'color: #00aa00');
+  update: async function () {
+    if (!this.isSetup_Update) {
+      console.log('%c ProfileManager - update initial', 'color: #00aa00');
+
+      this.clearData();
+      this.isSetup_Update = true;
+
+      hideTopBannerMessage();
+      showAppDisabledView(false);
+      this.updateCurrentAccountUI();
+    } else {
+      console.log('%c ProfileManager - update', 'color: #00aa00');
+    }
 
     this.updateCurrentAccountBalanceUI();
-
+    
+    await this.updateCurrentlyPlayingGames();
+    await this.updatePlayedGamesTotalAmounts();
     await this.updatePlayerProfit();
     await this.updateReferralFeesWithdrawn();
     await this.updatePendingWithdrawals();
@@ -139,9 +170,8 @@ let ProfileManager = {
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_rps_opponent);
     }
 
-    if (this.currentlyPlayingGamesBtnsHash == null || this.currentlyPlayingGamesBtnsHash != Hash(btnsStr)) {
-      this.currentlyPlayingGamesBtnsHash = Hash(btnsStr);
-
+    if (this.currentlyPlayingGamesBtnsStr.localeCompare(btnsStr) != 0) {
+      this.currentlyPlayingGamesBtnsStr = btnsStr;
       await $('#listCurrentlyPlayingGames').empty();
       $('#profileNotification')[0].classList.add('hidden');
 
@@ -166,10 +196,14 @@ let ProfileManager = {
 
   updatePlayedGamesTotalAmounts: async function () {
     let cfResult = await window.BlockchainManager.playedGamesForPlayer(Types.Game.cf, window.BlockchainManager.currentAccount());
-    $("#cfPlayedTotalAmount")[0].innerText = cfResult.length;
+    if ($("#cfPlayedTotalAmount")[0].textContent.localeCompare(cfResult) != 0) {
+      $("#cfPlayedTotalAmount")[0].textContent = cfResult.length;
+    }
 
     let rpsResult = await window.BlockchainManager.playedGamesForPlayer(Types.Game.rps, window.BlockchainManager.currentAccount());
-    $("#rpsPlayedTotalAmount")[0].innerText = rpsResult.length;
+    if ($("#rpsPlayedTotalAmount")[0].textContent.localeCompare(rpsResult) != 0) {
+      $("#rpsPlayedTotalAmount")[0].textContent = rpsResult.length;
+    }
   },
 
   updatePlayerProfit: async function () {
@@ -190,14 +224,18 @@ let ProfileManager = {
 
     let gamePlayProfit = betTotal.multipliedBy(new BigNumber("-1")).plus(prizeTotal.multipliedBy(new BigNumber("2")));
     // console.log("PPP ", (gamePlayProfit).toString());
-    gamePlayProfitAmountElement.innerText = Utils.weiToEtherFixed(gamePlayProfit.toString());
-
-    if (gamePlayProfit.isNegative()) {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
-      gamePlayProfitAmountElement.classList.remove("green");
-      gamePlayProfitAmountElement.classList.add("red");
-    } else {
-      document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
+    if (this.gamePlayProfitStr.localeCompare(gamePlayProfit.toString()) != 0) {
+      this.gamePlayProfitStr = gamePlayProfit.toString();
+      gamePlayProfitAmountElement.innerText = Utils.weiToEtherFixed(this.gamePlayProfitStr);
+  
+      if (gamePlayProfit.isNegative()) {
+        document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
+        gamePlayProfitAmountElement.classList.remove("green");
+        gamePlayProfitAmountElement.classList.add("red");
+      } else {
+        document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
+      }
+      
     }
 
     //  TOTAL
@@ -237,72 +275,102 @@ let ProfileManager = {
     totalProfit = totalProfit.plus(rpsReferralResult);
     // console.log("totalProfit after referral ", totalProfit.toString());
 
-    var profitAmountTotalElement = document.getElementById("profit_amount_total");
-    let totalProfitLengthCorrect = Utils.weiToEtherFixed(totalProfit.toString());
-    profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
+    if (this.totalProfitStr.localeCompare(totalProfit.toString()) != 0) {
+      this.totalProfitStr = totalProfit.toString();
 
-    if (totalProfit.isNegative()) {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
-      profitAmountTotalElement.classList.remove("green");
-      profitAmountTotalElement.classList.add("red");
-    } else {
-      document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
-      profitAmountTotalElement.classList.remove("red");
-      profitAmountTotalElement.classList.add("green");
+      var profitAmountTotalElement = document.getElementById("profit_amount_total");
+      let totalProfitLengthCorrect = Utils.weiToEtherFixed(this.totalProfitStr);
+      profitAmountTotalElement.innerHTML = totalProfitLengthCorrect.toString();
+  
+      if (totalProfit.isNegative()) {
+        document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-down.svg">';
+        profitAmountTotalElement.classList.remove("green");
+        profitAmountTotalElement.classList.add("red");
+      } else {
+        document.getElementById("updownpic_total").innerHTML = '<img src="/img/icon-trending-up.svg">';
+        profitAmountTotalElement.classList.remove("red");
+        profitAmountTotalElement.classList.add("green");
+      }
     }
   },
 
   updateReferralFeesWithdrawn: async function () {
     let cfResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    document.getElementById('ReferralFeesWithdrawnCF').innerHTML = Utils.weiToEtherFixed(cfResult.toString());
+    if ($("#ReferralFeesWithdrawnCF")[0].textContent.localeCompare(cfResult.toString()) != 0) {
+      $("#ReferralFeesWithdrawnCF")[0].textContent = Utils.weiToEtherFixed(cfResult.toString());
+    }
 
     let rpsResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    document.getElementById('ReferralFeesWithdrawnRPS').innerHTML = Utils.weiToEtherFixed(rpsResult.toString());
+    if ($("#ReferralFeesWithdrawnRPS")[0].textContent.localeCompare(rpsResult.toString()) != 0) {
+      $("#ReferralFeesWithdrawnRPS")[0].textContent = Utils.weiToEtherFixed(rpsResult.toString());
+    }
   },
 
   updatePendingWithdrawals: async function () {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
     this.updatePendingRafflePrize();
-    this.updatePendingBeneficiaryPrize();
+    this.updatePendingBeneficiaryPrize(); //  now
   },
 
   updatePendingReferral: async function () {
     let pendingGames = [];
     let pendingValues = [];
+    let isUpdate = false;
 
     let cfResult = new BigNumber(await window.BlockchainManager.referralFeesPending(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    if (cfResult.isGreaterThan(new BigNumber("0"))) {
+    if (this.pendingReferralBN_cf.comparedTo(cfResult) != 0) {
+      this.pendingReferralBN_cf = cfResult;
+      isUpdate = true;
+
       pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
     }
     
     let rpsResult = new BigNumber(await window.BlockchainManager.referralFeesPending(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    if (rpsResult.isGreaterThan(new BigNumber("0"))) {
+    if (this.pendingReferralBN_rps.comparedTo(rpsResult) != 0) {
+      this.pendingReferralBN_rps = rpsResult;
+      isUpdate = true;
+
       pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
 
-    this.updatePendingPictures(this.PendingWithdraw.referral, pendingGames, pendingValues);
+    if (isUpdate) {
+      this.updatePendingPictures(this.PendingWithdraw.referral, pendingGames, pendingValues);
+    }
   },
 
   updatePendingGamePrize: async function () {
     let pendingGames = [];
     let pendingValues = [];
+    let isUpdate = false;
 
-    let cfResultGames = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.cf, window.BlockchainManager.currentAccount());
-    if ((new BigNumber(cfResultGames.length.toString())).isGreaterThan(new BigNumber("0"))) {
-      pendingGames.push(Types.Game.cf);
-      pendingValues.push(cfResultGames.length);
+    let cfResult = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.cf, window.BlockchainManager.currentAccount());
+    if (cfResult.length != this.pendingGamePrizeCount_cf) {
+      this.pendingGamePrizeCount_cf = cfResult.length;
+      isUpdate = true;
+
+      if ((new BigNumber(cfResult.length.toString())).isGreaterThan(new BigNumber("0"))) {
+        pendingGames.push(Types.Game.cf);
+        pendingValues.push(cfResult.length);
+      }
     }
 
-    let rpsResultGames = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.rps, window.BlockchainManager.currentAccount());
-    if ((new BigNumber(rpsResultGames.length.toString())).isGreaterThan(new BigNumber("0"))) {
-      pendingGames.push(Types.Game.rps);
-      pendingValues.push(rpsResultGames.length);
+    let rpsResult = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.rps, window.BlockchainManager.currentAccount());
+    if (rpsResult.length > this.pendingGamePrizeCount_rps) {
+      this.pendingGamePrizeCount_rps = rpsResult.length;
+      isUpdate = true;
+
+      if ((new BigNumber(rpsResult.length.toString())).isGreaterThan(new BigNumber("0"))) {
+        pendingGames.push(Types.Game.rps);
+        pendingValues.push(rpsResult.length);
+      }
     }
 
-    this.updatePendingPictures(this.PendingWithdraw.gamePrize, pendingGames, pendingValues);
+    if (pendingGames.length > 0) {
+      this.updatePendingPictures(this.PendingWithdraw.gamePrize, pendingGames, pendingValues);
+    }
   },
 
   updatePendingRafflePrize: async function () {
@@ -310,18 +378,30 @@ let ProfileManager = {
     let pendingValues = [];
 
     let cfResult = new BigNumber(await window.BlockchainManager.rafflePrizePending(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    if (cfResult.isGreaterThan(new BigNumber("0"))) {
-      pendingGames.push(Types.Game.cf);
-      pendingValues.push(cfResult);
+    if (this.pendingRafflePrizeBN_cf.comparedTo(cfResult) != 0) {
+      console.log("111");
+      this.pendingRafflePrizeBN_cf = cfResult;
+
+      if (cfResult.isGreaterThan(new BigNumber("0"))) {
+        pendingGames.push(Types.Game.cf);
+        pendingValues.push(cfResult);
+      }
     }
 
     let rpsResult = new BigNumber(await window.BlockchainManager.rafflePrizePending(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    if (rpsResult.isGreaterThan(new BigNumber("0"))) {
-      pendingGames.push(Types.Game.rps);
-      pendingValues.push(rpsResult);
+    if (this.pendingRafflePrizeBN_rps.comparedTo(rpsResult) != 0) {
+      console.log("222");
+      this.pendingRafflePrizeBN_rps = rpsResult;
+
+      if (rpsResult.isGreaterThan(new BigNumber("0"))) {
+        pendingGames.push(Types.Game.rps);
+        pendingValues.push(rpsResult);
+      }
     }
 
-    this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
+    if (pendingGames.length > 0) {
+      this.updatePendingPictures(this.PendingWithdraw.raffle, pendingGames, pendingValues);
+    }
   },
 
   updatePendingBeneficiaryPrize: async function () {
@@ -453,7 +533,7 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            window.ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.update();
             window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
@@ -482,7 +562,8 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            window.ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.update();
+            window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -508,7 +589,8 @@ let ProfileManager = {
           })
           .once('receipt', function (receipt) {
             hideTopBannerMessage();
-            window.ProfileManager.updateAfterWithdrawal();
+            window.ProfileManager.update();
+            window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
             if (error.code != window.BlockchainManager.MetaMaskCodes.userDenied) {
@@ -534,7 +616,7 @@ let ProfileManager = {
             })
             .once('receipt', function (receipt) {
               hideTopBannerMessage();
-              window.ProfileManager.updateAfterWithdrawal();
+              window.ProfileManager.update();
               window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
             })
             .once('error', function (error, receipt) {
