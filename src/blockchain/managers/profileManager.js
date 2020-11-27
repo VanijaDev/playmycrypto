@@ -209,8 +209,6 @@ let ProfileManager = {
   updatePlayerProfit: async function () {
     //  GAMEPLAY
     var gamePlayProfitAmountElement = document.getElementById("profit_amount_gameplay");
-    gamePlayProfitAmountElement.classList.remove("red");
-    gamePlayProfitAmountElement.classList.add("green");
 
     let cfBetResult = new BigNumber(await window.BlockchainManager.betTotal(Types.Game.cf, window.BlockchainManager.currentAccount()));
     let betTotal = cfBetResult;
@@ -230,10 +228,14 @@ let ProfileManager = {
   
       if (gamePlayProfit.isNegative()) {
         document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-down.svg">';
+
         gamePlayProfitAmountElement.classList.remove("green");
         gamePlayProfitAmountElement.classList.add("red");
       } else {
         document.getElementById("updownpic_gameplay").innerHTML = '<img src="/img/icon-trending-up.svg">';
+
+        gamePlayProfitAmountElement.classList.remove("red");
+        gamePlayProfitAmountElement.classList.add("green");
       }
       
     }
