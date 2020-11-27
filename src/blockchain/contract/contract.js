@@ -4,7 +4,7 @@ const Web3 = require("web3");
 // var web3 = new Web3(Web3.givenProvider);
 
 let CoinFlipData = {
-    address: "0xE911C78cf4c7803F1f123cB7CC1721Dafd060299", //    Ganache
+    address: "0xaD6E52A5C06b2dBD86D51DAC43b1e2b9A77712dc", //    Ganache
     abi: [
 	{
 		"inputs": [
@@ -392,26 +392,7 @@ let CoinFlipData = {
 				"type": "address"
 			}
 		],
-		"name": "addressBetTotal",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "addressPrizeTotal",
+		"name": "betTotal",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -584,7 +565,7 @@ let CoinFlipData = {
 			},
 			{
 				"internalType": "uint8",
-				"name": "randCoinSide",
+				"name": "opponentCoinSide",
 				"type": "uint8"
 			},
 			{
@@ -1033,6 +1014,25 @@ let CoinFlipData = {
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "prizeTotal",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"
@@ -1097,6 +1097,25 @@ let CoinFlipData = {
 			}
 		],
 		"name": "rafflePrizePending",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "rafflePrizeWithdrawn",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1273,6 +1292,13 @@ let CoinFlipData = {
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1399,7 +1425,7 @@ let CoinFlipData = {
 }
 
 let RockPaperScissorsData = {
-    address: "0xCaCA0a013F1aD48ed14b06e440d15C33df2D8631", //    Ganache
+    address: "0x1D8c109d052aCf16B4c3dAca3694490FEF0Fd8C4", //    Ganache
     abi: [
 	{
 		"inputs": [
@@ -1496,6 +1522,43 @@ let RockPaperScissorsData = {
 				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "creator",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "opponent",
+				"type": "address"
+			}
+		],
+		"name": "RPS_GameExpiredFinished",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "creator",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "opponent",
+				"type": "address"
 			}
 		],
 		"name": "RPS_GameFinished",
@@ -1521,12 +1584,6 @@ let RockPaperScissorsData = {
 				"internalType": "address",
 				"name": "opponent",
 				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "nextMover",
-				"type": "address"
 			}
 		],
 		"name": "RPS_GameJoined",
@@ -1540,12 +1597,6 @@ let RockPaperScissorsData = {
 				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nextMover",
-				"type": "address"
 			}
 		],
 		"name": "RPS_GameMovePlayed",
@@ -1559,12 +1610,6 @@ let RockPaperScissorsData = {
 				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nextMover",
-				"type": "address"
 			}
 		],
 		"name": "RPS_GameOpponentMoved",
@@ -1601,6 +1646,31 @@ let RockPaperScissorsData = {
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "creator",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "opponent",
+				"type": "address"
+			}
+		],
+		"name": "RPS_GameQuittedFinished",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "referral",
 				"type": "address"
@@ -1617,12 +1687,6 @@ let RockPaperScissorsData = {
 				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "creator",
-				"type": "address"
 			}
 		],
 		"name": "RPS_GameUnpaused",
@@ -1699,12 +1763,6 @@ let RockPaperScissorsData = {
 				"internalType": "address",
 				"name": "winner",
 				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "prize",
-				"type": "uint256"
 			}
 		],
 		"name": "RPS_RafflePrizeWithdrawn",
@@ -1722,6 +1780,19 @@ let RockPaperScissorsData = {
 		],
 		"name": "Unpaused",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "ACQUIRED_FEE_BENEFICIARY_MAX_DURATION",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -1744,26 +1815,7 @@ let RockPaperScissorsData = {
 				"type": "address"
 			}
 		],
-		"name": "addressBetTotal",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "addressPrizeTotal",
+		"name": "betTotal",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1795,6 +1847,51 @@ let RockPaperScissorsData = {
 	{
 		"inputs": [],
 		"name": "devFeePending",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "feeBeneficiar",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "feeBeneficiarBalances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "feeBeneficiarPurchasedAt",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1915,7 +2012,7 @@ let RockPaperScissorsData = {
 			},
 			{
 				"internalType": "bool",
-				"name": "prizeWithdrawn",
+				"name": "isPrizeWithdrawn",
 				"type": "bool"
 			},
 			{
@@ -2011,7 +2108,7 @@ let RockPaperScissorsData = {
 				"type": "uint256"
 			}
 		],
-		"name": "gamesWithPendingPrizeWithdrawalForAddress",
+		"name": "gamesWithPendingPrizeWithdrawal",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -2049,7 +2146,7 @@ let RockPaperScissorsData = {
 				"type": "address"
 			}
 		],
-		"name": "getGamesWithPendingPrizeWithdrawalForAddress",
+		"name": "getGamesWithPendingPrizeWithdrawal",
 		"outputs": [
 			{
 				"internalType": "uint256[]",
@@ -2068,7 +2165,7 @@ let RockPaperScissorsData = {
 				"type": "address"
 			}
 		],
-		"name": "getPlayedGameIdxsForPlayer",
+		"name": "getPlayedGamesForPlayer",
 		"outputs": [
 			{
 				"internalType": "uint256[]",
@@ -2182,6 +2279,26 @@ let RockPaperScissorsData = {
 	},
 	{
 		"inputs": [],
+		"name": "latestBeneficiarPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "makeFeeBeneficiar",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "minBet",
 		"outputs": [
 			{
@@ -2214,7 +2331,26 @@ let RockPaperScissorsData = {
 				"type": "address"
 			}
 		],
-		"name": "ongoingGameIdxForPlayer",
+		"name": "ongoingGameAsCreator",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "ongoingGameAsOpponent",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -2372,16 +2508,16 @@ let RockPaperScissorsData = {
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
-		"name": "prizeForGame",
+		"name": "prizeTotal",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "_prize",
+				"name": "",
 				"type": "uint256"
 			}
 		],
@@ -2454,7 +2590,26 @@ let RockPaperScissorsData = {
 				"type": "address"
 			}
 		],
-		"name": "rafflePrizePendingForAddress",
+		"name": "rafflePrizePending",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "rafflePrizeWithdrawn",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -2559,19 +2714,6 @@ let RockPaperScissorsData = {
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "removeTopGame",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "renounceOwnership",
 		"outputs": [],
@@ -2673,6 +2815,13 @@ let RockPaperScissorsData = {
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -2746,6 +2895,13 @@ let RockPaperScissorsData = {
 			}
 		],
 		"name": "updateRaffleActivationParticipantsCount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawBeneficiaryFee",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
