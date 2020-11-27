@@ -7,7 +7,6 @@ const BlockchainManager = {
     userDenied: 4001
   },
 
-  currentBlockchainType: "",
   currentBlockchainManager: null,
 
   init: async function () {
@@ -26,7 +25,6 @@ const BlockchainManager = {
 
   updateCurrentBlockchain: function (_blockchainType) {
     console.log('BlockchainManager - updateCurrentBlockchain:', _blockchainType);
-    this.currentBlockchainType = _blockchainType;
     
     switch (_blockchainType) {
       case Types.BlockchainType.ethereum:
@@ -50,7 +48,7 @@ const BlockchainManager = {
 
   chainChanged: function (_chainId) {
     console.log('%c BlockchainManager - chainChanged %s', 'color: #00aa00', _chainId);
-    if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
+    if (this.currentBlockchainManager == BlockchainManager_ethereum) {
       if (this.currentBlockchainManager.chainChanged(_chainId)) {
         this.currentBlockchainManager.init();
         return true;
@@ -225,7 +223,6 @@ const BlockchainManager = {
       return;
     }
 
-    this.currentBlockchainType = _blockchainType;
     let iconElements;
 
     switch (_blockchainType) {
@@ -272,9 +269,9 @@ const BlockchainManager = {
   },
 
   currentCryptoName: function () {
-    if (this.currentBlockchainType == Types.BlockchainType.ethereum) {
+    if (this.currentBlockchainManager == BlockchainManager_ethereum) {
       return "ETH";
-    } else if (this.currentBlockchainType == Types.BlockchainType.tron) {
+    } else {
       return "TRX";
     }
   },

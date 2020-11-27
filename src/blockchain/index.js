@@ -15,21 +15,21 @@ const Index = {
   setup: async function () {
     console.log('%c index - setup', 'color: #00aa00');
 
-    await window.ProfileManager.setUpdateHandler(this);
+    await window.ProfileManager.setUpdateHandler(window.Index);
     await window.ProfileManager.update();
-    await this.update();
+    await window.Index.update();
 
-    this.timer = setInterval(function () {
+    window.Index.timer = setInterval(function () {
       window.Index.update();
       window.ProfileManager.update();
-    }, 5000);
+    }, 10000);
   },
 
   onUnload: function () {
     console.log('%c index - onUnload', 'color: #00aa00');
     
-    if(this.timer) {
-      clearInterval(this.timer);
+    if (window.Index.timer) {
+      clearInterval(window.Index.timer);
     }
 
     window.window.ProfileManager.setUpdateHandler(null);

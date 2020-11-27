@@ -36,11 +36,13 @@ const BlockchainManager_ethereum = {
   connectToMetaMask: async function () {
     console.log('%c BlockchainManager_ethereum - connectToMetaMask', 'color: #00aa00');
 
+    this.initted = false;
+
     // Modern dapp browsers...
     if (window.ethereum) {
       console.log("Modern dapp browsers...");
 
-      ethereum.autoRefreshOnNetworkChange;
+      ethereum.autoRefreshOnNetworkChange = false;
       window.web3 = new Web3(ethereum);
 
       try {
@@ -62,7 +64,6 @@ const BlockchainManager_ethereum = {
         showTopBannerMessage(error.message, null, true);
         showAppDisabledView(true);
 
-        this.initted = false;
         return false;
       }
     }
@@ -74,7 +75,6 @@ const BlockchainManager_ethereum = {
       showTopBannerMessage("Legacy dapp browsers... Working on compatibility", null, false);
       showAppDisabledView(true);
 
-      this.initted = false;
       return false;
     }
     // Non-dapp browsers...
@@ -83,11 +83,9 @@ const BlockchainManager_ethereum = {
       showTopBannerMessage("Non-Ethereum browser detected. You should consider trying MetaMask!", null, false);
       showAppDisabledView(true);
 
-      this.initted = false;
       return false;
     }
 
-    ethereum.autoRefreshOnNetworkChange = false;
     this.initted = true;
     return true;
   },
@@ -111,11 +109,11 @@ const BlockchainManager_ethereum = {
 
   isNetworkValid: function (_networkVersion) {
     /**
-     * Ganache = 0x1691, (5777)
+     * Ganache = 0x539, (1337)
      * Main Net = 0x1
      * Ropsten = 0x3
      */
-    return (_networkVersion == "0x1691");
+    return (_networkVersion == "0x539");
   },
 
   isCurrentNetworkValid: function () {

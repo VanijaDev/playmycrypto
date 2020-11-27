@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>OXO Games</title>
-  <link rel="shortcut icon" href="/favicon.png" type="image/png">
-  <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>OXO Games</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/png">
+    <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
+  </head>
 
-<body>
-<div id="app"></div>
-<!-- built files will be auto injected -->
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
 
-<script src="./jquery.min.js"></script>
-<script>
-  function showAppDisabledView(_show) {
-    if (_show) {
-      $("#app-disabled")[0].classList.add("app-disabled");
-      $("#app-disabled")[0].classList.remove("hidden");
-    } else {
-      $("#app-disabled")[0].classList.remove("app-disabled");
-      $("#app-disabled")[0].classList.add("hidden");
-    }
-  }
+    <script src="./jquery.min.js"></script>
+    <script>
+      function showAppDisabledView(_show) {
+        if (_show) {
+          $("#app-disabled")[0].classList.add("app-disabled");
+          $("#app-disabled")[0].classList.remove("hidden");
+        } else {
+          $("#app-disabled")[0].classList.remove("app-disabled");
+          $("#app-disabled")[0].classList.add("hidden");
+        }
+      }
 
-  function showTopBannerMessage(textBefore, hash, autohide) {
-    var topBannerMessage = textBefore;
-    if (hash && hash.length > 0) {
-      var linkStr = "https://etherscan.io/tx/" + hash;
-      topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
-    }
-    $('.top-message').html(topBannerMessage).addClass('visible');
-    if (autohide) {
-      setTimeout(function () {
+      function showTopBannerMessage(textBefore, hash, autohide) {
+        var topBannerMessage = textBefore;
+        if (hash && hash.length > 0) {
+          var linkStr = "https://etherscan.io/tx/" + hash;
+          topBannerMessage += '<a href=' + linkStr + ' target=blank>' + hash + '</a>';
+        }
+        $('.top-message').html(topBannerMessage).addClass('visible');
+        if (autohide) {
+          setTimeout(function () {
+            $('.top-message').html('').removeClass('visible');
+          }, 5000);
+        }
+      }
+
+      function hideTopBannerMessage() {
         $('.top-message').html('').removeClass('visible');
-      }, 5000);
-    }
-  }
+      }
 
-  function hideTopBannerMessage() {
-    $('.top-message').html('').removeClass('visible');
-  }
+      function showGameBlock(id) {
+        $('.game-block').addClass('hidden');
+        $('#' + id).removeClass('hidden');
+      }
 
-  function showGameBlock(id) {
-    $('.game-block').addClass('hidden');
-    $('#' + id).removeClass('hidden');
-  }
+      function switchBeneficiary(blockId) {
+        $('.beneficiary-block').addClass('hidden');
+        $('#' + blockId).removeClass('hidden');
+      }
 
-  function switchBeneficiary(blockId) {
-    $('.beneficiary-block').addClass('hidden');
-    $('#' + blockId).removeClass('hidden');
-  }
+      function showActionRequired(_element) {
+        $('#profileNotification').removeClass('hidden');
+        
+        var img = document.createElement('img');
+        img.classList.add("notification-icon");
+        img.src = '/img/notification.svg'; 
+        _element.append(img); 
+      }
 
-  function showActionRequired(_element) {
-    $('#profileNotification').removeClass('hidden');
-    
-    var img = document.createElement('img');
-    img.classList.add("notification-icon");
-    img.src = '/img/notification.svg'; 
-    _element.append(img); 
-  }
+      function hideActionRequired(gameButtonId) {
+        //  playingCFCreator, playingCFOpponent
+        //  playingRPSCreator, playingRPSOpponent
+        $('#' + gameButtonId).find('.notification-icon').remove();
+        if (!$('.notification-icon').length) {
+          $('#profileNotification').addClass('hidden');
+        }
+      }
+    </script>
 
-  function hideActionRequired(gameButtonId) {
-    //  playingCFCreator, playingCFOpponent
-    //  playingRPSCreator, playingRPSOpponent
-    $('#' + gameButtonId).find('.notification-icon').remove();
-    if (!$('.notification-icon').length) {
-      $('#profileNotification').addClass('hidden');
-    }
-  }
-</script>
-
-</body>
+  </body>
 
 </html>
