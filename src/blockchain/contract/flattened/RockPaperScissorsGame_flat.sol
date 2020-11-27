@@ -1,5 +1,5 @@
 
-// File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol
+// File: localhost/node_modules/openzeppelin-solidity/contracts/GSN/Context.sol
 
 // SPDX-License-Identifier: MIT
 
@@ -26,7 +26,7 @@ abstract contract Context {
     }
 }
 
-// File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol
+// File: localhost/node_modules/openzeppelin-solidity/contracts/access/Ownable.sol
 
 // SPDX-License-Identifier: MIT
 
@@ -96,8 +96,7 @@ contract Ownable is Context {
     }
 }
 
-
-// File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol
+// File: localhost/node_modules/openzeppelin-solidity/contracts/utils/Pausable.sol
 
 // SPDX-License-Identifier: MIT
 
@@ -189,7 +188,84 @@ contract Pausable is Context {
     }
 }
 
-// File: localhost/game_rock_paper_scissors/contracts/GameRaffle.sol
+// File: localhost/contracts/AcquiredFeeBeneficiar.sol
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+
+
+/**
+ * @dev Contract that allowes user to purchase right to receive % of game prizes.
+ * @notice Beneficiary address will be reset after single address is being set 15 days.
+ */
+contract AcquiredFeeBeneficiar is Ownable {
+  using SafeMath for uint256;
+
+  uint256 public constant ACQUIRED_FEE_BENEFICIARY_MAX_DURATION = 15 days;  //  max duration for single beneficiar
+
+  uint256 public latestBeneficiarPrice;
+
+  address payable public feeBeneficiar; //  ongoing address to get fees during withdrawals
+  uint256 public feeBeneficiarPurchasedAt;  //  timestamp, when purchased
+
+  mapping(address => uint256) public feeBeneficiarBalances;
+
+  /**
+   * @dev Purchase right to become fee beneficiar.
+   * TESTED
+   */
+  function makeFeeBeneficiar() virtual public payable {
+    require(msg.value > latestBeneficiarPrice, "Wrong amount");
+
+    latestBeneficiarPrice = msg.value;
+    feeBeneficiar = msg.sender;
+    feeBeneficiarPurchasedAt = now;
+  }
+
+  /**
+   * @dev Add fee amount to ongoing beneficiar balance.
+   * @param _amount Amount of fee to be added.
+   * TESTED
+   */
+  function addBeneficiarFee(uint256 _amount) internal {
+    resetFeeBeneficiarIfExceeded();
+
+    feeBeneficiarBalances[feeBeneficiar] = feeBeneficiarBalances[feeBeneficiar].add(_amount);
+  }
+
+  /**
+   * @dev Withdraws beneficiary fee.
+   * TESTED
+   */
+  function withdrawBeneficiaryFee() external {
+    uint256 fee = feeBeneficiarBalances[msg.sender];
+    require(fee > 0, "No fee");
+
+    delete feeBeneficiarBalances[msg.sender];
+    msg.sender.transfer(fee);
+
+    resetFeeBeneficiarIfExceeded();
+  }
+
+  /**
+   * @dev Resets fee beneficiar to owner if max duration exceeded.
+   * TESTED
+   */
+  function resetFeeBeneficiarIfExceeded() private {
+    if (feeBeneficiar == owner()) {
+      return;
+    }
+
+    if (now.sub(feeBeneficiarPurchasedAt) > ACQUIRED_FEE_BENEFICIARY_MAX_DURATION) {
+      address payable ownerAddr = address(uint160(owner()));
+      feeBeneficiar = ownerAddr;
+      delete feeBeneficiarPurchasedAt;
+      delete latestBeneficiarPrice;
+    }
+  }
+}
+// File: localhost/contracts/GameRaffle.sol
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
@@ -205,7 +281,9 @@ abstract contract GameRaffle is Ownable {
     uint256 time;
   }
   
-  mapping(address => uint256) public rafflePrizePendingForAddress;
+  mapping(address => uint256) public rafflePrizePending;
+  mapping(address => uint256) public rafflePrizeWithdrawn;
+  
   uint256 public ongoinRafflePrize;
   uint256 public rafflePrizesWonTotal;
 
@@ -215,13 +293,13 @@ abstract contract GameRaffle is Ownable {
 
 
   event RPS_RafflePlayed(address indexed winner, uint256 indexed prize);
-  event RPS_RafflePrizeWithdrawn(address indexed winner, uint256 indexed prize);
+  event RPS_RafflePrizeWithdrawn(address indexed winner);
 
 
   /**
    * @dev Gets raffle participants.
    * @return Participants count.
-   * TESTED
+   * 
    */
   function getRaffleParticipants() external view returns (address[] memory) {
     return raffleParticipants;
@@ -230,7 +308,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Updates raffle minimum participants Count to activate.
    * @param _amount Amount to be set.
-   * TESTED
+   * 
    */
   function updateRaffleActivationParticipantsCount(uint256 _amount) external onlyOwner {
     require(_amount > 0, "Should be > 0");
@@ -240,7 +318,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Gets past raffle results count.
    * @return Results count.
-   * TESTED
+   * 
    */
   function getRaffleResultCount() external view returns (uint256) {
     return raffleResults.length;
@@ -249,7 +327,7 @@ abstract contract GameRaffle is Ownable {
   /**
    * @dev Checks if raffle is activated.
    * @return Wether raffle is activated.
-   * TESTED
+   * 
    */
   function raffleActivated() public view returns(bool) {
     return (raffleParticipants.length >= raffleActivationParticipantsAmount && ongoinRafflePrize > 0);
@@ -257,13 +335,13 @@ abstract contract GameRaffle is Ownable {
 
   /**
    * @dev Runs the raffle.
-   * TESTED
+   * 
    */
   function runRaffle() external {
     require(raffleActivated(), "Raffle != activated");
 
     uint256 winnerIdx = rand();
-    rafflePrizePendingForAddress[raffleParticipants[winnerIdx]] = rafflePrizePendingForAddress[raffleParticipants[winnerIdx]].add(ongoinRafflePrize);
+    rafflePrizePending[raffleParticipants[winnerIdx]] = rafflePrizePending[raffleParticipants[winnerIdx]].add(ongoinRafflePrize);
     rafflePrizesWonTotal = rafflePrizesWonTotal.add(ongoinRafflePrize);
     raffleResults.push(RaffleResult(raffleParticipants[winnerIdx], ongoinRafflePrize, now));
 
@@ -275,7 +353,7 @@ abstract contract GameRaffle is Ownable {
 
   /**
    * @dev Generates random number
-   * TESTED
+   * 
    */
   function rand() public view returns(uint256) {
     require(raffleParticipants.length > 0, "No participants");
@@ -288,7 +366,7 @@ abstract contract GameRaffle is Ownable {
   function withdrawRafflePrizes() external virtual;
 }
 
-// File: localhost/game_rock_paper_scissors/contracts/IGamePausable.sol
+// File: localhost/contracts/IGamePausable.sol
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
@@ -296,7 +374,7 @@ pragma solidity ^0.6.0;
 abstract contract IGamePausable {
 
   event RPS_GamePaused(uint256 indexed id);
-  event RPS_GameUnpaused(uint256 indexed id, address indexed creator);
+  event RPS_GameUnpaused(uint256 indexed id);
 
   /**
    * @dev Checks if game is paused.
@@ -318,13 +396,13 @@ abstract contract IGamePausable {
   function unpauseGame(uint256 _id) external payable virtual;
 }
 
-// File: localhost/game_rock_paper_scissors/contracts/IExpiryMoveDuration.sol
+// File: localhost/contracts/IExpiryMoveDuration.sol
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
 abstract contract IExpiryMoveDuration {
-  uint16 public gameMoveDuration = 5 minutes;
+  uint16 public gameMoveDuration = 12 hours;
 
   /**
    * @dev Updates game move duration.
@@ -345,7 +423,7 @@ abstract contract IExpiryMoveDuration {
    */
   function finishExpiredGame(uint256 _id) external virtual;
 }
-// File: localhost/game_rock_paper_scissors/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol
+// File: localhost/node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol
 
 // SPDX-License-Identifier: MIT
 
@@ -507,8 +585,7 @@ library SafeMath {
     }
 }
 
-
-// File: localhost/game_rock_paper_scissors/contracts/Partnership.sol
+// File: localhost/contracts/Partnership.sol
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
@@ -563,7 +640,7 @@ contract Partnership is Ownable {
 
   /**
    * @dev Transfers partner fee to partner address if threshold was reached.
-   * TESTED
+   * 
    */
   function transferPartnerFee() internal {
     if (partnerFeePending >= partnerFeeTransferThreshold) {
@@ -577,7 +654,7 @@ contract Partnership is Ownable {
   }
 }
 
-// File: localhost/game_rock_paper_scissors/contracts/RockPaperScissorsGame.sol
+// File: localhost/contracts/RockPaperScissorsGame.sol
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
@@ -588,19 +665,27 @@ pragma solidity ^0.6.0;
 
 
 
+
 /**
  * @notice IMPORTANT: owner should create first game.
- * @notice CoinFlipGame can be created by creator and run by joined player. Creator is not required to be online or perform any actions for game to be played.
+ *
+ *  Prize distribution will be performed on game prize withdrawal only with percentages:
+ *    95% - winner
+ *     1% - winner referral
+ *     1% - raffle
+ *     1% - partner project
+ *     1% - fee beneficiar
+ *     1% - dev
  */
 
-contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IGamePausable, GameRaffle {
+
+contract RockPaperScissorsGame is Pausable, Partnership, AcquiredFeeBeneficiar, IExpiryMoveDuration, IGamePausable, GameRaffle {
   
   enum GameState {WaitingForOpponent, Started, WinnerPresent, Draw, Quitted, Expired}
-
   struct Game {
     bool paused;
-    bool prizeWithdrawn;
-    bool[2] drawWithdrawn;  //  0 - creator; 1 - opponent
+    bool isPrizeWithdrawn;
+    bool[2] isDrawWithdrawn;  //  0 - creator; 1 - opponent
 
     GameState state;
 
@@ -620,22 +705,22 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     address opponentReferral;
   }
 
-  uint256 private constant FEE_PERCENT = 1;
-
+  uint256 private constant FEE_PERCENT = 1; //  from single bet, because prize is opponent's bet
   uint256 public minBet = 10 finney; //  also used as fee add to TopGames, unpause
   
   uint256[5] public topGames; //  show above other games
 
   uint256 public gamesCreatedAmount;
-  uint256 public gamesCompletedAmount; //  played, quitted, move expired
-  mapping(uint256 => Game) public games;
-  mapping(address => uint256) public ongoingGameIdxForPlayer;
-  mapping(address => uint256[]) private playedGameIdxsForPlayer;
-  
-  mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawalForAddress; //  for both won & draw
+  uint256 public gamesCompletedAmount; //  completed in any way
 
-  mapping(address => uint256) public addressBetTotal;
-  mapping(address => uint256) public addressPrizeTotal;
+  mapping(uint256 => Game) public games;
+  mapping(address => uint256) public ongoingGameAsCreator;
+  mapping(address => uint256) public ongoingGameAsOpponent;
+  mapping(address => uint256[]) private playedGames;
+  mapping(address => uint256[]) public gamesWithPendingPrizeWithdrawal; //  for both won & draw
+
+  mapping(address => uint256) public betTotal;
+  mapping(address => uint256) public prizeTotal;
 
   mapping(address => uint256) public referralFeesPending;
   mapping(address => uint256) public referralFeesWithdrawn;
@@ -645,11 +730,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   uint256 public totalUsedReferralFees;
   uint256 public totalUsedInGame;
 
+
   event RPS_GameCreated(uint256 indexed id, address indexed creator, uint256 indexed bet);
-  event RPS_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent, address nextMover);
-  event RPS_GameMovePlayed(uint256 indexed id, address indexed nextMover);
-  event RPS_GameOpponentMoved(uint256 indexed id, address indexed nextMover);
-  event RPS_GameFinished(uint256 indexed id);
+  event RPS_GameJoined(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameMovePlayed(uint256 indexed id);
+  event RPS_GameOpponentMoved(uint256 indexed id);
+  event RPS_GameExpiredFinished(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameQuittedFinished(uint256 indexed id, address indexed creator, address indexed opponent);
+  event RPS_GameFinished(uint256 indexed id, address indexed creator, address indexed opponent);
   event RPS_GamePrizesWithdrawn(address indexed player);
   event RPS_GameUpdated(uint256 indexed id, address indexed creator);
   event RPS_GameAddedToTop(uint256 indexed id, address indexed creator);
@@ -661,18 +749,33 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     _;
   }
 
+  modifier onlyAvailableToCreate() {
+    require(ongoingGameAsCreator[msg.sender] == 0, "No more creating");
+    _;
+  }
+
+  modifier onlyAvailableToJoin() {
+    require(ongoingGameAsOpponent[msg.sender] == 0, "No more opponenting");
+    _;
+  }
+
   modifier onlyCorrectReferral(address _referral) {
     require(_referral != msg.sender, "Wrong referral");
     _;
   }
 
-  modifier onlySingleGamePlaying() {
-    require(ongoingGameIdxForPlayer[msg.sender] == 0,  "No more participating");
+  modifier onlyNotGameCreator(uint256 _id) {
+    require(games[_id].creator != msg.sender,  "Game creator");
     _;
   }
 
   modifier onlyGameCreator(uint256 _id) {
     require(games[_id].creator == msg.sender,  "Not creator");
+    _;
+  }
+
+  modifier onlyWaitingForOpponent(uint256 _id) {
+    require(games[_id].state == GameState.WaitingForOpponent,  "!= WaitingForOpponent");
     _;
   }
 
@@ -700,19 +803,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     require(_moveMark > 0 && _moveMark < 4, "Wrong move idx");
     _;
   }
-
-  modifier onlyWaitingForOpponent(uint256 _id) {
-    require(games[_id].state == GameState.WaitingForOpponent,  "!= WaitingForOpponent");
-    _;
-  }
   
   /**
    * @dev Contract constructor.
    * @param _partner Address for partner.
    * TESTED
    */
-  constructor(address payable _partner) Partnership (_partner, 1 ether) public {
-    updatePartner(_partner);
+  constructor(address payable _partner) public Partnership(_partner, 1 ether) {
+    feeBeneficiar = msg.sender;
   }
 
   /**
@@ -722,6 +820,72 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   function kill() external onlyOwner {
     address payable addr = msg.sender;
     selfdestruct(addr);
+  }
+
+  /**
+   * Pausable.sol
+   * 
+   */
+  /**
+   * @dev Triggers stopped state.
+   * TESTED
+   */
+  function pause() external onlyOwner {
+    Pausable._pause();
+  }
+
+  /**
+   * @dev Returns to normal state.
+   * TESTED
+   */
+  function unpause() external onlyOwner {
+    Pausable._unpause();
+  }
+
+  /**
+   * IGamePausable
+   * TESTED
+   */
+
+  /**
+   * @dev Pauses game.
+   * @param _id Game index.
+   * TESTED
+   */
+  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
+    games[_id].paused = true;
+
+    if (isTopGame(_id)) {
+      removeTopGame(_id);
+    }
+
+    emit RPS_GamePaused(_id);
+  }
+
+  /** 
+   * @dev Unpauses game.
+   * @param _id Game index.
+   * TESTED
+   */
+  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
+    require(msg.value == minBet, "Wrong fee");
+
+    games[_id].paused = false;
+    
+    devFeePending = devFeePending.add(msg.value);
+    totalUsedInGame = totalUsedInGame.add(msg.value);
+
+    emit RPS_GameUnpaused(_id);
+  }
+
+  /**
+   * @dev Checks if game is paused.
+   * @param _id Game index.
+   * @return Is game paused.
+   * TESTED
+   */
+  function gameOnPause(uint256 _id) public view override returns(bool) { 
+    return games[_id].paused;
   }
 
   /**
@@ -736,7 +900,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    */
   function updateGameMoveDuration(uint16 _duration) external override onlyOwner {
     require(_duration > 0, "Should be > 0");
-    gameMoveDuration = _duration;    
+    gameMoveDuration = _duration;  
   }
 
   /**
@@ -759,71 +923,26 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   function finishExpiredGame(uint256 _id) external override {
     Game storage game = games[_id];
 
-    require(game.creator != address(0), "No game with such id");
     require(game.state ==  GameState.Started, "Wrong state");
-    require(msg.sender == ((game.nextMover == game.creator) ? game.opponent : game.creator), "Wrong claimer");
     require(gameMoveExpired(_id), "Not yet expired");
+    address correctClaimer = (game.nextMover == game.creator) ? game.opponent : game.creator;
+    require((msg.sender == correctClaimer), "Wrong claimer");
 
     game.winner = msg.sender;
     game.state = GameState.Expired;
 
     finishGame(game);
+
+    emit RPS_GameExpiredFinished(game.id, game.creator, game.opponent);
   }
-
+  
   /**
-   * Pausable.sol
+   * AcquiredFeeBeneficiar
    * TESTED
    */
-  /**
-   * @dev Triggers stopped state.
-   * TESTED
-   */
-  function pause() external onlyOwner {
-    Pausable._pause();
-  }
-
-  /**
-   * IGamePausable
-   * TESTED
-   */
-  /**
-   * @dev Checks if game is paused.
-   * @param _id Game index.
-   * @return Is game paused.
-   * TESTED
-   */
-  function gameOnPause(uint256 _id) public view override returns(bool) { 
-    return games[_id].paused;
-  }
-
-  /**
-   * @dev Pauses game.
-   * @param _id Game index.
-   * TESTED
-   */
-  function pauseGame(uint256 _id) onlyGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) external override {
-    games[_id].paused = true;
-
-    if (isTopGame(_id)) {
-      removeTopGame(_id);
-    }
-
-    emit RPS_GamePaused(_id);
-  }
-  /** 
-   * @dev Unpauses game.
-   * @param _id Game index.
-   * TESTED
-   */
-  function unpauseGame(uint256 _id) onlyGameCreator(_id) onlyGamePaused(_id) external payable override {
-    require(msg.value == minBet, "Wrong fee");
-
-    games[_id].paused = false;
-    
-    devFeePending = devFeePending.add(msg.value);
+  function makeFeeBeneficiar() public payable override {
     totalUsedInGame = totalUsedInGame.add(msg.value);
-
-    emit RPS_GameUnpaused(_id, games[_id].creator);
+    AcquiredFeeBeneficiar.makeFeeBeneficiar();
   }
 
 
@@ -837,21 +956,19 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveHash Move hash (moveId, moveSeed).
    * TESTED
    */
-  function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlySingleGamePlaying onlyCorrectBet onlyCorrectReferral(_referral) {  
+  function createGame(address _referral, bytes32 _moveHash) external payable whenNotPaused onlyAvailableToCreate onlyCorrectBet onlyCorrectReferral(_referral) {  
     require(_moveHash[0] != 0, "Empty hash");
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
 
     games[gamesCreatedAmount].id = gamesCreatedAmount;
     games[gamesCreatedAmount].creator = msg.sender;
     games[gamesCreatedAmount].bet = msg.value;
     games[gamesCreatedAmount].creatorMoveHashes[0] = _moveHash;
-    if(_referral != address(0)) {
-      games[gamesCreatedAmount].creatorReferral = _referral;
-    }
+    (_referral == address(0)) ? games[gamesCreatedAmount].creatorReferral = owner() : games[gamesCreatedAmount].creatorReferral = _referral;
     
-    ongoingGameIdxForPlayer[msg.sender] = gamesCreatedAmount;
-    playedGameIdxsForPlayer[msg.sender].push(gamesCreatedAmount);
+    ongoingGameAsCreator[msg.sender] = gamesCreatedAmount;
+    playedGames[msg.sender].push(gamesCreatedAmount);
 
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
@@ -867,19 +984,17 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveMark Move mark id.
    * TESTED
    */
-  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlySingleGamePlaying onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
+  function joinGame(uint256 _id, address _referral, uint8 _moveMark) external payable whenNotPaused onlyAvailableToJoin onlyNotGameCreator(_id) onlyGameNotPaused(_id) onlyWaitingForOpponent(_id) onlyCorrectReferral(_referral) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
     
     require(game.bet == msg.value, "Wrong bet");
-    if(_referral != address(0)) {
-      game.opponentReferral = _referral;
-    }
+    (_referral == address(0)) ? games[_id].opponentReferral = owner() : games[_id].opponentReferral = _referral;
 
     if (isTopGame(_id)) {
       removeTopGame(_id);
     }
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     
     game.opponent = msg.sender;
     game.nextMover = game.creator;
@@ -887,12 +1002,12 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     game.movesOpponent[0] = _moveMark;
     game.state = GameState.Started;
 
-    ongoingGameIdxForPlayer[msg.sender] = _id;
-    playedGameIdxsForPlayer[msg.sender].push(_id);
+    ongoingGameAsOpponent[msg.sender] = _id;
+    playedGames[msg.sender].push(_id);
     
     totalUsedInGame = totalUsedInGame.add(msg.value);
 
-    emit RPS_GameJoined(_id, game.creator, game.opponent, game.nextMover);
+    emit RPS_GameJoined(_id, game.creator, game.opponent);
   }
 
   /**
@@ -903,7 +1018,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _nextMoveHash Next move hash.
    * TESTED
    */
-  function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
+  function playMove(uint256 _id, uint8 _prevMoveMark, bytes32 _prevSeedHashFromHash, bytes32 _nextMoveHash) external whenNotPaused onlyGameCreator(_id) onlyNextMover(_id) onlyNotExpiredGame(_id)  {
     Game storage game = games[_id];
     
     uint8 gameRow;
@@ -924,13 +1039,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
       game.nextMover = game.opponent;
       game.prevMoveTimestamp = now;
 
-      emit RPS_GameMovePlayed(_id, game.nextMover);
+      emit RPS_GameMovePlayed(_id);
       return;
     }
 
     game.winner = playerWithMoreWins(_id);
     game.state = (game.winner != address(0)) ? GameState.WinnerPresent : GameState.Draw;
     finishGame(game);
+    emit RPS_GameFinished(game.id, game.creator, game.opponent);
   }
 
   /**
@@ -939,7 +1055,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _moveMark Move mark.
    * TESTED
    */
-  function opponentNextMove(uint256 _id, uint8 _moveMark) external onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
+  function opponentNextMove(uint256 _id, uint8 _moveMark) external whenNotPaused onlyNextMover(_id) onlyNotExpiredGame(_id) onlyValidMoveMark(_moveMark) {
     Game storage game = games[_id];
     
     uint8 gameRow;
@@ -954,7 +1070,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     game.nextMover = game.creator;
     game.prevMoveTimestamp = now;
     
-    emit RPS_GameOpponentMoved(_id, game.nextMover);
+    emit RPS_GameOpponentMoved(_id);
   }
 
 
@@ -965,56 +1081,57 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Withdraws prize for multiple games where user is winner.
    * @param _maxLoop Max loop.
+   * @notice 95% to transfer. Fee will be deducted only from prize, but not draw.
    * TESTED
    */
   function withdrawGamePrizes(uint256 _maxLoop) external {
     require(_maxLoop > 0, "_maxLoop == 0");
     
-    uint256[] storage pendingGames = gamesWithPendingPrizeWithdrawalForAddress[msg.sender];
+    uint256[] storage pendingGames = gamesWithPendingPrizeWithdrawal[msg.sender];
     require(pendingGames.length > 0, "no pending");
-    require(_maxLoop <= pendingGames.length, "wrong _maxLoop");
+    require(_maxLoop <= pendingGames.length, "_maxLoop too big");
     
-    uint256 prizeTotal;
-    for (uint256 i = 0; i < _maxLoop; i ++) {
+    uint256 betsPrize;
+    uint256 betsDraw;
+    for (uint256 i = 0; i < _maxLoop; i++) {
       uint256 gameId = pendingGames[pendingGames.length.sub(1)];
       Game storage game = games[gameId];
       
       if (game.state == GameState.Draw) {
+        betsDraw = betsDraw.add(game.bet);
+
         if (game.creator == msg.sender) {
-          require(!game.drawWithdrawn[0], "Fatal, cr with draw");
-          game.drawWithdrawn[0] = true;
+          require(!game.isDrawWithdrawn[0], "Fatal, cr with draw");
+          game.isDrawWithdrawn[0] = true;
         } else if (game.opponent == msg.sender) {
-          require(!game.drawWithdrawn[1], "Fatal, opp with draw");
-          game.drawWithdrawn[1] = true;
+          require(!game.isDrawWithdrawn[1], "Fatal, opp with draw");
+          game.isDrawWithdrawn[1] = true;
         }
       } else {
-        require((game.winner == msg.sender), "Fatal, not winner");
-        require(!game.prizeWithdrawn, "Fatal,prize was with");
-        game.prizeWithdrawn = true;
+        require(!game.isPrizeWithdrawn, "Fatal,prize was with");
+        game.isPrizeWithdrawn = true;
+        betsPrize = betsPrize.add(game.bet);
+        
+        //  referral
+        address winnerReferral = (msg.sender == game.creator) ? game.creatorReferral : game.opponentReferral;
+        uint256 referralFee = game.bet.mul(FEE_PERCENT).div(100);
+        referralFeesPending[winnerReferral] = referralFeesPending[winnerReferral].add(referralFee);
+        totalUsedReferralFees = totalUsedReferralFees.add(referralFee);
       }
-
-      uint256 gamePrize = prizeForGame(gameId);
-      require(gamePrize > 0, "Fatal, no prize");
-
-      //  referral
-      address referral = (msg.sender == game.creator) ? game.creatorReferral : game.opponentReferral;
-      uint256 referralFee = gamePrize.mul(FEE_PERCENT).div(100);
-      referralFeesPending[referral] = referralFeesPending[referral].add(referralFee);
-      totalUsedReferralFees = totalUsedReferralFees.add(referralFee);
-      
-      prizeTotal += gamePrize;
       pendingGames.pop();
     }
 
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prizeTotal);
-    
-    uint256 singleFee = prizeTotal.mul(FEE_PERCENT).div(100);
+    prizeTotal[msg.sender] = prizeTotal[msg.sender].add(betsPrize);
+
+    //  5% fees
+    uint256 singleFee = betsPrize.mul(FEE_PERCENT).div(100);
     partnerFeePending = partnerFeePending.add(singleFee);
     ongoinRafflePrize = ongoinRafflePrize.add(singleFee);
-    devFeePending = devFeePending.add(singleFee.mul(2));
+    devFeePending = devFeePending.add(singleFee);
+    addBeneficiarFee(singleFee);
 
-    prizeTotal = prizeTotal.sub(singleFee.mul(5));
-    msg.sender.transfer(prizeTotal);
+    uint256 transferAmount = betsPrize.sub(singleFee.mul(5)).add(betsDraw).add(betsPrize);
+    msg.sender.transfer(transferAmount);
 
     //  partner transfer
     transferPartnerFee();
@@ -1057,25 +1174,14 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    */
    
   function withdrawRafflePrizes() external override {
-    require(rafflePrizePendingForAddress[msg.sender] > 0, "No raffle prize");
+    uint256 prize = rafflePrizePending[msg.sender];
+    require(prize > 0, "No raffle prize");
 
-    uint256 prize = rafflePrizePendingForAddress[msg.sender];
-    delete rafflePrizePendingForAddress[msg.sender];
-    
-    addressPrizeTotal[msg.sender] = addressPrizeTotal[msg.sender].add(prize);
-
-    uint256 singleFee = prize.mul(FEE_PERCENT).div(100);
-    partnerFeePending = partnerFeePending.add(singleFee);
-    devFeePending = devFeePending.add(singleFee.mul(2));
-
-    //  transfer prize
-    prize = prize.sub(singleFee.mul(3));
+    delete rafflePrizePending[msg.sender];
+    rafflePrizeWithdrawn[msg.sender] = rafflePrizeWithdrawn[msg.sender].add(prize);
     msg.sender.transfer(prize);
 
-    //  partner transfer
-    transferPartnerFee();
-
-    emit RPS_RafflePrizeWithdrawn(msg.sender, prize);
+    emit RPS_RafflePrizeWithdrawn(msg.sender);
   }
   
 
@@ -1101,7 +1207,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
 
     if (gameMoveExpired(_id)) {
-      if (game.winner == msg.sender) {
+      address correctClaimer = (game.nextMover == game.creator) ? game.opponent : game.creator;
+      if (msg.sender == correctClaimer) {
         revert("Claim, not quit");
       }
     }
@@ -1113,6 +1220,8 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
     
     finishGame(game);
+
+    emit RPS_GameQuittedFinished(game.id, game.creator, game.opponent);
   }
 
   /**
@@ -1144,7 +1253,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @param _id Game idx to be removed.
    * TESTED
    */
-  function removeTopGame(uint256 _id) public {
+  function removeTopGame(uint256 _id) private {
     uint256[5] memory tmpArr;
     bool found;
     
@@ -1196,7 +1305,7 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   function increaseBetForGameBy(uint256 _id) whenNotPaused onlyGameCreator(_id) onlyWaitingForOpponent(_id) external payable {
     require(msg.value > 0, "increase must be > 0");
 
-    addressBetTotal[msg.sender] = addressBetTotal[msg.sender].add(msg.value);
+    betTotal[msg.sender] = betTotal[msg.sender].add(msg.value);
     
     games[_id].bet = games[_id].bet.add(msg.value);
     totalUsedInGame = totalUsedInGame.add(msg.value);
@@ -1237,11 +1346,11 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Game withdrawal information.
    * @param _id Game index.
-   * @return prizeWithdrawn, drawWithdrawnCreator, drawWithdrawnOpponent.
+   * @return isPrizeWithdrawn, isDrawWithdrawnCreator, isDrawWithdrawnOpponent.
    * TESTED
    */
   function gameWithdrawalInfo(uint256 _id) external view returns (bool, bool, bool) {
-    return (games[_id].prizeWithdrawn, games[_id].drawWithdrawn[0], games[_id].drawWithdrawn[1]);
+    return (games[_id].isPrizeWithdrawn, games[_id].isDrawWithdrawn[0], games[_id].isDrawWithdrawn[1]);
   }
 
   /**
@@ -1250,37 +1359,19 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
    * @return List of indexes.
    * TESTED
    */
-  function getPlayedGameIdxsForPlayer(address _address) external view returns (uint256[] memory) {
-    require(_address != address(0), "Wrong address");
-
-    return playedGameIdxsForPlayer[_address];
+  function getPlayedGamesForPlayer(address _address) external view returns (uint256[] memory) {
+    require(_address != address(0), "Cannt be 0x0");
+    return playedGames[_address];
   }
 
   /**
-   * @dev Calculates prize for game for msg.sender.
-   * @param _id Game id.
-   * @return _prize Prize amount. Fees are included.
-   * TESTED
-   */
-  function prizeForGame(uint256 _id) public view returns (uint256 _prize) {
-    if (games[_id].winner == msg.sender) {
-      //  WinnerPresent, Quitted, Expired
-      _prize = games[_id].bet.mul(2);
-    } else if (games[_id].state == GameState.Draw) {
-      if ((games[_id].creator == msg.sender) || (games[_id].opponent == msg.sender)) {
-        _prize = games[_id].bet;
-      }
-    }
-  }
-
-  /**
-   * @dev Gets gamesWithPendingPrizeWithdrawalForAddress.
+   * @dev Gets gamesWithPendingPrizeWithdrawal.
    * @param _address Player address.
    * @return ids Game id array.
    * TESTED
    */
-  function getGamesWithPendingPrizeWithdrawalForAddress(address _address) external view returns(uint256[] memory ids) {
-    ids = gamesWithPendingPrizeWithdrawalForAddress[_address];
+  function getGamesWithPendingPrizeWithdrawal(address _address) external view returns(uint256[] memory ids) {
+    ids = gamesWithPendingPrizeWithdrawal[_address];
   }
 
   /**
@@ -1338,11 +1429,13 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
   /**
    * @dev Adds raffle participants & delete all ongoing statuses for players.
    * @param _game Game instance.
-   * TESTED
+   * TESTING
    */
   function finishGame(Game storage _game) private {
     if (_game.state == GameState.Expired || _game.state == GameState.Quitted) {
-      raffleParticipants.push(_game.winner);
+        if (_game.winner != owner()) {
+          raffleParticipants.push(_game.winner);
+        }
     } else if (_game.state == GameState.WinnerPresent || _game.state == GameState.Draw) {
       raffleParticipants.push(_game.creator);
       raffleParticipants.push(_game.opponent);
@@ -1351,18 +1444,16 @@ contract RockPaperScissorsGame is Pausable, Partnership, IExpiryMoveDuration, IG
     }
 
     gamesCompletedAmount = gamesCompletedAmount.add(1);
-    delete ongoingGameIdxForPlayer[_game.creator];
-    delete ongoingGameIdxForPlayer[_game.opponent];
+    delete ongoingGameAsCreator[_game.creator];
+    delete ongoingGameAsOpponent[_game.opponent];
     delete _game.prevMoveTimestamp;
     delete _game.nextMover;
 
     if (_game.winner != address(0)) {
-      gamesWithPendingPrizeWithdrawalForAddress[_game.winner].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.winner].push(_game.id);
     } else {
-      gamesWithPendingPrizeWithdrawalForAddress[_game.creator].push(_game.id);
-      gamesWithPendingPrizeWithdrawalForAddress[_game.opponent].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.creator].push(_game.id);
+      gamesWithPendingPrizeWithdrawal[_game.opponent].push(_game.id);
     }
-
-    emit RPS_GameFinished(_game.id);
   }
 }
