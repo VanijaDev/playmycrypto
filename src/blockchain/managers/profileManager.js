@@ -17,7 +17,6 @@ let ProfileManager = {
 
   isSetup_Update: false,
   profileUpdateHandler: null,
-  currentlyPlayingGamesBtnsStr: "",
   gamePlayProfitStr: "",
   totalProfitStr: "",
 
@@ -37,9 +36,7 @@ let ProfileManager = {
     this.profileUpdateHandler = _handler;
   },
 
-  clearData: function () {
-    this.isSetup_Update = false;
-    this.currentlyPlayingGamesBtnsStr = "";
+  clearData: async function () {
     this.gamePlayProfitStr = "";
     this.totalProfitStr = "";
 
@@ -50,22 +47,25 @@ let ProfileManager = {
     this.pendingRafflePrizeBN_cf = new BigNumber("0");
     this.pendingRafflePrizeBN_rps = new BigNumber("0");
 
-    this.ongoingGameCF_Creator = new BigNumber("0"),
-    this.ongoingGameCF_Opponent = new BigNumber("0"),
-    this.ongoingGameRPS_Creator = new BigNumber("0"),
-    this.ongoingGameRPS_Opponent = new BigNumber("0"),
+    this.ongoingGameCF_Creator = new BigNumber("0");
+    this.ongoingGameCF_Opponent = new BigNumber("0");
+    this.ongoingGameRPS_Creator = new BigNumber("0");
+    this.ongoingGameRPS_Opponent = new BigNumber("0");
 
     this.updatePendingPictures(this.PendingWithdraw.referral, [], []);
     this.updatePendingPictures(this.PendingWithdraw.gamePrize, [], []);
     this.updatePendingPictures(this.PendingWithdraw.raffle, [], []);
     this.updatePendingPictures(this.PendingWithdraw.beneficiary, [], []);
+    
+    await $('#listCurrentlyPlayingGames').empty();
+    $('#profileNotification')[0].classList.add('hidden');
   },
 
   update: async function () {
     if (!this.isSetup_Update) {
       console.log('%c ProfileManager - update initial', 'color: #00aa00');
 
-      this.clearData();
+      await this.clearData();
       this.isSetup_Update = true;
 
       hideTopBannerMessage();
@@ -107,10 +107,34 @@ let ProfileManager = {
 
   updateCurrentlyPlayingGames: async function () {
     let btns = [];
-    let btnsStr = "";
+
+    let ongoingGameCF_Creator_tmp = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let ongoingGameCF_Opponent_tmp = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    let ongoingGameRPS_Creator_tmp = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    let ongoingGameRPS_Opponent_tmp = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.rps, window.BlockchainManager.currentAccount()));
+
+    console.log();
+
+    if (ongoingGameCF_Creator_tmp.isEqualTo(this.ongoingGameCF_Creator) &&
+        ongoingGameCF_Opponent_tmp.isEqualTo(this.ongoingGameCF_Opponent) && 
+        ongoingGameRPS_Creator_tmp.isEqualTo(this.ongoingGameRPS_Creator) &&
+        ongoingGameRPS_Opponent_tmp.isEqualTo(this.ongoingGameRPS_Opponent)) {
+          return;
+        }
+
+    await this.clearData();
+
+    this.ongoingGameCF_Creator = ongoingGameCF_Creator_tmp;
+    this.ongoingGameCF_Opponent = ongoingGameCF_Opponent_tmp;
+    this.ongoingGameRPS_Creator = ongoingGameRPS_Creator_tmp;
+    this.ongoingGameRPS_Opponent = ongoingGameRPS_Opponent_tmp;
+
+    btns.forEach(btn => {
+      $('#listCurrentlyPlayingGames')[0].appendChild(btn);
+    });   
 
     //  cf
-    this.ongoingGameCF_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    //  ongoingGameCF_Creator
     // console.log("this.ongoingGameCF_Creator: ", this.ongoingGameCF_Creator.toString());
     if (this.ongoingGameCF_Creator.isGreaterThan(new BigNumber("0"))) {
       let tooltipStr = "creator: " + this.ongoingGameCF_Creator;
@@ -123,11 +147,10 @@ let ProfileManager = {
       }
 
       btns.push(btn_cf_creator);
-      btnsStr = btnsStr.concat(Types.Game.cf).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_creator);
     }
 
-    this.ongoingGameCF_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    //  ongoingGameCF_Opponent
     // console.log("this.ongoingGameCF_Opponent: ", this.ongoingGameCF_Opponent.toString());
     if (this.ongoingGameCF_Opponent.isGreaterThan(new BigNumber("0"))) {
       let tooltipStr = "opponent: " + this.ongoingGameCF_Opponent;
@@ -136,12 +159,11 @@ let ProfileManager = {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
       };
       btns.push(btn_cf_opponent);
-      btnsStr = btnsStr.concat(Types.Game.cf).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_opponent);
     }
 
     //  rps
-    this.ongoingGameRPS_Creator = new BigNumber(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    //  ongoingGameRPS_Creator
     // console.log("this.ongoingGameRPS_Creator: ", this.ongoingGameRPS_Creator.toString());
     if (this.ongoingGameRPS_Creator.isGreaterThan(new BigNumber("0"))) {
       let tooltipStr =  "creator: " + this.ongoingGameRPS_Creator;
@@ -154,10 +176,9 @@ let ProfileManager = {
       }
 
       btns.push(btn_rps_creator);
-      btnsStr = btnsStr.concat(Types.Game.rps).concat(tooltipStr);
     }
 
-    this.ongoingGameRPS_Opponent = new BigNumber(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    //  ongoingGameRPS_Opponent
     // console.log("this.ongoingGameRPS_Opponent: ", this.ongoingGameRPS_Opponent.toString());
     if (this.ongoingGameRPS_Opponent.isGreaterThan(new BigNumber("0"))) {
       let tooltipStr =  "opponent: " + this.ongoingGameRPS_Opponent;
@@ -166,19 +187,12 @@ let ProfileManager = {
         window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Opponent.toString());
       };
       btns.push(btn_rps_opponent);
-      btnsStr = btnsStr.concat(Types.Game.rps).concat(tooltipStr);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_rps_opponent);
     }
 
-    if (this.currentlyPlayingGamesBtnsStr.localeCompare(btnsStr) != 0) {
-      this.currentlyPlayingGamesBtnsStr = btnsStr;
-      await $('#listCurrentlyPlayingGames').empty();
-      $('#profileNotification')[0].classList.add('hidden');
-
-      btns.forEach(btn => {
-        $('#listCurrentlyPlayingGames')[0].appendChild(btn);
-      });
-    }
+    btns.forEach(btn => {
+      $('#listCurrentlyPlayingGames')[0].appendChild(btn);
+    });
   },
 
   checkIfPendingMove: async function (_gameType, _gameId) {
