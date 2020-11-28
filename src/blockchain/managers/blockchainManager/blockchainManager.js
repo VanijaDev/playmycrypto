@@ -174,6 +174,10 @@ const BlockchainManager = {
     return await this.currentBlockchainManager.feeBeneficiarBalance(_gameType, _account);
   },
 
+  feeBeneficiaryWithdrawn: async function (_gameType, _account) {
+    return await this.currentBlockchainManager.feeBeneficiaryWithdrawn(_gameType, _account);
+  },
+
   betTotal: async function (_gameType, _currentAccount) {
     return await this.currentBlockchainManager.betTotal(_gameType, _currentAccount);
   },

@@ -251,6 +251,18 @@ let PromiseManager = {
     });
   },
 
+  feeBeneficiaryWithdrawnPromise: function (_gameType, _account) {
+    return new Promise(resolve => {
+      window.BlockchainManager.gameInst(_gameType).methods.feeBeneficiaryWithdrawn(_account).call()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => {
+          throw new Error(err);
+        });
+    });
+  },
+
   gamesCreatedAmountPromise: function (_gameType) {
     return new Promise(resolve => {
       window.BlockchainManager.gameInst(_gameType).methods.gamesCreatedAmount().call()

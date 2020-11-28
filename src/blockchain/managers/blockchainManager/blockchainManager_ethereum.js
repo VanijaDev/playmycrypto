@@ -273,6 +273,10 @@ const BlockchainManager_ethereum = {
     return await PromiseManager.feeBeneficiarBalancePromise(_gameType, _account);
   },
 
+  feeBeneficiaryWithdrawn: async function (_gameType, _currentAccount) {
+    return await PromiseManager.feeBeneficiaryWithdrawnPromise(_gameType, _currentAccount);
+  },
+
   betTotal: async function (_gameType, _currentAccount) {
     return await PromiseManager.betTotalPromise(_gameType, _currentAccount);
   },

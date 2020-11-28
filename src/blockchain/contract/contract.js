@@ -4,7 +4,7 @@ const Web3 = require("web3");
 // var web3 = new Web3(Web3.givenProvider);
 
 let CoinFlipData = {
-    address: "0xaD6E52A5C06b2dBD86D51DAC43b1e2b9A77712dc", //    Ganache
+    address: "0x001c26Be0d22d38D37893a9e5495731be56c9042", //    Ganache
     abi: [
 	{
 		"inputs": [
@@ -469,6 +469,25 @@ let CoinFlipData = {
 	{
 		"inputs": [],
 		"name": "feeBeneficiarPurchasedAt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "feeBeneficiaryWithdrawn",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1425,7 +1444,7 @@ let CoinFlipData = {
 }
 
 let RockPaperScissorsData = {
-    address: "0x1D8c109d052aCf16B4c3dAca3694490FEF0Fd8C4", //    Ganache
+    address: "0x1De063c64479d1Cc539fAC7C9Bf9b5d83d21ae4A", //    Ganache
     abi: [
 	{
 		"inputs": [
@@ -1892,6 +1911,25 @@ let RockPaperScissorsData = {
 	{
 		"inputs": [],
 		"name": "feeBeneficiarPurchasedAt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "feeBeneficiaryWithdrawn",
 		"outputs": [
 			{
 				"internalType": "uint256",
