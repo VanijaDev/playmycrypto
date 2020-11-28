@@ -16,12 +16,12 @@ const Index = {
     console.log('%c index - setup', 'color: #00aa00');
 
     await window.ProfileManager.setUpdateHandler(window.Index);
-    await window.ProfileManager.update();
+    await window.ProfileManager.update(true);
     await window.Index.update();
 
     window.Index.timer = setInterval(function () {
       window.Index.update();
-      window.ProfileManager.update();
+      window.ProfileManager.update(false);
     }, 10000);
   },
 

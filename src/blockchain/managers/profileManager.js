@@ -15,7 +15,6 @@ let ProfileManager = {
     beneficiary: "withdrawBeneficiaryPrize"
   },
 
-  isSetup_Update: false,
   profileUpdateHandler: null,
   gamePlayProfitStr: "",
   totalProfitStr: "",
@@ -61,18 +60,15 @@ let ProfileManager = {
     $('#profileNotification')[0].classList.add('hidden');
   },
 
-  update: async function () {
-    if (!this.isSetup_Update) {
-      console.log('%c ProfileManager - update initial', 'color: #00aa00');
+  update: async function (_isClearData) {
+    console.log('%c ProfileManager - update & clear: %s', 'color: #00aa00', _isClearData);
 
+    if (_isClearData) {
       await this.clearData();
-      this.isSetup_Update = true;
 
       hideTopBannerMessage();
       showAppDisabledView(false);
       this.updateCurrentAccountUI();
-    } else {
-      console.log('%c ProfileManager - update', 'color: #00aa00');
     }
 
     this.updateCurrentAccountBalanceUI();
@@ -548,8 +544,7 @@ let ProfileManager = {
             showTopBannerMessage($('#translations').data().tx_referral_fee, hash, false);
           })
           .once('receipt', function (receipt) {
-            hideTopBannerMessage();
-            window.ProfileManager.update();
+            window.ProfileManager.update(true);
             window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
@@ -577,8 +572,7 @@ let ProfileManager = {
             showTopBannerMessage($('#translations').data().tx_game_prize, hash, false);
           })
           .once('receipt', function (receipt) {
-            hideTopBannerMessage();
-            window.ProfileManager.update();
+            window.ProfileManager.update(true);
             window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
@@ -604,8 +598,7 @@ let ProfileManager = {
             showTopBannerMessage($('#translations').data().tx_raffle_prize, hash, false);
           })
           .once('receipt', function (receipt) {
-            hideTopBannerMessage();
-            window.ProfileManager.update();
+            window.ProfileManager.update(true);
             window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
           })
           .once('error', function (error, receipt) {
@@ -631,8 +624,7 @@ let ProfileManager = {
               showTopBannerMessage($('#translations').data().tx_withdraw_beneficiary, hash, false);
             })
             .once('receipt', function (receipt) {
-              hideTopBannerMessage();
-              window.ProfileManager.update();
+              window.ProfileManager.update(true);
               window.ProfileManager.profileUpdateHandler.pendingWithdrawn();
             })
             .once('error', function (error, receipt) {

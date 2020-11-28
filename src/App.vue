@@ -489,7 +489,7 @@ export default {
         if (window.CommonManager.currentView == Types.View.game) {
           window.Game.update();
         } else {
-          window.ProfileManager.update();
+          window.ProfileManager.update(true);
         }
       }
     });
