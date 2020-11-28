@@ -79,7 +79,7 @@ const Game = {
     console.log('%c game - update', 'color: #00aa00');
 
     await window.ProfileManager.setUpdateHandler(this);
-    await window.ProfileManager.update();
+    await window.ProfileManager.update(true);
 
     this.updateMoneyIcons();
 

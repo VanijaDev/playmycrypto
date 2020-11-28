@@ -25,6 +25,8 @@ let ProfileManager = {
   pendingGamePrizeCount_rps: 0,
   pendingRafflePrizeBN_cf: new BigNumber("0"),
   pendingRafflePrizeBN_rps: new BigNumber("0"),
+  pendingBeneficiaryBN_cf: new BigNumber("0"),
+  pendingBeneficiaryBN_rps: new BigNumber("0"),
 
   ongoingGameCF_Creator: new BigNumber("0"),
   ongoingGameCF_Opponent: new BigNumber("0"),
@@ -45,6 +47,8 @@ let ProfileManager = {
     this.pendingGamePrizeCount_rps = 0;
     this.pendingRafflePrizeBN_cf = new BigNumber("0");
     this.pendingRafflePrizeBN_rps = new BigNumber("0");
+    this.pendingBeneficiaryBN_cf = new BigNumber("0");
+    this.pendingBeneficiaryBN_rps = new BigNumber("0");
 
     this.ongoingGameCF_Creator = new BigNumber("0");
     this.ongoingGameCF_Opponent = new BigNumber("0");
@@ -276,6 +280,16 @@ let ProfileManager = {
     }
     // console.log("totalProfit after raffle ", totalProfit.toString());
 
+    //  beneficiary
+    //  cf
+    let cfBeneficiaryResult = new BigNumber(await window.BlockchainManager.feeBeneficiaryWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
+    // console.log("cfBeneficiaryResult: ", cfBeneficiaryResult.toString());
+    totalProfit = totalProfit.plus(cfBeneficiaryResult);
+    //  rps
+    let rpsBeneficiaryResult = new BigNumber(await window.BlockchainManager.feeBeneficiaryWithdrawn(Types.Game.rps, window.BlockchainManager.currentAccount()));
+    // console.log("rpsBeneficiaryResult: ", rpsBeneficiaryResult.toString());
+    totalProfit = totalProfit.plus(rpsBeneficiaryResult);
+
     //  referral
     //  cf
     let cfReferralResult = new BigNumber(await window.BlockchainManager.referralFeesWithdrawn(Types.Game.cf, window.BlockchainManager.currentAccount()));
@@ -322,18 +336,16 @@ let ProfileManager = {
     this.updatePendingReferral();
     this.updatePendingGamePrize();
     this.updatePendingRafflePrize();
-    this.updatePendingBeneficiaryPrize(); //  now
+    this.updatePendingBeneficiaryPrize();
   },
 
   updatePendingReferral: async function () {
     let pendingGames = [];
     let pendingValues = [];
-    let isUpdate = false;
 
     let cfResult = new BigNumber(await window.BlockchainManager.referralFeesPending(Types.Game.cf, window.BlockchainManager.currentAccount()));
     if (this.pendingReferralBN_cf.comparedTo(cfResult) != 0) {
       this.pendingReferralBN_cf = cfResult;
-      isUpdate = true;
 
       pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
@@ -342,13 +354,12 @@ let ProfileManager = {
     let rpsResult = new BigNumber(await window.BlockchainManager.referralFeesPending(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (this.pendingReferralBN_rps.comparedTo(rpsResult) != 0) {
       this.pendingReferralBN_rps = rpsResult;
-      isUpdate = true;
 
       pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
 
-    if (isUpdate) {
+    if (pendingGames.length > 0) {
       this.updatePendingPictures(this.PendingWithdraw.referral, pendingGames, pendingValues);
     }
   },
@@ -356,12 +367,10 @@ let ProfileManager = {
   updatePendingGamePrize: async function () {
     let pendingGames = [];
     let pendingValues = [];
-    let isUpdate = false;
 
     let cfResult = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.cf, window.BlockchainManager.currentAccount());
     if (cfResult.length != this.pendingGamePrizeCount_cf) {
       this.pendingGamePrizeCount_cf = cfResult.length;
-      isUpdate = true;
 
       if ((new BigNumber(cfResult.length.toString())).isGreaterThan(new BigNumber("0"))) {
         pendingGames.push(Types.Game.cf);
@@ -372,7 +381,6 @@ let ProfileManager = {
     let rpsResult = await window.BlockchainManager.gamesWithPendingPrizeWithdrawal(Types.Game.rps, window.BlockchainManager.currentAccount());
     if (rpsResult.length > this.pendingGamePrizeCount_rps) {
       this.pendingGamePrizeCount_rps = rpsResult.length;
-      isUpdate = true;
 
       if ((new BigNumber(rpsResult.length.toString())).isGreaterThan(new BigNumber("0"))) {
         pendingGames.push(Types.Game.rps);
@@ -391,7 +399,6 @@ let ProfileManager = {
 
     let cfResult = new BigNumber(await window.BlockchainManager.rafflePrizePending(Types.Game.cf, window.BlockchainManager.currentAccount()));
     if (this.pendingRafflePrizeBN_cf.comparedTo(cfResult) != 0) {
-      console.log("111");
       this.pendingRafflePrizeBN_cf = cfResult;
 
       if (cfResult.isGreaterThan(new BigNumber("0"))) {
@@ -402,7 +409,6 @@ let ProfileManager = {
 
     let rpsResult = new BigNumber(await window.BlockchainManager.rafflePrizePending(Types.Game.rps, window.BlockchainManager.currentAccount()));
     if (this.pendingRafflePrizeBN_rps.comparedTo(rpsResult) != 0) {
-      console.log("222");
       this.pendingRafflePrizeBN_rps = rpsResult;
 
       if (rpsResult.isGreaterThan(new BigNumber("0"))) {
@@ -421,18 +427,24 @@ let ProfileManager = {
     let pendingValues = [];
 
     let cfResult = new BigNumber(await window.BlockchainManager.feeBeneficiarBalance(Types.Game.cf, window.BlockchainManager.currentAccount()));
-    if (cfResult.isGreaterThan(new BigNumber("0"))) {
+    if (this.pendingBeneficiaryBN_cf.comparedTo(cfResult) != 0) {
+      this.pendingBeneficiaryBN_cf = cfResult;
+
       pendingGames.push(Types.Game.cf);
       pendingValues.push(cfResult);
     }
 
     let rpsResult = new BigNumber(await window.BlockchainManager.feeBeneficiarBalance(Types.Game.rps, window.BlockchainManager.currentAccount()));
-    if (rpsResult.isGreaterThan(new BigNumber("0"))) {
+    if (this.pendingBeneficiaryBN_rps.comparedTo(rpsResult) != 0) {
+      this.pendingBeneficiaryBN_rps = rpsResult;
+
       pendingGames.push(Types.Game.rps);
       pendingValues.push(rpsResult);
     }
 
-    this.updatePendingPictures(this.PendingWithdraw.beneficiary, pendingGames, pendingValues);
+    if (pendingGames.length > 0) {
+      this.updatePendingPictures(this.PendingWithdraw.beneficiary, pendingGames, pendingValues);
+    }
   }, 
 
   isGameParticipant: function (_gameType, _id) {
