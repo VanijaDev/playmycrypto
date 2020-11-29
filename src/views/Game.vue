@@ -261,7 +261,7 @@
         if (typeof window.Game !== "undefined") {
           if (window.BlockchainManager.isInitted()) {
             clearInterval(loadInterval);
-            window.Game.setup(currentGameTmp);
+            window.Game.setup(currentGameTmp, null);
           }
         }
       }, 100);

@@ -3,7 +3,6 @@ import BigNumber from "bignumber.js";
 import Types from "../types";
 import $ from "../../../public/jquery.min";
 import router from "../../router/index";
-import Hash from "object-hash";
 
 let ProfileManager = {
   GAMES_TOTAL_AMOUNT: 2,
@@ -140,7 +139,7 @@ let ProfileManager = {
       let tooltipStr = "creator: " + this.ongoingGameCF_Creator;
       let btn_cf_creator = this.createPendingButtonElement("ongoingGameCF_Creator", Utils.gameIconSmallForGame(Types.Game.cf), tooltipStr);
       btn_cf_creator.onclick = function () {
-        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Creator.toString());
+        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Creator);
       };
       if (await this.checkIfPendingMove(Types.Game.cf, this.ongoingGameCF_Creator)) {
         showActionRequired(btn_cf_creator);
@@ -156,7 +155,7 @@ let ProfileManager = {
       let tooltipStr = "opponent: " + this.ongoingGameCF_Opponent;
       let btn_cf_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.cf), tooltipStr);
       btn_cf_opponent.onclick = function () {
-        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent.toString());
+        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.cf, window.ProfileManager.ongoingGameCF_Opponent);
       };
       btns.push(btn_cf_opponent);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_cf_opponent);
@@ -169,7 +168,7 @@ let ProfileManager = {
       let tooltipStr =  "creator: " + this.ongoingGameRPS_Creator;
       let btn_rps_creator = this.createPendingButtonElement("ongoingGameRPS_Creator", Utils.gameIconSmallForGame(Types.Game.rps),tooltipStr);
       btn_rps_creator.onclick = function () {
-        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Creator.toString());
+        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Creator);
       };
       if (await this.checkIfPendingMove(Types.Game.rps, this.ongoingGameRPS_Creator)) {
         showActionRequired(btn_rps_creator);
@@ -184,7 +183,7 @@ let ProfileManager = {
       let tooltipStr =  "opponent: " + this.ongoingGameRPS_Opponent;
       let btn_rps_opponent = this.createPendingButtonElement(null, Utils.gameIconSmallForGame(Types.Game.rps), tooltipStr);
       btn_rps_opponent.onclick = function () {
-        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Opponent.toString());
+        window.ProfileManager.currentlyPlayingGameClicked(Types.Game.rps, window.ProfileManager.ongoingGameRPS_Opponent);
       };
       btns.push(btn_rps_opponent);
       // $('#listCurrentlyPlayingGames')[0].appendChild(btn_rps_opponent);
@@ -201,11 +200,8 @@ let ProfileManager = {
   },
 
   currentlyPlayingGameClicked: function (_gameType, _gameId) {
-    console.log("ProfileManager - _gameType:", _gameType, "_gameId:", _gameId);
-    if (window.CommonManager.currentGameId != _gameId) {
-      window.CommonManager.setCurrentGameId(_gameId);
-      (window.CommonManager.currentView == Types.View.game) ? window.Game.setup(_gameType) : router.push(_gameType);
-    }
+    console.log("ProfileManager - _gameType:", _gameType, "_gameId:", _gameId.toString());
+    (window.CommonManager.currentView == Types.View.game) ? window.Game.setup(_gameType, _gameId) : router.push(_gameType);
   },
 
   updatePlayedGamesTotalAmounts: async function () {

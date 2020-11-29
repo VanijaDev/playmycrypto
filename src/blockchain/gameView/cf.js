@@ -25,11 +25,11 @@ const CF = {
     if(this.countdown) {
       clearInterval(this.countdown);
     }
-    window.CommonManager.resetCurrentGameId();
+    // window.CommonManager.resetCurrentGameId();
   },
 
   closeResultView: async function () {
-    window.CommonManager.resetCurrentGameId();
+    // window.CommonManager.resetCurrentGameId();
     await this.showGameViewForCurrentAccount(null);
   },
 
@@ -69,7 +69,7 @@ const CF = {
     } else {
       let createdId = parseInt(await window.BlockchainManager.ongoingGameAsCreator(Types.Game.cf, window.BlockchainManager.currentAccount()));
       if (createdId > 0) {
-        window.CommonManager.setCurrentGameId(createdId);
+        // window.CommonManager.setCurrentGameId(createdId);
         let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, createdId);
         let viewType = this.gameViewTypeForGameInfo(gameInfo);
         this.showGameView(viewType, gameInfo);
@@ -78,10 +78,10 @@ const CF = {
         if (joinedId > 0) {
           let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, joinedId);
           let viewType = this.gameViewTypeForGameInfo(gameInfo);
-          window.CommonManager.setCurrentGameId(joinedId);
+          // window.CommonManager.setCurrentGameId(joinedId);
           this.showGameView(viewType, gameInfo);
         } else {
-          window.CommonManager.setCurrentGameId(0);
+          // window.CommonManager.setCurrentGameId(0);
           this.showGameView(this.GameView.start, null);
         }
       }
@@ -600,7 +600,7 @@ const CF = {
       })
       .once('receipt', function (receipt) {
         if(window.CommonManager.isCurrentView(Types.View.game)) {
-          window.CommonManager.setCurrentGameId(gameId);
+          // window.CommonManager.setCurrentGameId(gameId);
           CF.showGameViewForCurrentAccount(CF.GameView.waitCreator);
           window.ProfileManager.update();
           hideTopBannerMessage();

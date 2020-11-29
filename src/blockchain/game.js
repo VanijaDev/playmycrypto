@@ -1,25 +1,12 @@
 import CF from "./gameView/cf";
 import RPS from "./gameView/rps";
 import Utils from "./utils";
-import {
-  BigNumber
-} from "bignumber.js";
+import BigNumber from "bignumber.js";
 import Types from "./types";
 
 const $t = $('#translations').data();
 
 const Game = {
-  CF_Notifications: {
-    gameAddedToTop: 0,
-    gameCreated: 1,
-    gamePaused: 2,
-    gameUnpaused: 3,
-    gamePlayed: 4,
-    gamePrizesWithdrawn: 5,
-    RafflePlayed: 6
-  },
-  CF_latestNotificationHash: new Map(),
-
   minBet: 0,
   topGameIds: [],
   availableGameIds: [],
@@ -28,6 +15,7 @@ const Game = {
   raffleParticipants: 0,
 
   gameType: "", //  Types.Game.cf / rps
+  gameId_BN: null,
   gameInst: null,
 
   // ProfileManager handler methods
@@ -35,13 +23,13 @@ const Game = {
     window.Game.update();
   },
 
-  setup: async function (_currentGameType) {
-    console.log('%c game - setup %s', 'color: #00aa00', _currentGameType);
+  setup: async function (_currentGameType, _currentGameId_BN) {
+    console.log('%c game - setup %s, gameId: %s', 'color: #00aa00', _currentGameType, (_currentGameId_BN) ? _currentGameId_BN.toString() : "null");
 
     this.gameType = _currentGameType;
+    this.gameId_BN = _currentGameId_BN
     this.gameInst = this.initGameInst(_currentGameType);
     this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
-    this.subscribeToEvents(this.gameType);
     await this.update();
   },
 
@@ -58,31 +46,22 @@ const Game = {
     }
   },
 
-  subscribeToEvents: function (_gameType) {
-    window.NotificationManager.eventHandler = this;
-
-    switch (_gameType) {
-      case Types.Game.cf:
-        window.NotificationManager.subscribe_cf();
-        break;
-
-      case Types.Game.rps:
-        window.NotificationManager.subscribe_rps();
-        break;
-    
-      default:
-        throw("ERROR: game - subscribeToEvents");
-    }
-  },
-
   update: async function () {
     console.log('%c game - update', 'color: #00aa00');
 
     await window.ProfileManager.setUpdateHandler(this);
     await window.ProfileManager.update(true);
 
+    this.updateTitle();
     this.updateMoneyIcons();
 
+    this.gameInst.updateGameView();
+    await this.updateAllGamesForGame(this.gameType);
+    await this.updateRaffleStateInfoForGame(this.gameType, true);
+    await this.updateBeneficiary(this.gameType);
+  },
+
+  updateTitle: function () {
     let title = "TITLE - ERROR";
     switch (this.gameType) {
       case Types.Game.cf:
@@ -96,19 +75,12 @@ const Game = {
         throw("ERROR: game - update");
     }
     document.getElementById("gameName").innerHTML = title;
-
-    this.gameInst.updateGameView();
-    await this.updateAllGamesForGame(this.gameType);
-    await this.updateRaffleStateInfoForGame(this.gameType, true);
-    await this.updateBeneficiary(this.gameType);
   },
 
   onUnload: function () {
     console.log('%c game - onUnload', 'color: #00aa00');
 
     this.gameInst.onUnload();
-    window.NotificationManager.eventHandler = null;
-    window.NotificationManager.clearAll();
     window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
   },

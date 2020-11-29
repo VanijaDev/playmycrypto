@@ -421,7 +421,6 @@ import Types from "./blockchain/types";
 import CommonManager from "./blockchain/managers/commonManager";
 import BlockchainManager from "./blockchain/managers/blockchainManager/blockchainManager";
 import ProfileManager from "./blockchain/managers/profileManager";
-import NotificationManager from "./blockchain/managers/notificationManager";
 
 const $t = $('#translations').data();
 
@@ -465,8 +464,6 @@ export default {
   async mounted() {
     console.log("----------- App mounted");
 
-    window.CommonManager.resetCurrentGameId();
-
     if (!window.BlockchainManager || !window.BlockchainManager.isInitted()) {
       if (!await window.BlockchainManager.init()) {
         console.error("BlockchainManager.init() failed.");
@@ -476,8 +473,6 @@ export default {
 
     window.ethereum.on("accountsChanged", function (accounts) {
       console.log("%c App - accountsChanged: %s", "color: #00aa00", accounts[0]);
-
-      window.CommonManager.resetCurrentGameId();
 
       if (
         window.BlockchainManager &&
@@ -496,8 +491,6 @@ export default {
 
     window.ethereum.on("chainChanged", async function (_chainId) {
       console.log("%c App - chainChanged: %s", "color: #00aa00", _chainId);
-
-      window.CommonManager.resetCurrentGameId();
 
       if (!window.BlockchainManager) {
         return;
@@ -520,7 +513,7 @@ export default {
 
           case Types.View.game:
             let currentGame = window.location.pathname.replace("/", "");
-            window.Game.setup(currentGame);
+            window.Game.setup(currentGame, null);
             break;
         
           default:

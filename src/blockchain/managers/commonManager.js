@@ -3,7 +3,7 @@ import $ from "../../../public/jquery.min"
 
 const CommonManager = {
   currentView: null,
-  currentGameId: 0,
+  // currentGameId: 0,
 
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;
@@ -11,15 +11,6 @@ const CommonManager = {
 
   isCurrentView: function(_viewType) {
     return _viewType.localeCompare(this.currentView) == 0;
-  },
-
-  setCurrentGameId: function (_currentGameId) {
-    // console.log("setCurrentGameId: ", _currentGameId);
-    this.currentGameId = _currentGameId;
-  },
-
-  resetCurrentGameId: function () {
-    this.currentGameId = 0;
   },
 
   showSpinner: function (_viewType) {
