@@ -3,7 +3,6 @@ import $ from "../../../public/jquery.min"
 
 const CommonManager = {
   currentView: null,
-  // currentGameId: 0,
 
   setCurrentView: function (_viewType) {
     this.currentView = _viewType;

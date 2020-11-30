@@ -9,6 +9,7 @@ const CF = {
   coinSideChosen: 0,
   minBet: "",
   currentGameView: "",
+  currentGameId_BN: null,
   countdown: null,
 
   GameView: {
@@ -33,7 +34,11 @@ const CF = {
     await this.showGameViewForCurrentAccount(null);
   },
 
-  updateGameView: async function () {
+  updateGameView: async function (_currentGameId_BN) {
+    console.log('%c cf - updateGameView gameId: %s', 'color: #00aa00', (_currentGameId_BN) ? _currentGameId_BN.toString() : "null");
+
+    this.currentGameId_BN = _currentGameId_BN;
+
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     this.ownerAddress = await window.BlockchainManager.gameOwner(Types.Game.cf);
     this.minBet = new BigNumber((await window.BlockchainManager.minBetForGame(Types.Game.cf)).toString());
@@ -53,17 +58,15 @@ const CF = {
   showGameViewForCurrentAccount: async function (_priorityView) {
     window.CommonManager.showSpinner(Types.SpinnerView.gameView);
     
-    const storedGameId = window.CommonManager.currentGameId;
-    
     if (_priorityView) {
-      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, storedGameId);
+      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, this.currentGameId_BN.toString());
       this.showGameView(_priorityView, gameInfo);
       window.CommonManager.hideSpinner(Types.SpinnerView.gameView);
       return;
     }
 
-    if (storedGameId > 0) {
-      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, storedGameId);
+    if (this.currentGameId_BN && this.currentGameId_BN.isGreaterThan(new BigNumber("0"))) {
+      let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, this.currentGameId_BN.toString());
       let viewType = this.gameViewTypeForGameInfo(gameInfo);
       this.showGameView(viewType, gameInfo);
     } else {
@@ -73,6 +76,8 @@ const CF = {
         let gameInfo = await window.BlockchainManager.gameInfo(Types.Game.cf, createdId);
         let viewType = this.gameViewTypeForGameInfo(gameInfo);
         this.showGameView(viewType, gameInfo);
+
+        this.currentGameId_BN = new BigNumber(createdId);
       } else {
         let joinedId = parseInt(await window.BlockchainManager.ongoingGameAsOpponent(Types.Game.cf, window.BlockchainManager.currentAccount()));
         if (joinedId > 0) {
@@ -80,6 +85,8 @@ const CF = {
           let viewType = this.gameViewTypeForGameInfo(gameInfo);
           // window.CommonManager.setCurrentGameId(joinedId);
           this.showGameView(viewType, gameInfo);
+
+          this.currentGameId_BN = new BigNumber(joinedId);
         } else {
           // window.CommonManager.setCurrentGameId(0);
           this.showGameView(this.GameView.start, null);

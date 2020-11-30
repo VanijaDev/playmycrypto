@@ -7,7 +7,7 @@ import Types from "./types";
 const $t = $('#translations').data();
 
 const Game = {
-  minBet: 0,
+  minBet_BN: null,
   topGameIds: [],
   availableGameIds: [],
   availableGamesFetchStartIndex: -1,
@@ -15,7 +15,6 @@ const Game = {
   raffleParticipants: 0,
 
   gameType: "", //  Types.Game.cf / rps
-  gameId_BN: null,
   gameInst: null,
 
   // ProfileManager handler methods
@@ -26,11 +25,15 @@ const Game = {
   setup: async function (_currentGameType, _currentGameId_BN) {
     console.log('%c game - setup %s, gameId: %s', 'color: #00aa00', _currentGameType, (_currentGameId_BN) ? _currentGameId_BN.toString() : "null");
 
+    if (this.gameType == _currentGameType &&
+        this.gameInst.currentGameId_BN.isEqualTo(_currentGameId_BN)) {
+          return;
+    }
+
     this.gameType = _currentGameType;
-    this.gameId_BN = _currentGameId_BN
     this.gameInst = this.initGameInst(_currentGameType);
-    this.minBet = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
-    await this.update();
+    this.minBet_BN = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
+    await this.update(_currentGameId_BN);
   },
 
   initGameInst: function (_gameType) {
@@ -46,7 +49,7 @@ const Game = {
     }
   },
 
-  update: async function () {
+  update: async function (_currentGameId_BN) {
     console.log('%c game - update', 'color: #00aa00');
 
     await window.ProfileManager.setUpdateHandler(this);
@@ -55,7 +58,7 @@ const Game = {
     this.updateTitle();
     this.updateMoneyIcons();
 
-    this.gameInst.updateGameView();
+    this.gameInst.updateGameView(_currentGameId_BN);
     await this.updateAllGamesForGame(this.gameType);
     await this.updateRaffleStateInfoForGame(this.gameType, true);
     await this.updateBeneficiary(this.gameType);
@@ -330,7 +333,7 @@ const Game = {
     $('#beneficiaryProfit')[0].classList.add("hidden");
     $('#makeBeneficiary')[0].classList.remove("hidden");
 
-    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(Utils.weiToEtherFixed(BigNumber(this.minBet))).toString();
+    $('#beneficiaryTransferAmount')[0].value = BigNumber($('#beneficiaryTransferred')[0].textContent).plus(Utils.weiToEtherFixed(BigNumber(this.minBet_BN))).toString();
   },
 
   makeBeneficiaryClicked: async function () {
