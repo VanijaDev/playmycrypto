@@ -76,7 +76,7 @@
             <div class="raffle shadow-block" id="raffleBlock">
               <div class="header position-relative">
                 <div>{{ $t("RAFFLE") }}</div>
-                <div class="f13">{{ $t("IN_RAFFLE") }}:</div>
+                <div class="f13">{{ $t("JACKPOT") }}</div>
 
                 <div class="raffle-amount">
                   <b id="cryptoForRaffle">0.0000</b>

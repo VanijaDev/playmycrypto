@@ -7,12 +7,24 @@ import Types from "./types";
 const $t = $('#translations').data();
 
 const Game = {
+  timer: null,
+
+  //  raffle
+  raffle_jackpot: 0,
+  raffle_participantsPresent: 0,
+  raffle_results: 0,
+  raffle_jackpot_BN: null,
+
+  //  beneficiary
+  beneficiary_current: null,
+  beneficiary_latestPrice: null,
+
+  cryptoIconSrc: "",
   minBet_BN: null,
   topGameIds: [],
   availableGameIds: [],
   availableGamesFetchStartIndex: -1,
   maxGamesToAddCount: 2, // max count of games to be added each "load more"
-  raffleParticipants: 0,
 
   gameType: "", //  Types.Game.cf / rps
   gameInst: null,
@@ -30,10 +42,22 @@ const Game = {
           return;
     }
 
+    window.Game.timer = setInterval(function () {
+      window.Game.update(null, false);
+      window.ProfileManager.update(false);
+    }, 10000);
+
     this.gameType = _currentGameType;
     this.gameInst = this.initGameInst(_currentGameType);
     this.minBet_BN = new BigNumber(await window.BlockchainManager.minBetForGame(this.gameType));
-    await this.update(_currentGameId_BN);
+
+    await window.ProfileManager.setUpdateHandler(this);
+    await window.ProfileManager.update(true);
+
+    this.updateTitle();
+    this.updateMoneyIcons();
+
+    await this.update(_currentGameId_BN, true);
   },
 
   initGameInst: function (_gameType) {
@@ -49,19 +73,13 @@ const Game = {
     }
   },
 
-  update: async function (_currentGameId_BN) {
+  update: async function (_currentGameId_BN, _initialUpdate) {
     console.log('%c game - update', 'color: #00aa00');
 
-    await window.ProfileManager.setUpdateHandler(this);
-    await window.ProfileManager.update(true);
-
-    this.updateTitle();
-    this.updateMoneyIcons();
-
-    this.gameInst.updateGameView(_currentGameId_BN);
-    await this.updateAllGamesForGame(this.gameType);
-    await this.updateRaffleStateInfoForGame(this.gameType, true);
-    await this.updateBeneficiary(this.gameType);
+    // this.gameInst.updateGameView(_currentGameId_BN);
+    // await this.updateAllGamesForGame(this.gameType);
+    await this.updateRaffleStateInfoForGame(this.gameType, _initialUpdate);
+    await this.updateBeneficiary(this.gameType, _initialUpdate);
   },
 
   updateTitle: function () {
@@ -82,6 +100,10 @@ const Game = {
 
   onUnload: function () {
     console.log('%c game - onUnload', 'color: #00aa00');
+
+    if (window.Game.timer) {
+      clearInterval(window.Game.timer);
+    }
 
     this.gameInst.onUnload();
     window.ProfileManager.setUpdateHandler(null);
@@ -239,36 +261,31 @@ const Game = {
   },
 
   //  RAFFLE
-  updateRaffleStateInfoForGame: async function (_gameType, _withHistory) {
+  updateRaffleStateInfoForGame: async function (_gameType, _showSpinner) {
     // console.log("updateRaffleStateInfoForGame");
 
-    window.CommonManager.showSpinner(Types.SpinnerView.raffle);
+    if (_showSpinner) {
+      window.CommonManager.showSpinner(Types.SpinnerView.raffle);
+    
+      await this.updateRafflePlayersToActivateForGame(_gameType);
+    }
 
     await this.updateRafflePlayersPresentForGame(_gameType);
-    await this.updateRafflePlayersToActivateForGame(_gameType);
     await this.updateRaffleStartButtonForGame(_gameType);
-    await this.updateRaffleOngoingPrizeForGame(_gameType);
-
-    if (_withHistory) {
-      this.updateRaffleHistoryForGame(_gameType);
-    }
+    await this.updateRaffleJackpotForGame(_gameType);
+    await this.updateRaffleHistoryForGame(_gameType);
 
     window.CommonManager.hideSpinner(Types.SpinnerView.raffle);
   },
 
   updateRafflePlayersPresentForGame: async function (_gameType) {
     let participants = await window.BlockchainManager.raffleParticipants(_gameType);
-
-    this.updateProfileOnRaffle(participants.length);
-    this.raffleParticipants = participants.length;
-
-    $("#rafflePlayingAmount")[0].innerText = participants.length;
-  },
-
-  updateProfileOnRaffle: function (_currentParticipants) {
-    if (_currentParticipants < this.raffleParticipants) {
-      window.ProfileManager.update();
+    if (participants.length == this.raffle_participantsPresent) {
+      return;
     }
+
+    this.raffle_participantsPresent = participants.length;
+    $("#rafflePlayingAmount")[0].innerText = participants.length;
   },
 
   updateRafflePlayersToActivateForGame: async function (_gameType) {
@@ -282,32 +299,41 @@ const Game = {
     $("#raffleStartBtn")[0].disabled = !isActivated;
   },
 
-  updateRaffleOngoingPrizeForGame: async function (_gameType) {
-    let ongoingPrize = await window.BlockchainManager.ongoinRafflePrize(_gameType);
-    // console.log("ongoinRafflePrize: ", result.toString());
-    $("#cryptoForRaffle")[0].innerText = Utils.weiToEtherFixed(ongoingPrize.toString());
-  },
-
-  updateRaffleHistoryForGame: async function (_gameType) {
-    $('#BlockRaffle').empty();
-
-    let raffleResults = await window.BlockchainManager.raffleResultCount(_gameType);
-    // console.log("raffleResults: ", raffleResults);
-    if (raffleResults == 0) {
+  updateRaffleJackpotForGame: async function (_gameType) {
+    let jackpot = new BigNumber(await window.BlockchainManager.ongoinRafflePrize(_gameType));
+    // console.log("jackpot: ", result.toString());
+    if (jackpot == this.raffle_jackpot_BN) {
       return;
     }
 
+    this.raffle_jackpot_BN = jackpot;
+    $("#cryptoForRaffle")[0].innerText = Utils.weiToEtherFixed(jackpot.toString());
+  },
+
+  updateRaffleHistoryForGame: async function (_gameType) {
+    let raffleResults = await window.BlockchainManager.raffleResultCount(_gameType);
+    // console.log("raffleResults: ", raffleResults);
+    if (raffleResults == 0 || raffleResults == this.raffle_results) {
+      return;
+    }
+    
+    $('#BlockRaffle').empty();
+    this.raffle_results = raffleResults;
     let result = await window.BlockchainManager.raffleResultInfo(_gameType, raffleResults - 1);
+
     $('#BlockRaffle').append(RaffleGamesTemplate.composetmp({
       'address': result.winner,
       'amount': Utils.weiToEtherFixed(result.prize.toString()),
       'timeago': new Date(result.time * 1000).toISOString().slice(0, 10)
     }));
+    $(".template_raffle").attr('src', window.Game.cryptoIconSrc);
   },
 
   //  Beneficiary vvv
-  updateBeneficiary: async function (_gameType) {
-    window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
+  updateBeneficiary: async function (_gameType, _showSpinner) {
+    if (_showSpinner) {
+      window.CommonManager.showSpinner(Types.SpinnerView.beneficiary);
+    }
 
     let currentBeneficiary = await window.BlockchainManager.feeBeneficiar(_gameType);
     $('#beneficiaryUser')[0].textContent = currentBeneficiary;
@@ -386,6 +412,14 @@ const Game = {
   //  Beneficiary ^^^
 
 
+
+
+
+
+
+
+
+  
   //  NOTIFICATION HELPERS
   onGameUpdated: async function (_gameId) {
     // console.log('%c game - onGameUpdated %s', 'color: #1d34ff', _gameId);
@@ -676,13 +710,13 @@ const Game = {
 
   updateMoneyIcons: function () {
     let srcStr = "/img/icon_amount-" + (window.BlockchainManager.currentCryptoName().toLowerCase()) + ".svg";
+    window.Game.cryptoIconSrc = srcStr;
 
     let loadInterval = setInterval(function () {
       clearInterval(loadInterval);
-      $(".template_available_games").attr('src', srcStr);
-      $(".template_top_games").attr('src', srcStr);
-      $(".template_raffle").attr('src', srcStr);
-    }, 1000);
+      $(".template_available_games").attr('src', window.Game.cryptoIconSrc);
+      $(".template_top_games").attr('src', window.Game.cryptoIconSrc);
+    }, 500);
   },
 
   //  cf
