@@ -18,6 +18,7 @@ const Game = {
   //  beneficiary
   beneficiary_current: "",
   beneficiary_latestPrice_BN: null,
+  beneficiary_profit_BN: null,
 
   cryptoIconSrc: "",
   minBet_BN: null,
@@ -31,7 +32,7 @@ const Game = {
 
   // ProfileManager handler methods
   pendingWithdrawn: async function () {
-    window.Game.update();
+    window.Game.update(null, false);
   },
 
   setup: async function (_currentGameType, _currentGameId_BN) {
@@ -360,13 +361,17 @@ const Game = {
 
     let currentBeneficiary = await window.BlockchainManager.feeBeneficiar(_gameType);
     let latestBeneficiarPrice = new BigNumber(await window.BlockchainManager.latestBeneficiarPrice(_gameType));
+    let profit = new BigNumber(await window.BlockchainManager.feeBeneficiarBalance(_gameType, window.BlockchainManager.currentAccount()));
 
-    if (Utils.addressesEqual(currentBeneficiary, this.beneficiary_current) && latestBeneficiarPrice.isEqualTo(this.beneficiary_latestPrice_BN)) {
-      return;
+    if (Utils.addressesEqual(currentBeneficiary, this.beneficiary_current) &&
+        latestBeneficiarPrice.isEqualTo(this.beneficiary_latestPrice_BN) &&
+        profit.isEqualTo(this.beneficiary_profit_BN)) {
+          return;
     }
 
     this.beneficiary_current = currentBeneficiary;
     this.beneficiary_latestPrice_BN = latestBeneficiarPrice;
+    this.beneficiary_profit_BN = profit;
 
     $('#beneficiaryTransferred')[0].textContent = Utils.weiToEtherFixed(latestBeneficiarPrice.toString());
     $('#beneficiaryUser')[0].textContent = currentBeneficiary;
