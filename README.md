@@ -1,3 +1,5 @@
+# UPD: suspended due to breaking changes in idea.
+
 # OXO Games
 
 ## Project setup
