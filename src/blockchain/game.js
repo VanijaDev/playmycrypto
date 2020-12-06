@@ -22,9 +22,9 @@ const Game = {
 
   cryptoIconSrc: "",
   minBet_BN: null,
-  topGameIds: [],
+  topGameIds: ["0", "0", "0", "0", "0"],
   availableGameIds: [],
-  availableGamesFetchStartIndex: -1,
+  availableGamesFetchStartIndex_BN: null,
   maxGamesToAddCount: 2, // max count of games to be added each "load more"
 
   gameType: "", //  Types.Game.cf / rps
@@ -43,9 +43,9 @@ const Game = {
           return;
     }
 
-    window.Game.timer = setInterval(function () {
-      window.Game.update(null, false);
-      window.ProfileManager.update(false);
+    window.Game.timer = setInterval(async function () {
+      await window.Game.update(null, false);
+      await window.ProfileManager.update(false);
     }, 10000);
 
     this.gameType = _currentGameType;
@@ -58,7 +58,7 @@ const Game = {
     this.updateTitle();
     this.updateMoneyIcons();
 
-    await this.update(_currentGameId_BN, true);
+    await window.Game.update(_currentGameId_BN, true);
   },
 
   initGameInst: function (_gameType) {
@@ -82,7 +82,7 @@ const Game = {
     }
 
     // this.gameInst.updateGameView(_currentGameId_BN);
-    // await this.updateAllGamesForGame(this.gameType);
+    await this.updateAllGamesForGame(this.gameType, _initialUpdate);
     await this.updateRaffleStateInfoForGame(this.gameType, _initialUpdate);
     await this.updateBeneficiary(this.gameType, _initialUpdate);
   },
@@ -99,9 +99,9 @@ const Game = {
     this.beneficiary_latestPrice_BN = null;
 
     this.cryptoIconSrc = "";
-    this.topGameIds = [];
+    this.topGameIds = ["0", "0", "0", "0", "0"];
     this.availableGameIds = [];
-    this.availableGamesFetchStartIndex = -1;
+    this.availableGamesFetchStartIndex_BN = null;
   },
 
   updateTitle: function () {
@@ -130,25 +130,25 @@ const Game = {
     this.gameInst.onUnload();
     window.ProfileManager.setUpdateHandler(null);
     hideTopBannerMessage();
-
-
   },
 
   //  LOAD GAMES
-  updateAllGamesForGame: function (_gameType) {
+  updateAllGamesForGame: function (_gameType, _showSpinner) {
     // clear data
-    this.availableGamesFetchStartIndex = -1;
+    this.availableGamesFetchStartIndex_BN = null;
     this.availableGameIds.splice(0, this.availableGameIds.length);
-    this.topGameIds.splice(0, this.topGameIds.length);
 
-    this.loadTopGamesForGame(_gameType);
-    this.loadAvailableGamesPortionForGame(_gameType);
+    this.loadTopGamesForGame(_gameType, _showSpinner);
+    // this.loadAvailableGamesPortionForGame(_gameType);
   },
 
-  loadTopGamesForGame: async function (_gameType) {
-    $('#TopGames').empty();
-    
-    window.CommonManager.showSpinner(Types.SpinnerView.topGames);
+  loadTopGamesForGame: async function (_gameType, _showSpinner) {
+    if (_showSpinner) {
+      $('#TopGames').empty();
+      this.topGameIds = ["0", "0", "0", "0", "0"];
+      window.CommonManager.showSpinner(Types.SpinnerView.raffle);
+    }
+
     let ownGame;
 
     if (_gameType == Types.Game.cf) {
@@ -162,6 +162,15 @@ const Game = {
     }
 
     let topGameIds_tmp = await window.BlockchainManager.topGames(_gameType);
+    console.log("topGameIds_tmp: ", topGameIds_tmp);
+    console.log("this.topGameIds: ", this.topGameIds);
+
+    if (topGameIds_tmp.equals(this.topGameIds)) {
+      console.log("Equal");
+      return;
+    }
+    console.log("Not Equal");
+
     this.topGameIds = [].concat(topGameIds_tmp);
     let ownGameTopGamesIdx = this.topGameIds.indexOf(ownGame);
 
@@ -191,29 +200,29 @@ const Game = {
       // console.log("loadAvailableGamesPortionForGame - RPS");
     }
 
-    if (this.availableGamesFetchStartIndex == 0) {
+    if (this.availableGamesFetchStartIndex_BN && this.availableGamesFetchStartIndex_BN.isZero()) {
       // console.log('%c No games to load', 'color: #1d34ff');
       return;
     }
 
     window.CommonManager.showSpinner(Types.SpinnerView.availableGames);
 
-    if (this.availableGamesFetchStartIndex == -1) {
-      this.availableGamesFetchStartIndex = (await window.BlockchainManager.gamesCreatedAmount(_gameType)) - 1;
+    if (this.availableGamesFetchStartIndex_BN && this.availableGamesFetchStartIndex_BN.isEqualTo(new BigNumber("-1"))) {
+      this.availableGamesFetchStartIndex_BN = (new BigNumber(await window.BlockchainManager.gamesCreatedAmount(_gameType))).minus(new BigNumber("1"));
     }
-    // console.log("this.availableGamesFetchStartIndex: ", this.availableGamesFetchStartIndex);
+    // console.log("this.availableGamesFetchStartIndex_BN: ", this.availableGamesFetchStartIndex_BN);
     let addedCount = 0;
 
-    while (addedCount < this.maxGamesToAddCount && this.availableGamesFetchStartIndex > 0) {
-      let gameInfo = await window.BlockchainManager.gameInfo(_gameType, this.availableGamesFetchStartIndex);
+    while (addedCount < this.maxGamesToAddCount && (this.availableGamesFetchStartIndex_BN && this.availableGamesFetchStartIndex_BN.isGreaterThan((new BigNumber("0"))))) {
+      let gameInfo = await window.BlockchainManager.gameInfo(_gameType, this.availableGamesFetchStartIndex_BN.toString());
       // console.log(gameInfo);
-      this.availableGamesFetchStartIndex -= 1;
+      this.availableGamesFetchStartIndex_BN -= 1;
 
       if (this.availableGameValidToAppend(gameInfo)) {
         this.addGameWithInfo(gameInfo, false, false);
 
         addedCount += 1;
-        if ((addedCount == this.maxGamesToAddCount) || (this.availableGamesFetchStartIndex == 0)) {
+        if (addedCount == this.maxGamesToAddCount || this.availableGamesFetchStartIndex_BN.isGreaterThan((new BigNumber("0")))) {
           break;
         }
       }
